@@ -1,0 +1,133 @@
+name: Validate Documentation Links
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    # Run weekly on Sunday at 00:00 UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install markdown-link-check
+      run: npm install -g markdown-link-check
+      
+    - name: Check Markdown Links
+      run: |
+        find . -name "*.md" -not -path "./node_modules/*" | xargs -n 1 markdown-link-check -q -c .github/workflows/link-check-config.json
+      continue-on-error: true
+      
+    - name: Report Results
+      if: failure()
+      run: echo "Some links are broken. Please check the logs above."
+
+  validate-yaml:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+        
+    - name: Install PyYAML
+      run: pip install pyyaml
+      
+    - name: Validate YAML Frontmatter
+      run: |
+        python -c "
+        import os
+        import yaml
+        import re
+        
+        errors = []
+        for root, dirs, files in os.walk('.'):
+            # Skip hidden directories
+            dirs[:] = [d for d in dirs if not d.startswith('.')]
+            
+            for file in files:
+                if file.endswith('.md'):
+                    filepath = os.path.join(root, file)
+                    try:
+                        with open(filepath, 'r') as f:
+                            content = f.read()
+                            # Check for YAML frontmatter
+                            if content.startswith('---'):
+                                # Extract frontmatter
+                                match = re.match(r'^---\n(.*?)\n---', content, re.DOTALL)
+                                if match:
+                                    yaml_content = match.group(1)
+                                    yaml.safe_load(yaml_content)
+                    except Exception as e:
+                        errors.append(f'{filepath}: {e}')
+        
+        if errors:
+            print('YAML validation errors found:')
+            for error in errors:
+                print(f'  - {error}')
+            exit(1)
+        else:
+            print('All YAML frontmatter is valid!')
+        "
+
+  check-structure:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      
+    - name: Verify Repository Structure
+      run: |
+        # Check for required files
+        required_files=("README.md" "LICENSE" "CONTRIBUTING.md" "FAQ.md" "GLOSSARY.md")
+        missing_files=()
+        
+        for file in "${required_files[@]}"; do
+          if [ ! -f "$file" ]; then
+            missing_files+=("$file")
+          fi
+        done
+        
+        if [ ${#missing_files[@]} -ne 0 ]; then
+          echo "Missing required files:"
+          printf '%s\n' "${missing_files[@]}"
+          exit 1
+        fi
+        
+        echo "All required files present!"
+        
+        # Check for required directories
+        required_dirs=("01-getting-started" "02-core-concepts" "03-data-operations")
+        missing_dirs=()
+        
+        for dir in "${required_dirs[@]}"; do
+          if [ ! -d "$dir" ]; then
+            missing_dirs+=("$dir")
+          fi
+        done
+        
+        if [ ${#missing_dirs[@]} -ne 0 ]; then
+          echo "Missing required directories:"
+          printf '%s\n' "${missing_dirs[@]}"
+          exit 1
+        fi
+        
+        echo "All required directories present!"

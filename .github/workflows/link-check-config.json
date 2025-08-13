@@ -1,0 +1,18 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^https://github.com/martinshein/xano"
+    },
+    {
+      "pattern": "^#"
+    },
+    {
+      "pattern": "^mailto:"
+    }
+  ],
+  "timeout": "20s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "30s",
+  "aliveStatusCodes": [200, 201, 202, 203, 204, 206, 301, 302, 303, 307, 308]
+}
