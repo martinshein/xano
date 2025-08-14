@@ -1,648 +1,560 @@
 ---
+title: "Loops - Iterate Through Data Collections"
+description: "Use loops to process arrays, repeat operations, and handle bulk data"
 category: function-stack
-difficulty: advanced
+subcategory: data-manipulation
+difficulty: intermediate
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv'
+- loops
+- iteration
+- foreach
+- while
+- arrays
 ---
 
-[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../building-with-visual-development/triggers.html)
-        -   [Middleware](../../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../database-requests/get-record.html)
-            -   [Add Record](../database-requests/add-record.html)
-            -   [Edit Record](../database-requests/edit-record.html)
-            -   [Add or Edit Record](../database-requests/add-or-edit-record.html)
-            -   [Patch Record](../database-requests/patch-record.html)
-            -   [Delete Record](../database-requests/delete-record.html)
-            -   [Bulk Operations](../database-requests/bulk-operations.html)
-            -   [Database Transaction](../database-requests/database-transaction.html)
-            -   [External Database Query](../database-requests/external-database-query.html)
-            -   [Direct Database Query](../database-requests/direct-database-query.html)
-            -   [Get Database Schema](../database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](create-variable.html)
-            -   [Update Variable](update-variable.html)
-            -   [Conditional](conditional.html)
-            -   [Switch](switch.html)
-            -   [Loops](loops.html)
-            -   [Math](math.html)
-            -   [Arrays](arrays.html)
-            -   [Objects](objects.html)
-            -   [Text](text.html)
-                    -   [Security](../security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../data-caching-redis.html)
-        -   [Custom Functions](../custom-functions.html)
-        -   [Utility Functions](../utility-functions.html)
-        -   [File Storage](../file-storage.html)
-        -   [Cloud Services](../cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../filters/manipulation.html)
-        -   [Math](../../filters/math.html)
-        -   [Timestamp](../../filters/timestamp.html)
-        -   [Text](../../filters/text.html)
-        -   [Array](../../filters/array.html)
-        -   [Transform](../../filters/transform.html)
-        -   [Conversion](../../filters/conversion.html)
-        -   [Comparison](../../filters/comparison.html)
-        -   [Security](../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../data-types/text.html)
-        -   [Expression](../../data-types/expression.html)
-        -   [Array](../../data-types/array.html)
-        -   [Object](../../data-types/object.html)
-        -   [Integer](../../data-types/integer.html)
-        -   [Decimal](../../data-types/decimal.html)
-        -   [Boolean](../../data-types/boolean.html)
-        -   [Timestamp](../../data-types/timestamp.html)
-        -   [Null](../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../xano-features/metadata-api/search.html)
-        -   [File](../../../xano-features/metadata-api/file.html)
-        -   [Request History](../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [For Each Loop](#for-each-loop)
-
--   [Add a For Each loop function.](#add-a-for-each-loop-function)
-
--   [Specify the list that the loop will iterate through.](#specify-the-list-that-the-loop-will-iterate-through)
-
--   [Define the variable that will hold each item as the loop runs.](#define-the-variable-that-will-hold-each-item-as-the-loop-runs)
-
--   [Add functions inside of your loop.](#add-functions-inside-of-your-loop)
-
--   [For Loop](#for-loop)
-
--   [While Loop](#while-loop)
-
--   [Additional Loop Functions](#additional-loop-functions)
-
--   [Loop: Break](#loop-break)
-
--   [Loop: Continue](#loop-continue)
-
--   [For Each Loop: Remove Entry](#for-each-loop-remove-entry)
-
-Was this helpful?
-
-Copy
-
-
-2.  Functions
-3.  [Data Manipulation](../data-manipulation.html)
-
-Loops 
-=====
-
-Loops are used to iterate over a set of items, or run a set of steps a certain number of times.
-
-There are a few different kinds of loops that you can use in Xano.
-
- 
-
-For Each Loop
-
-A For Each loop is designed to iterate over a list of items, such as all records returned by a database query, or items returned from an external API request.
-
-If you are iterating through a list of database records, set the return type in the query to **stream** to enable super memory-efficient looping. This is especially helpful the larger the list is.
-
-<div>
-
-1
-
-###  
-
-Add a For Each loop function.
-
-2
-
-###  
-
-Specify the list that the loop will iterate through.
-
-Select the variable that contains your list of items.
-[![](../../../_gitbook/imagecb59.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F2rAeav0PwytKYmDr0zdS%252FCleanShot%25202025-01-13%2520at%252010.19.49.png%3Falt%3Dmedia%26token%3Dc3e096cb-0092-4539-b7eb-9679dc86370a&width=300&dpr=4&quality=100&sign=98c989bd&sv=2)]
-
-3
-
-###  
-
-Define the variable that will hold each item as the loop runs.
-
-By default, this is called [**item**], but you can name it whatever you\'d like. Use this variable inside of your loop.
-[![](../../../_gitbook/image88b4.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252Fu9Oz3y3QCtuWkoibnGlX%252FCleanShot%25202025-01-13%2520at%252010.20.37.png%3Falt%3Dmedia%26token%3D8b05c0ee-4884-4609-9a6b-87fff6070a1a&width=300&dpr=4&quality=100&sign=34d59df&sv=2)]
-
-4
-
-###  
-
-Add functions inside of your loop.
-
-Make sure these steps target the right variable.
-[![](../../../_gitbook/image7a6a.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252Fy4jEBd1rMhTTIB1Z39bR%252FCleanShot%25202025-01-13%2520at%252010.21.15.png%3Falt%3Dmedia%26token%3Dfa6da30c-9f56-4e35-b90c-3df8b12512d4&width=300&dpr=4&quality=100&sign=cfb527bb&sv=2)]
-
-</div>
-
- 
-
-For Loop
-
-A For loop is used to repeat a stack of steps a certain number of times.
-
-Refer to the For Each loop instructions to see how it works. The only difference between a For and a For Each loop is\...
-
--   
-    
-        
-    
-    In a For loop, you need to specify the number of times the loop runs.
-    [![](../../../_gitbook/image910b.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FVt8sf8E8a2FTwixIdPIg%252FCleanShot%25202025-01-13%2520at%252010.11.19.png%3Falt%3Dmedia%26token%3Db3e449bf-e411-46c8-a028-24680d09ad51&width=300&dpr=4&quality=100&sign=f1c1edf5&sv=2)]
-    
--   
-    
-        
-    
-    Because we aren\'t building the loop against a list of items directly, we don\'t have a variable that houses the individual item. Instead, Xano keeps track of which iteration is running inside of an **index variable**, which you can set here.
-    [![](../../../_gitbook/image230e.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F40QmrafVexdB3MOSYzy3%252FCleanShot%25202025-01-13%2520at%252010.16.47.png%3Falt%3Dmedia%26token%3D181f8c37-c4b0-449f-9334-fb13428fe348&width=300&dpr=4&quality=100&sign=7e1a9a10&sv=2)]
-    
- 
-
-While Loop
-
-A While loop is used to repeat a set of steps infinitely as long as the condition(s) defined evaluate as true.
-
-Proceed with caution when using While loops, as they can not be easily stopped once started.
-
-To ensure that your loop works as intended, make sure to **stop the loop with a Break statement** while testing and debugging.
-
-If you are concerned that you have entered an infinite loop and want to break it, learn how to restart your instance [here](../../../xano-features/instance-settings.html#maintenance).
-
-You\'ll use the expression builder to define the conditions that tell the loop whether or not it should continue.
-
-###  
-
-Using the Expression Builder
-
-Each conditional has four different components.
-
-**Conditional Type**
-
-The conditional type determines how this condition is weighted in the final return. You can choose between **AND** and **OR. AND** conditionals require the present conditional and any others before it to be satisfied, such as \"where the date is before today **AND** the user is an admin\". **OR** conditionals do not require any other conditionals to be satisfied, such as \"if the user is an admin **OR** if the user is a manager\".
-
-**Left Value**
-
-This is the first value you\'re using in the conditional. In a database query, this is usually going to be a column that you want to check against.
-
-**Operators**
-
-Please note that operators may differ based on where you are building the expression. Database queries will have different operators available than regular conditional statements. Learn More
-
--   
-    
-        
-    
-    **Equals (==)** - an exact match
-    
--   
-    
-        
-    
-    **Not Equals (!=)** - does not equal
-    
--   
-    
-        
-    
-    **Equals with type matching (===)** - an exact value match and an exact type match
-
-    -   
-        
-                
-        
-        Ex. Variable **var\_1** has a value of 123, with a type of text. You set up a conditional statement to check if **var\_1 === 123**, but your value in the conditional statement is of type integer. This would return false, because the types do not match.
-            
--   
-    
-        
-    
-    **Not equals with type matching (!==)** - does not equal value or type, similar to ===
-    
--   
-    
-        
-    
-    **Greater than (\>)** - the value on the left is greater than the value on the right
-    
--   
-    
-        
-    
-    **Greater than or equals (≥)** - the value on the left is greater than or equals to the value on the right.
-    
--   
-    
-        
-    
-    **Less than (\<)** - the value on the left is less than the value on the right.
-    
--   
-    
-        
-    
-    **Less than or equals (≤)** - the value on the left is less than or equals to the value on the right.
-    
--   
-    
-        
-    
-    **LIKE** - Used for comparing text. Like is case-insensitive and compares if a text string is like another text string. It can be thought of as equals for text but upper case and lower case does not matter.
-    
--   
-    
-        
-    
-    **NOT LIKE** - Used for comparing text. Not Like is case-insensitive and compares if a text string is not like another. It is like not equals for text but upper case and lower case does not matter.
-    
--   
-    
-        
-    
-    **INCLUDES** - Used for comparing text. Includes is a flexible operator and is case-insensitive. It is able to determine if there is a partial match in a text string.
-    
--   
-    
-        
-    
-    **DOES NOT INCLUDE** - Used for comparing text. Does not include determines if a text string is not included in another text string.
-    
--   
-    
-        
-    
-    **IN** - If a single value is found in an array (list). Start with the single value on the left side and the right side should contain the array.
-    
--   
-    
-        
-    
-    **NOT IN** - If a single value is not found in an array (list). The single value should be on the left side and the array on the right side.
-    
--   
-    
-        
-    
-    **REGEX MATCHES** - [Regular Expression](https://regex101.com/) used for finding patterns in text.
-    
--   
-    
-        
-    
-    **REGEX DOES NOT MATCH** - [Regular Expression](https://regex101.com/) used for finding a pattern that does not match in text.
-    
--   
-    
-        
-    
-    **OVERLAPS** - Used for comparing two arrays. Overlaps determines if any values in one array are present in the second array.
-    
--   
-    
-        
-    
-    **DOES NOT OVERLAP** - Used for comparing two arrays. Does not overlaps determines if no values in the first array are present in the second array.
-    
--   
-    
-        
-    
-    **CONTAINS** - Contains is an advanced filter used for JSON and arrays. It looks for an exact schema match.
-    
--   
-    
-        
-    
-    **DOES NOT CONTAIN** - Does not contain is the opposite of contains. It determines if there is not an exact schema match.
-    
-####  
-
-Right Value
-
-The right value is whatever you are checking against the left value. This could be a hardcoded value, a variable, or even a database field from the same record.
-
- 
-
-Additional Loop Functions
-
-###  
-
-Loop: Break
-
-Breaks the currently running loop, meaning the loop is exited and the next function will run.
-
-###  
-
-Loop: Continue
-
-Immediately begins executing the next iteration of the loop. This is very useful for conditionals inside of loops that determine what happens to the item being iterated through.
-
-###  
-
-For Each Loop: Remove Entry
-
-This will remove the item being iterated through from the parent list.
-
-Last updated 5 months ago
-
-Was this helpful?
+# Loops - Iterate Through Data Collections
+
+
+
+## Quick Summary
+
+> **What it is:** Functions that repeat operations over data collections or a specific number of times
+> 
+> **When to use:** Processing arrays, bulk operations, data transformation, or repeated tasks
+> 
+> **Key benefit:** Efficient processing of multiple items without writing repetitive code
+> 
+> **Perfect for:** Non-developers building bulk email systems, data processing, or batch operations
+
+## What You'll Learn
+
+- For Each loop for arrays
+- For loop for counting
+- While loop for conditions
+- Loop control (break/continue)
+- Performance optimization
+- Real-world examples
+
+## For Each Loop - Process Arrays
+
+### Step 1: Add For Each Function
+1. Click + in function stack
+2. Select "Data Manipulation"
+3. Choose "Loops" → "For Each"
+
+### Step 2: Configure Loop
+```javascript
+For Each item in $var.user_list {
+  // Process each user
+  Send_Email {
+    to: item.email,
+    subject: "Welcome " ~ item.name
+  }
+}
+```
+
+## Integration Examples
+
+### With n8n - Batch Processing
+```javascript
+// n8n sends array of orders to process
+orders = Input.orders
+
+// Process each order
+For Each order in orders {
+  // Validate order
+  If (order.total > 0 && order.status == "pending") {
+    // Update inventory
+    For Each item in order.items {
+      current_stock = Get_Record {
+        table: "products",
+        field_name: "id",
+        field_value: item.product_id
+      }
+      
+      new_stock = current_stock.quantity - item.quantity
+      
+      Edit_Record {
+        id: item.product_id,
+        quantity: new_stock
+      }
+    }
+    
+    // Update order status
+    Edit_Record {
+      id: order.id,
+      status: "processed",
+      processed_at: timestamp()
+    }
+    
+    // Send confirmation
+    External_API_Request {
+      url: env.EMAIL_SERVICE + "/send",
+      method: "POST",
+      params: {
+        to: order.customer_email,
+        template: "order_confirmed",
+        data: order
+      }
+    }
+  }
+}
+
+return {
+  success: true,
+  processed_count: orders | length,
+  message: "All orders processed successfully"
+}
+```
+
+### With WeWeb - User Management
+```javascript
+// WeWeb sends list of users to activate
+user_ids = Input.user_ids
+
+results = []
+
+For Each user_id in user_ids {
+  // Get user details
+  user = Get_Record {
+    table: "users",
+    field_name: "id", 
+    field_value: user_id
+  }
+  
+  If (user) {
+    // Activate user
+    Edit_Record {
+      id: user_id,
+      status: "active",
+      activated_at: timestamp()
+    }
+    
+    // Send welcome email
+    welcome_result = External_API_Request {
+      url: env.EMAIL_API + "/welcome",
+      method: "POST",
+      params: {
+        email: user.email,
+        name: user.name,
+        login_url: env.APP_URL + "/login"
+      }
+    }
+    
+    // Track result
+    results.push({
+      user_id: user_id,
+      email: user.email,
+      status: "activated",
+      email_sent: welcome_result.success
+    })
+  } else {
+    results.push({
+      user_id: user_id,
+      status: "user_not_found"
+    })
+  }
+}
+
+return {
+  processed: results,
+  total_count: user_ids | length,
+  success_count: results | filter:"status,activated" | length
+}
+```
+
+## For Loop - Count-Based Iteration
+
+### Basic For Loop
+```javascript
+// Send 5 reminder emails
+For i from 1 to 5 {
+  // Use index variable 'i'
+  External_API_Request {
+    url: env.EMAIL_SERVICE + "/remind",
+    method: "POST",
+    params: {
+      template: "reminder_" ~ i,
+      recipient: Input.user_email
+    }
+  }
+  
+  // Wait between sends
+  Wait(1000)  // 1 second delay
+}
+```
+
+### Dynamic Count
+```javascript
+// Send notifications based on user tier
+notification_count = Input.user_tier == "premium" ? 10 : 
+                    Input.user_tier == "gold" ? 5 : 3
+
+For i from 1 to notification_count {
+  Add_Record {
+    table: "notifications",
+    user_id: Input.user_id,
+    message: "Daily update #" ~ i,
+    priority: i <= 3 ? "high" : "normal"
+  }
+}
+```
+
+## While Loop - Condition-Based
+
+### Basic While Loop
+```javascript
+// Process pending orders until queue is empty
+has_pending = true
+
+While (has_pending) {
+  // Get next pending order
+  pending_order = Query_All_Records {
+    table: "orders",
+    filter: {status: "pending"},
+    limit: 1,
+    sort: "created_at ASC"
+  }
+  
+  If (pending_order | length > 0) {
+    order = pending_order[0]
+    
+    // Process the order
+    Process_Order(order)
+    
+    // Mark as processed
+    Edit_Record {
+      id: order.id,
+      status: "processed"
+    }
+  } Else {
+    // No more pending orders
+    has_pending = false
+  }
+}
+```
+
+### Rate-Limited Processing
+```javascript
+// Process API calls with rate limiting
+api_calls = Input.api_requests
+processed = 0
+max_per_minute = 60
+
+While (processed < api_calls | length) {
+  // Process batch
+  batch_end = processed + max_per_minute
+  
+  For i from processed to batch_end {
+    If (i < api_calls | length) {
+      request = api_calls[i]
+      
+      External_API_Request {
+        url: request.url,
+        method: request.method,
+        params: request.data
+      }
+    }
+  }
+  
+  processed = batch_end
+  
+  // Wait 1 minute between batches
+  If (processed < api_calls | length) {
+    Wait(60000)  // 60 seconds
+  }
+}
+```
+
+## Loop Control Functions
+
+### Loop Break
+```javascript
+// Find first admin user
+For Each user in $var.all_users {
+  If (user.role == "admin") {
+    admin_user = user
+    Break  // Exit loop early
+  }
+}
+```
+
+### Loop Continue
+```javascript
+// Process only active users
+For Each user in $var.users {
+  If (user.status != "active") {
+    Continue  // Skip to next iteration
+  }
+  
+  // Process active user
+  Send_Email {
+    to: user.email,
+    subject: "Monthly Newsletter"
+  }
+}
+```
+
+### Remove Entry
+```javascript
+// Clean up expired sessions
+sessions = Query_All_Records {
+  table: "sessions"
+}
+
+For Each session in sessions {
+  If (session.expires_at < timestamp()) {
+    // Remove expired session from array
+    Remove_Entry
+    
+    // Also delete from database
+    Delete_Record {
+      id: session.id
+    }
+  }
+}
+
+// sessions array now only contains active sessions
+```
+
+## Performance Optimization
+
+### Stream Processing for Large Datasets
+```javascript
+// Use stream return type for memory efficiency
+large_dataset = Query_All_Records {
+  table: "large_table",
+  return_type: "stream"  // Memory efficient!
+}
+
+For Each record in large_dataset {
+  // Process each record without loading all into memory
+  Process_Record(record)
+}
+```
+
+### Batch Operations
+```javascript
+// Process records in batches
+batch_size = 100
+offset = 0
+has_more = true
+
+While (has_more) {
+  batch = Query_All_Records {
+    table: "records",
+    limit: batch_size,
+    offset: offset
+  }
+  
+  If (batch | length == 0) {
+    has_more = false
+  } Else {
+    // Process batch
+    For Each record in batch {
+      Update_Record(record)
+    }
+    
+    offset = offset + batch_size
+  }
+}
+```
+
+### Conditional Processing
+```javascript
+// Skip unnecessary processing
+For Each order in $var.orders {
+  // Quick checks first
+  If (order.status == "cancelled") {
+    Continue
+  }
+  
+  If (order.total == 0) {
+    Continue
+  }
+  
+  // Only process valid orders
+  Expensive_Processing(order)
+}
+```
+
+## Common Patterns
+
+### Data Transformation
+```javascript
+// Transform array of objects
+users = Input.raw_users
+formatted_users = []
+
+For Each user in users {
+  formatted_user = {
+    id: user.id,
+    name: user.first_name ~ " " ~ user.last_name,
+    email: user.email | lower,
+    profile_complete: user.bio && user.avatar ? true : false,
+    member_since: user.created_at | date:"Y-m-d"
+  }
+  
+  formatted_users.push(formatted_user)
+}
+
+return formatted_users
+```
+
+### Nested Loops
+```javascript
+// Process orders with items
+For Each order in $var.orders {
+  order_total = 0
+  
+  For Each item in order.items {
+    // Calculate item total
+    item_total = item.price * item.quantity
+    order_total = order_total + item_total
+    
+    // Update inventory
+    current_stock = Get_Record {
+      table: "products",
+      field_name: "id",
+      field_value: item.product_id
+    }
+    
+    Edit_Record {
+      id: item.product_id,
+      quantity: current_stock.quantity - item.quantity
+    }
+  }
+  
+  // Update order total
+  Edit_Record {
+    id: order.id,
+    calculated_total: order_total
+  }
+}
+```
+
+### Error Handling in Loops
+```javascript
+errors = []
+successes = []
+
+For Each item in Input.items {
+  Try {
+    result = Process_Item(item)
+    successes.push({
+      item_id: item.id,
+      result: result
+    })
+  } Catch (error) {
+    errors.push({
+      item_id: item.id,
+      error: error.message
+    })
+    Continue  // Continue processing other items
+  }
+}
+
+return {
+  success_count: successes | length,
+  error_count: errors | length,
+  errors: errors
+}
+```
+
+## Loop Types Comparison
+
+### When to Use Each Type
+
+**For Each Loop:**
+- Processing arrays/lists
+- Database records
+- API response arrays
+- User-provided data
+
+**For Loop:**
+- Fixed number of iterations
+- Counting operations
+- Generating sequences
+- Retry logic
+
+**While Loop:**
+- Unknown iteration count
+- Condition-based processing
+- Queue processing
+- Polling operations
+
+## Try This
+
+Create a bulk email system:
+1. Add For Each loop
+2. Process user list
+3. Send personalized emails
+4. Handle errors gracefully
+5. Track success/failure rates
+
+## Pro Tips
+
+💡 **Use Stream Mode:** Set return_type to "stream" for large datasets
+
+💡 **Batch Processing:** Process large datasets in smaller chunks
+
+💡 **Early Exit:** Use Break to exit loops when condition is met
+
+💡 **Error Handling:** Wrap risky operations in Try/Catch
+
+💡 **Progress Tracking:** Track loop progress for user feedback
+
+## Common Gotchas
+
+### Memory Issues
+```javascript
+// Problem: Loading huge dataset into memory
+huge_dataset = Query_All_Records("large_table")  // Loads everything!
+
+// Solution: Use stream processing
+huge_dataset = Query_All_Records {
+  table: "large_table",
+  return_type: "stream"  // Memory efficient
+}
+```
+
+### Infinite Loops
+```javascript
+// Problem: Condition never changes
+counter = 0
+While (counter < 10) {
+  Process_Something()
+  // Forgot to increment counter!
+}
+
+// Solution: Always update loop condition
+counter = 0
+While (counter < 10) {
+  Process_Something()
+  counter = counter + 1  // Update condition
+}
+```
+
+### Variable Scope
+```javascript
+// Access the loop item variable correctly
+For Each user in users {
+  // Use 'user' not 'users'
+  Send_Email {
+    to: user.email,  // Correct
+    subject: "Hello " ~ user.name
+  }
+}
+```
+
+## Next Steps
+
+1. Practice basic loops
+2. Implement error handling
+3. Optimize for large datasets
+4. Build nested loop logic
+5. Monitor performance
+
+Remember: Loops are powerful for bulk operations - start simple and optimize as needed!

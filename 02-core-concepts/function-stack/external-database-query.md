@@ -1,405 +1,587 @@
 ---
+title: "External Database Query - Connect to Other Databases"
+description: "Query PostgreSQL, MySQL, MS SQL, and Oracle databases from your Xano backend"
 category: function-stack
+subcategory: database
 difficulty: advanced
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
+- external
 - database
-title: '[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv'
+- postgresql
+- mysql
+- mssql
+- oracle
 ---
 
-[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../index.html)
+# External Database Query - Connect to Other Databases
 
 
 
+## Quick Summary
 
+> **What it is:** Functions to connect and query external databases like PostgreSQL, MySQL, MS SQL, and Oracle
+> 
+> **When to use:** Integrating with existing databases, legacy systems, or third-party data sources
+> 
+> **Key benefit:** Access data from multiple databases without migration or complex synchronization
+> 
+> **Perfect for:** Non-developers building apps that need data from existing business systems
 
+## What You'll Learn
 
+- Supported database types
+- Connection setup
+- Writing secure queries
+- Data integration patterns
+- Error handling
+- Performance optimization
 
+## Supported Databases
 
+### Available Connections
+- **PostgreSQL** - Popular open-source database
+- **MySQL** - Widely used web database
+- **MS SQL Server** - Microsoft enterprise database
+- **Oracle** - Enterprise database system
 
+## Basic Setup
 
+### Step 1: Add External Database Function
+1. Click + in function stack
+2. Select "Database Operations"
+3. Choose your database type:
+   - PostgreSQL Query
+   - MySQL Query
+   - MS SQL Query
+   - Oracle Query
 
+### Step 2: Configure Connection
+```javascript
+// Connection string format varies by database
+PostgreSQL: "postgresql://username:password@host:port/database"
+MySQL: "mysql://username:password@host:port/database"
+MS SQL: "mssql://username:password@host:port/database"
+Oracle: "oracle://username:password@host:port/service"
+```
 
+## Integration Examples
 
+### With n8n - Legacy System Integration
+```javascript
+// n8n workflow needs customer data from old CRM
+customer_id = Input.customer_id
 
+// Query legacy PostgreSQL database
+legacy_customer = PostgreSQL_Query {
+  connection_string: env.LEGACY_DB_CONNECTION,
+  query: `
+    SELECT 
+      customer_id,
+      first_name,
+      last_name,
+      email,
+      total_purchases,
+      last_order_date
+    FROM customers 
+    WHERE customer_id = ?
+  `,
+  params: [customer_id]
+}
 
--   
+if (legacy_customer && legacy_customer.length > 0) {
+  customer = legacy_customer[0]
+  
+  // Store in Xano for faster access
+  Add_Record {
+    table: "customer_cache",
+    customer_id: customer.customer_id,
+    name: customer.first_name ~ " " ~ customer.last_name,
+    email: customer.email,
+    total_purchases: customer.total_purchases,
+    last_order: customer.last_order_date,
+    synced_at: timestamp()
+  }
+  
+  return customer
+} else {
+  return {
+    error: "Customer not found in legacy system"
+  }
+}
+```
 
+### With WeWeb - Multi-Database Dashboard
+```javascript
+// WeWeb dashboard showing data from multiple sources
+date_filter = Input.date_from
+
+// Query sales from MySQL e-commerce DB
+ecommerce_sales = MySQL_Query {
+  connection_string: env.ECOMMERCE_DB,
+  query: `
+    SELECT 
+      DATE(created_at) as date,
+      COUNT(*) as orders,
+      SUM(total_amount) as revenue
+    FROM orders 
+    WHERE created_at >= ? 
+    GROUP BY DATE(created_at)
+    ORDER BY date
+  `,
+  params: [date_filter]
+}
+
+// Query inventory from PostgreSQL warehouse system
+warehouse_data = PostgreSQL_Query {
+  connection_string: env.WAREHOUSE_DB,
+  query: `
+    SELECT 
+      product_sku,
+      product_name,
+      current_stock,
+      reserved_stock,
+      available_stock
+    FROM inventory 
+    WHERE current_stock < reorder_point
+  `
+}
+
+// Query customer support from MS SQL
+support_metrics = MSSQL_Query {
+  connection_string: env.SUPPORT_DB,
+  query: `
+    SELECT 
+      COUNT(CASE WHEN status = 'open' THEN 1 END) as open_tickets,
+      COUNT(CASE WHEN status = 'resolved' AND resolved_date >= ? THEN 1 END) as resolved_today,
+      AVG(CASE WHEN status = 'resolved' THEN DATEDIFF(hour, created_date, resolved_date) END) as avg_resolution_hours
+    FROM support_tickets
+  `,
+  params: [date_filter]
+}
+
+return {
+  sales_data: ecommerce_sales,
+  low_stock_items: warehouse_data,
+  support_metrics: support_metrics[0],
+  dashboard_updated: timestamp()
+}
+```
+
+## Connection String Setup
+
+### PostgreSQL Connection
+```javascript
+// Basic connection
+connection = "postgresql://user:password@localhost:5432/mydb"
+
+// With SSL
+connection = "postgresql://user:password@host:5432/db?sslmode=require"
+
+// Environment variables (recommended)
+connection = "postgresql://" ~ env.PG_USER ~ ":" ~ env.PG_PASSWORD ~ 
+            "@" ~ env.PG_HOST ~ ":" ~ env.PG_PORT ~ "/" ~ env.PG_DATABASE
+```
+
+### MySQL Connection
+```javascript
+// Basic connection
+connection = "mysql://user:password@localhost:3306/mydb"
+
+// With charset
+connection = "mysql://user:password@host:3306/db?charset=utf8mb4"
+
+// Environment variables
+connection = "mysql://" ~ env.MYSQL_USER ~ ":" ~ env.MYSQL_PASSWORD ~ 
+            "@" ~ env.MYSQL_HOST ~ ":" ~ env.MYSQL_PORT ~ "/" ~ env.MYSQL_DATABASE
+```
+
+### MS SQL Server
+```javascript
+// Basic connection
+connection = "mssql://user:password@localhost:1433/mydb"
+
+// With instance
+connection = "mssql://user:password@host\\SQLEXPRESS:1433/db"
+
+// Environment variables
+connection = "mssql://" ~ env.MSSQL_USER ~ ":" ~ env.MSSQL_PASSWORD ~ 
+            "@" ~ env.MSSQL_HOST ~ ":" ~ env.MSSQL_PORT ~ "/" ~ env.MSSQL_DATABASE
+```
+
+### Oracle Connection
+```javascript
+// Service name connection
+connection = "oracle://user:password@host:1521/service"
+
+// SID connection
+connection = "oracle://user:password@host:1521:SID"
+
+// Environment variables
+connection = "oracle://" ~ env.ORACLE_USER ~ ":" ~ env.ORACLE_PASSWORD ~ 
+            "@" ~ env.ORACLE_HOST ~ ":" ~ env.ORACLE_PORT ~ "/" ~ env.ORACLE_SERVICE
+```
+
+## Secure Query Patterns
+
+### Always Use Parameters
+```javascript
+// ❌ DANGEROUS - SQL injection risk
+dangerous_query = "SELECT * FROM users WHERE email = '" ~ Input.email ~ "'"
+
+// ✅ SAFE - Parameterized query
+safe_query = MySQL_Query {
+  connection_string: env.DB_CONNECTION,
+  query: "SELECT * FROM users WHERE email = ?",
+  params: [Input.email]
+}
+```
+
+### Multiple Parameters
+```javascript
+// Safe parameterized query with multiple values
+user_orders = PostgreSQL_Query {
+  connection_string: env.DB_CONNECTION,
+  query: `
+    SELECT 
+      order_id,
+      total_amount,
+      status,
+      created_at
+    FROM orders 
+    WHERE user_id = ? 
+    AND created_at BETWEEN ? AND ?
+    ORDER BY created_at DESC
+  `,
+  params: [Input.user_id, Input.start_date, Input.end_date]
+}
+```
+
+## Common Query Patterns
+
+### Data Synchronization
+```javascript
+// Sync recent orders from external system
+sync_cutoff = Variable("last_sync_time") ?? "1970-01-01"
+
+external_orders = MySQL_Query {
+  connection_string: env.EXTERNAL_DB,
+  query: `
+    SELECT 
+      order_id,
+      customer_email,
+      total_amount,
+      status,
+      created_at,
+      updated_at
+    FROM orders 
+    WHERE updated_at > ?
+    ORDER BY updated_at ASC
+  `,
+  params: [sync_cutoff]
+}
+
+// Process each new/updated order
+For Each order in external_orders {
+  // Check if order exists in Xano
+  existing = Query_All_Records {
+    table: "orders",
+    filter: {external_order_id: order.order_id}
+  }
+  
+  if (existing && existing.length > 0) {
+    // Update existing order
+    Edit_Record {
+      id: existing[0].id,
+      status: order.status,
+      total_amount: order.total_amount,
+      updated_at: order.updated_at
+    }
+  } else {
+    // Create new order
+    Add_Record {
+      table: "orders",
+      external_order_id: order.order_id,
+      customer_email: order.customer_email,
+      total_amount: order.total_amount,
+      status: order.status,
+      created_at: order.created_at
+    }
+  }
+}
+
+// Update sync timestamp
+Update_Variable("last_sync_time", timestamp())
+```
+
+### Aggregation Reports
+```javascript
+// Generate sales report from external database
+report_data = PostgreSQL_Query {
+  connection_string: env.SALES_DB,
+  query: `
+    WITH monthly_sales AS (
+      SELECT 
+        DATE_TRUNC('month', order_date) as month,
+        COUNT(*) as order_count,
+        SUM(order_total) as revenue,
+        COUNT(DISTINCT customer_id) as unique_customers
+      FROM sales_orders
+      WHERE order_date >= ?
+      GROUP BY DATE_TRUNC('month', order_date)
+    ),
+    growth_calc AS (
+      SELECT 
+        month,
+        order_count,
+        revenue,
+        unique_customers,
+        LAG(revenue) OVER (ORDER BY month) as prev_revenue
+      FROM monthly_sales
+    )
+    SELECT 
+      month,
+      order_count,
+      revenue,
+      unique_customers,
+      CASE 
+        WHEN prev_revenue > 0 
+        THEN ROUND(((revenue - prev_revenue) / prev_revenue * 100), 2)
+        ELSE NULL
+      END as growth_percent
+    FROM growth_calc
+    ORDER BY month DESC
+  `,
+  params: [Input.start_date]
+}
+
+return {
+  report: report_data,
+  generated_at: timestamp()
+}
+```
+
+### Complex Joins
+```javascript
+// Join data from multiple tables with conditions
+customer_analysis = MySQL_Query {
+  connection_string: env.CRM_DB,
+  query: `
+    SELECT 
+      c.customer_id,
+      c.first_name,
+      c.last_name,
+      c.email,
+      COUNT(DISTINCT o.order_id) as total_orders,
+      SUM(o.order_total) as lifetime_value,
+      MAX(o.order_date) as last_order_date,
+      AVG(o.order_total) as avg_order_value,
+      COUNT(DISTINCT p.product_category) as categories_purchased
+    FROM customers c
+    LEFT JOIN orders o ON c.customer_id = o.customer_id
+    LEFT JOIN order_items oi ON o.order_id = oi.order_id
+    LEFT JOIN products p ON oi.product_id = p.product_id
+    WHERE c.registration_date >= ?
+    GROUP BY c.customer_id, c.first_name, c.last_name, c.email
+    HAVING COUNT(DISTINCT o.order_id) >= ?
+    ORDER BY lifetime_value DESC
+  `,
+  params: [Input.registration_cutoff, Input.min_orders]
+}
+```
+
+## Error Handling
+
+### Connection Error Handling
+```javascript
+Try {
+  results = PostgreSQL_Query {
+    connection_string: env.DB_CONNECTION,
+    query: "SELECT * FROM products WHERE category = ?",
+    params: [Input.category]
+  }
+  
+  return {
+    success: true,
+    data: results
+  }
+} Catch (error) {
+  // Log error for debugging
+  Add_Log({
+    type: "database_error",
+    database_type: "postgresql",
+    error_message: error.message,
+    query_attempted: "product category query"
+  })
+  
+  // Return user-friendly error
+  return {
+    success: false,
+    error: "Unable to fetch products at this time",
+    retry_after: 30
+  }
+}
+```
+
+### Timeout Handling
+```javascript
+// Set reasonable timeout for slow queries
+Try {
+  large_report = MySQL_Query {
+    connection_string: env.REPORTING_DB,
+    query: `
+      SELECT /* COMPLEX REPORTING QUERY */
+      FROM large_table lt
+      JOIN other_table ot ON lt.id = ot.foreign_id
+      WHERE lt.date_column >= ?
+    `,
+    params: [Input.start_date],
+    timeout: 30000  // 30 second timeout
+  }
+  
+  return large_report
+} Catch (timeout_error) {
+  // Offer alternative or suggest filtering
+  return {
+    error: "Query timeout - please try with a shorter date range",
+    suggested_max_days: 30
+  }
+}
+```
+
+## Performance Optimization
+
+### Indexing Considerations
+```javascript
+// Query with proper index usage
+optimized_query = PostgreSQL_Query {
+  connection_string: env.DB_CONNECTION,
+  query: `
+    -- Ensure indexes exist on:
+    -- users(email)
+    -- orders(user_id, created_at)
+    -- order_items(order_id)
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+    SELECT 
+      u.user_id,
+      u.email,
+      COUNT(o.order_id) as order_count,
+      SUM(oi.quantity * oi.price) as total_spent
+    FROM users u
+    INNER JOIN orders o ON u.user_id = o.user_id
+    INNER JOIN order_items oi ON o.order_id = oi.order_id
+    WHERE u.email = ? 
+    AND o.created_at >= ?
+    GROUP BY u.user_id, u.email
+  `,
+  params: [Input.email, Input.date_from]
+}
+```
 
--   
+### Pagination for Large Results
+```javascript
+// Paginated query for large datasets
+page_size = 100
+offset = (Input.page - 1) * page_size
 
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../building-with-visual-development/triggers.html)
-        -   [Middleware](../../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](query-all-records/external-filtering-examples.html)
-                            -   [Get Record](get-record.html)
-            -   [Add Record](add-record.html)
-            -   [Edit Record](edit-record.html)
-            -   [Add or Edit Record](add-or-edit-record.html)
-            -   [Patch Record](patch-record.html)
-            -   [Delete Record](delete-record.html)
-            -   [Bulk Operations](bulk-operations.html)
-            -   [Database Transaction](database-transaction.html)
-            -   [External Database Query](external-database-query.html)
-            -   [Direct Database Query](direct-database-query.html)
-            -   [Get Database Schema](get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../data-manipulation/create-variable.html)
-            -   [Update Variable](../data-manipulation/update-variable.html)
-            -   [Conditional](../data-manipulation/conditional.html)
-            -   [Switch](../data-manipulation/switch.html)
-            -   [Loops](../data-manipulation/loops.html)
-            -   [Math](../data-manipulation/math.html)
-            -   [Arrays](../data-manipulation/arrays.html)
-            -   [Objects](../data-manipulation/objects.html)
-            -   [Text](../data-manipulation/text.html)
-                    -   [Security](../security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../data-caching-redis.html)
-        -   [Custom Functions](../custom-functions.html)
-        -   [Utility Functions](../utility-functions.html)
-        -   [File Storage](../file-storage.html)
-        -   [Cloud Services](../cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../filters/manipulation.html)
-        -   [Math](../../filters/math.html)
-        -   [Timestamp](../../filters/timestamp.html)
-        -   [Text](../../filters/text.html)
-        -   [Array](../../filters/array.html)
-        -   [Transform](../../filters/transform.html)
-        -   [Conversion](../../filters/conversion.html)
-        -   [Comparison](../../filters/comparison.html)
-        -   [Security](../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../data-types/text.html)
-        -   [Expression](../../data-types/expression.html)
-        -   [Array](../../data-types/array.html)
-        -   [Object](../../data-types/object.html)
-        -   [Integer](../../data-types/integer.html)
-        -   [Decimal](../../data-types/decimal.html)
-        -   [Boolean](../../data-types/boolean.html)
-        -   [Timestamp](../../data-types/timestamp.html)
-        -   [Null](../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+paginated_results = MySQL_Query {
+  connection_string: env.DB_CONNECTION,
+  query: `
+    SELECT 
+      customer_id,
+      first_name,
+      last_name,
+      email,
+      registration_date
+    FROM customers
+    WHERE status = 'active'
+    ORDER BY registration_date DESC
+    LIMIT ? OFFSET ?
+  `,
+  params: [page_size, offset]
+}
 
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+// Get total count for pagination
+total_count = MySQL_Query {
+  connection_string: env.DB_CONNECTION,
+  query: "SELECT COUNT(*) as total FROM customers WHERE status = 'active'"
+}
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+return {
+  data: paginated_results,
+  pagination: {
+    current_page: Input.page,
+    page_size: page_size,
+    total_records: total_count[0].total,
+    total_pages: Math.ceil(total_count[0].total / page_size)
+  }
+}
+```
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+## Try This
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+Connect to an external database:
+1. Set up connection string
+2. Write a simple SELECT query
+3. Add parameterization for safety
+4. Handle errors gracefully
+5. Test with real data
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+## Pro Tips
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+💡 **Use Environment Variables:** Never hardcode connection strings
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../xano-features/metadata-api/search.html)
-        -   [File](../../../xano-features/metadata-api/file.html)
-        -   [Request History](../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+💡 **Always Parameterize:** Prevent SQL injection with parameters
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+💡 **Set Timeouts:** Avoid hanging on slow queries
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+💡 **Index Wisely:** Ensure external database has proper indexes
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+💡 **Cache Results:** Store frequently accessed data in Xano
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+## Common Gotchas
 
--   
-    Security
-    
-    -   Best Practices
+### Connection String Format
+```javascript
+// Problem: Wrong format
+connection = "postgres://user:pass@host/db"  // Missing port!
 
-[Powered by GitBook]
+// Solution: Complete format
+connection = "postgresql://user:pass@host:5432/db"
+```
 
-On this page
+### Parameter Types
+```javascript
+// Problem: Wrong parameter type
+MySQL_Query {
+  query: "SELECT * FROM users WHERE age > ?",
+  params: ["25"]  // String instead of number
+}
 
-Was this helpful?
+// Solution: Correct type
+MySQL_Query {
+  query: "SELECT * FROM users WHERE age > ?",
+  params: [25]  // Proper integer
+}
+```
 
-Copy
+### Special Characters in Passwords
+```javascript
+// Problem: Special characters in connection string
+connection = "mysql://user:p@ssw0rd!@host:3306/db"  // @ in password breaks parsing
 
+// Solution: URL encode special characters
+encoded_password = url_encode("p@ssw0rd!")
+connection = "mysql://user:" ~ encoded_password ~ "@host:3306/db"
+```
 
-2.  Functions
-3.  [Database Requests](../database-requests.html)
+## Next Steps
 
-External Database Query 
-=======================
+1. Set up secure connections
+2. Practice parameterized queries
+3. Implement error handling
+4. Optimize query performance
+5. Build data sync workflows
 
-In Xano, you can connect to the following types of external databases:
-
--   
-    
-        
-    
-    PostgreSQL
-    
--   
-    
-        
-    
-    MS SQL
-    
--   
-    
-        
-    
-    Oracle
-    
--   
-    
-        
-    
-    MySQL
-    
-Add a new function to your function stack that corresponds to the type of database you\'d like to connect to. The external connection functions are located under Database Operations.
-
-![](../../../_gitbook/imaged311.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FtKIO2JJm2VWWZFHc9g4p%252FCleanShot%25202024-10-09%2520at%252018.54.05%25402x.png%3Falt%3Dmedia%26token%3D6e10808f-8e65-46a0-b232-12b14376183e&width=768&dpr=4&quality=100&sign=bb51ef28&sv=2)
-
-Once you\'ve added your desired connection function, you\'ll need to define a **connection string**. A connection string is just a URL that contains all of the information we need to connect to your database, such as a hostname or IP address, port, username, and password. We\'ve added an easy to use panel to help you generate a connection string for your database.
-
-![](../../../_gitbook/image90d1.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FJDpcbezRTVhQu5nQkSAK%252FCleanShot%25202024-10-09%2520at%252018.55.53%25402x.png%3Falt%3Dmedia%26token%3D27b2aae7-684c-4b27-a120-5b5b9621a18c&width=768&dpr=4&quality=100&sign=10529cb2&sv=2)
-
-Fill in the required information and click **Save** at the bottom to generate your connection string.
-
-For more information on building a query to run against your database, see our [Direct Database Query documentation](direct-database-query.html).
-
-Last updated 6 months ago
-
-Was this helpful?
+Remember: External databases expand your data access - use them wisely and securely!
