@@ -1,420 +1,342 @@
 ---
+title: "API Request Assistant - AI-Powered Integration Helper"
+description: "Use Xano's AI Assistant to automatically configure external API requests - perfect for no-code users connecting to third-party services"
 category: api-endpoints
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/api-endpoints
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - AI Assistant
+  - External APIs
+  - Automation
+  - No-Code Tools
+  - Integration Helper
+difficulty: beginner
+reading_time: 5 minutes
+last_updated: '2025-01-23'
+prerequisites:
+  - Xano workspace access
+  - Basic understanding of APIs
 ---
 
+# API Request Assistant - AI-Powered Integration Helper
+
+## 📋 **Quick Summary**
+
+**What it does:** The API Request Assistant uses AI to automatically configure external API connections for you. Just describe what you want to do, and it generates the complete request configuration.
+
+**Why it matters:** This tool enables you to:
+- Connect to any API without reading complex documentation
+- Avoid common configuration mistakes
+- Save hours of trial and error
+- Get working integrations in minutes, not hours
+
+**Time to implement:** 2-5 minutes per API connection
+
 ---
-apple-mobile-web-app-status-bar-style: black
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'api-request-assistant'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## What is the API Request Assistant?
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+### Your AI Integration Expert
 
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
+Think of the API Request Assistant as having an expert developer sitting next to you who knows how to connect to thousands of APIs. You describe what you want in plain English, and it writes the technical configuration for you.
 
+### 💡 **What This Means for You**
 
+- **No more reading API docs:** Just tell the AI what service you want to connect to
+- **No more debugging headers:** The AI knows what each API needs
+- **No more format confusion:** It handles JSON, XML, form-data automatically
+- **Perfect for non-developers:** Speak naturally, get technical results
 
+## How to Use the API Request Assistant
 
+### Step 1: Add External API Request
 
+1. Open your Function Stack in Xano
+2. Click the **+** button to add a function
+3. Navigate to **APIs & Lambdas** category
+4. Select **External API Request**
 
+### Step 2: Launch the AI Assistant
 
+Click the **AI Assistant** button (magic wand icon) in the External API Request panel.
 
+### Step 3: Describe Your Request
 
+Tell the AI what you want in plain English:
 
+#### 🔗 **Example Prompts for n8n Users**
 
+```text
+"I need to send data to Slack when my n8n workflow triggers this endpoint"
 
+"Connect to Airtable and create a new record in my Customers table"
 
+"Get the latest exchange rates from a currency API"
+```
 
+#### 🌐 **Example Prompts for WeWeb Users**
 
--   
+```text
+"Set up Stripe to create a new customer with email and name"
 
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+"Connect to SendGrid to send a welcome email"
 
--   
+"Fetch user profile data from Auth0"
+```
 
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../the-function-stack/filters/manipulation.html)
-        -   [Math](../the-function-stack/filters/math.html)
-        -   [Timestamp](../the-function-stack/filters/timestamp.html)
-        -   [Text](../the-function-stack/filters/text.html)
-        -   [Array](../the-function-stack/filters/array.html)
-        -   [Transform](../the-function-stack/filters/transform.html)
-        -   [Conversion](../the-function-stack/filters/conversion.html)
-        -   [Comparison](../the-function-stack/filters/comparison.html)
-        -   [Security](../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../the-function-stack/data-types/text.html)
-        -   [Expression](../the-function-stack/data-types/expression.html)
-        -   [Array](../the-function-stack/data-types/array.html)
-        -   [Object](../the-function-stack/data-types/object.html)
-        -   [Integer](../the-function-stack/data-types/integer.html)
-        -   [Decimal](../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../the-function-stack/data-types/timestamp.html)
-        -   [Null](../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+#### 🔧 **Example Prompts for Make/Integromat Users**
 
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+```text
+"Connect to Google Sheets and append a new row"
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+"Send an SMS through Twilio with a verification code"
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+"Create a new contact in HubSpot CRM"
+```
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+### Step 4: Review and Apply
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+The AI will generate:
+- Complete URL with proper formatting
+- Correct HTTP method (GET, POST, etc.)
+- Required headers
+- Properly formatted request body
+- Authentication setup
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+Review the configuration and click **Apply** to use it.
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+### Step 5: Add Sensitive Information
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+For security, manually add:
+- API keys
+- Passwords
+- Secret tokens
+- Client secrets
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+**💡 Pro Tip:** Store these in Environment Variables instead of hardcoding
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+## Real-World Examples
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+### Example 1: Connecting to OpenAI
 
--   
-    Security
-    
-    -   Best Practices
+**Your prompt:**
+```text
+"Connect to OpenAI GPT-4 to analyze customer feedback sentiment"
+```
 
-[Powered by GitBook]
+**AI generates:**
+```json
+{
+  "url": "https://api.openai.com/v1/chat/completions",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer [ADD_YOUR_API_KEY]",
+    "Content-Type": "application/json"
+  },
+  "params": {
+    "model": "gpt-4",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Analyze the sentiment of the following feedback"
+      },
+      {
+        "role": "user",
+        "content": "{feedback_text}"
+      }
+    ]
+  }
+}
+```
 
-On this page
+### Example 2: Stripe Payment Processing
 
-Was this helpful?
+**Your prompt:**
+```text
+"Create a Stripe customer and charge them $49.99 for a subscription"
+```
 
-Copy
+**AI generates:**
+```json
+{
+  "url": "https://api.stripe.com/v1/customers",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer [ADD_YOUR_SECRET_KEY]",
+    "Content-Type": "application/x-www-form-urlencoded"
+  },
+  "params": {
+    "email": "{customer_email}",
+    "source": "{payment_token}",
+    "metadata[subscription]": "premium"
+  }
+}
+```
 
-1.  [Build With AI](using-ai-builders-with-xano.html)
+### Example 3: Sending Emails via SendGrid
 
-API Request Assistant 
-=====================
+**Your prompt:**
+```text
+"Send a password reset email using SendGrid"
+```
 
-<div>
+**AI generates:**
+```json
+{
+  "url": "https://api.sendgrid.com/v3/mail/send",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer [ADD_YOUR_API_KEY]",
+    "Content-Type": "application/json"
+  },
+  "params": {
+    "personalizations": [{
+      "to": [{"email": "{user_email}"}],
+      "dynamic_template_data": {
+        "reset_link": "{reset_url}",
+        "user_name": "{user_name}"
+      }
+    }],
+    "template_id": "d-xxxxxxxxxxxxx",
+    "from": {"email": "noreply@yourcompany.com"}
+  }
+}
+```
 
-1
+## Advanced AI Assistant Features
 
-###  
+### Iterative Refinement
 
-Add an External API Request function to your function stack.
+Don't get it right the first time? Continue the conversation:
 
-This is located inside of the **APIs & Lambdas** category.
+```text
+You: "Connect to Slack to send a message"
+AI: [generates basic configuration]
+You: "Add formatting and mention a user"
+AI: [updates with rich formatting and @mention syntax]
+You: "Also include a button that links to our dashboard"
+AI: [adds interactive button component]
+```
 
-2
+### Understanding Complex APIs
 
-###  
+The AI Assistant understands:
+- OAuth flow requirements
+- Pagination patterns
+- Rate limiting considerations
+- Webhook signatures
+- Multi-part form data
+- GraphQL queries
 
-Click [![](../_gitbook/imaged5bc.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F1G2mEZvVXlOR6d9kiD6I%252FCleanShot%25202025-04-02%2520at%252015.44.45.png%3Falt%3Dmedia%26token%3D53cbbf6d-62b9-4a06-893c-c5e14b6fb3d1&width=300&dpr=4&quality=100&sign=ed805135&sv=2)] from the panel that opens.
+### API Documentation Import
 
-3
+You can even paste API documentation:
 
-###  
+```text
+"Here's the curl command from the docs: 
+curl -X POST https://api.example.com/v1/data \
+  -H 'Authorization: Bearer token' \
+  -d '{\"key\":\"value\"}'"
+```
 
-Tell the AI Assistant about the API you want to access, and any specifics about the request you want to make.
+The AI will convert it to Xano's format automatically.
 
-![](../_gitbook/imagec482.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FjT1vrsN9at0cDSPSsqoy%252FCleanShot%25202025-04-02%2520at%252015.57.03.png%3Falt%3Dmedia%26token%3D2312e5ad-08f1-44c2-8972-3fe01ceb90b6&width=768&dpr=4&quality=100&sign=e397100&sv=2)
+## Best Practices
 
-4
+### 1. Be Specific in Your Prompts
 
-###  
+❌ **Vague:** "Connect to payment API"
+✅ **Specific:** "Connect to Stripe to create a checkout session for $29.99"
 
-You can either choose to apply the AI\'s suggestion, or continue to converse with the AI to iterate or make changes.
+### 2. Mention Your Use Case
 
-![](../_gitbook/imagea5c5.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F0dc9zZTKSIf6xRICbJdP%252FCleanShot%25202025-04-02%2520at%252015.58.52.png%3Falt%3Dmedia%26token%3D48c8ed4d-2f55-42f7-b64f-b91cc46563b1&width=768&dpr=4&quality=100&sign=785b98c&sv=2)
+❌ **Generic:** "Get data from API"
+✅ **Contextual:** "Get customer orders from Shopify to display in WeWeb dashboard"
 
-5
+### 3. Include Required Fields
 
-###  
+❌ **Incomplete:** "Send email"
+✅ **Complete:** "Send email with subject, recipient, and HTML body using SendGrid"
 
-For things like API keys, you can either pass them to the AI or fill them in manually after you\'ve applied the suggestion.[![](../_gitbook/imagef6a6.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F2QElXqiTiOIkcD0CVPE6%252FCleanShot%25202025-04-02%2520at%252016.00.32.gif%3Falt%3Dmedia%26token%3D9e4c1fb4-7c59-4031-850d-53711c86567a&width=300&dpr=4&quality=100&sign=1a95adff&sv=2)]
+## Common Patterns by Platform
 
-</div>
+### 🔗 **For n8n Workflows**
 
-Last updated 4 months ago
+When n8n triggers your Xano endpoint, use the AI Assistant to:
+- Process webhook data
+- Enrich data from multiple sources
+- Transform formats between systems
 
-Was this helpful?
+### 🌐 **For WeWeb Apps**
+
+Use the AI Assistant to set up:
+- User authentication flows
+- Payment processing
+- File uploads to cloud storage
+- Email notifications
+
+### 🔧 **For Make Scenarios**
+
+Configure integrations for:
+- CRM synchronization
+- Marketing automation
+- Document generation
+- Analytics tracking
+
+## Troubleshooting
+
+### Issue: AI Doesn't Understand My API
+
+**Solution:** Provide more context:
+- API name and version
+- Link to documentation
+- Example request from docs
+
+### Issue: Configuration Doesn't Work
+
+**Solution:** Iterate with the AI:
+```text
+"The request returns 401 error"
+AI will suggest: "Check authorization header format..."
+```
+
+### Issue: Complex Authentication
+
+**Solution:** Break it down:
+```text
+"First, I need to get an OAuth token from /auth/token, 
+then use it to call /api/data"
+```
+
+## Security Considerations
+
+### Never Share Sensitive Data with AI
+
+✅ **Do:** "Add Stripe API key header"
+❌ **Don't:** "Use key sk_live_abc123..."
+
+### Use Environment Variables
+
+After AI generates config:
+1. Replace `[ADD_YOUR_API_KEY]` with environment variable
+2. Store actual keys in Xano's Environment Variables
+3. Reference them as `{env.STRIPE_KEY}`
+
+## 💡 **Pro Tips**
+
+1. **Save Common Patterns:** Copy successful configurations for reuse
+2. **Test Incrementally:** Start with simple requests, then add complexity
+3. **Check Rate Limits:** Ask AI about API rate limits
+4. **Version Your APIs:** Ask AI to use specific API versions
+5. **Document Purpose:** Add comments explaining what each request does
+
+## Next Steps
+
+- Try the [External API Request](api__external_api_request.md) function manually
+- Learn about [API Authentication](../authentication/oauth-sso.md)
+- Explore [Webhook](../../08-reference/functions/webhooks.md) configuration
+- Master [Background Tasks](../function-stack/background-tasks.md) for long operations
+
+## Need Help?
+
+- 💬 [Xano Community](https://community.xano.com) - Share your AI prompts
+- 🎥 [Video Tutorials](https://university.xano.com) - See AI Assistant in action
+- 📚 [API Gallery](https://www.xano.com/api-gallery) - Pre-configured integrations

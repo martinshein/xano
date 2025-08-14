@@ -1,446 +1,393 @@
 ---
+title: "External API Requests in Xano"
+description: "Connect Xano to any external service or API - perfect for integrating payment gateways, email services, AI tools, and more"
 category: api-endpoints
-has_code_examples: true
-last_updated: '2025-01-23'
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: 'API: External Api Request'
+  - External APIs
+  - Integration
+  - HTTP Requests
+  - Webhooks
+  - Third-party Services
+difficulty: intermediate
+reading_time: 10 minutes
+last_updated: '2025-01-23'
+prerequisites:
+  - Basic understanding of APIs
+  - Xano Function Stack knowledge
+  - API authentication concepts
 ---
 
-# API: External Api Request
+# External API Requests in Xano
 
-[](../../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    What is an external API request?
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../../building-with-visual-development.html)
-2.  Functions
-3.  APIs & Lambdas
-External API Request 
-====================
-What is an external API request?
-The External API Request function is used to send requests to external APIs. You\'ll use this anytime you want to interact with a third party service, such as a payment platform or email provider.
-Using the External API Request Function
-<div>
-1
-###  
-Add an External API Request function
-2
-###  
-Use the AI Assistant to help you build your API request
-<div>
-1
-###  
-Add an External API Request function to your function stack.
-This is located inside of the **APIs & Lambdas** category.
-2
-###  
-Click [] from the panel that opens.
-3
-###  
-Tell the AI Assistant about the API you want to access, and any specifics about the request you want to make.
-4
-###  
-You can either choose to apply the AI\'s suggestion, or continue to converse with the AI to iterate or make changes.
-5
-###  
-For things like API keys, you can either pass them to the AI or fill them in manually after you\'ve applied the suggestion.[]
-</div>
-3
-###  
-Or, build the request manually or with a cURL command
-You can copy cURL commands from API documentation, and paste them using []. Xano will build the request for you.
-Option
-Description
-url
-The URL of the API you\'re calling, such as:
-`https://api.service.com/send_message`
-method
-The verb the API is designed to respond to, such as GET, POST, DELETE, etc\...
-params
-Also known as \"query parameters\", these are options sent along with the request, such as searching and filtering options, or other data that the request needs to execute.
-You may also see this referred to as **request body**.
-Hover over the params value space and click [**set**] to add a new parameter.
-[]
-headers
-Any headers you need to send with the request, such as authentication.
-Add headers by hovering over the value space and click [**push**
-]
-[][
-]
-timeout
-How long Xano should allow the request to take before considering it timed out (failed)
-follow\_location
-Determines if you wish to automatically follow the redirects (if there are any) in the API call.
-An example of this would be an API that generates a file for you, then gives you a redirect to get that file.
-</div>
-Understanding API Documentation
-<div>
-1
-###  
-Start by evaluating the four key sections that almost every API documentation has.
-The Getting Started guide is your entry point - it typically covers the basics of authentication, shows a simple example request, and helps you make your first API call successfully.
-The Authentication section explains how to get your API keys and how to include them in your requests. This is crucial since you\'ll need this working before you can try anything else.
-The API Reference details every possible endpoint and operation. Don\'t try to read this cover-to-cover. Instead, find the specific endpoint that matches what you\'re trying to do, then study its parameters, required headers, and example responses.
-The Examples/Tutorials section often has complete code snippets showing common use cases. These are invaluable for seeing how different API calls work together to accomplish a task.
-2
-###  
-Finding the endpoint(s) you need
-When you find the endpoint you need, focus on three things:
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    What URL you\'ll be calling
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    What parameters or data you need to send
-    :::
-3.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    What the response will look like
-    :::
-Most API documentation also includes **cURL commands**, which you can copy and paste right into Xano by clicking []on the External API Request function panel. This is the optimal way to create external API request in Xano, as it ensures consistency with what the API requires and is much faster.
-**Tip**
-Most API documentation has a \"try it out\" or interactive portion that allows you to experiment with the API --- it\'s the fastest way to understand how everything works.
-</div>
-Multipart (File) Support
-Xano has support for sending images through the external API request function. You can send a file resource - either as an input or variable - through the parameters section of the external API request as a key-value pair or as the entire parameter (depending on what the specific API requires).
-Security Settings
-###  
-Host Verification
-When an API request is sent to a secure server (you\'ll know if it\'s a secure request if the URL starts with https --- most requests will), the domain\'s secure connection is verified using a certificate. Enabling host verification checks the certificate to make sure that it matches the domain you\'re sending the request to.
-This value can be `true` or `false`
-**Recommended Setting:** `true`
-You might want to set Host Verification to \'false\' in a few specific scenarios:
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Development and Testing Environments**: When working with development servers that use self-signed certificates or have hostnames that don\'t match their certificates
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Internal Services with Misconfigured Certificates**: In corporate environments where internal services may have certificates that don\'t exactly match the hostnames used to access them, especially in legacy systems.
-    :::
-3.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Troubleshooting SSL Issues**: To isolate whether hostname verification is causing connection problems when debugging API connectivity issues.
-    :::
-###  
-Peer Verification
-Secure certificates are usually issued by certain trusted authorities, such as LetsEncrypt. Peer Verification enables checking whether or not the certificate is issued by one of these known trusted authorities, validating its authenticity.
-This value can be `true` or `false`
-**Recommended Setting:** `true`
-You might want to set this to false if the server you\'re sending the request to falls under one of the scenarios outlined above under **Host Verification**.
-###  
-SSL Authentication
-This is a set of additional options you can use to validate the security of the request being made. The provider of the service you\'re calling should be able to provide these for you, if necessary.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `certificate`: The content of the client certificate file. Usually, you\'d be provided with a .crt or a .pem file --- just open it up in your text editor of choice and paste the contents here.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `certificate_pass`: Password for the certificate if it\'s password-protected
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `private_key`: The contents of the private key file. Usually, you\'d be provided with a .pem file for this --- just open it up in your text editor of choice and paste the contents here.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `private_key_pass`: Password for the private key if it\'s password-protected
-    :::
-###  
-CA Certificate
-Custom CA certificates allow you to specify your own trusted Certificate Authority for peer verification. This is an advanced option that is useful when connecting to servers that use certificates signed by private or internal CAs --- as in, a CA that is not listed as a known trusted authority.
-A custom certificate is usually provided as a file that you\'d just open up in a text editor and paste here. It will look something like this:
-Copy
-``` 
------BEGIN CERTIFICATE-----
-MIIDITCCAgmgAwIBAgIUJqrGM2rS34H8YryJJLAMarvab8AwDQYJKoZIhvcNAQEL
-BQAwIDEeMBwGA1UEAwwVbXlDdXN0b21DZXJ0aWZpY2F0ZUNKX...
------END CERTIFICATE-----
-```
-Last updated 4 months ago
-Was this helpful?
+## 📋 **Quick Summary**
 
-## Code Examples
+**What it does:** External API Requests allow Xano to communicate with any third-party service, making it the bridge between your backend and external tools like Stripe, SendGrid, OpenAI, or any REST API.
 
-```
- 
------BEGIN CERTIFICATE-----
-MIIDITCCAgmgAwIBAgIUJqrGM2rS34H8YryJJLAMarvab8AwDQYJKoZIhvcNAQEL
-BQAwIDEeMBwGA1UEAwwVbXlDdXN0b21DZXJ0aWZpY2F0ZUNKX...
------END CERTIFICATE-----
+**Why it matters:** This function enables you to:
+- Integrate payment processing without storing sensitive data
+- Send emails through professional services
+- Connect to AI/ML services
+- Sync data with CRMs and ERPs
+- Chain multiple services in your workflows
 
+**Time to implement:** 10-30 minutes per integration
+
+---
+
+## Understanding External API Requests
+
+### What Are External API Requests?
+
+Think of External API Requests as Xano making a phone call to another service. Just like n8n's HTTP Request node or Make's HTTP module, this function lets Xano reach out to any service with an API.
+
+### 💡 **What This Means for You**
+
+- **In n8n:** Similar to HTTP Request nodes, but running on your backend
+- **In WeWeb:** Handle sensitive API calls server-side instead of exposing keys
+- **In Make:** Complement your scenarios with secure backend processing
+
+## Getting Started Quickly
+
+### Three Ways to Create External API Requests
+
+#### 1. 🤖 **AI Assistant Method** (Fastest)
+1. Add External API Request function
+2. Click the AI Assistant button
+3. Describe what you want: "Connect to Stripe to create a customer"
+4. Review and apply the generated configuration
+
+#### 2. 📋 **cURL Import Method** (Most Accurate)
+1. Copy cURL command from API documentation
+2. Click "Import cURL" button in Xano
+3. Paste the command
+4. Xano auto-configures everything
+
+#### 3. 🔧 **Manual Configuration** (Most Control)
+Build your request piece by piece with full customization
+
+## Essential Configuration
+
+### Basic Request Structure
+
+```yaml
+URL: https://api.service.com/endpoint
+Method: GET | POST | PUT | DELETE | PATCH
+Headers:
+  Authorization: Bearer YOUR_API_KEY
+  Content-Type: application/json
+Body:
+  key: value
+  nested:
+    data: here
 ```
 
+### 🔗 **n8n Integration Pattern**
+
+When n8n calls Xano, which then calls external API:
+```javascript
+// n8n → Xano → External Service → n8n
+1. n8n triggers Xano endpoint
+2. Xano calls external API securely
+3. Xano processes response
+4. Xano returns clean data to n8n
+```
+
+### 🌐 **WeWeb Security Pattern**
+
+Keep API keys safe by routing through Xano:
+```javascript
+// WeWeb → Xano → Stripe
+// Never: WeWeb → Stripe (exposes keys)
+// Always: WeWeb → Xano (with auth) → Stripe
+```
+
+## Common Integration Examples
+
+### Example 1: Stripe Payment Processing
+
+```json
+{
+  "url": "https://api.stripe.com/v1/customers",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer sk_live_...",
+    "Content-Type": "application/x-www-form-urlencoded"
+  },
+  "params": {
+    "email": "{customer_email}",
+    "name": "{customer_name}"
+  }
+}
+```
+
+**💡 Pro Tip:** Store Stripe keys in Environment Variables, not hardcoded
+
+### Example 2: SendGrid Email
+
+```json
+{
+  "url": "https://api.sendgrid.com/v3/mail/send",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer SG...",
+    "Content-Type": "application/json"
+  },
+  "params": {
+    "personalizations": [{
+      "to": [{"email": "{recipient}"}]
+    }],
+    "from": {"email": "noreply@company.com"},
+    "subject": "Welcome!",
+    "content": [{
+      "type": "text/html",
+      "value": "{email_body}"
+    }]
+  }
+}
+```
+
+### Example 3: OpenAI GPT Integration
+
+```json
+{
+  "url": "https://api.openai.com/v1/chat/completions",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer sk-...",
+    "Content-Type": "application/json"
+  },
+  "params": {
+    "model": "gpt-4",
+    "messages": [
+      {"role": "user", "content": "{user_prompt}"}
+    ],
+    "temperature": 0.7
+  }
+}
+```
+
+## Authentication Methods
+
+### 1. API Key Authentication
+
+Most common for services like SendGrid, Stripe:
+```yaml
+Headers:
+  X-API-Key: your-key-here
+  # or
+  Authorization: Bearer your-key-here
+```
+
+### 2. OAuth 2.0 Flow
+
+For services like Google, Microsoft:
+1. Get authorization code
+2. Exchange for access token
+3. Use token in requests
+4. Refresh when expired
+
+### 3. Basic Authentication
+
+For older APIs:
+```yaml
+Headers:
+  Authorization: Basic base64(username:password)
+```
+
+### 🔧 **Make/Integromat Tip**
+
+Use Xano for OAuth token management:
+- Store refresh tokens securely
+- Auto-refresh before expiry
+- Share tokens across scenarios
+
+## Handling Files and Multipart Data
+
+### Sending Files to External Services
+
+```javascript
+// Upload to Cloudinary example
+{
+  "url": "https://api.cloudinary.com/v1_1/{cloud}/upload",
+  "method": "POST",
+  "params": {
+    "file": file_resource, // From Xano file input
+    "upload_preset": "unsigned_preset"
+  }
+}
+```
+
+### Receiving Files from APIs
+
+1. Get file URL from API response
+2. Use "Create File Resource" function
+3. Store in Xano or pass to frontend
+
+## Error Handling & Retries
+
+### Implementing Smart Retries
+
+```yaml
+1. Try external request
+2. If status != 200:
+   - Wait 1 second
+   - Try again (max 3 times)
+   - Log error if all fail
+3. Return success or error
+```
+
+### Common Error Patterns
+
+| Error Code | Meaning | Solution |
+|------------|---------|----------|
+| 401 | Authentication failed | Check API key |
+| 429 | Rate limited | Add delays between requests |
+| 500 | Server error | Implement retry logic |
+| timeout | Request too slow | Increase timeout setting |
+
+## Security Best Practices
+
+### 1. Never Expose API Keys
+
+```yaml
+❌ Bad: Hardcode in function
+✅ Good: Use Environment Variables
+✅ Better: Use Xano's Vault for secrets
+```
+
+### 2. Validate SSL Certificates
+
+```yaml
+Host Verification: true (recommended)
+Peer Verification: true (recommended)
+# Only set false for development
+```
+
+### 3. Use IP Whitelisting
+
+For sensitive APIs:
+1. Get Xano's static IP (Scale plan)
+2. Whitelist in external service
+3. Extra security layer
+
+## Performance Optimization
+
+### Timeout Settings
+
+```yaml
+Default: 30 seconds
+Large files: 60-120 seconds
+Quick checks: 5-10 seconds
+```
+
+### Caching Responses
+
+For expensive or slow APIs:
+1. Check cache first (Redis)
+2. If miss, make external request
+3. Store response in cache
+4. Return cached data
+
+### 🔗 **n8n Optimization**
+
+Chain requests efficiently:
+```javascript
+// Instead of: n8n → API1, n8n → API2, n8n → API3
+// Do: n8n → Xano → [API1, API2, API3] → n8n
+// Result: 1 round trip instead of 3
+```
+
+## Debugging External Requests
+
+### Using Run & Debug
+
+1. Add External API Request to function
+2. Click "Run & Debug"
+3. Check:
+   - Request details (headers, body)
+   - Response status
+   - Response body
+   - Timing information
+
+### Common Issues & Solutions
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| "Connection refused" | Wrong URL/port | Verify endpoint URL |
+| "SSL certificate problem" | Self-signed cert | Disable peer verification (dev only) |
+| "Timeout" | Slow API | Increase timeout value |
+| "401 Unauthorized" | Bad credentials | Check API key format |
+
+## Advanced Patterns
+
+### Pattern 1: Webhook Relay
+
+```yaml
+# Receive webhook → Process → Forward
+1. Xano receives webhook
+2. Validate and transform data
+3. Forward to multiple services
+4. Return consolidated response
+```
+
+### Pattern 2: API Aggregation
+
+```yaml
+# Combine multiple API responses
+1. Call Weather API
+2. Call Traffic API
+3. Call Calendar API
+4. Merge data
+5. Return unified response
+```
+
+### Pattern 3: Circuit Breaker
+
+```yaml
+# Prevent cascade failures
+1. Track API failures
+2. If failures > threshold
+3. Stop calling API temporarily
+4. Return cached/default data
+5. Retry after cooldown
+```
+
+## 💡 **Pro Tips for No-Code Users**
+
+1. **Start with Postman:** Test external APIs in Postman first, then import to Xano
+2. **Use Request History:** Debug by checking what Xano actually sent
+3. **Environment Variables:** Store different keys for dev/staging/production
+4. **Mock During Development:** Create fake responses while building
+5. **Document Everything:** Add notes about rate limits and requirements
+
+## Real-World Use Cases
+
+### E-commerce Integration
+- Process payments (Stripe/PayPal)
+- Calculate shipping (FedEx/UPS APIs)
+- Send receipts (email service)
+- Update inventory (ERP system)
+
+### Marketing Automation
+- Sync contacts with CRM
+- Trigger email campaigns
+- Post to social media
+- Track analytics events
+
+### AI-Powered Features
+- Generate content (OpenAI)
+- Analyze sentiment (AWS Comprehend)
+- Translate text (DeepL)
+- Process images (Cloudinary)
+
+## Next Steps
+
+- Master [API Authentication](../authentication/oauth-sso.md) for secure integrations
+- Learn about [Webhooks](../../08-reference/functions/webhooks.md) for receiving data
+- Explore [Background Tasks](../function-stack/background-tasks.md) for long-running operations
+
+## Need Help?
+
+- 📚 [Xano Community](https://community.xano.com) - Ask integration questions
+- 🎥 [Video Tutorials](https://university.xano.com) - See integrations in action
+- 📖 [API Directory](https://rapidapi.com) - Find APIs to integrate
