@@ -1,895 +1,449 @@
 ---
+title: "AI Tools - Intelligent Automation in Xano"
+description: "Integrate AI capabilities into your Xano workflows with MCP servers, template engines, and intelligent agents"
 category: function-stack
-difficulty: advanced
+subcategory: ai-integration
+difficulty: intermediate
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2'
+- ai-tools
+- mcp
+- template-engine
+- automation
+- agents
+- machine-learning
 ---
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+# AI Tools - Intelligent Automation in Xano
 
+## Quick Summary
 
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../building-with-visual-development/triggers.html)
-        -   [Middleware](../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](database-requests/get-record.html)
-            -   [Add Record](database-requests/add-record.html)
-            -   [Edit Record](database-requests/edit-record.html)
-            -   [Add or Edit Record](database-requests/add-or-edit-record.html)
-            -   [Patch Record](database-requests/patch-record.html)
-            -   [Delete Record](database-requests/delete-record.html)
-            -   [Bulk Operations](database-requests/bulk-operations.html)
-            -   [Database Transaction](database-requests/database-transaction.html)
-            -   [External Database Query](database-requests/external-database-query.html)
-            -   [Direct Database Query](database-requests/direct-database-query.html)
-            -   [Get Database Schema](database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](data-manipulation/create-variable.html)
-            -   [Update Variable](data-manipulation/update-variable.html)
-            -   [Conditional](data-manipulation/conditional.html)
-            -   [Switch](data-manipulation/switch.html)
-            -   [Loops](data-manipulation/loops.html)
-            -   [Math](data-manipulation/math.html)
-            -   [Arrays](data-manipulation/arrays.html)
-            -   [Objects](data-manipulation/objects.html)
-            -   [Text](data-manipulation/text.html)
-                    -   [Security](security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](data-caching-redis.html)
-        -   [Custom Functions](custom-functions.html)
-        -   [Utility Functions](utility-functions.html)
-        -   [File Storage](file-storage.html)
-        -   [Cloud Services](cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../filters/manipulation.html)
-        -   [Math](../filters/math.html)
-        -   [Timestamp](../filters/timestamp.html)
-        -   [Text](../filters/text.html)
-        -   [Array](../filters/array.html)
-        -   [Transform](../filters/transform.html)
-        -   [Conversion](../filters/conversion.html)
-        -   [Comparison](../filters/comparison.html)
-        -   [Security](../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../data-types/text.html)
-        -   [Expression](../data-types/expression.html)
-        -   [Array](../data-types/array.html)
-        -   [Object](../data-types/object.html)
-        -   [Integer](../data-types/integer.html)
-        -   [Decimal](../data-types/decimal.html)
-        -   [Boolean](../data-types/boolean.html)
-        -   [Timestamp](../data-types/timestamp.html)
-        -   [Null](../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../xano-features/metadata-api/content.html)
-        -   [Search](../../xano-features/metadata-api/search.html)
-        -   [File](../../xano-features/metadata-api/file.html)
-        -   [Request History](../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
-Was this helpful?
-
-Copy
-
-
-2.  Functions
-
-AI Tools 
-========
-
- 
-
-MCP List Tools
-
-Provides a list of available tools and their configurations from an MCP server
-
-Parameter
-
-Purpose
-
-url
-
-The URL to access the MCP server
-
-bearer token
-
-If required, an authentication token to access the server
-
- 
-
-MCP Call Tool
-
-Executes a tool available on a remote MCP server
-
-Parameter
-
-Purpose
-
-url
-
-The URL to access the MCP server
-
-bearer token
-
-If required, an authentication token to access the server
-
-tool name
-
-The name of the tool to call
-
-args
-
-The data that the tool requires, if any. This should usually be a JSON object.
-
- 
-
-Call Agent
-
-Calls an AI Agent that exists in this workspace
-
-Parameter
-
-Purpose
-
-args
-
-a JSON object of arguments the agent needs to run
-
-allow\_tool\_execution
-
-true or false, determines if the agent has permission to run tools
-
- 
-
-Template Engine
-
- 
-
-Quick Summary
-
-The Template Engine, powered by Twig, is used to manipulate and dynamically generate large blocks of text or code with your own data, such as records from your Xano database, or from inputs sent to your APIs.
-
-It\'s great for helping generate things like AI prompts, HTML, and other more large-format data without messing around with a bulk of separate functions to do so.
-
-<div>
-
-</div>
-
- 
-
-What is the Template Engine?
-
-At its core, think of the Template Engine as text replacement and manipulation of the future. It is designed to give you a simple syntax to quickly manipulate large text strings with dynamic data, such as\...
-
--   
-    
-        
-    
-    AI Prompts
-    
--   
-    
-        
-    
-    HTML
-    
--   
-    
-        
-    
-    JSON
-    
--   
-    
-        
-    
-    SQL queries
-    
-The template engine is powered by Twig, which you can learn more about [here](https://twig.symfony.com/).
-
- 
-
-When should I use the Template Engine instead of other text filters?
-
-You should stick with filters like [replace](../filters/text.html#replace) or [sprintf](../filters/text.html#sprintf) if you\'re manipulating short strings of text, such as:
-
--   
-    
-        
-    
-    Replacing a name inside of a string like \"Hello, \[first\_name\] \[last\_name\]\"
-    
--   
-    
-        
-    
-    Dynamically providing a price for a single product
-    
-The Template Engine, however, is useful for content templates where:
-
--   
-    
-        
-    
-    The template will be edited by non-developers
-    
--   
-    
-        
-    
-    The data structure is complex with nested objects
-    
--   
-    
-        
-    
-    You need to include conditional sections
-    
--   
-    
-        
-    
-    Data formatting (like dates) needs to be consistent
-    
--   
-    
-        
-    
-    Templates might be reused with different data sources
-    
-If you\'re doing dynamic replacement over a longer block of text, such as the example below, Template Engine will make this much easier for you.
-
-Copy
-
-``` 
-Write a personalized email to } } about their recent } purchase.
-
-Include:
-- Reference to their purchase history (they've ordered } times)
-- Mention that their } will be delivered on }
-- If }, offer them a }% discount on their next purchase
-- Thank them for being a customer since }
-
-Sign off with the name of their account manager: }
-```
-
- 
-
-Using the Template Engine
-
-<div>
-
-1
-
-###  
-
-Look for the Template Engine function under Utility Functions.
-
-![](../../_gitbook/image37ab.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FTf5FE3kGjwJFG8WWNy0n%252FCleanShot%25202025-04-02%2520at%252016.29.13.png%3Falt%3Dmedia%26token%3D8bbc4381-82cf-408a-af17-9b3bf0f6c70b&width=768&dpr=4&quality=100&sign=9a1f796f&sv=2)
-
-2
-
-###  
-
-Once you add the Template Engine to your function stack, click the [✏️] button in the panel to open the editor, or use the AI assistant to help write a template for you
-
-3
-
-###  
-
-Take a tour of the editor and begin building your template.
-
-![](../../_gitbook/imageb3b4.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FO9dhVXAaiLRKmNX5wrJX%252FCleanShot%25202025-04-02%2520at%252016.33.01.png%3Falt%3Dmedia%26token%3D928b4ec3-aee1-4dd1-8b89-3497e5dbd37e&width=768&dpr=4&quality=100&sign=5a4da712&sv=2)
-
-</div>
-
- 
-
-Template Syntax
-
-###  
-
-Variables
-
-Variables are wrapped in {{ curly braces }}, like this, and begin with a \$ character. In the below example, we\'re getting the `name` from an object stored in the `user1` variable.
-
-Copy
-
-``` 
-Hi, }
-```
-
-Reference items in an array by using the item index.
-
-Copy
-
-``` 
-Hi, }
-```
-
-###  
-
-Conditionals
-
-Conditionals are helpful if you want to dynamically determine what the end result of your template looks like outside of the actual data. For example, maybe you want VIP users to have a different greeting than regular users.
-
-Conditionals are wrapped in {% and %} and have support for `else` and `else if`
-
-Copy
-
-``` 
-
-  Hey, }! Thanks for being a part of our VIP program.
-{% else %}
-  Hey, }! Thanks for reading.
-{% endif %}
-```
-
-> In the above example, for this user:
->
+> **What it is:** A suite of AI-powered tools that bring intelligent automation, content generation, and machine learning capabilities to your Xano backends
 > 
+> **When to use:** When you need natural language processing, content generation, intelligent routing, or AI-powered decision making
 > 
-> >
-> Copy
->
-> ``` 
-> {
->     "name" == "Chris",
->     "vip" == true
->     }
-> ```
-> >
-> \...the result would be:
->
+> **Key benefit:** Add AI intelligence without managing complex infrastructure or writing ML code
 > 
-> 
-> >
-> Copy
->
-> ``` 
-> Hey, Chris! Thanks for being a part of our VIP program.
-> ```
-> 
+> **Popular uses:** Chatbots, content generation, sentiment analysis, intelligent automation
 
-Copy
+## What You'll Learn
 
-``` 
-{% if $score >== 90 %}
-  Your grade is an A
-{% elseif $score >== 80 %}
-  Your grade is a B
-{% elseif $score >== 70 %}
-  Your grade is a C
-{% else %}
-  Your grade is an F
-{% endif %}
-```
+- Setting up MCP (Model Context Protocol) connections
+- Using the Template Engine for dynamic content
+- Calling AI agents for complex tasks
+- Practical AI patterns for n8n and WeWeb
+- Best practices for AI integration
 
-> In the above example, for this score:
->
-> 
-> 
-> >
-> Copy
->
-> ``` 
-> score = 85
-> ```
-> >
-> \...the result would be:
->
-> 
-> 
-> >
-> Copy
->
-> ``` 
-> Your grade is a B
-> ```
-> 
-###  
+## MCP (Model Context Protocol) Tools
 
-Loops
+### Understanding MCP
 
-You can use loops to populate lists of data without having to write out separate lines for each item, or knowing how many items you\'ll need to populate.
+MCP is like a universal adapter for AI services. It lets you connect to various AI providers and tools through a standardized protocol.
 
-Copy
+### MCP List Tools
 
-``` 
+Discover available AI capabilities on any MCP server:
 
-  - }x } at $} each
-{% endfor %}
-```
+```javascript
+// Configuration
+MCP Server URL: "https://ai-server.example.com"
+Bearer Token: environment.MCP_TOKEN  // Optional auth
 
-Data
-
-Sample Output
-
-Copy
-
-``` 
-[
-  ,
-  ,
-  
+// Returns list of available tools
+Response: [
+  {
+    name: "text-generation",
+    description: "Generate human-like text",
+    parameters: [...]
+  },
+  {
+    name: "image-analysis",
+    description: "Analyze and describe images",
+    parameters: [...]
+  }
 ]
 ```
 
--   
-    
-        
-    
-    2x Blue T-shirt at \$19.99 each
-    
--   
-    
-        
-    
-    1x Denim Jeans at \$59.99 each
-    
--   
-    
-        
-    
-    3x Cotton Socks at \$4.99 each
-    
-You can also use an Else statement at the end of your For loop to determine what action to take if no items are found. In the next example, if `$list` contains no items, the template will return `No items found.`
+### MCP Call Tool
 
-Copy
+Execute specific AI functions:
 
-``` 
-{% for item in $list %}
-  {{ item }}
-{% else %}
-  No items found.
-{% endfor %}
+```javascript
+// Example: Generate product description
+MCP Call Tool:
+  Server: "https://ai-server.example.com"
+  Tool: "text-generation"
+  Parameters: {
+    prompt: "Write a product description for: " + product.name,
+    max_tokens: 200,
+    temperature: 0.7
+  }
+
+// Returns AI-generated content
 ```
 
-###  
+## Template Engine
 
-Filters
+### Dynamic Content Generation
 
-You can use Twig\'s built in filters, similar to our own, to transform or manipulate data as part of the template.
+The Template Engine transforms templates with variables into final content - perfect for emails, documents, and dynamic text.
 
-The below list is some of the most essential filters used in Twig, but it is not all of them. You can review the entire list [here](https://twig.symfony.com/doc/3.x/filters/index.html).
+```javascript
+// Template with variables
+template = """
+Hello {{customer_name}},
 
-Filter
+Your order #{{order_id}} has been {{status}}.
 
-Description
+Items:
+{{#each items}}
+- {{name}} (Qty: {{quantity}}) - ${{price}}
+{{/each}}
 
-Example
+Total: ${{total}}
 
-Result
+Thank you for your business!
+"""
 
-`upper`
+// Data object
+data = {
+  customer_name: "John Doe",
+  order_id: "ORD-12345",
+  status: "shipped",
+  items: cart_items,
+  total: order_total
+}
 
-Converts string to uppercase
-
-`}`
-*When \$user.name is \"John Smith\"*
-
-\"JOHN SMITH\"
-
-`lower`
-
-Converts string to lowercase
-
-`}`
-*When \$user.name is \"John Smith\"*
-
-\"john smith\"
-
-`trim`
-
-Removes whitespace from the beginning and end of a string
-
-`}`
-*When \$user.input is \" hello \"*
-
-\"hello\"
-
-`join`
-
-Joins array elements into a string with a delimiter
-
-`}`
-*When \$user.tags is \[\"php\", \"twig\", \"web\"\]*
-
-\"php, twig, web\"
-
-`default`
-
-Provides a fallback value if the variable is null, empty, or undefined
-
-`}`
-*When \$user.middleName is null*
-
-\"No middle name\"
-
-`number_format`
-
-Formats numbers with grouped thousands and decimal points
-
-`}`
-*When \$product.price is 1234.56*
-
-\"1,234.56\"
-
-`shuffle`
-
-Randomly shuffles an array
-
-`}`
-*When \$user.items is \[\"a\", \"b\", \"c\"\]*
-
-*Random order like:* \[\"c\", \"a\", \"b\"\]
-
-`date`
-
-Formats dates using PHP\'s date syntax
-
-`}`
-*When \$user.createdAt is \"2023-12-25\"*
-
-\"December 25, 2023\"
-
-###  
-
-Escape Filter (e)
-
-The escape filter is used to format text using specifications designated by the destination, such as a URL that only allows certain characters to remain valid.
-
-When you use `e` by itself without specifying a format, it typically defaults to HTML escaping. This means it will convert characters like `<`, `>`, `&`, `"`, and `'` to their HTML-safe equivalents.
-
-When you specify a format (like `e('html')`, `e('js')`, `e('url')`, etc.), you\'re explicitly telling the Template Engine how to escape the content for a specific context, which can provide more precise protection. We\'d recommend always specifying the format, just to be safe.
-
-####  
-
-HTML Escaping
-
-Copy
-
-``` 
-{% set $user_input = '<script>alert("XSS");</script>' %}
-{{ $user_input|e('html') }}
-
-Outputs: &lt;script&gt;alert(&quot;XSS&quot;);&lt;/script&gt;
+// Generate final content
+result = Template_Engine(template, data)
 ```
 
-####  
+### Advanced Template Features
 
-JavaScript Escaping
-
-Copy
-
-``` 
-{% set $js_string = 'Hello "world"! \n New line' %}
-{{ $js_string|e('js') }}
-{# Outputs: Hello \"world\"! \\n New line #}
+**Conditionals in Templates:**
+```handlebars
+{{#if is_premium}}
+  <p>Thank you for being a premium member!</p>
+  <p>You saved {{discount_amount}} on this order.</p>
+{{else}}
+  <p>Upgrade to premium for exclusive discounts!</p>
+{{/if}}
 ```
 
-####  
-
-URL Escaping
-
-Copy
-
-``` 
-{% set $search_query = 'hello world & special chars' %}
-{{ $search_query|e('url') }}
-{# Outputs: hello+world+%26+special+chars #}
+**Loops and Iterations:**
+```handlebars
+{{#each products}}
+  <div class="product">
+    <h3>{{title}}</h3>
+    <p>Price: ${{price}}</p>
+    {{#if in_stock}}
+      <button>Add to Cart</button>
+    {{else}}
+      <button disabled>Out of Stock</button>
+    {{/if}}
+  </div>
+{{/each}}
 ```
 
-####  
+## AI Agents
 
-CSS Escaping
+### Calling AI Agents
 
-Copy
+AI Agents are pre-configured AI workflows that handle complex tasks:
 
-``` 
-{% set $css_value = 'expression(alert("XSS"))' %}
-{{ $css_value|e('css') }}
-{# Outputs: expression\28 alert\28 "XSS"\29 \29 #}
+```javascript
+// Example: Customer Support Agent
+Call AI Agent:
+  Agent: "customer-support"
+  Input: {
+    message: user_message,
+    context: {
+      user_id: auth.user_id,
+      order_history: recent_orders,
+      previous_tickets: support_history
+    }
+  }
+
+// Agent analyzes and returns
+Response: {
+  intent: "refund_request",
+  sentiment: "frustrated",
+  suggested_action: "process_refund",
+  draft_response: "I understand your concern..."
+}
 ```
 
-###  
+### Common AI Agent Patterns
 
-Comments
+**Content Moderation Agent:**
+```javascript
+// Check user-generated content
+moderation_result = AI_Agent("content-moderator", {
+  text: user_comment,
+  context: "product_review"
+})
 
-You can insert comments into your templates by wrapping them in {\# and \#}. They won\'t appear in your final template.
-
-Copy
-
-``` 
-{# This is a hidden comment #}
+IF (moderation_result.is_appropriate) {
+  Publish review
+} ELSE {
+  Flag for human review
+  Send moderation notice
+}
 ```
 
-You can check out some examples of the Template Engine in real-world scenarios here: [Sample Templates](../../xano-ai/template-engine.html#sample-templates).
+**Translation Agent:**
+```javascript
+// Multi-language support
+translated = AI_Agent("translator", {
+  text: original_content,
+  source_language: "auto-detect",
+  target_language: user.preferred_language
+})
+```
 
-Last updated 5 days ago
+## Practical AI Integrations
 
-Was this helpful?
+### Example 1: Smart Email Responses
+
+```javascript
+// Analyze incoming email
+analysis = AI_Agent("email-analyzer", {
+  subject: email.subject,
+  body: email.body
+})
+
+// Route based on AI classification
+SWITCH (analysis.category) {
+  CASE "support":
+    Create support ticket
+    Send auto-acknowledgment
+    
+  CASE "sales":
+    Add to CRM lead
+    Notify sales team
+    
+  CASE "spam":
+    Move to spam folder
+    Update spam filter
+}
+```
+
+### Example 2: Product Recommendations
+
+```javascript
+// AI-powered recommendations
+recommendations = AI_Agent("recommender", {
+  user_id: user.id,
+  browsing_history: recent_views,
+  purchase_history: past_orders,
+  current_cart: cart_items
+})
+
+// Format for display
+recommended_products = []
+FOR EACH item IN recommendations.products {
+  product = Get_Product(item.id)
+  product.ai_score = item.relevance_score
+  product.reason = item.recommendation_reason
+  ARRAY_PUSH(recommended_products, product)
+}
+```
+
+### Example 3: Content Generation
+
+```javascript
+// Generate blog post outline
+outline = AI_Agent("content-creator", {
+  topic: input.topic,
+  keywords: input.keywords,
+  tone: "professional",
+  length: "medium"
+})
+
+// Expand each section
+full_content = []
+FOR EACH section IN outline.sections {
+  section_content = Template_Engine(
+    "Write a detailed paragraph about: {{topic}}",
+    { topic: section.title }
+  )
+  ARRAY_PUSH(full_content, section_content)
+}
+```
+
+## Integration with n8n
+
+### Webhook AI Processing
+
+```javascript
+// n8n sends data for AI processing
+1. Receive webhook with raw data
+2. Call AI Agent for analysis
+3. Process based on AI results
+4. Return enriched data to n8n
+
+// Example flow
+webhook_data = input
+ai_analysis = AI_Agent("data-enricher", webhook_data)
+enriched_data = {
+  original: webhook_data,
+  ai_insights: ai_analysis,
+  suggested_actions: ai_analysis.recommendations
+}
+Return enriched_data
+```
+
+### AI-Powered Automation Chains
+
+```javascript
+// Trigger complex n8n workflows based on AI decisions
+ai_decision = AI_Agent("decision-maker", {
+  data: input_data,
+  rules: business_rules
+})
+
+// Trigger appropriate n8n workflow
+webhook_url = "https://n8n.example.com/webhook/"
+IF (ai_decision.action == "escalate") {
+  webhook_url += "escalation-flow"
+} ELSE IF (ai_decision.action == "automate") {
+  webhook_url += "automation-flow"
+}
+
+External_API_Request(webhook_url, ai_decision)
+```
+
+## Integration with WeWeb
+
+### AI-Enhanced UI
+
+```javascript
+// Provide AI suggestions to WeWeb frontend
+user_input = input.partial_text
+
+// Get AI completions
+suggestions = AI_Agent("auto-complete", {
+  partial: user_input,
+  context: "product_search",
+  limit: 5
+})
+
+// Format for WeWeb dropdown
+Return {
+  suggestions: suggestions.completions,
+  confidence: suggestions.scores
+}
+```
+
+### Dynamic Content Personalization
+
+```javascript
+// Personalize WeWeb content with AI
+user_profile = Get_User_Profile(auth.user_id)
+
+personalized_content = AI_Agent("personalizer", {
+  user_preferences: user_profile.preferences,
+  available_content: content_library,
+  context: "homepage"
+})
+
+Return {
+  hero_message: personalized_content.headline,
+  featured_items: personalized_content.recommendations,
+  cta_text: personalized_content.call_to_action
+}
+```
+
+## Best Practices
+
+### API Key Management
+
+```javascript
+// Never hardcode API keys
+ai_config = {
+  api_key: environment.OPENAI_API_KEY,
+  endpoint: environment.AI_ENDPOINT,
+  model: environment.AI_MODEL || "gpt-3.5-turbo"
+}
+```
+
+### Error Handling
+
+```javascript
+TRY {
+  ai_result = AI_Agent("processor", input_data)
+} CATCH (error) {
+  // Fallback to non-AI logic
+  IF (error.type == "rate_limit") {
+    // Use cached response or queue for later
+    Return cached_response
+  } ELSE {
+    // Log and use default behavior
+    Log_Error(error)
+    Return default_response
+  }
+}
+```
+
+### Cost Optimization
+
+```javascript
+// Cache AI responses when appropriate
+cache_key = "ai_response_" + HASH(input_parameters)
+cached = Get_Cache_Value(cache_key)
+
+IF (cached) {
+  Return cached
+} ELSE {
+  ai_response = AI_Agent("expensive-model", input_parameters)
+  Set_Cache_Value(cache_key, ai_response, TTL: 3600)
+  Return ai_response
+}
+```
+
+## Common Mistakes to Avoid
+
+1. **Not Handling AI Failures**
+   - Always have fallback logic
+   - AI services can be unreliable
+
+2. **Sending Sensitive Data**
+   - Sanitize PII before sending to AI
+   - Check compliance requirements
+
+3. **Ignoring Rate Limits**
+   - Implement retry logic
+   - Use queuing for high volume
+
+4. **Over-relying on AI**
+   - Validate AI outputs
+   - Have human review for critical decisions
+
+## Try This
+
+Build an AI-powered customer service bot:
+1. Set up MCP connection to AI provider
+2. Create template for response formatting
+3. Build agent for intent recognition
+4. Route to appropriate handler
+5. Generate personalized responses
+
+## Pro Tips
+
+💡 **Token Limits:** Monitor token usage to control costs
+
+💡 **Response Caching:** Cache AI responses for identical inputs
+
+💡 **Prompt Engineering:** Craft specific prompts for better results
+
+💡 **Hybrid Approach:** Combine AI with rule-based logic for reliability
+
+## Performance Considerations
+
+- AI calls add latency (typically 1-3 seconds)
+- Use background tasks for non-urgent AI processing
+- Implement streaming for long-form content generation
+- Batch similar requests when possible
+
+Remember: AI tools are powerful enhancers, not replacements for good logic. Use them to augment your applications with intelligence while maintaining reliability and control!

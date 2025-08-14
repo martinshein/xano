@@ -1,577 +1,479 @@
 ---
+title: "Bulk Operations - Mass Database Actions"
+description: "Process multiple records efficiently with bulk insert, update, and delete operations in Xano"
 category: function-stack
-difficulty: advanced
+subcategory: database-operations
+difficulty: intermediate
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
+- bulk-operations
+- performance
 - database
-title: '[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv'
+- batch-processing
+- optimization
 ---
 
-[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../building-with-visual-development/triggers.html)
-        -   [Middleware](../../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](query-all-records/external-filtering-examples.html)
-                            -   [Get Record](get-record.html)
-            -   [Add Record](add-record.html)
-            -   [Edit Record](edit-record.html)
-            -   [Add or Edit Record](add-or-edit-record.html)
-            -   [Patch Record](patch-record.html)
-            -   [Delete Record](delete-record.html)
-            -   [Bulk Operations](bulk-operations.html)
-            -   [Database Transaction](database-transaction.html)
-            -   [External Database Query](external-database-query.html)
-            -   [Direct Database Query](direct-database-query.html)
-            -   [Get Database Schema](get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../data-manipulation/create-variable.html)
-            -   [Update Variable](../data-manipulation/update-variable.html)
-            -   [Conditional](../data-manipulation/conditional.html)
-            -   [Switch](../data-manipulation/switch.html)
-            -   [Loops](../data-manipulation/loops.html)
-            -   [Math](../data-manipulation/math.html)
-            -   [Arrays](../data-manipulation/arrays.html)
-            -   [Objects](../data-manipulation/objects.html)
-            -   [Text](../data-manipulation/text.html)
-                    -   [Security](../security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../data-caching-redis.html)
-        -   [Custom Functions](../custom-functions.html)
-        -   [Utility Functions](../utility-functions.html)
-        -   [File Storage](../file-storage.html)
-        -   [Cloud Services](../cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../filters/manipulation.html)
-        -   [Math](../../filters/math.html)
-        -   [Timestamp](../../filters/timestamp.html)
-        -   [Text](../../filters/text.html)
-        -   [Array](../../filters/array.html)
-        -   [Transform](../../filters/transform.html)
-        -   [Conversion](../../filters/conversion.html)
-        -   [Comparison](../../filters/comparison.html)
-        -   [Security](../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../data-types/text.html)
-        -   [Expression](../../data-types/expression.html)
-        -   [Array](../../data-types/array.html)
-        -   [Object](../../data-types/object.html)
-        -   [Integer](../../data-types/integer.html)
-        -   [Decimal](../../data-types/decimal.html)
-        -   [Boolean](../../data-types/boolean.html)
-        -   [Timestamp](../../data-types/timestamp.html)
-        -   [Null](../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../xano-features/metadata-api/search.html)
-        -   [File](../../../xano-features/metadata-api/file.html)
-        -   [Request History](../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [Bulk Operations](#bulk-operations)
-
--   [Clear All Records](#clear-all-records)
-
-Was this helpful?
-
-Copy
-
-
-2.  Functions
-3.  [Database Requests](../database-requests.html)
-
-Bulk Operations 
-===============
-
-Perform actions on multiple records at once.
-
- 
-
-Bulk Operations
-
-Using bulk operations in Xano is largely the same between operation types. Each function expects an array of data or a custom query that it will use to apply the bulk operation, with the exception of Clear All Records.
-
-The available bulk operations are:
-
--   
-    
-        
-    
-    **Bulk Add Records**
-    
--   
-    
-        
-    
-    **Bulk Delete Records**
-    
--   
-    
-        
-    
-    **Bulk Patch Records**
-    
--   
-    
-        
-    
-    **Bulk Update Records**
-    
--   
-    
-        
-    
-    **Clear App Records**
-    
-For **Bulk Add Records, Bulk Patch Records, and Bulk Update Records**, you\'ll need to provide an array of items to add or update in the table.
-
-**Bulk Add** and **Bulk Update** require the entire contents of the record. Make sure to include the record IDs in Bulk Update.
-
-**Bulk Patch** only requires each object to have the ID and the fields you want updated.
-
-For operations like **Bulk Delete**, use the custom query expression to determine which records to delete.
-
-###  
-
-Using the Expression Builder
-
-Each conditional has four different components.
-
-**Conditional Type**
-
-The conditional type determines how this condition is weighted in the final return. You can choose between **AND** and **OR. AND** conditionals require the present conditional and any others before it to be satisfied, such as \"where the date is before today **AND** the user is an admin\". **OR** conditionals do not require any other conditionals to be satisfied, such as \"if the user is an admin **OR** if the user is a manager\".
-
-**Left Value**
-
-This is the first value you\'re using in the conditional. In a database query, this is usually going to be a column that you want to check against.
-
-**Operators**
-
-Please note that operators may differ based on where you are building the expression. Database queries will have different operators available than regular conditional statements. Learn More
-
--   
-    
-        
-    
-    **Equals (==)** - an exact match
-    
--   
-    
-        
-    
-    **Not Equals (!=)** - does not equal
-    
--   
-    
-        
-    
-    **Equals with type matching (===)** - an exact value match and an exact type match
-
-    -   
-        
-                
-        
-        Ex. Variable **var\_1** has a value of 123, with a type of text. You set up a conditional statement to check if **var\_1 === 123**, but your value in the conditional statement is of type integer. This would return false, because the types do not match.
-            
--   
-    
-        
-    
-    **Not equals with type matching (!==)** - does not equal value or type, similar to ===
-    
--   
-    
-        
-    
-    **Greater than (\>)** - the value on the left is greater than the value on the right
-    
--   
-    
-        
-    
-    **Greater than or equals (≥)** - the value on the left is greater than or equals to the value on the right.
-    
--   
-    
-        
-    
-    **Less than (\<)** - the value on the left is less than the value on the right.
-    
--   
-    
-        
-    
-    **Less than or equals (≤)** - the value on the left is less than or equals to the value on the right.
-    
--   
-    
-        
-    
-    **LIKE** - Used for comparing text. Like is case-insensitive and compares if a text string is like another text string. It can be thought of as equals for text but upper case and lower case does not matter.
-    
--   
-    
-        
-    
-    **NOT LIKE** - Used for comparing text. Not Like is case-insensitive and compares if a text string is not like another. It is like not equals for text but upper case and lower case does not matter.
-    
--   
-    
-        
-    
-    **INCLUDES** - Used for comparing text. Includes is a flexible operator and is case-insensitive. It is able to determine if there is a partial match in a text string.
-    
--   
-    
-        
-    
-    **DOES NOT INCLUDE** - Used for comparing text. Does not include determines if a text string is not included in another text string.
-    
--   
-    
-        
-    
-    **IN** - If a single value is found in an array (list). Start with the single value on the left side and the right side should contain the array.
-    
--   
-    
-        
-    
-    **NOT IN** - If a single value is not found in an array (list). The single value should be on the left side and the array on the right side.
-    
--   
-    
-        
-    
-    **REGEX MATCHES** - [Regular Expression](https://regex101.com/) used for finding patterns in text.
-    
--   
-    
-        
-    
-    **REGEX DOES NOT MATCH** - [Regular Expression](https://regex101.com/) used for finding a pattern that does not match in text.
-    
--   
-    
-        
-    
-    **OVERLAPS** - Used for comparing two arrays. Overlaps determines if any values in one array are present in the second array.
-    
--   
-    
-        
-    
-    **DOES NOT OVERLAP** - Used for comparing two arrays. Does not overlaps determines if no values in the first array are present in the second array.
-    
--   
-    
-        
-    
-    **CONTAINS** - Contains is an advanced filter used for JSON and arrays. It looks for an exact schema match.
-    
--   
-    
-        
-    
-    **DOES NOT CONTAIN** - Does not contain is the opposite of contains. It determines if there is not an exact schema match.
-    
-####  
-
-Right Value
-
-The right value is whatever you are checking against the left value. This could be a hardcoded value, a variable, or even a database field from the same record.
-
- 
-
-Clear All Records
-
-Clear All Records will delete every record in the table.
-
-Last updated 4 months ago
-
-Was this helpful?
+# Bulk Operations - Mass Database Actions
+
+## Quick Summary
+
+> **What it is:** Database functions that process multiple records in a single operation instead of one-by-one
+> 
+> **When to use:** When you need to create, update, or delete many records at once - imports, mass updates, batch processing
+> 
+> **Key benefit:** 10-100x faster than individual operations, reduces database load
+> 
+> **Common uses:** CSV imports, mass updates, batch deletions, data migrations
+
+## What You'll Learn
+
+- Bulk insert, update, and delete operations
+- Performance comparison with loops
+- Error handling in bulk operations
+- Best practices for large datasets
+- Integration patterns with n8n and WeWeb
+
+## Why Use Bulk Operations?
+
+### Performance Comparison
+
+```javascript
+// Bad: Loop with individual operations (slow)
+FOR EACH item IN 1000_items {
+  Add Record: products (item)  // 1000 database calls
+}
+// Time: ~10 seconds
+
+// Good: Bulk operation (fast)
+Bulk Add Records: products (1000_items)  // 1 database call
+// Time: ~0.5 seconds
+
+// Result: 20x faster!
+```
+
+## Bulk Insert
+
+### Basic Bulk Insert
+
+```javascript
+// Prepare data array
+new_products = [
+  { name: "Product A", price: 19.99, sku: "SKU-001" },
+  { name: "Product B", price: 29.99, sku: "SKU-002" },
+  { name: "Product C", price: 39.99, sku: "SKU-003" }
+  // ... hundreds more
+]
+
+// Single operation to insert all
+Bulk Add Records: products
+  Data: new_products
+  Return: inserted_records
+
+// Returns array of created records with IDs
+```
+
+### CSV Import Example
+
+```javascript
+// Import CSV data
+Import Products From CSV:
+  // Parse CSV file
+  csv_data = Parse_CSV(input.file)
+  
+  // Transform to match database schema
+  products_to_import = []
+  FOR EACH row IN csv_data {
+    product = {
+      name: row.product_name,
+      price: DECIMAL(row.price),
+      sku: row.sku_code,
+      category: row.category,
+      stock: INTEGER(row.quantity),
+      created_at: NOW()
+    }
+    ARRAY_PUSH(products_to_import, product)
+  }
+  
+  // Bulk insert all at once
+  imported = Bulk Add Records: products (products_to_import)
+  
+  Return {
+    success: true,
+    imported_count: imported.length,
+    first_id: imported[0].id,
+    last_id: imported[imported.length - 1].id
+  }
+```
+
+## Bulk Update
+
+### Update Multiple Records
+
+```javascript
+// Update prices for multiple products
+Bulk Update Records: products
+  Filter: category = "electronics"
+  Updates: {
+    price: price * 1.1,  // 10% increase
+    last_modified: NOW(),
+    modified_by: auth.user_id
+  }
+  
+// Returns count of updated records
+```
+
+### Conditional Bulk Updates
+
+```javascript
+// Different updates for different records
+updates_list = [
+  { id: 1, status: "active", discount: 10 },
+  { id: 2, status: "inactive", discount: 0 },
+  { id: 3, status: "active", discount: 15 }
+]
+
+// Apply specific updates to specific records
+FOR EACH update IN updates_list {
+  Bulk Update Records: products
+    Filter: id = update.id
+    Updates: {
+      status: update.status,
+      discount_percentage: update.discount
+    }
+}
+```
+
+### Mass Status Update
+
+```javascript
+// Archive old orders
+Bulk Update Records: orders
+  Filter: {
+    created_at: { "<": "2023-01-01" },
+    status: "completed"
+  }
+  Updates: {
+    archived: true,
+    archived_date: NOW(),
+    archived_by: "system"
+  }
+
+// Activate seasonal products
+Bulk Update Records: products
+  Filter: {
+    seasonal: true,
+    season: "winter"
+  }
+  Updates: {
+    active: true,
+    featured: true
+  }
+```
+
+## Bulk Delete
+
+### Safe Bulk Delete
+
+```javascript
+// Delete with confirmation
+records_to_delete = Query: temporary_data
+  WHERE created_at < DATE_SUB(NOW(), 30, 'days')
+
+IF (records_to_delete.count > 0) {
+  // Log before deletion
+  Log("Deleting " + records_to_delete.count + " old records")
+  
+  // Perform bulk delete
+  deleted_count = Bulk Delete Records: temporary_data
+    Filter: created_at < DATE_SUB(NOW(), 30, 'days')
+  
+  Return {
+    deleted: deleted_count,
+    message: "Cleanup completed"
+  }
+}
+```
+
+### Cascade Delete Pattern
+
+```javascript
+// Delete user and all related data
+Delete User With Data:
+  user_id = input.user_id
+  
+  // Delete in correct order (dependencies first)
+  Bulk Delete Records: user_sessions WHERE user_id = user_id
+  Bulk Delete Records: user_preferences WHERE user_id = user_id
+  Bulk Delete Records: user_activities WHERE user_id = user_id
+  Bulk Delete Records: user_files WHERE user_id = user_id
+  
+  // Finally delete user
+  Delete Record: users WHERE id = user_id
+  
+  Return { success: true, message: "User and data deleted" }
+```
+
+## Advanced Patterns
+
+### Batch Processing Large Datasets
+
+```javascript
+// Process millions of records in batches
+Process Large Dataset:
+  batch_size = 1000
+  offset = 0
+  total_processed = 0
+  
+  WHILE (true) {
+    // Get batch
+    batch = Query: large_table
+      LIMIT batch_size
+      OFFSET offset
+    
+    IF (batch.count == 0) BREAK
+    
+    // Process batch
+    processed_batch = []
+    FOR EACH record IN batch {
+      processed = {
+        ...record,
+        processed: true,
+        processed_date: NOW()
+      }
+      ARRAY_PUSH(processed_batch, processed)
+    }
+    
+    // Bulk update
+    Bulk Update Records: large_table (processed_batch)
+    
+    total_processed += batch.count
+    offset += batch_size
+    
+    // Progress tracking
+    Log("Processed " + total_processed + " records")
+  }
+  
+  Return { total_processed: total_processed }
+```
+
+### Upsert Pattern (Insert or Update)
+
+```javascript
+// Bulk upsert implementation
+Bulk Upsert:
+  items = input.items
+  
+  // Get existing records
+  existing_skus = ARRAY_MAP(items, sku)
+  existing = Query: products WHERE sku IN existing_skus
+  existing_map = ARRAY_TO_MAP(existing, "sku")
+  
+  to_insert = []
+  to_update = []
+  
+  FOR EACH item IN items {
+    IF (existing_map[item.sku]) {
+      // Prepare for update
+      update = {
+        id: existing_map[item.sku].id,
+        ...item
+      }
+      ARRAY_PUSH(to_update, update)
+    } ELSE {
+      // Prepare for insert
+      ARRAY_PUSH(to_insert, item)
+    }
+  }
+  
+  // Perform bulk operations
+  inserted = Bulk Add Records: products (to_insert)
+  updated = Bulk Update Records: products (to_update)
+  
+  Return {
+    inserted_count: inserted.length,
+    updated_count: updated.length
+  }
+```
+
+## Error Handling
+
+### Transaction Safety
+
+```javascript
+// Wrap bulk operations in transaction
+Database Transaction {
+  TRY {
+    // Multiple bulk operations
+    Bulk Delete Records: old_inventory
+    Bulk Add Records: new_inventory (import_data)
+    Bulk Update Records: products (stock_updates)
+    
+    // All succeed or all fail
+    COMMIT
+    
+  } CATCH (error) {
+    // Rollback all changes
+    ROLLBACK
+    Log_Error("Bulk operation failed: " + error)
+    THROW error
+  }
+}
+```
+
+### Validation Before Bulk Operations
+
+```javascript
+// Validate before bulk insert
+Validate And Import:
+  items = input.items
+  errors = []
+  valid_items = []
+  
+  // Validate each item
+  FOR EACH item IN items {
+    validation_errors = []
+    
+    IF (!item.sku) {
+      ARRAY_PUSH(validation_errors, "Missing SKU")
+    }
+    IF (item.price < 0) {
+      ARRAY_PUSH(validation_errors, "Invalid price")
+    }
+    
+    IF (validation_errors.length > 0) {
+      ARRAY_PUSH(errors, {
+        item: item,
+        errors: validation_errors
+      })
+    } ELSE {
+      ARRAY_PUSH(valid_items, item)
+    }
+  }
+  
+  // Only import valid items
+  IF (valid_items.length > 0) {
+    imported = Bulk Add Records: products (valid_items)
+  }
+  
+  Return {
+    imported: valid_items.length,
+    errors: errors
+  }
+```
+
+## Integration Patterns
+
+### With n8n
+
+```javascript
+// n8n sends batch data for processing
+Process n8n Batch:
+  webhook_data = input.batch_data
+  
+  // Transform for Xano
+  records = ARRAY_MAP(webhook_data, {
+    source: "n8n",
+    data: item,
+    received_at: NOW()
+  })
+  
+  // Bulk insert
+  inserted = Bulk Add Records: webhook_queue (records)
+  
+  // Process async
+  ASYNC: process_webhook_batch(inserted)
+  
+  Return {
+    received: inserted.length,
+    status: "processing"
+  }
+```
+
+### With WeWeb
+
+```javascript
+// Bulk operations for WeWeb data tables
+Update Table Data:
+  table_updates = input.updates  // From WeWeb
+  
+  // Separate operations by type
+  to_add = ARRAY_FILTER(table_updates, operation == "add")
+  to_update = ARRAY_FILTER(table_updates, operation == "update")
+  to_delete = ARRAY_FILTER(table_updates, operation == "delete")
+  
+  results = {}
+  
+  IF (to_add.length > 0) {
+    results.added = Bulk Add Records: table_data (to_add)
+  }
+  
+  IF (to_update.length > 0) {
+    results.updated = Bulk Update Records: table_data (to_update)
+  }
+  
+  IF (to_delete.length > 0) {
+    delete_ids = ARRAY_MAP(to_delete, id)
+    results.deleted = Bulk Delete Records: table_data 
+      WHERE id IN delete_ids
+  }
+  
+  Return results
+```
+
+## Performance Tips
+
+### Optimal Batch Sizes
+
+```javascript
+// Different operations have different optimal sizes
+Bulk Insert: 100-1000 records per batch
+Bulk Update: 500-5000 records per batch
+Bulk Delete: 1000-10000 records per batch
+
+// Adjust based on record size
+small_records (< 1KB): larger batches
+large_records (> 10KB): smaller batches
+```
+
+### Index Optimization
+
+```javascript
+// Before bulk operations on filtered data
+1. Ensure indexes exist on filter columns
+2. Run bulk operations
+3. Rebuild indexes if necessary
+
+// Example
+Create Index: products (category, status)
+Bulk Update Records: products WHERE category = "X" AND status = "Y"
+```
+
+## Common Mistakes to Avoid
+
+1. **No Validation** - Invalid data crashes bulk operations
+2. **Too Large Batches** - Can timeout or run out of memory
+3. **No Transaction** - Partial success leaves inconsistent data
+4. **Missing Indexes** - Slow filters on large tables
+5. **No Progress Tracking** - Can't monitor long operations
+
+## Try This
+
+Build a data import system:
+1. Accept CSV file upload
+2. Validate all rows
+3. Show validation errors
+4. Bulk import valid rows
+5. Return import summary
+
+## Pro Tips
+
+💡 **Chunk Large Operations:** Process in batches of 1000 for stability
+
+💡 **Use Transactions:** Ensure all-or-nothing for related operations
+
+💡 **Pre-validate:** Check data before bulk operations to avoid failures
+
+💡 **Monitor Performance:** Track execution time for optimization
+
+Remember: Bulk operations are your performance secret weapon. Use them whenever you're processing multiple records!

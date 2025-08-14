@@ -1,444 +1,424 @@
 ---
+title: "Background Tasks - Scheduled and Recurring Operations"
+description: "Set up scheduled jobs, recurring tasks, and background processing in Xano for automated workflows"
 category: function-stack
-difficulty: advanced
+subcategory: automation
+difficulty: intermediate
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2'
+- background-tasks
+- scheduling
+- cron
+- automation
+- recurring-jobs
 ---
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+# Background Tasks - Scheduled and Recurring Operations
 
+## Quick Summary
 
+> **What it is:** Automated functions that run on a schedule or in the background without user interaction
+> 
+> **When to use:** For recurring operations like daily reports, data cleanup, synchronization, or any task that needs to run at specific times
+> 
+> **Key benefit:** Automate repetitive tasks and maintain your system without manual intervention
+> 
+> **Common uses:** Daily backups, email digests, data synchronization, cleanup operations
 
+## What You'll Learn
 
+- Setting up scheduled tasks with cron expressions
+- Creating recurring background jobs
+- Managing task execution and monitoring
+- Best practices for reliable automation
+- Integration patterns with n8n and WeWeb
 
+## Types of Background Tasks
 
+### Scheduled Tasks
+Run at specific times:
+- Daily reports at 9 AM
+- Weekly backups on Sunday
+- Monthly billing on the 1st
 
+### Recurring Tasks
+Run at intervals:
+- Check for updates every 5 minutes
+- Process queue every 30 seconds
+- Sync data every hour
 
+### Triggered Tasks
+Run based on conditions:
+- When queue reaches threshold
+- After system events
+- On data changes
 
+## Setting Up Background Tasks
 
+### Basic Configuration
 
+```javascript
+Background Task Settings:
+  Name: daily_report_generator
+  Schedule: "0 9 * * *"  // Every day at 9 AM
+  Timezone: "America/New_York"
+  Enabled: true
+  
+Function Stack:
+  - Query yesterday's data
+  - Generate report
+  - Send email to stakeholders
+  - Log execution
+```
 
+### Cron Expression Guide
 
+```javascript
+* * * * *
+│ │ │ │ │
+│ │ │ │ └─ Day of Week (0-7, Sun=0 or 7)
+│ │ │ └─── Month (1-12)
+│ │ └───── Day of Month (1-31)
+│ └─────── Hour (0-23)
+└───────── Minute (0-59)
 
+Common Patterns:
+"0 0 * * *"      // Daily at midnight
+"0 */2 * * *"    // Every 2 hours
+"*/15 * * * *"   // Every 15 minutes
+"0 9 * * 1"      // Mondays at 9 AM
+"0 0 1 * *"      // First day of month
+```
 
--   
+## Practical Examples
 
+### Example 1: Daily Email Digest
+
+```javascript
+// Runs daily at 8 AM
+Background Task: send_daily_digest
+  
+  // Get active users
+  users = Query: users WHERE subscribed = true
+  
+  FOR EACH user IN users {
+    // Get user's activity
+    activities = Query: activities 
+      WHERE user_id = user.id 
+      AND created_at > yesterday()
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
+    // Skip if no activity
+    IF (activities.count == 0) CONTINUE
     
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](custom-functions/async-functions.html)
-                    -   [Background Tasks](background-tasks.html)
-        -   [Triggers](triggers.html)
-        -   [Middleware](middleware.html)
-        -   [Configuring Expressions](configuring-expressions.html)
-        -   [Working with Data](working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../functions/database-requests/get-record.html)
-            -   [Add Record](../functions/database-requests/add-record.html)
-            -   [Edit Record](../functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../functions/database-requests/patch-record.html)
-            -   [Delete Record](../functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../functions/database-requests/database-transaction.html)
-            -   [External Database Query](../functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../functions/data-manipulation/update-variable.html)
-            -   [Conditional](../functions/data-manipulation/conditional.html)
-            -   [Switch](../functions/data-manipulation/switch.html)
-            -   [Loops](../functions/data-manipulation/loops.html)
-            -   [Math](../functions/data-manipulation/math.html)
-            -   [Arrays](../functions/data-manipulation/arrays.html)
-            -   [Objects](../functions/data-manipulation/objects.html)
-            -   [Text](../functions/data-manipulation/text.html)
-                    -   [Security](../functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../functions/data-caching-redis.html)
-        -   [Custom Functions](../functions/custom-functions.html)
-        -   [Utility Functions](../functions/utility-functions.html)
-        -   [File Storage](../functions/file-storage.html)
-        -   [Cloud Services](../functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../filters/manipulation.html)
-        -   [Math](../filters/math.html)
-        -   [Timestamp](../filters/timestamp.html)
-        -   [Text](../filters/text.html)
-        -   [Array](../filters/array.html)
-        -   [Transform](../filters/transform.html)
-        -   [Conversion](../filters/conversion.html)
-        -   [Comparison](../filters/comparison.html)
-        -   [Security](../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../data-types/text.html)
-        -   [Expression](../data-types/expression.html)
-        -   [Array](../data-types/array.html)
-        -   [Object](../data-types/object.html)
-        -   [Integer](../data-types/integer.html)
-        -   [Decimal](../data-types/decimal.html)
-        -   [Boolean](../data-types/boolean.html)
-        -   [Timestamp](../data-types/timestamp.html)
-        -   [Null](../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
+    // Generate personalized email
+    email_content = Template_Engine(
+      digest_template,
+      {
+        user_name: user.name,
+        activities: activities,
+        stats: calculate_stats(activities)
+      }
+    )
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+    // Send email
+    Send_Email(user.email, "Your Daily Digest", email_content)
+  }
+  
+  // Log completion
+  Create_Log("Daily digest sent to " + users.count + " users")
+```
 
--   
-    The Database
+### Example 2: Data Cleanup
+
+```javascript
+// Runs nightly at 2 AM
+Background Task: cleanup_old_data
+  
+  // Delete old logs (>30 days)
+  deleted_logs = Delete_Records: logs 
+    WHERE created_at < DATE_SUB(NOW(), 30, 'days')
+  
+  // Archive old orders (>1 year)
+  old_orders = Query: orders 
+    WHERE created_at < DATE_SUB(NOW(), 1, 'year')
+    AND status = 'completed'
+  
+  FOR EACH order IN old_orders {
+    // Move to archive table
+    Create_Record: archived_orders (order)
+    Delete_Record: orders WHERE id = order.id
+  }
+  
+  // Clean temporary files
+  temp_files = Query: files WHERE temporary = true
+    AND created_at < DATE_SUB(NOW(), 24, 'hours')
+  
+  FOR EACH file IN temp_files {
+    Delete_File(file.path)
+    Delete_Record: files WHERE id = file.id
+  }
+  
+  Log("Cleanup completed: " + deleted_logs + " logs, " + 
+      old_orders.count + " orders archived")
+```
+
+### Example 3: Data Synchronization
+
+```javascript
+// Runs every 30 minutes
+Background Task: sync_with_external_system
+  
+  // Get last sync timestamp
+  last_sync = Get_Setting("last_sync_time") || DATE_SUB(NOW(), 1, 'hour')
+  
+  // Fetch updates from external API
+  external_updates = External_API_Request(
+    "https://api.example.com/updates",
+    { since: last_sync }
+  )
+  
+  // Process updates
+  success_count = 0
+  error_count = 0
+  
+  FOR EACH update IN external_updates.data {
+    TRY {
+      // Find or create local record
+      local_record = Query: records 
+        WHERE external_id = update.id
+      
+      IF (local_record) {
+        Update_Record: records (update)
+      } ELSE {
+        Create_Record: records (update)
+      }
+      success_count++
+    } CATCH (error) {
+      error_count++
+      Log_Error("Sync failed for " + update.id + ": " + error)
+    }
+  }
+  
+  // Update last sync time
+  Update_Setting("last_sync_time", NOW())
+  
+  // Send notification if errors
+  IF (error_count > 0) {
+    Send_Alert("Sync completed with " + error_count + " errors")
+  }
+```
+
+## Advanced Patterns
+
+### Queue Processing
+
+```javascript
+// Runs every minute
+Background Task: process_email_queue
+  
+  // Get pending emails (max 50)
+  pending = Query: email_queue 
+    WHERE status = 'pending'
+    LIMIT 50
+  
+  FOR EACH email IN pending {
+    TRY {
+      // Send email
+      Send_Email(email.to, email.subject, email.body)
+      
+      // Mark as sent
+      Update_Record: email_queue
+        id: email.id
+        status: 'sent'
+        sent_at: NOW()
+        
+    } CATCH (error) {
+      // Increment retry count
+      Update_Record: email_queue
+        id: email.id
+        retry_count: email.retry_count + 1
+        last_error: error.message
+      
+      // Mark as failed after 3 retries
+      IF (email.retry_count >= 3) {
+        Update_Record: email_queue
+          id: email.id
+          status: 'failed'
+      }
+    }
+  }
+```
+
+### Monitoring and Alerting
+
+```javascript
+// Runs every 5 minutes
+Background Task: system_monitor
+  
+  // Check API response time
+  start = NOW()
+  test_result = External_API_Request("https://api.example.com/health")
+  response_time = NOW() - start
+  
+  IF (response_time > 2000) {  // Over 2 seconds
+    Send_Alert("API slow response: " + response_time + "ms")
+  }
+  
+  // Check database size
+  db_stats = Query_Database_Stats()
+  IF (db_stats.usage_percent > 80) {
+    Send_Alert("Database usage at " + db_stats.usage_percent + "%")
+  }
+  
+  // Check failed jobs
+  failed_jobs = Query: background_tasks_log 
+    WHERE status = 'failed'
+    AND created_at > DATE_SUB(NOW(), 1, 'hour')
+  
+  IF (failed_jobs.count > 5) {
+    Send_Alert(failed_jobs.count + " tasks failed in last hour")
+  }
+```
+
+## Integration Patterns
+
+### With n8n
+
+```javascript
+// Trigger n8n workflow on schedule
+Background Task: trigger_n8n_workflow
+  
+  // Collect data for n8n
+  daily_stats = {
+    users: Count_Records("users"),
+    orders: Count_Records("orders", "created_at > yesterday()"),
+    revenue: Sum_Field("orders", "total", "created_at > yesterday()")
+  }
+  
+  // Send to n8n webhook
+  External_API_Request(
+    "https://n8n.example.com/webhook/daily-report",
+    {
+      method: "POST",
+      body: daily_stats
+    }
+  )
+```
+
+### With WeWeb
+
+```javascript
+// Prepare cached data for WeWeb
+Background Task: cache_dashboard_data
+  
+  // Calculate expensive metrics
+  dashboard_data = {
+    total_users: Count_Records("users"),
+    active_users: Count_Records("users", "last_login > DATE_SUB(NOW(), 30, 'days')"),
+    revenue_mtd: Calculate_Revenue_MTD(),
+    top_products: Get_Top_Products(10),
+    recent_orders: Get_Recent_Orders(20)
+  }
+  
+  // Cache for frontend
+  Set_Cache_Value("dashboard_data", dashboard_data, TTL: 3600)
+```
+
+## Best Practices
+
+### Error Handling
+
+```javascript
+Background Task: important_task
+  TRY {
+    // Main logic
+    perform_operations()
     
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
+    // Log success
+    Create_Log("Task completed successfully")
     
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
+  } CATCH (error) {
+    // Log error
+    Create_Error_Log(error)
     
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
+    // Send notification
+    Send_Alert("Background task failed: " + error.message)
     
-    -   File Storage in Xano
-    -   Private File Storage
+    // Re-throw for retry mechanism
+    THROW error
+  }
+```
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+### Idempotency
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+Make tasks safe to run multiple times:
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../xano-features/metadata-api/content.html)
-        -   [Search](../../xano-features/metadata-api/search.html)
-        -   [File](../../xano-features/metadata-api/file.html)
-        -   [Request History](../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+```javascript
+// Check if already processed
+existing = Query: processed_records 
+  WHERE date = today()
+  
+IF (existing) {
+  Log("Already processed for today")
+  RETURN
+}
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+// Process and mark complete
+process_data()
+Create_Record: processed_records { date: today() }
+```
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+### Performance
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+```javascript
+// Process in batches
+batch_size = 100
+offset = 0
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+WHILE (true) {
+  batch = Query: large_table 
+    LIMIT batch_size 
+    OFFSET offset
+  
+  IF (batch.count == 0) BREAK
+  
+  process_batch(batch)
+  offset = offset + batch_size
+  
+  // Prevent timeout
+  IF (execution_time() > 50000) {  // 50 seconds
+    // Queue remaining for next run
+    BREAK
+  }
+}
+```
 
--   
-    Security
-    
-    -   Best Practices
+## Common Mistakes to Avoid
 
-[Powered by GitBook]
+1. **No Error Handling** - Tasks fail silently
+2. **Too Frequent Execution** - Overloads system
+3. **No Monitoring** - Failures go unnoticed
+4. **Long Running Tasks** - Risk timeout
+5. **No Idempotency** - Duplicate processing
 
-On this page
+## Try This
 
--   
-    
-    [Building and Using Background Tasks](#building-and-using-background-tasks)
+Create a smart cleanup system:
+1. Daily: Delete old logs
+2. Weekly: Archive completed orders
+3. Monthly: Generate usage reports
+4. Monitor all task executions
+5. Alert on failures
 
--   [Click in the left-hand menu to access your background tasks.](#click-in-the-left-hand-menu-to-access-your-background-tasks)
+## Pro Tips
 
--   [Click to create a new background task.](#click-to-create-a-new-background-task)
+💡 **Stagger Schedules:** Don't run all tasks at midnight - spread the load
 
--   [Build your background task.](#build-your-background-task)
+💡 **Use Queues:** For high-volume processing, use queue pattern
 
--   [Set your task to active.](#set-your-task-to-active)
+💡 **Monitor Execution:** Track duration and success rates
 
-Was this helpful?
+💡 **Test Locally:** Test background tasks as regular functions first
 
-Copy
-
-
-2.  Building with Visual Development
-
-Background Tasks 
-================
-
-Build and run workflows on a set schedule
-
- 
-
-Quick Summary
-
-Background tasks, or sometimes referred to as \"cron jobs\" are workflows that run on a set schedule. Background tasks are great for things like sending out marketing emails, report generation, analytics, and large data processing jobs.
-
-Background Tasks are available on our **Starter plan** and higher.
-
- 
-
-Building and Using Background Tasks
-
-<div>
-
-1
-
-###  
-
-Click [![](../../_gitbook/image5680.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FW5U0ZeazxbAh9sQ8Ez2Z%252FCleanShot%25202024-12-27%2520at%252015.03.15.png%3Falt%3Dmedia%26token%3Dc6a302b1-2f54-4385-978d-fd60bc0f9a02&width=300&dpr=4&quality=100&sign=7e048d75&sv=2)] in the left-hand menu to access your background tasks.
-
-2
-
-###  
-
-Click [![](../../_gitbook/image9aa6.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FS7Gu8nT1y2pY0xo7iuI1%252FCleanShot%25202024-12-27%2520at%252015.03.59.png%3Falt%3Dmedia%26token%3D1fd754d4-bbc6-4813-9edb-af495d5cf7a1&width=300&dpr=4&quality=100&sign=39e5dc52&sv=2)] to create a new background task.
-
-Fill in your desired options, such as **name**, **description**, **tags**, [**request history**](../../maintenance-monitoring-and-logging/request-history.html), and the preferred [**data source**](../../the-database/database-basics/data-sources.html).
-
-3
-
-###  
-
-Build your background task.
-
-Background tasks are a little different from APIs and custom functions, in that they do not have inputs or deliver a response. Tasks have two sections that require your attention.
-
-###  
-
-🔄 Function stack
-
-This is where all of the magic happens. All of the business logic that is performed lives here.
-
-As you add functions to your function stack, it will suggest next steps based on most popular user activity.
-
-####  
-
-📅 Schedule
-
-The schedule determines when your background task runs, and how often.
-
-If a new run is scheduled to begin before the previous has completed, the currently due run will be skipped.
-
-4
-
-###  
-
-Set your task to active.
-
-Once you have built your function stack and your task schedule, click Enable Task to set it as active, and publish your changes.
-
-![](../../_gitbook/image3c27.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FZmslQcdF7gKNMlWnmCbi%252FCleanShot%25202024-12-27%2520at%252015.09.18.png%3Falt%3Dmedia%26token%3D592dbb36-e216-40a8-b159-bb2bc1e37728&width=768&dpr=4&quality=100&sign=3031f8cd&sv=2)
-
-</div>
-
-Last updated 1 month ago
-
-Was this helpful?
+Remember: Background tasks keep your system healthy and your users happy with automated, reliable operations!

@@ -1,382 +1,470 @@
 ---
+title: "Additional Features - Advanced Function Stack Capabilities"
+description: "Explore advanced features like response caching, performance optimization, and special functions in Xano"
 category: function-stack
+subcategory: advanced
 difficulty: advanced
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+- caching
+- performance
+- optimization
+- advanced-features
+- scaling
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
+# Additional Features - Advanced Function Stack Capabilities
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'additional-features'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## Quick Summary
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+> **What it is:** A collection of advanced features that enhance your function stacks with caching, optimization, and special capabilities
+> 
+> **When to use:** When you need to optimize performance, handle high traffic, or implement advanced patterns
+> 
+> **Key benefit:** Transform your APIs from functional to production-ready with enterprise features
+> 
+> **Most important:** Response caching can dramatically improve API performance
 
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
+## What You'll Learn
 
+- Response caching strategies for instant API responses
+- Performance optimization techniques
+- Advanced error handling patterns
+- Scaling strategies for high traffic
+- Special utility functions
 
+## Response Caching
 
+### Understanding Response Caching
 
+Response caching stores the entire API response for reuse, eliminating the need to re-execute the function stack for identical requests.
 
+**How it works:**
+1. First request executes normally
+2. Response is cached with a unique key
+3. Subsequent identical requests return cached response
+4. Cache expires after specified time
 
+### Configuration
 
+```javascript
+// Cache settings
+Cache Duration: 300  // 5 minutes in seconds
+Cache Key: Generated from inputs automatically
+Cache Invalidation: Manual or automatic on data changes
+```
 
+### When to Use Response Caching
 
+**Perfect for:**
+- Public data that rarely changes
+- Expensive calculations or aggregations
+- External API responses
+- Report generation
+- Search results
 
+**Avoid for:**
+- User-specific data
+- Real-time information
+- Sensitive/private data
+- Frequently changing data
 
+### Implementation Examples
 
+#### Example 1: Product Catalog
 
+```javascript
+// Cache product listings for 10 minutes
+API Endpoint: GET /products
+Cache Duration: 600 seconds
 
+Function Stack:
+1. Query all products
+2. Join with categories
+3. Calculate ratings
+4. Format response
 
--   
+// Result: First request takes 500ms, cached requests take 10ms
+```
 
+#### Example 2: Analytics Dashboard
+
+```javascript
+// Cache dashboard metrics hourly
+Cache Duration: 3600 seconds
+Cache Key: "dashboard_" + date_hour
+
+Function Stack:
+1. Aggregate daily metrics
+2. Calculate trends
+3. Generate charts data
+4. Return formatted response
+
+// Heavy calculation runs once per hour
+```
+
+### Cache Invalidation Strategies
+
+```javascript
+// Manual invalidation
+On product update:
+  Clear cache for: "products_*"
+
+// Time-based invalidation
+Short-lived data: 60 seconds
+Medium-lived data: 5 minutes
+Long-lived data: 1 hour
+
+// Smart invalidation
+Track dependencies and clear related caches
+```
+
+## Performance Optimization Features
+
+### 1. Lazy Loading
+
+Load data only when needed:
+
+```javascript
+// Instead of loading everything
+user = Get full user with all relations
+
+// Load incrementally
+user_basic = Get user basic info
+IF (need_profile) {
+  user_profile = Get user profile
+}
+IF (need_preferences) {
+  user_preferences = Get preferences
+}
+```
+
+### 2. Batch Processing
+
+Process multiple items efficiently:
+
+```javascript
+// Instead of individual queries in loop
+FOR EACH id IN user_ids {
+  user = Get user by id  // N queries
+}
+
+// Use single batch query
+users = Query users WHERE id IN user_ids  // 1 query
+```
+
+### 3. Parallel Execution
+
+Run independent operations simultaneously:
+
+```javascript
+// Execute in parallel (conceptual)
+PARALLEL {
+  user_data = Get user info
+  order_data = Get recent orders
+  recommendations = Get recommendations
+}
+
+// All three execute at once, not sequentially
+```
+
+## Advanced Error Handling
+
+### Graceful Degradation
+
+```javascript
+TRY {
+  primary_data = Get from primary source
+} CATCH {
+  // Fallback to cache
+  primary_data = Get from cache
+  
+  IF (cache_miss) {
+    // Final fallback
+    primary_data = default_safe_data
+  }
+  
+  // Log issue for monitoring
+  Log error with context
+}
+```
+
+### Circuit Breaker Pattern
+
+```javascript
+// Track failures
+failure_count = Get cache value "api_failures"
+
+IF (failure_count > 5) {
+  // Circuit open - fail fast
+  Return cached_response or error
+}
+
+TRY {
+  result = Call external API
+  // Reset on success
+  Set cache "api_failures" = 0
+} CATCH {
+  // Increment failures
+  Increment cache "api_failures"
+  Return fallback_response
+}
+```
+
+## Scaling Features
+
+### 1. Request Throttling
+
+Limit requests per user:
+
+```javascript
+// Rate limiting with cache
+key = "rate_limit_" + user_id
+count = Increment cache value key
+
+IF (count > 100) {
+  Return error "Rate limit exceeded"
+}
+
+// Set expiry for rolling window
+Set cache TTL key = 3600  // Reset hourly
+```
+
+### 2. Queue Management
+
+Handle burst traffic:
+
+```javascript
+// Add to processing queue
+queue_item = {
+  id: UUID(),
+  user_id: user.id,
+  action: "process_order",
+  data: order_data,
+  queued_at: timestamp_now()
+}
+
+Add to queue table
+Return { status: "queued", id: queue_item.id }
+
+// Background task processes queue
+```
+
+### 3. Load Distribution
+
+Distribute heavy operations:
+
+```javascript
+// Split large dataset
+total_records = Count all records
+chunk_size = 1000
+chunks = CEIL(total_records / chunk_size)
+
+FOR i FROM 0 TO chunks {
+  offset = i * chunk_size
+  
+  // Process chunk
+  Create background task:
+    Process records LIMIT chunk_size OFFSET offset
+}
+```
+
+## Special Utility Features
+
+### 1. Webhook Retries
+
+Automatic retry logic:
+
+```javascript
+retry_count = 0
+max_retries = 3
+
+WHILE (retry_count < max_retries) {
+  TRY {
+    Send webhook
+    BREAK  // Success, exit loop
+  } CATCH {
+    retry_count++
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+    IF (retry_count < max_retries) {
+      // Exponential backoff
+      Wait POWER(2, retry_count) seconds
+    }
+  }
+}
 
--   
+IF (retry_count == max_retries) {
+  // Add to dead letter queue
+  Store failed webhook for manual review
+}
+```
 
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](building-with-visual-development/background-tasks.html)
-        -   [Triggers](building-with-visual-development/triggers.html)
-        -   [Middleware](building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](functions/database-requests/get-record.html)
-            -   [Add Record](functions/database-requests/add-record.html)
-            -   [Edit Record](functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](functions/database-requests/patch-record.html)
-            -   [Delete Record](functions/database-requests/delete-record.html)
-            -   [Bulk Operations](functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](functions/database-requests/database-transaction.html)
-            -   [External Database Query](functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](functions/data-manipulation/create-variable.html)
-            -   [Update Variable](functions/data-manipulation/update-variable.html)
-            -   [Conditional](functions/data-manipulation/conditional.html)
-            -   [Switch](functions/data-manipulation/switch.html)
-            -   [Loops](functions/data-manipulation/loops.html)
-            -   [Math](functions/data-manipulation/math.html)
-            -   [Arrays](functions/data-manipulation/arrays.html)
-            -   [Objects](functions/data-manipulation/objects.html)
-            -   [Text](functions/data-manipulation/text.html)
-                    -   [Security](functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](functions/data-caching-redis.html)
-        -   [Custom Functions](functions/custom-functions.html)
-        -   [Utility Functions](functions/utility-functions.html)
-        -   [File Storage](functions/file-storage.html)
-        -   [Cloud Services](functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](filters/manipulation.html)
-        -   [Math](filters/math.html)
-        -   [Timestamp](filters/timestamp.html)
-        -   [Text](filters/text.html)
-        -   [Array](filters/array.html)
-        -   [Transform](filters/transform.html)
-        -   [Conversion](filters/conversion.html)
-        -   [Comparison](filters/comparison.html)
-        -   [Security](filters/security.html)
-            -   Data Types
-        
-        -   [Text](data-types/text.html)
-        -   [Expression](data-types/expression.html)
-        -   [Array](data-types/array.html)
-        -   [Object](data-types/object.html)
-        -   [Integer](data-types/integer.html)
-        -   [Decimal](data-types/decimal.html)
-        -   [Boolean](data-types/boolean.html)
-        -   [Timestamp](data-types/timestamp.html)
-        -   [Null](data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+### 2. Dynamic Configuration
 
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+Environment-based settings:
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+```javascript
+// Get environment
+env = environment_variable("ENVIRONMENT")
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+// Load appropriate config
+config = SWITCH (env) {
+  CASE "production":
+    {
+      cache_duration: 3600,
+      rate_limit: 1000,
+      debug: false
+    }
+  CASE "staging":
+    {
+      cache_duration: 300,
+      rate_limit: 100,
+      debug: true
+    }
+  DEFAULT:
+    {
+      cache_duration: 0,
+      rate_limit: 10,
+      debug: true
+    }
+}
+```
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+### 3. Audit Logging
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+Track all operations:
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+```javascript
+// Create audit log entry
+audit_log = {
+  user_id: auth.user_id,
+  action: "update_record",
+  resource_type: "order",
+  resource_id: order.id,
+  before_value: original_order,
+  after_value: updated_order,
+  ip_address: request.ip,
+  timestamp: timestamp_now()
+}
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+// Store asynchronously
+Create background task: Store audit_log
+```
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+## Integration Patterns
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+### With n8n
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+```javascript
+// Webhook processing with caching
+webhook_signature = Generate signature from payload
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+// Check if already processed
+cached = Get cache value webhook_signature
+IF (cached) {
+  Return { status: "already_processed" }
+}
 
--   
-    Security
-    
-    -   Best Practices
+// Process webhook
+Process webhook data
 
-[Powered by GitBook]
+// Mark as processed
+Set cache webhook_signature = true
+TTL = 86400  // 24 hours
+```
 
-On this page
+### With WeWeb
 
-Was this helpful?
+```javascript
+// Optimized data fetching for collections
+// Cache filtered results
+cache_key = "products_" + filters_hash
 
-Copy
+cached_data = Get cache cache_key
+IF (cached_data) {
+  Return cached_data
+}
 
+// Fetch and cache
+products = Query with filters
+Set cache cache_key = products
+TTL = 300  // 5 minutes
 
+Return products
+```
 
-Additional Features 
-===================
+## Best Practices
 
-[[Response Caching]]
+### Caching Strategy
 
-Last updated 6 months ago
+```javascript
+// Layered caching approach
+1. Browser cache: Static assets
+2. CDN cache: Public API responses
+3. Application cache: Response caching
+4. Database cache: Query results
+5. Redis cache: Session data
+```
 
-Was this helpful?
+### Monitoring
+
+Track these metrics:
+- Cache hit rate
+- Response times
+- Error rates
+- Queue depths
+- Resource usage
+
+### Testing
+
+```javascript
+// Test with cache disabled
+FORCE_CACHE_MISS = true
+
+// Test cache invalidation
+Update record
+Verify cache cleared
+
+// Test performance
+Measure with/without cache
+```
+
+## Common Mistakes to Avoid
+
+1. **Over-caching**
+   - Don't cache user-specific data globally
+   - Avoid caching sensitive information
+
+2. **Under-caching**
+   - Identify expensive operations
+   - Cache external API calls
+
+3. **Poor invalidation**
+   - Clear related caches on updates
+   - Use appropriate TTLs
+
+4. **Missing error handling**
+   - Always have fallbacks
+   - Log failures for debugging
+
+## Try This
+
+Implement a smart caching system:
+1. Identify your slowest endpoints
+2. Add response caching with 5-minute TTL
+3. Implement cache invalidation on updates
+4. Monitor cache hit rates
+5. Adjust TTLs based on usage patterns
+
+## Pro Tips
+
+💡 **Cache Keys:** Use consistent, predictable cache key patterns
+
+💡 **TTL Strategy:** Shorter TTLs for frequently changing data
+
+💡 **Warm Cache:** Pre-populate cache during off-peak hours
+
+💡 **Monitor:** Track cache effectiveness with metrics
+
+Remember: These additional features transform good APIs into great ones. Use them wisely to build scalable, performant applications!

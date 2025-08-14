@@ -1,374 +1,245 @@
 ---
+title: APIs & Lambdas
+description: Connect external services and execute custom code with visual API integrations and serverless Lambda functions
 category: function-stack
-difficulty: advanced
+difficulty: intermediate
 last_updated: '2025-01-23'
-related_docs: []
+related_docs:
+  - external-api-request
+  - lambda-functions
+  - realtime-functions
 subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2'
+  - apis
+  - lambda
+  - external-integration
+  - serverless
+  - javascript
+  - typescript
 ---
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+# APIs & Lambdas
 
+**Quick Summary**
+APIs & Lambdas help you connect with external services and run custom code within your visual workflows. Think of them as bridges that let your Xano backend communicate with other tools and execute specialized logic.
 
+## What You'll Learn
 
+- When to use external API requests vs Lambda functions
+- How to connect with third-party services
+- Building real-time functionality
+- Best practices for external integrations
 
+---
 
+## Function Categories
 
+The APIs and Lambda Functions category contains three powerful tools for extending your backend capabilities:
 
+### External API Request
+Connect to any web service or API - perfect for integrating with payment processors, email services, or any external platform.
 
+**Common Use Cases:**
+- Payment processing (Stripe, PayPal)
+- Email services (SendGrid, Mailgun)
+- SMS notifications (Twilio)
+- Social media APIs
+- Weather services
+- Third-party data sources
 
+### Lambda Functions  
+Execute JavaScript or TypeScript code directly in your function stack - ideal for complex calculations or custom logic that visual functions can't handle.
 
+**Common Use Cases:**
+- Complex mathematical calculations
+- Custom data transformations
+- API response parsing
+- Business rule implementations
+- Integration with npm packages
 
+### Realtime Functions
+Trigger live updates and events across your application - perfect for chat features, live notifications, or collaborative tools.
 
+**Common Use Cases:**
+- Live chat systems
+- Real-time notifications
+- Collaborative editing
+- Live dashboards
+- Gaming features
+- Activity feeds
 
+---
 
+## Try This: Build a Payment Notification System
 
--   
+**Scenario:** Create a system that processes payments and sends real-time notifications.
 
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+### Step 1: Process Payment with External API
+```javascript
+// External API Request to Stripe
+POST https://api.stripe.com/v1/charges
+Headers: {
+  "Authorization": "Bearer sk_test_...",
+  "Content-Type": "application/x-www-form-urlencoded"
+}
+Body: {
+  "amount": 2000,
+  "currency": "usd", 
+  "source": "tok_visa",
+  "description": "Order #1234"
+}
+```
 
--   
+### Step 2: Process Response with Lambda
+```javascript
+// Lambda Function to handle payment response
+const paymentResult = $functions.external_api.response;
 
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../building-with-visual-development/triggers.html)
-        -   [Middleware](../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](database-requests/get-record.html)
-            -   [Add Record](database-requests/add-record.html)
-            -   [Edit Record](database-requests/edit-record.html)
-            -   [Add or Edit Record](database-requests/add-or-edit-record.html)
-            -   [Patch Record](database-requests/patch-record.html)
-            -   [Delete Record](database-requests/delete-record.html)
-            -   [Bulk Operations](database-requests/bulk-operations.html)
-            -   [Database Transaction](database-requests/database-transaction.html)
-            -   [External Database Query](database-requests/external-database-query.html)
-            -   [Direct Database Query](database-requests/direct-database-query.html)
-            -   [Get Database Schema](database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](data-manipulation/create-variable.html)
-            -   [Update Variable](data-manipulation/update-variable.html)
-            -   [Conditional](data-manipulation/conditional.html)
-            -   [Switch](data-manipulation/switch.html)
-            -   [Loops](data-manipulation/loops.html)
-            -   [Math](data-manipulation/math.html)
-            -   [Arrays](data-manipulation/arrays.html)
-            -   [Objects](data-manipulation/objects.html)
-            -   [Text](data-manipulation/text.html)
-                    -   [Security](security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](data-caching-redis.html)
-        -   [Custom Functions](custom-functions.html)
-        -   [Utility Functions](utility-functions.html)
-        -   [File Storage](file-storage.html)
-        -   [Cloud Services](cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../filters/manipulation.html)
-        -   [Math](../filters/math.html)
-        -   [Timestamp](../filters/timestamp.html)
-        -   [Text](../filters/text.html)
-        -   [Array](../filters/array.html)
-        -   [Transform](../filters/transform.html)
-        -   [Conversion](../filters/conversion.html)
-        -   [Comparison](../filters/comparison.html)
-        -   [Security](../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../data-types/text.html)
-        -   [Expression](../data-types/expression.html)
-        -   [Array](../data-types/array.html)
-        -   [Object](../data-types/object.html)
-        -   [Integer](../data-types/integer.html)
-        -   [Decimal](../data-types/decimal.html)
-        -   [Boolean](../data-types/boolean.html)
-        -   [Timestamp](../data-types/timestamp.html)
-        -   [Null](../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+if (paymentResult.status === 'succeeded') {
+  // Update order status
+  const orderUpdate = {
+    id: $input.order_id,
+    status: 'paid',
+    payment_id: paymentResult.id,
+    paid_at: new Date()
+  };
+  
+  return {
+    success: true,
+    order: orderUpdate,
+    customer_email: $input.customer_email
+  };
+} else {
+  return {
+    success: false,
+    error: paymentResult.failure_message
+  };
+}
+```
 
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+### Step 3: Send Real-time Update
+```javascript
+// Realtime Function to notify customer
+if ($functions.process_payment.success) {
+  // Send to customer's channel
+  const notification = {
+    type: 'payment_success',
+    order_id: $input.order_id,
+    message: 'Your payment has been processed successfully!'
+  };
+  
+  // Broadcast to user's channel
+  channel: `user_${$auth.user.id}`,
+  event: 'payment_notification',
+  data: notification
+}
+```
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+---
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+## Integration Patterns for Visual Developers
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+### WeWeb Integration Pattern
+1. **Frontend Action** → WeWeb button click
+2. **API Call** → Xano endpoint with External API Request
+3. **Lambda Processing** → Custom logic for response handling  
+4. **Realtime Update** → Live UI updates in WeWeb
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+### n8n Automation Pattern
+1. **Trigger** → Webhook from external service
+2. **Lambda Function** → Process and validate data
+3. **External API** → Forward to another service
+4. **Realtime Event** → Notify connected users
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+---
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../xano-features/metadata-api/content.html)
-        -   [Search](../../xano-features/metadata-api/search.html)
-        -   [File](../../xano-features/metadata-api/file.html)
-        -   [Request History](../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+## When to Use Each Tool
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+### Use External API Request When:
+✅ Connecting to existing web services  
+✅ Making HTTP requests to third parties  
+✅ You need authentication headers/tokens  
+✅ Working with REST or GraphQL APIs  
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+### Use Lambda Functions When:
+✅ Complex data transformations needed  
+✅ Mathematical calculations required  
+✅ Custom business logic implementation  
+✅ Need to use JavaScript/TypeScript libraries  
+✅ Processing API responses before saving  
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+### Use Realtime Functions When:
+✅ Building chat or messaging features  
+✅ Live notifications required  
+✅ Collaborative tools development  
+✅ Real-time dashboard updates  
+✅ Gaming or interactive features  
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+---
 
--   
-    Security
-    
-    -   Best Practices
+## Common Mistakes to Avoid
 
-[Powered by GitBook]
+❌ **Using Lambda for simple operations**
+- Visual functions are often simpler and faster
 
-On this page
+❌ **Not handling API errors properly** 
+- Always check response status and handle failures
 
-Was this helpful?
+❌ **Hardcoding API keys**
+- Use environment variables for sensitive data
 
-Copy
+❌ **Forgetting rate limits**
+- Respect third-party API limitations
 
+❌ **Overusing realtime events**
+- Only send updates when necessary
 
-2.  Functions
+---
 
-APIs & Lambdas 
-==============
+## Pro Tips
 
-> The APIs and Lambda Functions category contains functions to connect with third party services, initiate Realtime events, and execute JavaScript / TypeScript alongside your function stack.
+💡 **API Integration Strategy**
+- Test external APIs in isolation first
+- Use Lambda functions to normalize different API responses
+- Implement retry logic for unreliable services
 
-[[External API Request]]
+💡 **Performance Optimization**
+- Cache API responses when possible
+- Use background tasks for non-urgent API calls
+- Batch multiple operations when supported
 
-[[Lambda Functions]]
+💡 **Error Handling**
+- Provide meaningful error messages
+- Log API failures for debugging
+- Implement fallback behaviors
 
-[[Realtime Functions]]
+💡 **Security Best Practices**
+- Never expose API keys in frontend code
+- Validate all external data before processing
+- Use HTTPS for all external API calls
 
-Last updated 4 months ago
+---
 
-Was this helpful?
+## Real-World Examples
+
+### E-commerce Order Flow
+1. **Order Creation** → Visual functions create order record
+2. **Payment Processing** → External API Request to payment processor
+3. **Inventory Update** → Lambda function calculates new stock levels
+4. **Customer Notification** → Realtime function sends order confirmation
+
+### Social Media Dashboard
+1. **Data Fetching** → External API Requests to social platforms
+2. **Data Processing** → Lambda functions normalize different API formats
+3. **Analytics Calculation** → Lambda functions compute engagement metrics
+4. **Live Updates** → Realtime functions push new data to dashboard
+
+### Customer Support System
+1. **Ticket Creation** → Visual functions store support ticket
+2. **Auto-Assignment** → Lambda function implements assignment logic
+3. **Email Notification** → External API Request to email service
+4. **Status Updates** → Realtime functions notify agents and customers
+
+---
+
+**Next Steps:** Ready to dive deeper? Explore [External API Request](/root/xano-knowledge/02-core-concepts/function-stack/external-api-request.md) for detailed API integration or [Lambda Functions](/root/xano-knowledge/02-core-concepts/function-stack/lambda-functions.md) for custom code execution.
