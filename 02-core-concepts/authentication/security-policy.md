@@ -1,465 +1,776 @@
 ---
+title: "Security Policy Management in Xano - Comprehensive Implementation Guide"
+description: "Master Xano security policy configuration with enterprise-grade controls, compliance frameworks, and advanced security features for production applications"
 category: authentication
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/authentication
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - Security Policy
+  - Enterprise Security
+  - Compliance
+  - 2FA
+  - SSO Enforcement
+  - IP Filtering
+  - Security Configuration
+  - Data Protection
+difficulty: advanced
+reading_time: 16 minutes
+last_updated: '2025-01-23'
+prerequisites:
+  - Paid Xano plan (some features require Enterprise)
+  - Understanding of security principles
+  - Network and IP address concepts
+  - Knowledge of authentication methods
 ---
 
+# Security Policy Management in Xano
+
+## 📋 **Quick Summary**
+
+**What it does:** Xano's Security Policy features provide enterprise-grade security controls to enforce authentication requirements, manage access restrictions, and ensure compliance with organizational security standards.
+
+**Why it matters:** Security policies enable you to:
+- **Enforce compliance** - Meet regulatory and industry security requirements
+- **Control access** - Restrict who can access your instance and from where
+- **Protect data** - Prevent unauthorized access and data breaches
+- **Manage teams** - Control how team members authenticate and access resources
+- **Maintain security posture** - Implement consistent security standards across your organization
+
+**Time to implement:** 15-30 minutes for basic policies, 2-4 hours for enterprise compliance setup
+
 ---
-apple-mobile-web-app-status-bar-style: black
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'security-policy'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## What You'll Learn
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+- Understanding Xano security policy features and limitations
+- Implementing enterprise authentication requirements
+- Configuring IP-based access controls and network security
+- Setting up multi-factor authentication enforcement
+- Building compliance frameworks for various industries
+- Advanced security patterns for team and data management
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+## Understanding Xano Security Policies
 
+Think of Xano's security policies as your organization's digital security guard - they check credentials, verify locations, and enforce rules before allowing anyone through the door to your backend systems.
 
+### 🎯 **Security Policy Categories**
 
+| Category | Purpose | Examples |
+|----------|---------|----------|
+| **Authentication** | Control how users log in | 2FA requirements, SSO enforcement |
+| **Authorization** | Manage what users can access | Role restrictions, workspace isolation |
+| **Network Security** | Control where access comes from | IP allowlists, geographic restrictions |
+| **Session Management** | Control login sessions | Inactivity timeouts, concurrent sessions |
+| **Data Protection** | Secure data operations | Query restrictions, key isolation |
 
+### 🔐 **Plan-Based Feature Availability**
 
+**Available on All Paid Plans:**
+- Direct Query restrictions
+- Redis Key Isolation
+- Basic workspace security
 
+**Enterprise Plan Only:**
+- Inactivity logout enforcement
+- 2FA requirements
+- Authentication service enforcement
+- SSO host restrictions
+- IP allowlists and denylists
 
+## Accessing Security Policy Settings
 
+### Navigation Steps
 
+1. Go to [Xano Instance Selection](https://app.xano.com/instance)
+2. Click the **⚙️ (Settings)** icon next to your instance
+3. Select **Security Policy** from the settings panel
+4. Configure your desired security controls
 
+### Interface Overview
 
+The Security Policy panel is organized into sections:
+- **Basic Security** (All paid plans)
+- **Advanced Authentication** (Enterprise)
+- **Network Controls** (Enterprise)
+- **Compliance Settings** (Enterprise)
 
+## Basic Security Features (All Paid Plans)
 
+### 1. Direct Query Control
 
+**Purpose:** Restricts the use of Direct Database Query functions in function stacks.
 
--   
+**Why It Matters:**
+- Prevents SQL injection vulnerabilities
+- Limits access to advanced database operations
+- Reduces risk from team members with excessive privileges
+- Maintains audit trails for database operations
 
+**Implementation:**
+```yaml
+Setting: Allow Direct Query
+Options:
+  - Enabled: Team members can use Direct Database Query
+  - Disabled: Direct Database Query functions blocked
+```
+
+**Best Practice Configuration:**
+```yaml
+Development Environment: Enabled (for flexibility)
+Staging Environment: Disabled (testing security controls)
+Production Environment: Disabled (maximum security)
+```
+
+**Alternative Approaches When Disabled:**
+- Use specific database functions (Add Record, Edit Record, etc.)
+- Create custom functions for complex operations
+- Implement stored procedures through database migrations
+- Use Lambda functions for advanced data processing
+
+### 2. Redis Key Isolation
+
+**Purpose:** Isolates caching keys between different workspaces to prevent data leakage.
+
+**Why Enable Key Isolation:**
+- Prevents accidental data sharing between workspaces
+- Maintains tenant isolation in multi-workspace setups
+- Reduces risk of cache poisoning attacks
+- Ensures consistent cache behavior per workspace
+
+**Implementation:**
+```yaml
+Setting: Redis Key Isolation
+Options:
+  - Enabled: Keys isolated per workspace
+  - Disabled: Keys shared across workspaces (default)
+```
+
+**Use Cases for Isolation:**
+```yaml
+Enable When:
+  - Multiple clients/tenants using separate workspaces
+  - Different teams working on separate projects
+  - Compliance requirements for data separation
+  - Development/staging/production environment separation
+
+Keep Disabled When:
+  - Single workspace instance
+  - Intentional cross-workspace data sharing needed
+  - Simple development setup with one team
+```
+
+## Enterprise Authentication Features
+
+### 1. Inactivity Logout Enforcement
+
+**Purpose:** Automatically logs out team members after periods of inactivity.
+
+**Configuration Options:**
+- **Time Range:** 1 to 24 hours
+- **Scope:** Applies to all team members
+- **Override:** No individual exemptions
+
+**Implementation Strategy:**
+```yaml
+Recommended Settings by Role:
+  Admin Users: 2-4 hours
+  Regular Users: 4-8 hours
+  Read-only Users: 8-12 hours
+  
+Compliance Requirements:
+  HIPAA: 4 hours maximum
+  PCI DSS: 2 hours maximum
+  SOX: 4 hours maximum
+  General Corporate: 8 hours
+```
+
+**User Experience Considerations:**
+```javascript
+// Notify users before logout
+class SessionMonitor {
+  constructor(timeoutMinutes) {
+    this.timeout = timeoutMinutes * 60 * 1000;
+    this.warningTime = 5 * 60 * 1000; // 5 minutes warning
+    this.setupWarnings();
+  }
+  
+  setupWarnings() {
+    // Show warning 5 minutes before logout
+    setTimeout(() => {
+      this.showLogoutWarning();
+    }, this.timeout - this.warningTime);
+  }
+  
+  showLogoutWarning() {
+    const remainingMinutes = Math.floor(this.warningTime / 60000);
+    alert(`You will be logged out in ${remainingMinutes} minutes due to inactivity.`);
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+    // Offer session extension
+    if (confirm('Would you like to extend your session?')) {
+      this.extendSession();
+    }
+  }
+}
+```
 
--   
+### 2. Two-Factor Authentication (2FA) Enforcement
 
+**Purpose:** Requires all team members to use 2FA for authentication.
+
+**Enforcement Options:**
+- **Mandatory:** All users must enable 2FA
+- **Grace Period:** Time for existing users to enable 2FA
+- **Recovery Options:** Admin override capabilities
+
+**Implementation Timeline:**
+```yaml
+Phase 1 (Week 1):
+  - Announce 2FA requirement to team
+  - Provide setup instructions and support
+  - Enable 2FA for admin accounts
+
+Phase 2 (Week 2-3):
+  - Voluntary 2FA adoption period
+  - Monitor adoption rates
+  - Provide individual support
+
+Phase 3 (Week 4):
+  - Enable 2FA enforcement
+  - Monitor for authentication issues
+  - Address any access problems
+```
+
+**2FA Best Practices:**
+```yaml
+Recommended Authenticators:
+  - Google Authenticator
+  - Authy
+  - 1Password
+  - Bitwarden Authenticator
+
+Backup Codes:
+  - Generate recovery codes
+  - Store securely offline
+  - Require admin verification for use
+  
+Admin Controls:
+  - Emergency 2FA reset capability
+  - Audit logs for 2FA changes
+  - Regular compliance reporting
+```
+
+### 3. Authentication Service Enforcement
+
+**Purpose:** Controls which authentication providers team members can use.
+
+**Available Options:**
+- Email/Password
+- Google OAuth
+- GitHub OAuth
+- Microsoft OAuth
+- Custom SSO providers
+
+**Enterprise SSO Configuration:**
+```yaml
+Typical Enterprise Setup:
+  Primary: Microsoft Azure AD
+  Secondary: Google Workspace
+  Disabled: Email/Password, GitHub
+  
+Security Benefits:
+  - Centralized user management
+  - Consistent security policies
+  - Single logout capabilities
+  - Audit trail integration
+```
+
+**Implementation Strategy:**
+```javascript
+// SSO enforcement with fallback
+class AuthenticationPolicy {
+  constructor(allowedProviders, emergencyAccess = false) {
+    this.allowedProviders = allowedProviders;
+    this.emergencyAccess = emergencyAccess;
+  }
+  
+  validateAuthMethod(provider) {
+    if (!this.allowedProviders.includes(provider)) {
+      if (this.emergencyAccess && this.isEmergencyScenario()) {
+        this.logEmergencyAccess(provider);
+        return true;
+      }
+      throw new Error(`Authentication via ${provider} is not permitted`);
+    }
+    return true;
+  }
+  
+  isEmergencyScenario() {
+    // Check for maintenance windows or SSO outages
+    return this.checkSSOHealth() === false;
+  }
+}
+```
+
+### 4. Allowed SSO Hosts
+
+**Purpose:** Restricts authentication to specific email domains.
+
+**Use Cases:**
+- Corporate domain enforcement
+- Partner organization access
+- Contractor access control
+- Compliance requirements
+
+**Configuration Examples:**
+```yaml
+Corporate Only:
+  - @company.com
+  - @subsidiary.com
+
+Multi-Organization:
+  - @company.com
+  - @partner1.com
+  - @partner2.com
+  
+Development/Testing:
+  - @company.com
+  - @company-dev.com
+  - @contractor-company.com
+```
+
+**Domain Validation Implementation:**
+```javascript
+class DomainValidator {
+  constructor(allowedDomains) {
+    this.allowedDomains = allowedDomains.map(d => d.toLowerCase());
+  }
+  
+  validateEmailDomain(email) {
+    const domain = '@' + email.split('@')[1].toLowerCase();
     
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../the-function-stack/filters/manipulation.html)
-        -   [Math](../../the-function-stack/filters/math.html)
-        -   [Timestamp](../../the-function-stack/filters/timestamp.html)
-        -   [Text](../../the-function-stack/filters/text.html)
-        -   [Array](../../the-function-stack/filters/array.html)
-        -   [Transform](../../the-function-stack/filters/transform.html)
-        -   [Conversion](../../the-function-stack/filters/conversion.html)
-        -   [Comparison](../../the-function-stack/filters/comparison.html)
-        -   [Security](../../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../the-function-stack/data-types/text.html)
-        -   [Expression](../../the-function-stack/data-types/expression.html)
-        -   [Array](../../the-function-stack/data-types/array.html)
-        -   [Object](../../the-function-stack/data-types/object.html)
-        -   [Integer](../../the-function-stack/data-types/integer.html)
-        -   [Decimal](../../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../../the-function-stack/data-types/timestamp.html)
-        -   [Null](../../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
+    if (!this.allowedDomains.includes(domain)) {
+      throw new Error(`Email domain ${domain} is not authorized`);
+    }
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
+    return true;
+  }
+  
+  // Support for subdomain matching
+  validateSubdomains(email) {
+    const emailDomain = email.split('@')[1].toLowerCase();
     
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+    return this.allowedDomains.some(allowedDomain => {
+      const cleanDomain = allowedDomain.replace('@', '');
+      return emailDomain === cleanDomain || 
+             emailDomain.endsWith('.' + cleanDomain);
+    });
+  }
+}
+```
 
--   
-    Build For AI
+## Network Security Controls
+
+### 1. IP Address Allowlist
+
+**Purpose:** Restricts access to your Xano instance and APIs to specific IP addresses.
+
+**Use Cases:**
+- Office network restrictions
+- VPN-only access
+- Partner network access
+- Geographic compliance
+
+**Implementation Considerations:**
+```yaml
+Static IP Scenarios:
+  - Corporate office networks
+  - Data center connections
+  - Partner VPN endpoints
+  - Dedicated server environments
+
+Dynamic IP Challenges:
+  - Remote work environments
+  - Mobile device access
+  - ISP IP address changes
+  - Cloud service IP ranges
+```
+
+**Configuration Examples:**
+```yaml
+# Office network only
+Corporate Setup:
+  - 203.0.113.0/24    # Main office
+  - 198.51.100.0/24   # Branch office
+  - 192.0.2.0/24      # Data center
+
+# Cloud service access
+AWS Integration:
+  - 52.95.0.0/16      # AWS service IPs
+  - 54.240.0.0/16     # Additional AWS range
+
+# VPN access only
+VPN-Only Access:
+  - 10.0.0.0/8        # Private VPN range
+  - 172.16.0.0/12     # Secondary VPN range
+```
+
+**Dynamic IP Management:**
+```javascript
+// API for dynamic IP updates
+class DynamicIPManager {
+  async updateAllowedIP(userId, newIP, reason) {
+    // Validate user permissions
+    await this.validateUpdatePermission(userId);
     
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
+    // Check IP format and legitimacy
+    const validatedIP = this.validateIPAddress(newIP);
     
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
+    // Log the change for audit
+    await this.logIPChange(userId, newIP, reason);
     
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
+    // Update allowlist via API
+    return await this.updateXanoAllowlist(validatedIP);
+  }
+  
+  validateIPAddress(ip) {
+    const ipv4Regex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
+    const ipv6Regex = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
     
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
+    if (!ipv4Regex.test(ip) && !ipv6Regex.test(ip)) {
+      throw new Error('Invalid IP address format');
+    }
     
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
+    return ip;
+  }
+}
+```
+
+### 2. IP Address Denylist
+
+**Purpose:** Blocks specific IP addresses from accessing your instance.
+
+**Common Use Cases:**
+- Blocking known attack sources
+- Preventing access from specific regions
+- Blocking compromised IP ranges
+- Temporary access restrictions
+
+**Denylist Sources:**
+```yaml
+Threat Intelligence:
+  - Known malicious IPs
+  - Botnet command centers
+  - Compromised servers
+  - Scanning tools
+
+Geographic Restrictions:
+  - Countries with compliance restrictions
+  - High-risk geographic regions
+  - Embargoed nations
+
+Internal Security:
+  - Terminated employee home IPs
+  - Contractor access revocation
+  - Compromised internal networks
+```
+
+**Automated Denylist Management:**
+```javascript
+// Automated threat detection and blocking
+class ThreatManager {
+  constructor(threatFeeds) {
+    this.threatFeeds = threatFeeds;
+    this.denylist = new Set();
+  }
+  
+  async updateThreatIntelligence() {
+    for (const feed of this.threatFeeds) {
+      const threats = await this.fetchThreatFeed(feed);
+      threats.forEach(ip => this.denylist.add(ip));
+    }
     
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
+    await this.syncWithXanoDenylist();
+  }
+  
+  async analyzeTrafficPatterns() {
+    const suspiciousIPs = await this.detectSuspiciousActivity();
     
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](release-track-preferences.html)
-        -   [Static IP (Outgoing)](static-ip-outgoing.html)
-        -   [Change Server Region](change-server-region.html)
-        -   [Direct Database Connector](direct-database-connector.html)
-        -   [Backup and Restore](backup-and-restore.html)
-        -   [Security Policy](security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../metadata-api/tables-and-schema.html)
-        -   [Content](../metadata-api/content.html)
-        -   [Search](../metadata-api/search.html)
-        -   [File](../metadata-api/file.html)
-        -   [Request History](../metadata-api/request-history.html)
-        -   [Workspace Import and Export](../metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
+    for (const ip of suspiciousIPs) {
+      if (this.confirmThreat(ip)) {
+        await this.addToDenylist(ip, 'Automated threat detection');
+      }
+    }
+  }
+}
+```
+
+## Compliance Framework Implementation
+
+### HIPAA Compliance Setup
+
+```yaml
+Required Settings:
+  Inactivity Logout: 4 hours maximum
+  2FA Enforcement: Required for all users
+  Authentication: Corporate SSO only
+  IP Restrictions: Office networks only
+  Direct Query: Disabled
+  Key Isolation: Enabled
+
+Additional Requirements:
+  - User access audit logs
+  - Regular permission reviews
+  - Data access monitoring
+  - Breach notification procedures
+```
+
+### PCI DSS Compliance Setup
+
+```yaml
+Required Settings:
+  Inactivity Logout: 2 hours maximum
+  2FA Enforcement: Required for all privileged users
+  Authentication: Strong authentication methods only
+  IP Restrictions: Segmented network access
+  Direct Query: Disabled in production
+  
+Network Security:
+  - DMZ deployment for API endpoints
+  - Internal network segregation
+  - Regular penetration testing
+  - Vulnerability management
+```
+
+### SOX Compliance Setup
+
+```yaml
+Required Settings:
+  Access Controls: Role-based with separation of duties
+  Audit Logging: All administrative actions
+  Change Management: Documented and approved
+  Data Integrity: Controls preventing unauthorized changes
+  
+Process Requirements:
+  - Quarterly access reviews
+  - Change approval workflows
+  - Segregation of development/production
+  - Financial data access restrictions
+```
+
+### GDPR Compliance Setup
+
+```yaml
+Required Settings:
+  Data Access: Role-based with need-to-know
+  Authentication: EU-resident restrictions
+  Logging: Comprehensive access logs
+  Data Isolation: Per-tenant security
+  
+Privacy Controls:
+  - Data subject access rights
+  - Right to be forgotten implementation
+  - Data portability features
+  - Consent management
+```
+
+## Advanced Security Patterns
+
+### 1. Zero Trust Architecture
+
+```javascript
+// Zero trust implementation
+class ZeroTrustPolicy {
+  async validateRequest(request) {
+    // 1. Verify user identity
+    const user = await this.authenticateUser(request);
     
-    -   Using Xano Transform
-
--   
-    Xano Actions
+    // 2. Check device trust
+    await this.validateDevice(request.deviceFingerprint);
     
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
+    // 3. Assess risk score
+    const riskScore = await this.calculateRiskScore(user, request);
     
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
+    // 4. Apply dynamic controls
+    if (riskScore > 0.7) {
+      await this.requireAdditionalVerification(user);
+    }
     
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
+    // 5. Enforce least privilege
+    return await this.enforceMinimalAccess(user, request.resource);
+  }
+  
+  calculateRiskScore(user, request) {
+    let risk = 0;
     
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
+    // Time-based risk
+    if (this.isUnusualTime(request.timestamp)) risk += 0.2;
     
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
+    // Location-based risk
+    if (this.isUnusualLocation(request.ip, user.normalLocations)) risk += 0.3;
     
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
+    // Behavior-based risk
+    if (this.isUnusualBehavior(request.actions, user.normalBehavior)) risk += 0.3;
     
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
+    // Device-based risk
+    if (!this.isTrustedDevice(request.device, user.trustedDevices)) risk += 0.2;
     
-    -   Best Practices
+    return Math.min(risk, 1.0);
+  }
+}
+```
 
-[Powered by GitBook]
+### 2. Multi-Environment Security
 
-On this page
+```yaml
+Development Environment:
+  Security Level: Relaxed
+  IP Restrictions: None
+  Authentication: Email/password allowed
+  2FA: Optional
+  Session Timeout: 12 hours
 
-Was this helpful?
+Staging Environment:
+  Security Level: Production-like
+  IP Restrictions: Corporate networks
+  Authentication: SSO preferred
+  2FA: Required for admin roles
+  Session Timeout: 8 hours
 
-Copy
+Production Environment:
+  Security Level: Maximum
+  IP Restrictions: Strict allowlist
+  Authentication: SSO only
+  2FA: Required for all users
+  Session Timeout: 4 hours
+```
 
-1.  [Xano Features](../snippets.html)
-2.  Instance Settings
+### 3. Incident Response Integration
 
-Security Policy 
-===============
+```javascript
+// Security incident detection and response
+class SecurityMonitor {
+  constructor() {
+    this.alertThresholds = {
+      failedLogins: 5,
+      suspiciousIPs: 10,
+      privilegeEscalation: 1
+    };
+  }
+  
+  async monitorSecurityEvents() {
+    const events = await this.collectSecurityEvents();
+    
+    for (const event of events) {
+      const severity = await this.assessThreat(event);
+      
+      if (severity >= 'HIGH') {
+        await this.triggerIncidentResponse(event);
+      }
+    }
+  }
+  
+  async triggerIncidentResponse(event) {
+    // 1. Immediate containment
+    if (event.type === 'PRIVILEGE_ESCALATION') {
+      await this.suspendUser(event.userId);
+    }
+    
+    // 2. Evidence collection
+    await this.preserveAuditLogs(event.timestamp);
+    
+    // 3. Notification
+    await this.notifySecurityTeam(event);
+    
+    // 4. Recovery planning
+    await this.initiateRecoveryProcedures(event);
+  }
+}
+```
 
- 
+## 💡 **Try This**
 
-What is Security Policy?
+### Beginner Challenge
+Configure basic security policies:
+1. Enable Redis Key Isolation
+2. Disable Direct Query in production
+3. Set up basic IP restrictions
+4. Test authentication enforcement
 
-This panel as a part of your instance settings enables certain security measures that you might need to ensure data integrity / safety, or for compliance reasons. This can include things like enforcing inactivity logout, authentication services, 2FA, or SSO.
+### Intermediate Challenge
+Implement enterprise authentication:
+1. Configure SSO with your identity provider
+2. Enforce 2FA for all team members
+3. Set up domain restrictions
+4. Create compliance documentation
 
-You can access the Security Policy panel by heading to your [instance selection screen](https://app.xano.com/instance), clicking the [⚙️] icon next to your instance, and choosing Security Policy from the panel that opens.
+### Advanced Challenge
+Build comprehensive security framework:
+1. Design multi-environment security policies
+2. Implement zero trust principles
+3. Create automated threat response
+4. Build compliance reporting system
 
-![](../../_gitbook/imageb9d8.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FFBLUu2kCZ5tpdTMtWjjR%252FCleanShot%25202025-03-26%2520at%252011.57.13.png%3Falt%3Dmedia%26token%3D6a2f6a71-225f-486d-b085-cb4564631e64&width=768&dpr=4&quality=100&sign=8a9302e2&sv=2)
+## Common Implementation Mistakes
 
-Accessing the Security Policy panel
+1. **Too restrictive IP allowlists** - Blocking legitimate remote workers
+2. **No emergency access procedures** - Getting locked out during incidents
+3. **Ignoring user experience** - Making security too difficult to use
+4. **Inconsistent policies** - Different rules for different environments
+5. **No regular reviews** - Policies becoming outdated or inappropriate
 
- 
+## Security Policy Monitoring
 
-For All Paid Plans
+### Audit and Compliance Reporting
 
-Certain security policy settings are available for all paid Xano plans, and include the following:
+```javascript
+class SecurityAuditReporter {
+  async generateComplianceReport(framework) {
+    const report = {
+      framework: framework,
+      generatedAt: new Date().toISOString(),
+      findings: []
+    };
+    
+    // Check authentication policies
+    const authFindings = await this.auditAuthenticationPolicies(framework);
+    report.findings.push(...authFindings);
+    
+    // Check access controls
+    const accessFindings = await this.auditAccessControls(framework);
+    report.findings.push(...accessFindings);
+    
+    // Check network security
+    const networkFindings = await this.auditNetworkSecurity(framework);
+    report.findings.push(...networkFindings);
+    
+    return report;
+  }
+  
+  async auditAuthenticationPolicies(framework) {
+    const findings = [];
+    
+    // Check 2FA enforcement
+    if (framework === 'HIPAA' && !this.is2FAEnforced()) {
+      findings.push({
+        severity: 'HIGH',
+        finding: '2FA not enforced for HIPAA compliance',
+        remediation: 'Enable 2FA enforcement in Security Policy settings'
+      });
+    }
+    
+    return findings;
+  }
+}
+```
 
-###  
+## Next Steps
 
-Allow Direct Query
+- Implement [Role-Based Access Control](restricting-access-rbac.md) for authorization
+- Configure [OAuth and SSO](oauth-sso.md) for enterprise authentication
+- Set up [User Data Separation](separating-user-data.md) for privacy compliance
+- Review [API Security](../api-endpoints/token-scopes-reference.md) best practices
 
-This setting determines whether or not use of the [Direct Database Query](../../the-function-stack/functions/database-requests/direct-database-query.html) function is allowed in your function stacks.
+## Need Help?
 
- 
-
-Why would you want to disable Direct Query?
-
-Direct Query enables you to not only run basic database functions, such as adding or updating data, but also enables access to more advanced and potentially dangerous SQL statements. Disabling this function helps ensure that team members can\'t execute functions that they shouldn\'t be.
-
-###  
-
-Redis Key Isolation
-
-This setting determines whether or not keys you set using [caching functions](../../the-function-stack/functions/data-caching-redis.html) are available in other workspaces.
-
- 
-
-Why enable Redis Key Isolation?
-
-This can be especially important if you have different team members who have access to different, isolated workspaces. Key Isolation helps ensure that in the rare case separate teams use the same keys that there isn\'t a conflict.
-
- 
-
-Premium Features
-
-These features are only available via a premium add-on as a part of our Enterprise plan. Contact your Xano representative to learn more.
-
-###  
-
-**Inactivity Logout Time**
-
-This setting enables automatic logout of Xano due to inactivity for all team members. If enabled options range between 1 to 24 hours.
-
-###  
-
-**Require 2FA**
-
-This setting enforces all team members of your Instance to authenticate using 2FA when logging into Xano.
-
-###  
-
-**Authentication Enforcement**
-
-This setting optionally enforces which authentication service(s) team members can authenticate with.
-
-###  
-
-**Allowed SSO Hosts**
-
-This setting enforces the email address domains allowed when team members log in. For example, if we wanted team members to only authenticate using Github accounts that use a xano.com email address, we would check Github under Authentication Enforcement and add xano.com as an allowed SSO host.
-
-###  
-
-**IP Address Allowlist**
-
-This setting enforces certain IPs allowed to access your Xano instance and call your APIs
-
-###  
-
-**IP Address Denylist**
-
-This setting enforces denying IPs allowed to access your Xano instance and call your APIs
-
-Last updated 4 months ago
-
-Was this helpful?
+- 📚 [Xano Community](https://community.xano.com) - Security policy discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Security setup guides
+- 📖 [Enterprise Documentation](../../enterprise/security-features.md) - Advanced security features
+- 🔧 [Support](https://xano.com/support) - Enterprise security assistance

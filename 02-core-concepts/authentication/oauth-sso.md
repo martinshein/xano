@@ -1,471 +1,859 @@
 ---
+title: "OAuth & Single Sign-On (SSO) in Xano - Complete Implementation Guide"
+description: "Master OAuth authentication and SSO implementation in Xano with Google, Facebook, GitHub, and custom providers - streamline user login for no-code applications"
 category: authentication
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/authentication
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - OAuth
+  - Single Sign-On
+  - SSO
+  - Google Auth
+  - Facebook Login
+  - GitHub OAuth
+  - Authentication
+  - User Management
+difficulty: intermediate
+reading_time: 20 minutes
+last_updated: '2025-01-23'
+prerequisites:
+  - Understanding of user authentication concepts
+  - Xano workspace with API development knowledge
+  - Frontend integration experience
 ---
 
+# OAuth & Single Sign-On (SSO) in Xano
+
+## 📋 **Quick Summary**
+
+**What it does:** OAuth (Open Authorization) enables users to sign into your application using existing accounts from providers like Google, Facebook, or GitHub without creating new passwords or sharing credentials.
+
+**Why it matters:** OAuth and SSO provide:
+- **Better user experience** - No new accounts to create or passwords to remember
+- **Enhanced security** - Leverage proven authentication systems from major providers
+- **Faster onboarding** - Users can sign up and start using your app immediately
+- **Reduced support burden** - Fewer password reset requests and login issues
+
+**Time to implement:** 30-60 minutes per OAuth provider, 2-3 hours for complete multi-provider setup
+
 ---
-apple-mobile-web-app-status-bar-style: black
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'oauth-sso'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## What You'll Learn
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+- OAuth vs traditional authentication and when to use each
+- Complete OAuth flow implementation in Xano
+- Setting up popular providers (Google, Facebook, GitHub)
+- Frontend integration patterns for no-code tools
+- Advanced security considerations and best practices
+- Troubleshooting common OAuth implementation issues
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+## Understanding OAuth & SSO
 
+Think of OAuth like a hotel key card system - instead of giving someone your house key, the hotel gives you a temporary card that only works for your room and only during your stay. OAuth works similarly by giving apps limited, temporary access to your data without sharing your actual password.
 
+### 🎯 **OAuth vs Traditional Authentication**
 
+| Aspect | Traditional Auth | OAuth/SSO |
+|--------|-----------------|-----------|
+| **User Experience** | Create new account | Use existing account |
+| **Password Management** | User manages password | Provider handles security |
+| **Setup Complexity** | Simple | Moderate setup, easier maintenance |
+| **Security** | Depends on implementation | Leverages provider security |
+| **Trust** | Users must trust your app | Users trust familiar providers |
 
+### 🔐 **OAuth vs JWE Token Authentication**
 
+**OAuth** is like having a **trusted intermediary** (Google, Facebook) vouch for the user's identity:
+- User authenticates with a provider they trust
+- Provider confirms identity to your application
+- Great for user onboarding and reducing friction
+- Handles authentication, not just data transmission
 
+**JWE Token Authentication** is like a **sealed, encrypted envelope**:
+- Data is encrypted and can only be read by intended recipient
+- Ensures data privacy and integrity during transmission
+- Used after authentication to secure API communication
+- Handles secure data exchange, not user identity verification
 
+💡 **In Practice:** Most applications use OAuth for initial login, then switch to JWE tokens for ongoing API communication.
 
+## The OAuth Flow Explained
 
+### Step-by-Step OAuth Process
 
-
-
-
-
-
--   
-
+```mermaid
+sequenceDiagram
+    participant User
+    participant YourApp
+    participant Xano
+    participant Provider
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+    User->>YourApp: Click "Sign in with Google"
+    YourApp->>Provider: Redirect to Google login
+    User->>Provider: Enter credentials & consent
+    Provider->>Xano: Send authorization code
+    Xano->>Provider: Exchange code for access token
+    Provider->>Xano: Return access token + user data
+    Xano->>Xano: Create/update user record
+    Xano->>YourApp: Return Xano JWT token
+    YourApp->>User: User is logged in
+```
 
--   
+### 1. **Client Registration**
+Your application registers with the OAuth provider to get:
+- **Client ID**: Public identifier for your app
+- **Client Secret**: Private key for secure communication
+- **Redirect URL**: Where users return after authentication
 
+### 2. **User Authorization**
+User clicks "Sign in with Google/Facebook" and gets redirected to:
+- Provider's login page
+- Permission consent screen
+- Approval for data access
+
+### 3. **Authorization Grant**
+Provider sends back an authorization code via URL parameter:
+```
+https://yourapp.com/oauth/callback?code=abc123&state=xyz789
+```
+
+### 4. **Access Token Exchange**
+Your Xano API exchanges the code for tokens:
+```json
+{
+  "access_token": "ya29.a0ARrdaM...",
+  "refresh_token": "1//04...",
+  "expires_in": 3600,
+  "token_type": "Bearer"
+}
+```
+
+### 5. **User Data Retrieval**
+Use access token to get user information:
+```json
+{
+  "id": "1234567890",
+  "name": "John Doe",
+  "email": "john@example.com",
+  "picture": "https://photo.url"
+}
+```
+
+### 6. **Xano Authentication**
+Create/update user record and return Xano JWT for your app.
+
+## Setting Up OAuth in Xano
+
+### Step 1: Enable Marketplace Access
+
+If you don't see **Marketplace** in your navigation:
+
+1. Go to **Workspace Settings** (gear icon in top-right)
+2. Check **Enable Marketplace**
+3. Save settings
+
+### Step 2: Browse OAuth Extensions
+
+Xano provides prebuilt OAuth flows for popular providers:
+
+- **Google OAuth** - Most common, reliable
+- **Facebook OAuth** - Social media integration
+- **GitHub OAuth** - Developer-focused applications
+- **Apple OAuth** - iOS and privacy-conscious users
+- **Microsoft OAuth** - Enterprise integrations
+- **Twitter/X OAuth** - Social media authentication
+
+### Step 3: Import OAuth Extension
+
+1. Navigate to **Marketplace**
+2. Search for your desired OAuth provider
+3. Click **Install** to add to your workspace
+4. Review the imported API endpoints and database tables
+
+### Step 4: Configure Provider Settings
+
+Each OAuth provider requires specific configuration:
+
+## Google OAuth Setup
+
+### 1. Google Cloud Console Configuration
+
+```yaml
+Steps:
+1. Go to Google Cloud Console (console.cloud.google.com)
+2. Create a new project or select existing
+3. Enable Google+ API and Gmail API
+4. Go to Credentials → Create OAuth 2.0 Client ID
+5. Set redirect URI: https://[instance].xano.io/api/oauth/google/callback
+```
+
+### 2. Xano Configuration
+
+```javascript
+// Environment variables to set in Xano
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URI=https://[instance].xano.io/api/oauth/google/callback
+```
+
+### 3. Frontend Integration Example
+
+```javascript
+// Frontend: Initiate Google OAuth
+function loginWithGoogle() {
+  const googleAuthUrl = `https://accounts.google.com/oauth/authorize?` +
+    `client_id=${GOOGLE_CLIENT_ID}&` +
+    `redirect_uri=${encodeURIComponent(REDIRECT_URI)}&` +
+    `scope=openid%20profile%20email&` +
+    `response_type=code&` +
+    `state=${generateRandomState()}`;
+  
+  window.location.href = googleAuthUrl;
+}
+
+// Handle callback and get Xano token
+async function handleGoogleCallback(code, state) {
+  const response = await fetch('https://[instance].xano.io/api/oauth/google', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code, state })
+  });
+  
+  const data = await response.json();
+  localStorage.setItem('xano_token', data.authToken);
+  
+  return data.user;
+}
+```
+
+## Facebook OAuth Setup
+
+### 1. Facebook App Configuration
+
+```yaml
+Steps:
+1. Go to developers.facebook.com
+2. Create a new app or use existing
+3. Add Facebook Login product
+4. Set Valid OAuth Redirect URIs: 
+   https://[instance].xano.io/api/oauth/facebook/callback
+5. Get App ID and App Secret
+```
+
+### 2. Xano Environment Variables
+
+```javascript
+FACEBOOK_APP_ID=your_facebook_app_id
+FACEBOOK_APP_SECRET=your_facebook_app_secret
+FACEBOOK_REDIRECT_URI=https://[instance].xano.io/api/oauth/facebook/callback
+```
+
+### 3. Frontend Implementation
+
+```javascript
+// Facebook OAuth initiation
+function loginWithFacebook() {
+  const facebookAuthUrl = `https://www.facebook.com/v18.0/dialog/oauth?` +
+    `client_id=${FACEBOOK_APP_ID}&` +
+    `redirect_uri=${encodeURIComponent(FACEBOOK_REDIRECT_URI)}&` +
+    `scope=email,public_profile&` +
+    `response_type=code&` +
+    `state=${generateRandomState()}`;
+  
+  window.location.href = facebookAuthUrl;
+}
+```
+
+## GitHub OAuth Setup
+
+### 1. GitHub App Configuration
+
+```yaml
+Steps:
+1. Go to GitHub Settings → Developer settings
+2. Click OAuth Apps → New OAuth App
+3. Set Authorization callback URL:
+   https://[instance].xano.io/api/oauth/github/callback
+4. Get Client ID and Client Secret
+```
+
+### 2. Environment Configuration
+
+```javascript
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+GITHUB_REDIRECT_URI=https://[instance].xano.io/api/oauth/github/callback
+```
+
+## No-Code Platform Integration
+
+### 🔗 **n8n OAuth Workflow**
+
+```yaml
+OAuth Integration Workflow:
+1. Webhook Trigger (OAuth callback)
+2. Function Node (Extract authorization code)
+3. HTTP Request (Exchange code for token at Xano)
+4. Conditional (Check authentication success)
+5. Set Variables (Store user data)
+6. HTTP Response (Redirect user to app)
+```
+
+**n8n OAuth Handler Example:**
+```javascript
+// Process OAuth callback
+const authCode = $input.query.code;
+const state = $input.query.state;
+
+if (!authCode) {
+  return { error: 'Authorization code missing' };
+}
+
+// Exchange code for Xano token
+const xanoResponse = await $request({
+  method: 'POST',
+  url: 'https://[instance].xano.io/api/oauth/google',
+  data: { code: authCode, state: state },
+  headers: { 'Content-Type': 'application/json' }
+});
+
+return {
+  success: true,
+  authToken: xanoResponse.data.authToken,
+  user: xanoResponse.data.user
+};
+```
+
+### 🌐 **WeWeb OAuth Integration**
+
+```javascript
+// WeWeb OAuth authentication flow
+class WeWebOAuth {
+  constructor() {
+    this.providers = {
+      google: {
+        clientId: wwLib.envVars.GOOGLE_CLIENT_ID,
+        scope: 'openid profile email'
+      },
+      facebook: {
+        clientId: wwLib.envVars.FACEBOOK_APP_ID,
+        scope: 'email,public_profile'
+      }
+    };
+  }
+  
+  async initiateOAuth(provider) {
+    const config = this.providers[provider];
+    if (!config) throw new Error(`Provider ${provider} not supported`);
     
-    -   Building with Visual Development
+    const authUrl = this.buildAuthUrl(provider, config);
+    window.location.href = authUrl;
+  }
+  
+  buildAuthUrl(provider, config) {
+    const baseUrls = {
+      google: 'https://accounts.google.com/oauth/authorize',
+      facebook: 'https://www.facebook.com/v18.0/dialog/oauth'
+    };
+    
+    const params = new URLSearchParams({
+      client_id: config.clientId,
+      redirect_uri: `${window.location.origin}/oauth/${provider}/callback`,
+      scope: config.scope,
+      response_type: 'code',
+      state: this.generateState()
+    });
+    
+    return `${baseUrls[provider]}?${params}`;
+  }
+  
+  async handleCallback(provider, code, state) {
+    // Verify state parameter
+    if (!this.verifyState(state)) {
+      throw new Error('Invalid state parameter');
+    }
+    
+    // Exchange code for Xano token
+    const response = await wwLib.api.post({
+      url: `${wwLib.envVars.XANO_API}/oauth/${provider}`,
+      data: { code, state },
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    // Store authentication data
+    wwLib.auth.setAuthToken(response.data.authToken);
+    wwLib.user.setUserData(response.data.user);
+    
+    // Redirect to app
+    wwLib.goTo('/dashboard');
+    
+    return response.data;
+  }
+  
+  generateState() {
+    return Math.random().toString(36).substring(2, 15);
+  }
+  
+  verifyState(state) {
+    // Implement state verification logic
+    return sessionStorage.getItem('oauth_state') === state;
+  }
+}
+
+// Usage in WeWeb
+const oauth = new WeWebOAuth();
+
+// Login button actions
+function loginWithGoogle() {
+  oauth.initiateOAuth('google');
+}
+
+function loginWithFacebook() {
+  oauth.initiateOAuth('facebook');
+}
+```
+
+### 🔧 **Make OAuth Automation**
+
+```yaml
+OAuth Processing Scenario:
+1. Webhook (OAuth provider callback)
+2. JSON Parser (Extract callback data)
+3. HTTP Request (Call Xano OAuth endpoint)
+4. Router (Handle success/error responses)
+5. Data Store (Update user records)
+6. Email (Send welcome message)
+```
+
+## Advanced OAuth Patterns
+
+### Pattern 1: Multi-Provider Authentication
+
+```javascript
+class MultiProviderOAuth {
+  constructor() {
+    this.providers = ['google', 'facebook', 'github', 'apple'];
+    this.userMerging = true; // Enable account linking
+  }
+  
+  async authenticateUser(provider, authData) {
+    try {
+      // 1. Get user data from provider
+      const providerUser = await this.getProviderUserData(provider, authData);
+      
+      // 2. Check for existing user by email
+      const existingUser = await this.findUserByEmail(providerUser.email);
+      
+      if (existingUser) {
+        // 3. Link new provider to existing account
+        await this.linkProviderToUser(existingUser.id, provider, providerUser);
+        return this.generateAuthToken(existingUser);
+      } else {
+        // 4. Create new user with provider data
+        const newUser = await this.createUserFromProvider(provider, providerUser);
+        return this.generateAuthToken(newUser);
+      }
+      
+    } catch (error) {
+      throw new Error(`OAuth authentication failed: ${error.message}`);
+    }
+  }
+  
+  async linkProviderToUser(userId, provider, providerData) {
+    // Store provider-specific data
+    await this.updateUserRecord(userId, {
+      [`${provider}_id`]: providerData.id,
+      [`${provider}_data`]: JSON.stringify(providerData),
+      [`${provider}_linked_at`]: new Date().toISOString()
+    });
+  }
+  
+  async createUserFromProvider(provider, providerData) {
+    const userData = {
+      email: providerData.email,
+      name: providerData.name,
+      avatar: providerData.picture || providerData.avatar_url,
+      email_verified: true, // OAuth providers verify emails
+      auth_provider: provider,
+      [`${provider}_id`]: providerData.id,
+      created_at: new Date().toISOString()
+    };
+    
+    return await this.createUser(userData);
+  }
+}
+```
+
+### Pattern 2: JWT Integration with OAuth
+
+```javascript
+// After successful OAuth, generate application-specific JWT
+function generateXanoAuthToken(user, oauthProvider) {
+  const tokenPayload = {
+    user_id: user.id,
+    email: user.email,
+    name: user.name,
+    auth_method: 'oauth',
+    oauth_provider: oauthProvider,
+    permissions: user.role_permissions,
+    issued_at: Math.floor(Date.now() / 1000),
+    expires_at: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24 hours
+  };
+  
+  // Use Xano's built-in JWT generation
+  return generateJWT(tokenPayload, process.env.JWT_SECRET);
+}
+
+// Middleware to validate OAuth-generated tokens
+function validateOAuthToken(request) {
+  const token = extractTokenFromRequest(request);
+  
+  if (!token) {
+    throw new Error('Authentication token required');
+  }
+  
+  const decoded = verifyJWT(token, process.env.JWT_SECRET);
+  
+  if (decoded.auth_method !== 'oauth') {
+    throw new Error('Token not generated from OAuth flow');
+  }
+  
+  if (decoded.expires_at < Math.floor(Date.now() / 1000)) {
+    throw new Error('Token has expired');
+  }
+  
+  return decoded;
+}
+```
+
+### Pattern 3: Enhanced Security Features
+
+```javascript
+class SecureOAuth {
+  constructor() {
+    this.rateLimit = new Map(); // Simple rate limiting
+    this.suspiciousActivity = new Map();
+  }
+  
+  async secureAuthentication(provider, authData, clientInfo) {
+    // 1. Rate limiting
+    this.enforceRateLimit(clientInfo.ip);
+    
+    // 2. CSRF protection via state parameter
+    this.validateStateParameter(authData.state, authData.sessionId);
+    
+    // 3. Provider token validation
+    const providerUser = await this.validateProviderToken(provider, authData);
+    
+    // 4. Risk assessment
+    const riskScore = this.assessAuthenticationRisk(providerUser, clientInfo);
+    
+    if (riskScore > 0.8) {
+      // High risk - require additional verification
+      await this.requireAdditionalVerification(providerUser.email);
+      throw new Error('Additional verification required');
+    }
+    
+    // 5. Successful authentication
+    return await this.completeAuthentication(providerUser, provider);
+  }
+  
+  enforceRateLimit(ip) {
+    const now = Date.now();
+    const attempts = this.rateLimit.get(ip) || [];
+    
+    // Remove attempts older than 1 hour
+    const recentAttempts = attempts.filter(time => now - time < 60 * 60 * 1000);
+    
+    if (recentAttempts.length >= 10) {
+      throw new Error('Too many authentication attempts');
+    }
+    
+    recentAttempts.push(now);
+    this.rateLimit.set(ip, recentAttempts);
+  }
+  
+  validateStateParameter(providedState, sessionState) {
+    if (!providedState || providedState !== sessionState) {
+      throw new Error('Invalid state parameter - possible CSRF attack');
+    }
+  }
+  
+  assessAuthenticationRisk(user, clientInfo) {
+    let risk = 0;
+    
+    // New account
+    if (!user.lastLogin) risk += 0.2;
+    
+    // Unusual location
+    if (this.isUnusualLocation(user.id, clientInfo.ip)) risk += 0.3;
+    
+    // Suspicious timing
+    if (this.isSuspiciousTiming(user.id)) risk += 0.2;
+    
+    // Provider-specific risks
+    if (this.hasProviderRiskIndicators(user)) risk += 0.3;
+    
+    return Math.min(risk, 1.0);
+  }
+}
+```
+
+## Security Best Practices
+
+### 1. State Parameter for CSRF Protection
+
+```javascript
+// Always use and validate state parameter
+function generateSecureState() {
+  const state = crypto.randomBytes(32).toString('hex');
+  sessionStorage.setItem('oauth_state', state);
+  return state;
+}
+
+function validateState(returnedState) {
+  const originalState = sessionStorage.getItem('oauth_state');
+  sessionStorage.removeItem('oauth_state');
+  
+  if (originalState !== returnedState) {
+    throw new Error('CSRF attack detected');
+  }
+}
+```
+
+### 2. Secure Token Storage
+
+```javascript
+// Secure token handling
+class SecureTokenStorage {
+  static store(token) {
+    // Use httpOnly cookies for maximum security
+    document.cookie = `auth_token=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`;
+    
+    // Or use secure localStorage with encryption
+    const encrypted = this.encrypt(token);
+    localStorage.setItem('auth_token_encrypted', encrypted);
+  }
+  
+  static retrieve() {
+    // Decrypt if using localStorage
+    const encrypted = localStorage.getItem('auth_token_encrypted');
+    return encrypted ? this.decrypt(encrypted) : null;
+  }
+  
+  static clear() {
+    document.cookie = 'auth_token=; Max-Age=0';
+    localStorage.removeItem('auth_token_encrypted');
+  }
+}
+```
+
+### 3. Scope Management
+
+```javascript
+// Request minimal necessary scopes
+const providerScopes = {
+  google: 'openid email profile', // Minimal Google scopes
+  facebook: 'email,public_profile', // Basic Facebook info
+  github: 'user:email', // Just email from GitHub
+  apple: 'name email' // Basic Apple ID info
+};
+
+// Validate received data matches requested scopes
+function validateReceivedData(provider, userData) {
+  const allowedFields = {
+    google: ['id', 'email', 'name', 'picture', 'email_verified'],
+    facebook: ['id', 'email', 'name', 'picture'],
+    github: ['id', 'email', 'login', 'name', 'avatar_url'],
+    apple: ['sub', 'email', 'name', 'email_verified']
+  };
+  
+  const allowed = allowedFields[provider];
+  const received = Object.keys(userData);
+  
+  // Check for unexpected data
+  const unexpected = received.filter(field => !allowed.includes(field));
+  if (unexpected.length > 0) {
+    console.warn(`Unexpected OAuth data received: ${unexpected.join(', ')}`);
+  }
+}
+```
+
+## Error Handling & Troubleshooting
+
+### Common OAuth Errors
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `redirect_uri_mismatch` | URL doesn't match registered | Update OAuth app settings |
+| `invalid_client` | Wrong Client ID/Secret | Verify credentials |
+| `access_denied` | User cancelled login | Handle gracefully, show retry |
+| `invalid_grant` | Expired/invalid auth code | Restart OAuth flow |
+| `insufficient_scope` | Missing permissions | Request additional scopes |
+
+### Robust Error Handling
+
+```javascript
+class OAuthErrorHandler {
+  static async handleCallback(searchParams) {
+    try {
+      // Check for error parameter
+      if (searchParams.has('error')) {
+        const error = searchParams.get('error');
+        const description = searchParams.get('error_description');
         
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../the-function-stack/filters/manipulation.html)
-        -   [Math](../../the-function-stack/filters/math.html)
-        -   [Timestamp](../../the-function-stack/filters/timestamp.html)
-        -   [Text](../../the-function-stack/filters/text.html)
-        -   [Array](../../the-function-stack/filters/array.html)
-        -   [Transform](../../the-function-stack/filters/transform.html)
-        -   [Conversion](../../the-function-stack/filters/conversion.html)
-        -   [Comparison](../../the-function-stack/filters/comparison.html)
-        -   [Security](../../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../the-function-stack/data-types/text.html)
-        -   [Expression](../../the-function-stack/data-types/expression.html)
-        -   [Array](../../the-function-stack/data-types/array.html)
-        -   [Object](../../the-function-stack/data-types/object.html)
-        -   [Integer](../../the-function-stack/data-types/integer.html)
-        -   [Decimal](../../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../../the-function-stack/data-types/timestamp.html)
-        -   [Null](../../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
+        return this.handleOAuthError(error, description);
+      }
+      
+      // Extract and validate code
+      const code = searchParams.get('code');
+      const state = searchParams.get('state');
+      
+      if (!code) {
+        throw new Error('Authorization code missing');
+      }
+      
+      // Process successful callback
+      return await this.processAuthCode(code, state);
+      
+    } catch (error) {
+      console.error('OAuth callback failed:', error);
+      return this.showUserFriendlyError(error);
+    }
+  }
+  
+  static handleOAuthError(error, description) {
+    const userMessages = {
+      'access_denied': 'You cancelled the login. Click here to try again.',
+      'invalid_request': 'There was a problem with the login request. Please try again.',
+      'server_error': 'The login service is temporarily unavailable. Please try again later.',
+      'temporarily_unavailable': 'Login is temporarily unavailable. Please try again in a few minutes.'
+    };
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
+    const userMessage = userMessages[error] || 'Login failed. Please try again.';
     
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
+    return {
+      success: false,
+      error: error,
+      userMessage: userMessage,
+      technical: description
+    };
+  }
+  
+  static showUserFriendlyError(error) {
+    // Show appropriate error message to user
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'oauth-error';
+    errorDiv.innerHTML = `
+      <h3>Login Failed</h3>
+      <p>We couldn't sign you in. Please try again.</p>
+      <button onclick="retryLogin()">Try Again</button>
+    `;
     
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+    document.body.appendChild(errorDiv);
+  }
+}
+```
 
--   
-    Build With AI
+### Debug Mode Implementation
+
+```javascript
+// Debug OAuth issues
+class OAuthDebugger {
+  static debug = process.env.NODE_ENV === 'development';
+  
+  static log(step, data) {
+    if (this.debug) {
+      console.log(`[OAuth Debug] ${step}:`, data);
+    }
+  }
+  
+  static logAuthFlow(provider, step, data) {
+    this.log(`${provider.toUpperCase()} - ${step}`, {
+      timestamp: new Date().toISOString(),
+      step: step,
+      data: data,
+      url: window.location.href
+    });
+  }
+  
+  static validateFlowIntegrity() {
+    const requiredParams = ['code', 'state'];
+    const urlParams = new URLSearchParams(window.location.search);
     
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
+    requiredParams.forEach(param => {
+      if (!urlParams.has(param)) {
+        console.error(`Missing required OAuth parameter: ${param}`);
+      }
+    });
     
-    -   File Storage in Xano
-    -   Private File Storage
+    this.log('URL Parameters', Object.fromEntries(urlParams));
+  }
+}
+```
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+## 💡 **Try This**
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](separating-user-data.html)
-        -   [Restricting Access (RBAC)](restricting-access-rbac.html)
-        -   [OAuth (SSO)](oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+### Beginner Challenge
+Set up Google OAuth in your Xano workspace:
+1. Create Google Cloud Console project
+2. Install Google OAuth from Marketplace
+3. Configure redirect URLs and test authentication
+4. Build a simple login page
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../xano-features/metadata-api/content.html)
-        -   [Search](../../xano-features/metadata-api/search.html)
-        -   [File](../../xano-features/metadata-api/file.html)
-        -   [Request History](../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+### Intermediate Challenge
+Implement multi-provider authentication:
+1. Add Google, Facebook, and GitHub OAuth
+2. Handle account linking for same email addresses
+3. Create a provider selection interface
+4. Implement profile data synchronization
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+### Advanced Challenge
+Build enterprise-grade OAuth system:
+1. Add SAML and enterprise providers
+2. Implement risk-based authentication
+3. Add audit logging and monitoring
+4. Create admin panel for OAuth management
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+## Common Mistakes to Avoid
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+1. **Insecure redirect URLs** - Always use HTTPS in production
+2. **Missing state validation** - Leaves app vulnerable to CSRF attacks
+3. **Over-scoped permissions** - Request only necessary data
+4. **Poor error handling** - Users need clear feedback when auth fails
+5. **Storing provider tokens** - Exchange for app-specific tokens quickly
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+## Production Checklist
 
--   
-    Security
-    
-    -   Best Practices
+```yaml
+Security:
+- [ ] HTTPS-only redirect URLs
+- [ ] State parameter validation
+- [ ] Minimal scope requests
+- [ ] Secure token storage
+- [ ] Rate limiting implemented
 
-[Powered by GitBook]
+Configuration:
+- [ ] Environment variables secured
+- [ ] Provider apps configured correctly
+- [ ] Backup authentication method available
+- [ ] Error handling comprehensive
 
-On this page
+Testing:
+- [ ] All providers tested
+- [ ] Error scenarios handled
+- [ ] Mobile responsiveness verified
+- [ ] Performance acceptable
+```
 
--   
-    
-    [OAuth vs JWE Token Authentication](#oauth-vs-jwe-token-authentication)
+## Next Steps
 
--   [The OAuth Flow](#the-oauth-flow)
+- Master [Role-Based Access Control](restricting-access-rbac.md) for authorization
+- Learn about [User Data Separation](separating-user-data.md) for privacy
+- Explore [Security Policies](security-policy.md) for advanced protection
+- Understand [JWT Authentication](../api-endpoints/token-scopes-reference.md)
 
--   [Building OAuth in Xano](#building-oauth-in-xano)
+## Need Help?
 
--   [Enable Marketplace access in your workspace](#enable-marketplace-access-in-your-workspace)
-
--   [Access the Marketplace and browse for your OAuth extension of choice](#access-the-marketplace-and-browse-for-your-oauth-extension-of-choice)
-
-Was this helpful?
-
-Copy
-
-1.  [Building Backend Features](../user-authentication-and-user-data.html)
-2.  User Authentication & User Data
-
-OAuth (SSO) 
-===========
-
-**OAuth** is a security framework that allows you to grant websites or applications access to your information without sharing your password. It acts like a permission slip, letting a service access part of your data from another service on your behalf. For example, you might log into a new app using your Google or Facebook account, and OAuth handles the secure sharing of your data between the services.
-
- 
-
-**OAuth vs JWE Token Authentication**
-
-**OAuth** is like giving a valet key to a friend, allowing them limited access to your car. It lets services share your data safely without sharing your password. You\'re still in control, and you can revoke this access at any time.
-
-**JWE Token Authentication** is more like using a sealed envelope. Your information is encrypted and can only be read by the intended recipient. It ensures data integrity and privacy but doesn\'t manage who has access like OAuth does. It\'s great for situations where secure data transmission is key.
-
- 
-
-The OAuth Flow
-
-1.  
-    
-        
-    
-    **Client Registration**: The client application registers with the OAuth service provider to obtain a client ID and client secret, which are used to identify the application during the OAuth flow.
-    
-2.  
-    
-        
-    
-    **User Authorization**: The client redirects the user to the authorization server where the user logs in and consents to the application\'s data access request. This is where the user would see a Google, Facebook, X, or other sign-in option on your frontend.
-    
-3.  
-    
-        
-    
-    **Authorization Grant**: Once the user signs in and approves access, the authorization server issues an authorization grant to the client, typically in the form of a code sent via a URL query parameter. This would be one of your APIs in Xano that is designed to ingest that authorization.
-    
-4.  
-    
-        
-    
-    **Access Token Request**: Your Xano API sends a request to the authorization server\'s token endpoint, including the authorization grant and credentials (client ID and secret), to obtain an access token. Once we\'ve determined that token is valid, it will be traded for a Xano JWE token to proceed with standard authentication methods.
-    
-5.  
-    
-        
-    
-    **Access Token Response**: The authorization server verifies the request and returns an access token, which the client can use to access protected resources on the user\'s behalf.
-    
-6.  
-    
-        
-    
-    **Access Resource**: The client uses the access token to make requests to the resource server, accessing the user\'s resources as allowed by the token\'s scope.
-    
- 
-
-Building OAuth in Xano
-
-<div>
-
-1
-
-###  
-
-Enable Marketplace access in your workspace
-
-If you don\'t see **Marketplace** in your left-hand navigation menu, head to your workspace settings, and click the icon in the top-right corner, and click **Settings**.
-
-Check the box to **Enable Marketplace**
-
-2
-
-###  
-
-Access the Marketplace and browse for your OAuth extension of choice
-
-Xano provides several prebuilt OAuth flows that you can import from here into your workspace.
-
-![](../../_gitbook/image5b54.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252Fnjpcz37We8JVMazP2zvl%252FCleanShot%25202025-02-03%2520at%252016.30.04.png%3Falt%3Dmedia%26token%3De68b0c44-e156-41f7-a874-386ca660d2b7&width=768&dpr=4&quality=100&sign=b7dfd9c8&sv=2)
-
-</div>
-
-Last updated 6 months ago
-
-Was this helpful?
+- 📚 [Xano Community](https://community.xano.com) - OAuth implementation discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Step-by-step OAuth setup
+- 📖 [Marketplace Extensions](https://xano.com/marketplace) - Pre-built OAuth flows
+- 🔧 [Support](https://xano.com/support) - Technical OAuth assistance

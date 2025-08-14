@@ -1,468 +1,942 @@
 ---
+title: "Role-Based Access Control (RBAC) in Xano - Complete Implementation Guide"
+description: "Master RBAC implementation in Xano with comprehensive role management, permission systems, and security patterns for no-code applications"
 category: authentication
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/authentication
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - RBAC
+  - Role-Based Access Control
+  - Authorization
+  - Permissions
+  - User Roles
+  - Access Control
+  - Security
+  - Authentication
+difficulty: intermediate
+reading_time: 18 minutes
+last_updated: '2025-01-23'
+prerequisites:
+  - Understanding of user authentication
+  - Knowledge of Xano function stacks
+  - Database schema design experience
+  - JWT token concepts
 ---
 
+# Role-Based Access Control (RBAC) in Xano
+
+## 📋 **Quick Summary**
+
+**What it does:** RBAC (Role-Based Access Control) restricts access to your application's features and data based on user roles and permissions, ensuring users only access what they're authorized to see and do.
+
+**Why it matters:** RBAC provides:
+- **Enhanced security** - Prevent unauthorized access to sensitive data and operations
+- **Scalable permissions** - Manage access for thousands of users with role-based groups
+- **Compliance readiness** - Meet regulatory requirements for data access controls
+- **Reduced admin burden** - Assign roles instead of individual permissions
+- **Clear access policies** - Define who can do what in your application
+
+**Time to implement:** 1-2 hours for basic RBAC, 4-8 hours for enterprise-grade permission systems
+
 ---
-apple-mobile-web-app-status-bar-style: black
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'restricting-access-rbac'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## What You'll Learn
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+- RBAC concepts and security principles
+- Database schema design for roles and permissions
+- Multiple RBAC implementation patterns in Xano
+- Advanced permission systems with hierarchical roles
+- Frontend integration for role-based UI controls
+- Best practices for enterprise security compliance
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+## Understanding RBAC Concepts
 
+Think of RBAC like a company's organizational structure - instead of giving each employee individual keys to every room, you create role-based keycards. Marketing team members get access to marketing areas, IT gets access to server rooms, and executives get broader access.
 
+### 🎯 **Core RBAC Components**
 
+| Component | Description | Example |
+|-----------|-------------|---------|
+| **User** | Individual person using the system | john@company.com |
+| **Role** | Job function or responsibility | Admin, Manager, Staff |
+| **Permission** | Specific action or access right | Create User, View Reports |
+| **Resource** | Protected data or functionality | User Records, Financial Data |
 
+### 🔐 **RBAC vs Other Access Control Models**
 
+**RBAC (Role-Based Access Control)**:
+- Users assigned to roles, roles have permissions
+- Scalable for large organizations
+- Easy to audit and manage
 
+**ABAC (Attribute-Based Access Control)**:
+- Dynamic permissions based on user/resource attributes
+- More flexible but complex to implement
 
+**DAC (Discretionary Access Control)**:
+- Resource owners control access
+- Simple but doesn't scale well
 
+## Database Schema Design for RBAC
 
+### Basic RBAC Schema
 
+```sql
+-- Users table with role reference
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  role_id INTEGER REFERENCES roles(id),
+  created_at TIMESTAMP DEFAULT NOW()
+);
 
+-- Roles table
+CREATE TABLE roles (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) UNIQUE NOT NULL,
+  description TEXT,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP DEFAULT NOW()
+);
 
+-- Sample roles
+INSERT INTO roles (name, description) VALUES 
+('admin', 'Full system access'),
+('manager', 'Department management access'),
+('staff', 'Basic user access'),
+('viewer', 'Read-only access');
+```
 
+### Advanced RBAC with Permissions
 
+```sql
+-- Permissions table
+CREATE TABLE permissions (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) UNIQUE NOT NULL,
+  description TEXT,
+  resource VARCHAR(100) NOT NULL,
+  action VARCHAR(50) NOT NULL
+);
 
--   
+-- Role-Permission junction table (many-to-many)
+CREATE TABLE role_permissions (
+  id SERIAL PRIMARY KEY,
+  role_id INTEGER REFERENCES roles(id),
+  permission_id INTEGER REFERENCES permissions(id),
+  UNIQUE(role_id, permission_id)
+);
 
+-- Sample permissions
+INSERT INTO permissions (name, description, resource, action) VALUES 
+('users_create', 'Create new users', 'users', 'create'),
+('users_read', 'View user information', 'users', 'read'),
+('users_update', 'Update user information', 'users', 'update'),
+('users_delete', 'Delete users', 'users', 'delete'),
+('reports_read', 'View reports', 'reports', 'read'),
+('settings_update', 'Modify system settings', 'settings', 'update');
+```
+
+### Hierarchical Roles Schema
+
+```sql
+-- Roles with hierarchy support
+CREATE TABLE roles (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) UNIQUE NOT NULL,
+  parent_role_id INTEGER REFERENCES roles(id),
+  level INTEGER DEFAULT 0,
+  description TEXT
+);
+
+-- Department-based access
+CREATE TABLE departments (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  parent_id INTEGER REFERENCES departments(id)
+);
+
+-- User-Department-Role assignments
+CREATE TABLE user_role_assignments (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  role_id INTEGER REFERENCES roles(id),
+  department_id INTEGER REFERENCES departments(id),
+  granted_at TIMESTAMP DEFAULT NOW(),
+  granted_by INTEGER REFERENCES users(id)
+);
+```
+
+## RBAC Implementation Patterns
+
+### Pattern 1: Simple Role-Based Access (Database Lookup)
+
+**Best for:** Basic applications with simple role requirements
+
+```javascript
+// Function Stack: Check User Role via Database
+// Step 1: Get user record with role information
+const userRecord = await getRecord({
+  table: 'users',
+  id: auth.user.id,
+  include: ['role']
+});
+
+// Step 2: Precondition to check role
+if (userRecord.role.name !== 'admin') {
+  throw new Error('Access denied: Admin role required', 403);
+}
+
+// Step 3: Continue with protected operation
+return await queryAllRecords({
+  table: 'users'
+});
+```
+
+**Xano Function Stack Setup:**
+1. **Get Record** from `users` table using `auth.user.id`
+2. **Precondition** with expression: `requester.role == "admin"`
+3. **Query All Records** (or other protected operation)
+
+### Pattern 2: Token-Based Access (JWT Extras)
+
+**Best for:** High-performance applications requiring fast role checks
+
+```javascript
+// During login/signup, include role in JWT extras
+function createAuthToken(user) {
+  return generateJWT({
+    user_id: user.id,
+    extras: {
+      role: user.role.name,
+      permissions: user.role.permissions,
+      department_id: user.department_id
+    }
+  });
+}
+
+// In protected endpoints, use extras for role checking
+function checkAdminAccess() {
+  // Precondition expression: auth.extras.role == "admin"
+  if (auth.extras.role !== 'admin') {
+    throw new Error('Admin access required', 403);
+  }
+}
+```
+
+### Pattern 3: Permission-Based Access Control
+
+**Best for:** Complex applications with granular permissions
+
+```javascript
+// Advanced permission checking system
+class PermissionChecker {
+  static async hasPermission(userId, resource, action) {
+    // Query user's permissions through roles
+    const userPermissions = await queryRecords({
+      table: 'user_role_assignments',
+      filters: { user_id: userId },
+      include: ['role.permissions']
+    });
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
+    // Check if user has required permission
+    const hasPermission = userPermissions.some(assignment =>
+      assignment.role.permissions.some(permission =>
+        permission.resource === resource && 
+        permission.action === action
+      )
+    );
     
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../the-function-stack/filters/manipulation.html)
-        -   [Math](../../the-function-stack/filters/math.html)
-        -   [Timestamp](../../the-function-stack/filters/timestamp.html)
-        -   [Text](../../the-function-stack/filters/text.html)
-        -   [Array](../../the-function-stack/filters/array.html)
-        -   [Transform](../../the-function-stack/filters/transform.html)
-        -   [Conversion](../../the-function-stack/filters/conversion.html)
-        -   [Comparison](../../the-function-stack/filters/comparison.html)
-        -   [Security](../../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../the-function-stack/data-types/text.html)
-        -   [Expression](../../the-function-stack/data-types/expression.html)
-        -   [Array](../../the-function-stack/data-types/array.html)
-        -   [Object](../../the-function-stack/data-types/object.html)
-        -   [Integer](../../the-function-stack/data-types/integer.html)
-        -   [Decimal](../../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../../the-function-stack/data-types/timestamp.html)
-        -   [Null](../../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
+    if (!hasPermission) {
+      throw new Error(`Permission denied: ${resource}:${action}`, 403);
+    }
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+    return true;
+  }
+  
+  static async checkMultiplePermissions(userId, requirements) {
+    for (const { resource, action } of requirements) {
+      await this.hasPermission(userId, resource, action);
+    }
+    return true;
+  }
+}
 
--   
-    The Database
+// Usage in function stack
+await PermissionChecker.hasPermission(
+  auth.user.id, 
+  'users', 
+  'create'
+);
+```
+
+### Pattern 4: Department-Based Access Control
+
+**Best for:** Organizations with departmental data separation
+
+```javascript
+// Multi-tenant style access control
+class DepartmentAccessControl {
+  static async enforceDataAccess(userId, requestedData) {
+    // Get user's department access
+    const userAccess = await getRecord({
+      table: 'users',
+      id: userId,
+      include: ['department', 'role']
+    });
     
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
+    // Check if user can access requested department data
+    if (requestedData.department_id) {
+      const hasAccess = await this.canAccessDepartment(
+        userAccess,
+        requestedData.department_id
+      );
+      
+      if (!hasAccess) {
+        throw new Error('Department access denied', 403);
+      }
+    }
     
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
+    return userAccess;
+  }
+  
+  static async canAccessDepartment(userAccess, targetDepartmentId) {
+    // Admin can access all departments
+    if (userAccess.role.name === 'admin') {
+      return true;
+    }
     
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
+    // Users can access their own department
+    if (userAccess.department_id === targetDepartmentId) {
+      return true;
+    }
     
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
+    // Managers can access child departments
+    if (userAccess.role.name === 'manager') {
+      return await this.isChildDepartment(
+        userAccess.department_id,
+        targetDepartmentId
+      );
+    }
     
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+    return false;
+  }
+}
+```
 
--   
-    Maintenance, Monitoring, and Logging
+## Advanced RBAC Features
+
+### Conditional Permissions
+
+```javascript
+// Time-based access control
+class ConditionalRBAC {
+  static checkBusinessHoursAccess(userRole) {
+    const currentHour = new Date().getHours();
+    const isBusinessHours = currentHour >= 9 && currentHour <= 17;
     
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
+    // Non-admin users restricted to business hours
+    if (userRole !== 'admin' && !isBusinessHours) {
+      throw new Error('Access restricted to business hours', 403);
+    }
     
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](separating-user-data.html)
-        -   [Restricting Access (RBAC)](restricting-access-rbac.html)
-        -   [OAuth (SSO)](oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
+    return true;
+  }
+  
+  static checkLocationBasedAccess(userLocation, requiredLocation) {
+    // Geographic access restrictions
+    if (requiredLocation && userLocation !== requiredLocation) {
+      throw new Error('Location-based access denied', 403);
+    }
     
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../xano-features/metadata-api/content.html)
-        -   [Search](../../xano-features/metadata-api/search.html)
-        -   [File](../../xano-features/metadata-api/file.html)
-        -   [Request History](../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
+    return true;
+  }
+  
+  static checkResourceOwnership(userId, resourceOwnerId, userRole) {
+    // Users can access their own data, admins can access all
+    if (userId === resourceOwnerId || userRole === 'admin') {
+      return true;
+    }
     
-    -   Using Xano Transform
+    throw new Error('Resource ownership access denied', 403);
+  }
+}
+```
 
--   
-    Xano Actions
+### Dynamic Role Assignment
+
+```javascript
+// Temporary role elevation
+class DynamicRoleAssignment {
+  static async grantTemporaryRole(userId, roleId, duration) {
+    const expiresAt = new Date(Date.now() + duration);
     
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
+    return await addRecord({
+      table: 'temporary_role_assignments',
+      data: {
+        user_id: userId,
+        role_id: roleId,
+        expires_at: expiresAt,
+        granted_by: auth.user.id
+      }
+    });
+  }
+  
+  static async getUserActiveRoles(userId) {
+    // Get permanent roles
+    const permanentRoles = await queryRecords({
+      table: 'user_role_assignments',
+      filters: { user_id: userId },
+      include: ['role']
+    });
     
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
+    // Get active temporary roles
+    const temporaryRoles = await queryRecords({
+      table: 'temporary_role_assignments',
+      filters: {
+        user_id: userId,
+        'expires_at|>': new Date().toISOString()
+      },
+      include: ['role']
+    });
     
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
+    return [...permanentRoles, ...temporaryRoles];
+  }
+}
+```
+
+## No-Code Platform Integration
+
+### 🔗 **n8n RBAC Workflow**
+
+```yaml
+RBAC Check Workflow:
+1. HTTP Request (Incoming API call)
+2. Function Node (Extract auth token)
+3. HTTP Request (Get user role from Xano)
+4. Switch Node (Route based on role)
+5. Different paths for different roles
+6. HTTP Response (Return appropriate data)
+```
+
+**n8n Role Checking Function:**
+```javascript
+// Extract and validate user role
+const authToken = $input.headers.authorization;
+if (!authToken) {
+  return { error: 'Authentication required' };
+}
+
+// Decode JWT to get user info
+const decoded = jwt.decode(authToken.replace('Bearer ', ''));
+const userRole = decoded.extras?.role;
+
+// Route based on role
+switch (userRole) {
+  case 'admin':
+    return { route: 'admin_data', permissions: ['read', 'write', 'delete'] };
+  case 'manager':
+    return { route: 'manager_data', permissions: ['read', 'write'] };
+  case 'staff':
+    return { route: 'staff_data', permissions: ['read'] };
+  default:
+    return { error: 'Invalid role' };
+}
+```
+
+### 🌐 **WeWeb Role-Based UI Control**
+
+```javascript
+// WeWeb RBAC integration
+class WeWebRBAC {
+  constructor() {
+    this.userRole = wwLib.auth.getUserRole();
+    this.permissions = wwLib.auth.getUserPermissions();
+  }
+  
+  // Check if user has specific permission
+  hasPermission(resource, action) {
+    return this.permissions.some(permission =>
+      permission.resource === resource && permission.action === action
+    );
+  }
+  
+  // Check if user has any of the specified roles
+  hasAnyRole(roles) {
+    return roles.includes(this.userRole);
+  }
+  
+  // Show/hide UI elements based on permissions
+  setupUIPermissions() {
+    // Hide admin panel for non-admins
+    if (!this.hasAnyRole(['admin'])) {
+      wwLib.hideElement('admin-panel');
+    }
     
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
+    // Disable delete buttons for users without delete permission
+    if (!this.hasPermission('users', 'delete')) {
+      wwLib.disableElements('.delete-button');
+    }
     
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
+    // Show manager features for managers and admins
+    if (this.hasAnyRole(['admin', 'manager'])) {
+      wwLib.showElement('manager-features');
+    }
+  }
+  
+  // Filter data based on user permissions
+  filterDataByPermissions(data, resourceType) {
+    if (this.userRole === 'admin') {
+      return data; // Admins see everything
+    }
     
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
+    // Filter based on user's department or ownership
+    return data.filter(item => {
+      if (item.created_by === wwLib.auth.getUserId()) {
+        return true; // Users can see their own data
+      }
+      
+      if (this.userRole === 'manager' && 
+          item.department_id === wwLib.auth.getUserDepartment()) {
+        return true; // Managers see department data
+      }
+      
+      return false;
+    });
+  }
+}
+
+// Initialize RBAC on page load
+const rbac = new WeWebRBAC();
+rbac.setupUIPermissions();
+
+// Use in data binding
+function loadUserData() {
+  const data = wwLib.data.getAllUsers();
+  return rbac.filterDataByPermissions(data, 'users');
+}
+```
+
+### 🔧 **Make RBAC Automation**
+
+```yaml
+RBAC Validation Scenario:
+1. Webhook (Receive request with auth token)
+2. HTTP Request (Validate token with Xano)
+3. JSON Parser (Extract user role and permissions)
+4. Router (Branch based on role)
+   - Admin path: Full access operations
+   - Manager path: Limited management operations  
+   - Staff path: Basic read operations
+5. Error Handler (Handle access denied scenarios)
+```
+
+## Security Best Practices
+
+### 1. Principle of Least Privilege
+
+```javascript
+// Always grant minimum required permissions
+class LeastPrivilegeRBAC {
+  static async assignRoleWithReview(userId, roleId, assignedBy) {
+    // Log role assignment for audit trail
+    await addRecord({
+      table: 'role_assignment_log',
+      data: {
+        user_id: userId,
+        role_id: roleId,
+        assigned_by: assignedBy,
+        assigned_at: new Date().toISOString(),
+        reason: 'Initial assignment'
+      }
+    });
     
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
+    // Set automatic review date
+    const reviewDate = new Date();
+    reviewDate.setMonth(reviewDate.getMonth() + 6);
     
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
-Was this helpful?
-
-Copy
-
-1.  [Building Backend Features](../user-authentication-and-user-data.html)
-2.  User Authentication & User Data
-
-Restricting Access (RBAC) 
-=========================
-
-RBAC (Role-based access control) or role-based permissions is a way to restrict access based on a user\'s defined role. This guide will cover two different methods of enforcing access / RBAC to an API endpoint based on the user\'s role.
-
-<div>
-
-</div>
-
-Let\'s use the following user table for both examples of RBAC. Make note of the role field and the values for each user.
-
-![](../../_gitbook/image36e7.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FDHYZCuUiAlT3bssm3lIM%252Fimage.png%3Falt%3Dmedia%26token%3D31f50f0b-fea6-4163-b139-e9a9b807b685&width=768&dpr=4&quality=100&sign=7c3dbed9&sv=2)
-
-In this example, each user has one of two roles: admin or staff.
-
-####  
-
-**RBAC Example 1: Use Get Record**
-
-Now, let\'s set up an API endpoint that GETs all users but only if the user trying to call the endpoint has a role of admin.
-
-Take note of the endpoint below, user authentication is required. Additionally, take note of the Function Stack:
-
-1.  
+    return await addRecord({
+      table: 'user_role_assignments',
+      data: {
+        user_id: userId,
+        role_id: roleId,
+        review_due: reviewDate.toISOString()
+      }
+    });
+  }
+  
+  static async reviewOverPrivilegedUsers() {
+    // Find users with admin or high-privilege roles
+    const highPrivilegeUsers = await queryRecords({
+      table: 'user_role_assignments',
+      filters: {
+        'role.level|>=': 8 // High privilege level
+      },
+      include: ['user', 'role']
+    });
     
-        
+    return highPrivilegeUsers.map(assignment => ({
+      user: assignment.user.email,
+      role: assignment.role.name,
+      assigned_date: assignment.created_at,
+      review_recommended: true
+    }));
+  }
+}
+```
+
+### 2. Role Separation and Validation
+
+```javascript
+// Prevent role escalation attacks
+class RoleValidation {
+  static validateRoleAssignment(assignerRole, targetRole) {
+    const roleHierarchy = {
+      'viewer': 1,
+      'staff': 2,
+      'manager': 3,
+      'admin': 4,
+      'superadmin': 5
+    };
     
-    Get Record from user: This will use the authToken to find the user\'s ID and look up their information.
+    const assignerLevel = roleHierarchy[assignerRole];
+    const targetLevel = roleHierarchy[targetRole];
     
-2.  
+    // Prevent privilege escalation
+    if (targetLevel >= assignerLevel) {
+      throw new Error('Cannot assign role equal or higher than your own', 403);
+    }
     
-        
+    return true;
+  }
+  
+  static validateSensitiveOperation(userRole, operation) {
+    const sensitiveOperations = {
+      'delete_all_users': ['superadmin'],
+      'modify_permissions': ['admin', 'superadmin'],
+      'view_audit_logs': ['admin', 'superadmin'],
+      'system_settings': ['superadmin']
+    };
     
-    Precondition: This will enforce that the user\'s role is equal to admin. If it is not, then it will throw and error and stop the endpoint.
+    const allowedRoles = sensitiveOperations[operation] || [];
     
-3.  
+    if (!allowedRoles.includes(userRole)) {
+      throw new Error(`Operation ${operation} not permitted for role ${userRole}`, 403);
+    }
     
-        
+    return true;
+  }
+}
+```
+
+### 3. Audit Logging for RBAC
+
+```javascript
+// Comprehensive audit logging
+class RBACAuditLogger {
+  static async logAccessAttempt(userId, resource, action, success, details = {}) {
+    return await addRecord({
+      table: 'access_log',
+      data: {
+        user_id: userId,
+        resource: resource,
+        action: action,
+        success: success,
+        timestamp: new Date().toISOString(),
+        ip_address: details.ip_address,
+        user_agent: details.user_agent,
+        details: JSON.stringify(details)
+      }
+    });
+  }
+  
+  static async generateAccessReport(startDate, endDate) {
+    const accessLogs = await queryRecords({
+      table: 'access_log',
+      filters: {
+        'timestamp|>=': startDate,
+        'timestamp|<=': endDate
+      },
+      include: ['user']
+    });
     
-    Query all records from user: This will only be performed if the user\'s role is an admin by passing the precondition.
+    const report = {
+      total_attempts: accessLogs.length,
+      successful_attempts: accessLogs.filter(log => log.success).length,
+      failed_attempts: accessLogs.filter(log => !log.success).length,
+      top_accessed_resources: this.getTopResources(accessLogs),
+      suspicious_activity: this.findSuspiciousActivity(accessLogs)
+    };
     
+    return report;
+  }
+  
+  static findSuspiciousActivity(logs) {
+    // Detect multiple failed access attempts
+    const failedAttempts = logs.filter(log => !log.success);
+    const attemptsByUser = {};
+    
+    failedAttempts.forEach(log => {
+      if (!attemptsByUser[log.user_id]) {
+        attemptsByUser[log.user_id] = [];
+      }
+      attemptsByUser[log.user_id].push(log);
+    });
+    
+    // Flag users with more than 5 failed attempts in the period
+    const suspicious = Object.entries(attemptsByUser)
+      .filter(([userId, attempts]) => attempts.length > 5)
+      .map(([userId, attempts]) => ({
+        user_id: userId,
+        failed_attempts: attempts.length,
+        resources_attempted: [...new Set(attempts.map(a => a.resource))]
+      }));
+    
+    return suspicious;
+  }
+}
+```
 
-![](../../_gitbook/image5d3e.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FonKEooRr3Hw1bsh1XcGR%252Fimage.png%3Falt%3Dmedia%26token%3Dac7691ca-5ee1-44a0-a8de-2e452ad0da44&width=768&dpr=4&quality=100&sign=4b78962&sv=2)
+## Enterprise RBAC Patterns
 
-In this example, the API endpoint requires an authenticated user. Then the Function Stack is set up to perform only if the user\'s role is equal to admin.
+### Multi-Tenant RBAC
 
-Get the record of the user who\'s calling the endpoint (requester) with the auth ID.
+```javascript
+// Tenant-aware role-based access control
+class MultiTenantRBAC {
+  static async checkTenantAccess(userId, tenantId, resource, action) {
+    // Get user's tenant assignments
+    const userTenants = await queryRecords({
+      table: 'user_tenant_assignments',
+      filters: { user_id: userId },
+      include: ['tenant', 'role']
+    });
+    
+    // Check if user has access to the specific tenant
+    const tenantAccess = userTenants.find(
+      assignment => assignment.tenant_id === tenantId
+    );
+    
+    if (!tenantAccess) {
+      throw new Error('Tenant access denied', 403);
+    }
+    
+    // Check if user's role in this tenant allows the action
+    const hasPermission = await this.checkTenantPermission(
+      tenantAccess.role_id,
+      resource,
+      action
+    );
+    
+    if (!hasPermission) {
+      throw new Error(`Permission denied: ${resource}:${action} in tenant ${tenantId}`, 403);
+    }
+    
+    return tenantAccess;
+  }
+  
+  static async getUserTenantContext(userId) {
+    const tenantAssignments = await queryRecords({
+      table: 'user_tenant_assignments',
+      filters: { user_id: userId, is_active: true },
+      include: ['tenant', 'role.permissions']
+    });
+    
+    return tenantAssignments.map(assignment => ({
+      tenant_id: assignment.tenant_id,
+      tenant_name: assignment.tenant.name,
+      role: assignment.role.name,
+      permissions: assignment.role.permissions.map(p => ({
+        resource: p.resource,
+        actions: p.actions
+      }))
+    }));
+  }
+}
+```
 
-![](../../_gitbook/image664a.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FPrldsRrgdeShYlJ8Vixp%252Fimage.png%3Falt%3Dmedia%26token%3D5102ca7b-ae0b-495a-91ef-dcadc22f2822&width=768&dpr=4&quality=100&sign=73e5193c&sv=2)
+### API Rate Limiting by Role
 
-In this example, we are getting the record of the user based on their authenticated ID.
+```javascript
+// Role-based rate limiting
+class RoleBasedRateLimit {
+  static getRateLimitForRole(role) {
+    const limits = {
+      'viewer': { requests: 100, window: 3600 }, // 100/hour
+      'staff': { requests: 500, window: 3600 },   // 500/hour
+      'manager': { requests: 1000, window: 3600 }, // 1000/hour
+      'admin': { requests: 5000, window: 3600 },   // 5000/hour
+      'superadmin': null // No limits
+    };
+    
+    return limits[role] || limits['viewer'];
+  }
+  
+  static async checkRateLimit(userId, userRole) {
+    const limit = this.getRateLimitForRole(userRole);
+    
+    if (!limit) return true; // No limits
+    
+    const windowStart = Math.floor(Date.now() / 1000) - limit.window;
+    
+    const recentRequests = await queryRecords({
+      table: 'api_requests',
+      filters: {
+        user_id: userId,
+        'timestamp|>=': windowStart
+      }
+    });
+    
+    if (recentRequests.length >= limit.requests) {
+      throw new Error(`Rate limit exceeded: ${limit.requests} requests per ${limit.window} seconds`, 429);
+    }
+    
+    // Log the request
+    await addRecord({
+      table: 'api_requests',
+      data: {
+        user_id: userId,
+        timestamp: Math.floor(Date.now() / 1000)
+      }
+    });
+    
+    return true;
+  }
+}
+```
 
-Next, set a precondition to enforce that the user (called requester in the example) has a role equal to admin.
+## Testing RBAC Implementation
 
-![](../../_gitbook/image2e03.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FO1PA0ZpCOfjLBbjPWYgP%252Fimage.png%3Falt%3Dmedia%26token%3D400f6024-63d0-46f0-8da2-852f8a16ab6b&width=768&dpr=4&quality=100&sign=54635c46&sv=2)
+### Automated RBAC Testing
 
-Click on the pencil icon to open the Expression Builder and set the conditions for the precondition. Additionally, set your error type and message if the conditions are not met.
+```javascript
+// Test suite for RBAC functionality
+class RBACTestSuite {
+  static async runAllTests() {
+    const results = [];
+    
+    // Test basic role assignments
+    results.push(await this.testRoleAssignment());
+    
+    // Test permission checks
+    results.push(await this.testPermissionChecks());
+    
+    // Test privilege escalation prevention
+    results.push(await this.testPrivilegeEscalation());
+    
+    // Test tenant isolation
+    results.push(await this.testTenantIsolation());
+    
+    return {
+      total_tests: results.length,
+      passed: results.filter(r => r.passed).length,
+      failed: results.filter(r => !r.passed).length,
+      results: results
+    };
+  }
+  
+  static async testRoleAssignment() {
+    try {
+      // Test admin can assign manager role
+      await assignRole(1, 'manager', 'admin'); // Should succeed
+      
+      // Test staff cannot assign admin role
+      try {
+        await assignRole(2, 'admin', 'staff'); // Should fail
+        return { test: 'role_assignment', passed: false, reason: 'Staff should not assign admin role' };
+      } catch (error) {
+        // Expected to fail
+      }
+      
+      return { test: 'role_assignment', passed: true };
+    } catch (error) {
+      return { test: 'role_assignment', passed: false, error: error.message };
+    }
+  }
+  
+  static async testPermissionChecks() {
+    try {
+      // Test admin can access admin endpoints
+      const adminAccess = await checkAccess(1, 'users', 'delete', 'admin');
+      
+      // Test staff cannot access admin endpoints
+      try {
+        await checkAccess(2, 'users', 'delete', 'staff');
+        return { test: 'permission_checks', passed: false, reason: 'Staff should not delete users' };
+      } catch (error) {
+        // Expected to fail
+      }
+      
+      return { test: 'permission_checks', passed: true };
+    } catch (error) {
+      return { test: 'permission_checks', passed: false, error: error.message };
+    }
+  }
+}
+```
 
-![](../../_gitbook/imagede5c.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FPEPEX4vz84ygHUtmYBGx%252Fimage.png%3Falt%3Dmedia%26token%3D139e36ed-0cef-4cf1-ab17-06325f0ecb97&width=768&dpr=4&quality=100&sign=d9ef8607&sv=2)
+## 💡 **Try This**
 
-In this example, the requester.role must be equal to admin in order to pass the precondition.
+### Beginner Challenge
+Implement basic RBAC with three roles:
+1. Create users, roles, and role_assignments tables
+2. Build login endpoint that includes role in JWT
+3. Create admin-only endpoint using precondition
+4. Test role-based access control
 
-If the precondition is met, then the user who is the requester will have permission to execute the rest of the Function Stack and complete the API endpoint.
+### Intermediate Challenge
+Build permission-based access control:
+1. Create permissions and role_permissions tables
+2. Implement permission checking function
+3. Create middleware for automatic permission checks
+4. Build admin interface for role management
 
-####  
+### Advanced Challenge
+Design enterprise multi-tenant RBAC:
+1. Add tenant isolation with cross-tenant access controls
+2. Implement hierarchical roles and departments
+3. Create audit logging and compliance reporting
+4. Build role analytics dashboard
 
-RBAC Example 2: Use Extras
+## Common Mistakes to Avoid
 
-[Extras](../user-authentication-and-user-data.html#extras) allow you to store data within the authentication token, which you can access and use on authenticated API endpoints.
+1. **Client-side only access control** - Always validate permissions server-side
+2. **Overly complex role hierarchies** - Keep roles simple and understandable
+3. **Missing audit trails** - Log all permission changes and access attempts
+4. **Hard-coded permissions** - Use database-driven permission systems
+5. **No permission review process** - Regularly audit user permissions
 
-First, you must set up the [sign-up & login](../user-authentication-and-user-data.html) to include the user\'s role at the time of authentication.
+## Security Compliance Checklist
 
-In this example, we will use the login endpoint to pass the user\'s role into extras of the auth token at the time of authentication.
+```yaml
+Access Control:
+- [ ] Principle of least privilege enforced
+- [ ] Role separation implemented
+- [ ] Administrative access monitored
+- [ ] Regular permission reviews scheduled
 
-![](../../_gitbook/image30c0.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FHd6ZxJBWCC929qV25rsd%252Fimage.png%3Falt%3Dmedia%26token%3D1cde4ef9-96d6-4133-8d9b-2b84655ff129&width=768&dpr=4&quality=100&sign=61b5fd7c&sv=2)
+Audit & Compliance:
+- [ ] All access attempts logged
+- [ ] Failed access attempts monitored
+- [ ] Regular security reports generated
+- [ ] Compliance requirements met
 
-In this example, we are passing the user\'s role into the authToken at the time of login by utilizing extras.
+Technical Security:
+- [ ] Server-side permission validation
+- [ ] JWT tokens properly secured
+- [ ] Rate limiting by role implemented
+- [ ] Privilege escalation prevented
+```
 
-Now that the user\'s role is passed into the authToken, we can eliminate the Get Record function from the previous example and reference \"extras.role\" in the precondition to enforce the user\'s role.
+## Next Steps
 
-![](../../_gitbook/image4d04.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FI4ByRi9ttyUp8j87RTxY%252Fimage.png%3Falt%3Dmedia%26token%3D82cc2a0a-e2e0-43ea-a7ca-10ed6daab9c0&width=768&dpr=4&quality=100&sign=dd8ab151&sv=2)
+- Explore [User Data Separation](separating-user-data.md) for data isolation
+- Learn about [Security Policies](security-policy.md) for advanced protection
+- Master [OAuth Integration](oauth-sso.md) for external authentication
+- Understand [API Security](../api-endpoints/token-scopes-reference.md)
 
-In this example, we can use the extras of the authenticated user to access the user\'s role and set the precondition equal to admin.
+## Need Help?
 
-![](../../_gitbook/image6db4.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FVAeju5IjFrt7OPNMw8WK%252Fimage.png%3Falt%3Dmedia%26token%3D0df7ac2e-a276-45a7-be2e-c7946afd29ad&width=768&dpr=4&quality=100&sign=f27ae50e&sv=2)
-
-Set extras.role (as defined in the creation of the authentication token) equal to admin.
-
-If the user\'s role is equal to admin then they will pass the precondition and have permission to execute the rest of the Function Stack. **
-
-Last updated 6 months ago
-
-Was this helpful?
+- 📚 [Xano Community](https://community.xano.com) - RBAC implementation discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Step-by-step RBAC setup
+- 📖 [Security Documentation](../../security/best-practices.md) - Advanced security patterns
+- 🔧 [Support](https://xano.com/support) - Enterprise RBAC assistance
