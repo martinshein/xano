@@ -1,579 +1,411 @@
 ---
+title: "Conditional Logic - Building Smart Decisions"
+description: "Create intelligent workflows with if/then/else logic and conditional branching in Xano"
 category: function-stack
-difficulty: advanced
+subcategory: control-flow
+difficulty: intermediate
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv'
+- conditionals
+- if-else
+- logic
+- branching
+- decision-making
 ---
 
-[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../building-with-visual-development/triggers.html)
-        -   [Middleware](../../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../database-requests/get-record.html)
-            -   [Add Record](../database-requests/add-record.html)
-            -   [Edit Record](../database-requests/edit-record.html)
-            -   [Add or Edit Record](../database-requests/add-or-edit-record.html)
-            -   [Patch Record](../database-requests/patch-record.html)
-            -   [Delete Record](../database-requests/delete-record.html)
-            -   [Bulk Operations](../database-requests/bulk-operations.html)
-            -   [Database Transaction](../database-requests/database-transaction.html)
-            -   [External Database Query](../database-requests/external-database-query.html)
-            -   [Direct Database Query](../database-requests/direct-database-query.html)
-            -   [Get Database Schema](../database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](create-variable.html)
-            -   [Update Variable](update-variable.html)
-            -   [Conditional](conditional.html)
-            -   [Switch](switch.html)
-            -   [Loops](loops.html)
-            -   [Math](math.html)
-            -   [Arrays](arrays.html)
-            -   [Objects](objects.html)
-            -   [Text](text.html)
-                    -   [Security](../security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../data-caching-redis.html)
-        -   [Custom Functions](../custom-functions.html)
-        -   [Utility Functions](../utility-functions.html)
-        -   [File Storage](../file-storage.html)
-        -   [Cloud Services](../cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../filters/manipulation.html)
-        -   [Math](../../filters/math.html)
-        -   [Timestamp](../../filters/timestamp.html)
-        -   [Text](../../filters/text.html)
-        -   [Array](../../filters/array.html)
-        -   [Transform](../../filters/transform.html)
-        -   [Conversion](../../filters/conversion.html)
-        -   [Comparison](../../filters/comparison.html)
-        -   [Security](../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../data-types/text.html)
-        -   [Expression](../../data-types/expression.html)
-        -   [Array](../../data-types/array.html)
-        -   [Object](../../data-types/object.html)
-        -   [Integer](../../data-types/integer.html)
-        -   [Decimal](../../data-types/decimal.html)
-        -   [Boolean](../../data-types/boolean.html)
-        -   [Timestamp](../../data-types/timestamp.html)
-        -   [Null](../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../xano-features/metadata-api/search.html)
-        -   [File](../../../xano-features/metadata-api/file.html)
-        -   [Request History](../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [Add a Conditional step to your function stack.](#add-a-conditional-step-to-your-function-stack)
-
--   [Click Add Condition to add a condition.](#click-add-condition-to-add-a-condition)
-
--   [Once you have your conditions defined, add additional functions into your Then and Else blocks.](#once-you-have-your-conditions-defined-add-additional-functions-into-your-then-and-else-blocks)
-
--   [You can Use Else If to define multiple paths in the same conditional statement.](#you-can-use-else-if-to-define-multiple-paths-in-the-same-conditional-statement)
-
-Was this helpful?
-
-Copy
-
-
-2.  Functions
-3.  [Data Manipulation](../data-manipulation.html)
-
-Conditional 
-===========
-
-Conditional statements are used to determine what functions to run based on the outcome of an expression, or a set of expressions.
-
-**Hint**
-
-For simple comparisons with multiple options, consider using [Switch](switch.html) instead.
-
- 
-
-Conditional vs Switch --- which one should you use?
-
-When deciding between using an If/Then statement and a Switch statement, it\'s important to consider the complexity and clarity of the logic you\'re implementing. An If/Then statement is ideal for situations where you have several conditions that require different actions. It provides straightforward logic for evaluating true or false scenarios.
-
-On the other hand, a Switch statement is better suited for cases with multiple possible values for a single variable. It makes your function stacks cleaner and more organized by avoiding deep nesting of conditions when the logic involves fixed values. Use If/Then for more advanced conditions and Switch for handling multiple specific scenarios with more concise readability.
-
-<div>
-
-1
-
-###  
-
-Add a Conditional step to your function stack.
-
-2
-
-###  
-
-Click [Add Condition] to add a condition.
-
-You can add multiple conditions to a single function stack if you want to check multiple values.
-
-###  
-
-Using the Expression Builder
-
-Each conditional has four different components.
-
-**Conditional Type**
-
-The conditional type determines how this condition is weighted in the final return. You can choose between **AND** and **OR. AND** conditionals require the present conditional and any others before it to be satisfied, such as \"where the date is before today **AND** the user is an admin\". **OR** conditionals do not require any other conditionals to be satisfied, such as \"if the user is an admin **OR** if the user is a manager\".
-
-**Left Value**
-
-This is the first value you\'re using in the conditional. In a database query, this is usually going to be a column that you want to check against.
-
-**Operators**
-
-Please note that operators may differ based on where you are building the expression. Database queries will have different operators available than regular conditional statements. Learn More
-
--   
-    
-        
-    
-    **Equals (==)** - an exact match
-    
--   
-    
-        
-    
-    **Not Equals (!=)** - does not equal
-    
--   
-    
-        
-    
-    **Equals with type matching (===)** - an exact value match and an exact type match
-
-    -   
-        
-                
-        
-        Ex. Variable **var\_1** has a value of 123, with a type of text. You set up a conditional statement to check if **var\_1 === 123**, but your value in the conditional statement is of type integer. This would return false, because the types do not match.
-            
--   
-    
-        
-    
-    **Not equals with type matching (!==)** - does not equal value or type, similar to ===
-    
--   
-    
-        
-    
-    **Greater than (\>)** - the value on the left is greater than the value on the right
-    
--   
-    
-        
-    
-    **Greater than or equals (≥)** - the value on the left is greater than or equals to the value on the right.
-    
--   
-    
-        
-    
-    **Less than (\<)** - the value on the left is less than the value on the right.
-    
--   
-    
-        
-    
-    **Less than or equals (≤)** - the value on the left is less than or equals to the value on the right.
-    
--   
-    
-        
-    
-    **LIKE** - Used for comparing text. Like is case-insensitive and compares if a text string is like another text string. It can be thought of as equals for text but upper case and lower case does not matter.
-    
--   
-    
-        
-    
-    **NOT LIKE** - Used for comparing text. Not Like is case-insensitive and compares if a text string is not like another. It is like not equals for text but upper case and lower case does not matter.
-    
--   
-    
-        
-    
-    **INCLUDES** - Used for comparing text. Includes is a flexible operator and is case-insensitive. It is able to determine if there is a partial match in a text string.
-    
--   
-    
-        
-    
-    **DOES NOT INCLUDE** - Used for comparing text. Does not include determines if a text string is not included in another text string.
-    
--   
-    
-        
-    
-    **IN** - If a single value is found in an array (list). Start with the single value on the left side and the right side should contain the array.
-    
--   
-    
-        
-    
-    **NOT IN** - If a single value is not found in an array (list). The single value should be on the left side and the array on the right side.
-    
--   
-    
-        
-    
-    **REGEX MATCHES** - [Regular Expression](https://regex101.com/) used for finding patterns in text.
-    
--   
-    
-        
-    
-    **REGEX DOES NOT MATCH** - [Regular Expression](https://regex101.com/) used for finding a pattern that does not match in text.
-    
--   
-    
-        
-    
-    **OVERLAPS** - Used for comparing two arrays. Overlaps determines if any values in one array are present in the second array.
-    
--   
-    
-        
-    
-    **DOES NOT OVERLAP** - Used for comparing two arrays. Does not overlaps determines if no values in the first array are present in the second array.
-    
--   
-    
-        
-    
-    **CONTAINS** - Contains is an advanced filter used for JSON and arrays. It looks for an exact schema match.
-    
--   
-    
-        
-    
-    **DOES NOT CONTAIN** - Does not contain is the opposite of contains. It determines if there is not an exact schema match.
-    
-####  
-
-Right Value
-
-The right value is whatever you are checking against the left value. This could be a hardcoded value, a variable, or even a database field from the same record.
-
-3
-
-###  
-
-Once you have your conditions defined, add additional functions into your Then and Else blocks.
-
-If the condition(s) evaluate as **true**, it will run the steps in the Then block.
-
-If the condition(s) evaluate as **false**, it will run the steps in the Else block.
-
-You can also leave either of these blocks empty if you only want to utilize one of them.
-
-4
-
-###  
-
-You can Use Else If to define multiple paths in the same conditional statement.
-
-Click [![](../../../_gitbook/image554f.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F4NI9z4Jjz3UZbydC6k1U%252FCleanShot%25202025-03-07%2520at%252016.17.46.png%3Falt%3Dmedia%26token%3D709f6da6-34b7-4f31-8e5c-e7ddd44da1b2&width=300&dpr=4&quality=100&sign=af76c009&sv=2)]to add an Else If path to your conditional statement. The process for defining the condition(s) it checks is exactly the same as before.
-
-</div>
-
-Last updated 4 months ago
-
-Was this helpful?
+# Conditional Logic - Building Smart Decisions
+
+## Quick Summary
+
+> **What it is:** Visual if/then/else statements that let your functions make decisions and execute different paths based on conditions
+> 
+> **When to use:** Whenever you need different behavior based on user roles, data values, time conditions, or any business logic
+> 
+> **Key benefit:** Create adaptive applications that respond intelligently to different scenarios
+> 
+> **Visual approach:** Drag-and-drop conditional blocks without writing complex code
+
+## What You'll Learn
+
+- Building if/then/else logic visually
+- Creating complex multi-condition flows
+- Nesting conditionals for advanced logic
+- Best practices for maintainable conditions
+- Real-world patterns for n8n and WeWeb
+
+## Understanding Conditionals
+
+Conditionals are decision points in your function:
+- **IF** condition is true → Do this
+- **ELSE IF** another condition is true → Do that
+- **ELSE** → Do default action
+
+Think of it like a smart assistant following instructions based on what they observe.
+
+## Basic Conditional Structure
+
+### Simple If/Else
+
+```javascript
+IF (user.age >= 18) {
+  // Adult user path
+  - Show all content
+  - Enable purchases
+  - No restrictions
+} ELSE {
+  // Minor user path
+  - Show age-appropriate content
+  - Disable purchases
+  - Apply parental controls
+}
+```
+
+### Multiple Conditions (Else If)
+
+```javascript
+IF (order.total > 1000) {
+  discount = 20  // VIP discount
+} ELSE IF (order.total > 500) {
+  discount = 15  // Gold discount
+} ELSE IF (order.total > 100) {
+  discount = 10  // Silver discount
+} ELSE {
+  discount = 0   // No discount
+}
+```
+
+## Setting Up Conditionals in Xano
+
+### Visual Configuration
+
+1. **Add Conditional block** to function stack
+2. **Define condition** using expression builder
+3. **Add functions** to IF branch
+4. **Add functions** to ELSE branch
+5. **Test both paths** with debugger
+
+### Expression Builder
+
+Build conditions visually:
+- Select variables from dropdown
+- Choose operators (==, !=, >, <, etc.)
+- Combine with AND/OR logic
+- Preview condition result
+
+## Practical Examples
+
+### Example 1: User Authentication Flow
+
+```javascript
+// Check authentication status
+IF (auth.token == null) {
+  // Not logged in
+  Return {
+    error: "Authentication required",
+    code: 401
+  }
+} ELSE IF (auth.expired == true) {
+  // Token expired
+  Refresh token
+  IF (refresh.success) {
+    Continue with request
+  } ELSE {
+    Return {
+      error: "Session expired",
+      code: 401
+    }
+  }
+} ELSE {
+  // Valid auth - proceed
+  Process request
+}
+```
+
+### Example 2: Dynamic Pricing Logic
+
+```javascript
+// Calculate price based on customer type
+IF (customer.type == "wholesale") {
+  base_price = product.wholesale_price
+  
+  IF (order.quantity >= 100) {
+    additional_discount = 0.1  // 10% bulk discount
+  } ELSE {
+    additional_discount = 0
+  }
+  
+} ELSE IF (customer.is_member == true) {
+  base_price = product.member_price
+  additional_discount = 0.05  // 5% member bonus
+  
+} ELSE {
+  base_price = product.retail_price
+  additional_discount = 0
+}
+
+final_price = base_price * (1 - additional_discount)
+```
+
+### Example 3: Content Visibility Rules
+
+```javascript
+// Determine what content to show
+IF (user.subscription == "premium") {
+  // Premium users see everything
+  content = Query: all_content
+  ads_enabled = false
+  download_enabled = true
+  
+} ELSE IF (user.subscription == "basic") {
+  // Basic users have limits
+  content = Query: basic_content
+  ads_enabled = true
+  download_enabled = false
+  
+} ELSE {
+  // Free users
+  content = Query: free_content LIMIT 5
+  ads_enabled = true
+  download_enabled = false
+  show_upgrade_prompt = true
+}
+```
+
+## Advanced Conditional Patterns
+
+### Nested Conditionals
+
+```javascript
+IF (request.method == "POST") {
+  // Handle POST requests
+  IF (validate_input(request.body)) {
+    IF (user.can_create) {
+      Create record
+      Return success
+    } ELSE {
+      Return "Permission denied"
+    }
+  } ELSE {
+    Return "Invalid input"
+  }
+} ELSE IF (request.method == "GET") {
+  // Handle GET requests
+  IF (user.authenticated) {
+    Return user_data
+  } ELSE {
+    Return public_data
+  }
+}
+```
+
+### Guard Clauses (Early Returns)
+
+```javascript
+// Check prerequisites first
+IF (user == null) {
+  Return "User not found"
+  STOP
+}
+
+IF (user.banned == true) {
+  Return "Account suspended"
+  STOP
+}
+
+IF (user.email_verified == false) {
+  Return "Please verify email"
+  STOP
+}
+
+// Main logic (only runs if all checks pass)
+Process user request
+```
+
+### Switch-like Pattern
+
+```javascript
+// Multiple exclusive conditions
+IF (status == "pending") {
+  color = "yellow"
+  icon = "clock"
+  message = "Processing..."
+  
+} ELSE IF (status == "approved") {
+  color = "green"
+  icon = "check"
+  message = "Approved!"
+  
+} ELSE IF (status == "rejected") {
+  color = "red"
+  icon = "x"
+  message = "Rejected"
+  
+} ELSE {
+  color = "gray"
+  icon = "question"
+  message = "Unknown status"
+}
+```
+
+## Combining Conditions
+
+### AND Logic (All must be true)
+
+```javascript
+IF (user.age >= 18 AND user.verified AND user.country == "US") {
+  // All conditions met
+  Enable full access
+}
+```
+
+### OR Logic (Any can be true)
+
+```javascript
+IF (user.role == "admin" OR user.role == "moderator" OR user.is_owner) {
+  // Has elevated permissions
+  Show admin panel
+}
+```
+
+### Complex Combinations
+
+```javascript
+IF ((user.premium AND user.credits > 0) OR user.role == "admin") {
+  // Either premium with credits OR admin
+  Allow premium feature
+}
+```
+
+## Integration Patterns
+
+### With n8n Workflows
+
+```javascript
+// Route webhook to appropriate n8n workflow
+IF (webhook.event == "order.created") {
+  trigger_url = "n8n.com/webhook/new-order"
+  
+} ELSE IF (webhook.event == "user.signup") {
+  trigger_url = "n8n.com/webhook/onboarding"
+  
+} ELSE IF (webhook.event == "payment.failed") {
+  trigger_url = "n8n.com/webhook/payment-recovery"
+  
+} ELSE {
+  // Unknown event
+  Log error
+  trigger_url = null
+}
+
+IF (trigger_url != null) {
+  Send to n8n webhook
+}
+```
+
+### With WeWeb
+
+```javascript
+// Conditional data for WeWeb frontend
+IF (user.onboarding_complete == false) {
+  // Show onboarding data
+  Return {
+    show_tour: true,
+    step: user.onboarding_step,
+    tips: onboarding_tips
+  }
+} ELSE {
+  // Regular dashboard
+  Return {
+    show_tour: false,
+    dashboard_data: user_metrics,
+    notifications: recent_notifications
+  }
+}
+```
+
+## Best Practices
+
+### Keep Conditions Simple
+
+```javascript
+// Bad: Complex nested condition
+IF ((a > b AND (c == d OR e != f)) AND (g OR (h AND i)))
+
+// Good: Break into named variables
+condition1 = (a > b)
+condition2 = (c == d OR e != f)
+condition3 = (g OR (h AND i))
+
+IF (condition1 AND condition2 AND condition3)
+```
+
+### Use Descriptive Names
+
+```javascript
+// Bad
+IF (u.t == "p" AND u.s > 100)
+
+// Good
+is_premium_user = (user.tier == "premium")
+has_high_score = (user.score > 100)
+
+IF (is_premium_user AND has_high_score)
+```
+
+### Handle All Cases
+
+```javascript
+// Always include ELSE for unexpected cases
+IF (known_condition_1) {
+  // Handle case 1
+} ELSE IF (known_condition_2) {
+  // Handle case 2
+} ELSE {
+  // Handle unexpected
+  Log "Unexpected condition"
+  Use safe default
+}
+```
+
+## Common Mistakes to Avoid
+
+1. **Forgetting ELSE clause**
+   - Always handle the "what if none match" case
+
+2. **Over-nesting conditions**
+   - Break complex logic into separate functions
+
+3. **Duplicate logic in branches**
+   - Extract common code outside conditionals
+
+4. **Not testing all paths**
+   - Use debugger to verify each branch works
+
+## Try This
+
+Build a smart access control system:
+1. Check if user is authenticated
+2. Verify user role and permissions
+3. Check resource ownership
+4. Apply time-based restrictions
+5. Return appropriate access level
+
+## Pro Tips
+
+💡 **Early Returns:** Use guard clauses to handle edge cases first
+
+💡 **Named Conditions:** Store complex conditions in variables for clarity
+
+💡 **Consistent Structure:** Keep similar logic patterns across your app
+
+💡 **Comment Complex Logic:** Add descriptions to explain business rules
+
+## Performance Considerations
+
+- Conditions are evaluated sequentially (top to bottom)
+- Put most likely conditions first
+- Expensive operations should be evaluated last
+- Cache condition results if reused
+
+Remember: Good conditional logic makes your applications smart and adaptive. Structure them well for maintainable, intelligent systems!

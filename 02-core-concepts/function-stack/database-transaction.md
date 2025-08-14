@@ -1,412 +1,381 @@
 ---
+title: "Database Transactions - All or Nothing Operations"
+description: "Ensure database operations succeed together or fail together for data integrity"
 category: function-stack
-difficulty: advanced
+subcategory: database
+difficulty: intermediate
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- transformation
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
 - database
-title: '[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv'
+- transactions
+- data-integrity
+- safety
+- operations
 ---
 
-[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../index.html)
+# Database Transactions - All or Nothing Operations
 
 
 
+## Quick Summary
 
+> **What it is:** A way to group database operations so they all succeed or all fail together
+> 
+> **When to use:** Critical operations where partial completion would corrupt data (payments, transfers, multi-table updates)
+> 
+> **Key benefit:** Guarantees data consistency - no half-completed operations
+> 
+> **Perfect for:** Non-developers building reliable financial, inventory, or booking systems
 
+## What You'll Learn
 
+- Understanding transaction safety
+- When to use transactions
+- Setting up transaction blocks
+- Handling success and failure
+- Best practices for reliability
 
+## What Are Database Transactions?
 
+Think of transactions like a bank transfer:
+1. **Withdraw** $100 from Account A
+2. **Deposit** $100 to Account B
 
+If step 2 fails, step 1 must be reversed - otherwise money disappears!
 
+Transactions ensure:
+- **All steps complete** = Changes saved
+- **Any step fails** = All changes reversed
 
+## Real-World Examples
 
+### Money Transfer
+```javascript
+Transaction {
+  1. Check balance >= amount
+  2. Deduct from sender
+  3. Add to receiver
+  4. Create transfer record
+}
+// If ANY step fails, ALL are reversed
+```
 
+### Inventory Purchase
+```javascript
+Transaction {
+  1. Check stock availability
+  2. Reduce inventory count
+  3. Create order record
+  4. Reserve items for customer
+}
+// All succeed or none do
+```
 
+### User Registration
+```javascript
+Transaction {
+  1. Create user account
+  2. Create profile record
+  3. Create settings record
+  4. Send welcome email (not in transaction)
+}
+// Email isn't critical for data integrity
+```
 
--   
+## Setting Up Transactions
 
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+### Step 1: Add Transaction Block
 
--   
+1. Click + in function stack
+2. Select "Database Transaction"
+3. No additional settings needed
+4. Click Save
 
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../building-with-visual-development/triggers.html)
-        -   [Middleware](../../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](query-all-records/external-filtering-examples.html)
-                            -   [Get Record](get-record.html)
-            -   [Add Record](add-record.html)
-            -   [Edit Record](edit-record.html)
-            -   [Add or Edit Record](add-or-edit-record.html)
-            -   [Patch Record](patch-record.html)
-            -   [Delete Record](delete-record.html)
-            -   [Bulk Operations](bulk-operations.html)
-            -   [Database Transaction](database-transaction.html)
-            -   [External Database Query](external-database-query.html)
-            -   [Direct Database Query](direct-database-query.html)
-            -   [Get Database Schema](get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../data-manipulation/create-variable.html)
-            -   [Update Variable](../data-manipulation/update-variable.html)
-            -   [Conditional](../data-manipulation/conditional.html)
-            -   [Switch](../data-manipulation/switch.html)
-            -   [Loops](../data-manipulation/loops.html)
-            -   [Math](../data-manipulation/math.html)
-            -   [Arrays](../data-manipulation/arrays.html)
-            -   [Objects](../data-manipulation/objects.html)
-            -   [Text](../data-manipulation/text.html)
-                    -   [Security](../security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../data-caching-redis.html)
-        -   [Custom Functions](../custom-functions.html)
-        -   [Utility Functions](../utility-functions.html)
-        -   [File Storage](../file-storage.html)
-        -   [Cloud Services](../cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../filters/manipulation.html)
-        -   [Math](../../filters/math.html)
-        -   [Timestamp](../../filters/timestamp.html)
-        -   [Text](../../filters/text.html)
-        -   [Array](../../filters/array.html)
-        -   [Transform](../../filters/transform.html)
-        -   [Conversion](../../filters/conversion.html)
-        -   [Comparison](../../filters/comparison.html)
-        -   [Security](../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../data-types/text.html)
-        -   [Expression](../../data-types/expression.html)
-        -   [Array](../../data-types/array.html)
-        -   [Object](../../data-types/object.html)
-        -   [Integer](../../data-types/integer.html)
-        -   [Decimal](../../data-types/decimal.html)
-        -   [Boolean](../../data-types/boolean.html)
-        -   [Timestamp](../../data-types/timestamp.html)
-        -   [Null](../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+### Step 2: Add Database Operations
 
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+Drag operations INTO the transaction:
+- Query All Records
+- Add Record
+- Edit Record
+- Delete Record
+- Any database function
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+### Step 3: Non-Database Functions
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+You can include:
+- Conditionals
+- Variables
+- Data manipulation
+- Calculations
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+These won't trigger rollback on error!
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+## Important: What Triggers Rollback
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+### WILL Rollback Transaction
+❌ Database errors:
+- Constraint violations
+- Foreign key errors
+- Duplicate unique values
+- Connection failures
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../xano-features/metadata-api/search.html)
-        -   [File](../../../xano-features/metadata-api/file.html)
-        -   [Request History](../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+### WON'T Rollback Transaction
+✅ Non-database errors:
+- API call failures
+- Variable errors
+- Conditional logic
+- Math errors
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+## Integration Examples
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+### With n8n - Order Processing
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+```javascript
+// n8n sends order data
+Order_Data = Webhook Input
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+Transaction {
+  // All must succeed
+  1. Create order record
+  2. Update inventory
+  3. Apply customer credit
+  4. Create shipping record
+}
 
--   
-    Security
-    
-    -   Best Practices
+// Outside transaction (can fail safely)
+Send_Confirmation_Email()
+Update_Analytics()
+```
 
-[Powered by GitBook]
+### With WeWeb - Booking System
 
-On this page
+```javascript
+// WeWeb booking form
+Booking_Data = Input
 
--   
-    
-    [What are database transactions?](#what-are-database-transactions)
+Transaction {
+  // Critical operations
+  1. Check availability
+  2. Create booking
+  3. Mark slots as taken
+  4. Apply payment hold
+}
 
--   [Using Database Transactions](#using-database-transactions)
+// Non-critical (outside)
+Send_Notification()
+Log_Activity()
+```
 
--   [Add a Database Transaction function to your function stack.](#add-a-database-transaction-function-to-your-function-stack)
+## Common Transaction Patterns
 
--   [Add steps to the database transaction.](#add-steps-to-the-database-transaction)
+### Parent-Child Records
 
-Was this helpful?
+```javascript
+Transaction {
+  // Create parent
+  order = Add_Order_Record()
+  
+  // Create children
+  For Each item in cart {
+    Add_Order_Item(order.id, item)
+  }
+}
+```
 
-Copy
+### Balance Updates
 
+```javascript
+Transaction {
+  // Get current balance
+  account = Get_Account(user_id)
+  
+  // Update balance
+  new_balance = account.balance - amount
+  
+  // Save updated balance
+  Update_Account(user_id, new_balance)
+  
+  // Create transaction log
+  Add_Transaction_Log(user_id, amount)
+}
+```
 
-2.  Functions
-3.  [Database Requests](../database-requests.html)
+### Multi-Table Updates
 
-Database Transaction 
-====================
+```javascript
+Transaction {
+  // Update user table
+  Update_User_Status(user_id, "premium")
+  
+  // Update subscription table
+  Add_Subscription(user_id, plan_id)
+  
+  // Update billing table
+  Add_Billing_Record(user_id, amount)
+}
+```
 
- 
+## Error Handling
 
-What are database transactions?
+### With Transactions
 
-Database transactions allows you to treat a set of functions as a whole. This means that every function must succeed properly in order for all of them to be executed. Usually, you would use this if you have two or more database operations that are mission critical for the end result.
+```javascript
+Try {
+  Transaction {
+    // Database operations
+    Update_Inventory()
+    Create_Order()
+  }
+  return { success: true }
+} Catch {
+  // All changes reversed automatically
+  return { success: false, error: "Order failed" }
+}
+```
 
-> Let\'s consider a financial application as an example. During a money transfer, if money is successfully withdrawn from one account but something goes wrong with the deposit to the second account, then you would want the entire transfer to be cancelled. Otherwise, the money would still be withdrawn from the first account even though it was never received by the second account.
+### Without Transactions (Dangerous!)
 
-Only **database operations** are considered when determining whether or not to roll back the changes made to the database. This means that for other function types, like conditionals or data transformation, those can still encounter errors without impacting the database transaction.
+```javascript
+// DON'T DO THIS for critical operations
+Update_Inventory()  // Succeeds
+Create_Order()      // Fails
+// Now inventory is wrong!
+```
 
- 
+## Best Practices
 
-Using Database Transactions
+### Keep Transactions Small
 
-<div>
+```javascript
+// Good: Focused transaction
+Transaction {
+  Update_Balance()
+  Create_Log()
+}
 
-1
+// Avoid: Too many operations
+Transaction {
+  20+ database operations
+  Complex logic
+  External API calls
+}
+```
 
-###  
+### Critical Operations Only
 
-Add a Database Transaction function to your function stack.
+```javascript
+Transaction {
+  // Critical: Must succeed together
+  Charge_Payment()
+  Create_Order()
+}
 
-There are no additional settings for a database transaction, so just click Save on the panel that opens.
+// Non-critical: Outside transaction
+Send_Email()
+Update_Analytics()
+```
 
-2
+### Test Rollback Scenarios
 
-###  
+```javascript
+Transaction {
+  Update_Record_1()  // Will succeed
+  Update_Record_2()  // Force error to test
+}
+// Verify Record_1 changes were reversed
+```
 
-Add steps to the database transaction.
+## Performance Considerations
 
-You can click and drag to move existing steps into the transaction, or add new functions.
+### Transaction Locks
 
-</div>
+During transaction:
+- Tables may be locked
+- Other operations wait
+- Keep transactions quick
 
-Last updated 7 months ago
+### Resource Usage
 
-Was this helpful?
+- Transactions use more memory
+- Rollback requires overhead
+- Balance safety vs performance
+
+## Common Gotchas
+
+### External Services
+
+```javascript
+// WRONG: API call in transaction
+Transaction {
+  Update_Database()
+  Call_Payment_API()  // If this fails, database rolls back
+                      // but payment might have processed!
+}
+
+// RIGHT: API call outside
+Call_Payment_API()
+if (payment_success) {
+  Transaction {
+    Update_Database()
+  }
+}
+```
+
+### Read Operations
+
+```javascript
+// Reads don't need transactions
+Transaction {
+  Get_User()  // Unnecessary
+  Get_Settings()  // Unnecessary
+}
+
+// Better
+user = Get_User()
+settings = Get_Settings()
+Transaction {
+  Update_User()
+  Update_Settings()
+}
+```
+
+## Try This
+
+Create a points transfer system:
+1. Add transaction block
+2. Check sender has enough points
+3. Deduct from sender
+4. Add to receiver
+5. Create transfer log
+6. Test with insufficient points
+
+## Pro Tips
+
+💡 **Test Failures:** Intentionally cause errors to verify rollback
+
+💡 **Log Outside:** Keep audit logs outside transactions
+
+💡 **Quick Operations:** Minimize time in transaction
+
+💡 **Validate First:** Check conditions before starting transaction
+
+💡 **Document Critical:** Mark which operations require transactions
+
+## When NOT to Use Transactions
+
+- Simple read operations
+- Single record updates
+- Non-critical operations
+- External API calls
+- File operations
+
+## Next Steps
+
+1. Identify critical operations
+2. Add transaction blocks
+3. Test rollback scenarios
+4. Monitor performance
+5. Document transaction logic
+
+Remember: Transactions are your safety net for critical operations - use them to build bulletproof systems!

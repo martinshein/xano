@@ -1,682 +1,383 @@
 ---
+title: "Comparison Functions - Data Matching and Validation"
+description: "Master comparison operations for data validation, filtering, and conditional logic in Xano"
 category: function-stack
-difficulty: advanced
+subcategory: logic
+difficulty: beginner
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2'
+- comparison
+- validation
+- filtering
+- conditionals
+- logic
 ---
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../building-with-visual-development/triggers.html)
-        -   [Middleware](../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../functions/database-requests/get-record.html)
-            -   [Add Record](../functions/database-requests/add-record.html)
-            -   [Edit Record](../functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../functions/database-requests/patch-record.html)
-            -   [Delete Record](../functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../functions/database-requests/database-transaction.html)
-            -   [External Database Query](../functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../functions/data-manipulation/update-variable.html)
-            -   [Conditional](../functions/data-manipulation/conditional.html)
-            -   [Switch](../functions/data-manipulation/switch.html)
-            -   [Loops](../functions/data-manipulation/loops.html)
-            -   [Math](../functions/data-manipulation/math.html)
-            -   [Arrays](../functions/data-manipulation/arrays.html)
-            -   [Objects](../functions/data-manipulation/objects.html)
-            -   [Text](../functions/data-manipulation/text.html)
-                    -   [Security](../functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../functions/data-caching-redis.html)
-        -   [Custom Functions](../functions/custom-functions.html)
-        -   [Utility Functions](../functions/utility-functions.html)
-        -   [File Storage](../functions/file-storage.html)
-        -   [Cloud Services](../functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](manipulation.html)
-        -   [Math](math.html)
-        -   [Timestamp](timestamp.html)
-        -   [Text](text.html)
-        -   [Array](array.html)
-        -   [Transform](transform.html)
-        -   [Conversion](conversion.html)
-        -   [Comparison](comparison.html)
-        -   [Security](security.html)
-            -   Data Types
-        
-        -   [Text](../data-types/text.html)
-        -   [Expression](../data-types/expression.html)
-        -   [Array](../data-types/array.html)
-        -   [Object](../data-types/object.html)
-        -   [Integer](../data-types/integer.html)
-        -   [Decimal](../data-types/decimal.html)
-        -   [Boolean](../data-types/boolean.html)
-        -   [Timestamp](../data-types/timestamp.html)
-        -   [Null](../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../xano-features/metadata-api/content.html)
-        -   [Search](../../xano-features/metadata-api/search.html)
-        -   [File](../../xano-features/metadata-api/file.html)
-        -   [Request History](../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
-Was this helpful?
-
-Copy
-
-
-2.  Filters
-
-Comparison 
-==========
-
-​Comparison filters are useful for comparisons and checking data types, especially for conditional logic. They will result in a true or false boolean value.
-
--   
-    
-        
-    
-    [**bitwise\_not**](comparison.html#bitwise_not) **-** Returns the existing value with its bits flipped.
-    
--   
-    
-        
-    
-    [**equals**](comparison.html#equals) **-** Returns a boolean if both values are equal.
-    
--   
-    
-        
-    
-    [**even**](comparison.html#even) **-** Returns whether or not the value is even.
-    
--   
-    
-        
-    
-    [**greater\_than**](comparison.html#greater_than) **-** Returns a boolean if the left value is greater than the right value.
-    
--   
-    
-        
-    
-    [**greater\_than\_or\_equal**](comparison.html#greater_than_or_equal) **-** Returns a boolean if the left value is greater than or equal to the right value.
-    
--   
-    
-        
-    
-    [**in**](comparison.html#in) **-** Returns whether or not the value is in the array.
-    
--   
-    
-        
-    
-    [**is\_array**](comparison.html#is_array) **-** Returns whether or not the value is a numerical indexed array.
-    
--   
-    
-        
-    
-    [**is\_bool**](comparison.html#is_bool) **-** Returns whether or not the value is a boolean.
-    
--   
-    
-        
-    
-    [**is\_decimal**](comparison.html#is_decimal) **-** Returns whether or not the value is a decimal value.
-    
--   
-    
-        
-    
-    [**is\_empty**](comparison.html#is_empty) **-** Returns whether or not the value is empty (\"\", null, 0, \[\], {}).
-    
--   
-    
-        
-    
-    [**is\_int**](comparison.html#is_int) **-** Returns whether or not the value is an integer.
-    
--   
-    
-        
-    
-    [**is\_null**](comparison.html#is_null) **-** Returns whether or not the value is null
-    
--   
-    
-        
-    
-    [**is\_object**](comparison.html#is_object) **-** Returns whether or not the value is an object.
-    
--   
-    
-        
-    
-    [**is\_text**](comparison.html#is_text) **-** Returns whether or not the value is text.
-    
--   
-    
-        
-    
-    **is\_uuid** - Returns whether or not the value is a UUID
-    
--   
-    
-        
-    
-    [**less\_than**](comparison.html#less_than) **-** Returns a boolean if the left value is less than the right value
-    
--   
-    
-        
-    
-    [**less\_than\_or\_equal**](comparison.html#less_than_or_equal) **-** Returns a boolean if the left value is less than or equal to the right value
-    
--   
-    
-        
-    
-    [**not**](comparison.html#not) **-** Returns the opposite of the existing value evaluated as a boolean
-    
--   
-    
-        
-    
-    [**not\_equals**](comparison.html#not_equals) **-** Returns a boolean if both values are not equal
-    
--   
-    
-        
-    
-    [**odd**](comparison.html#odd) **-** Returns whether or not the value is odd
-    
-####  
-
-**bitwise\_not**
-
-Returns the existing value with its bits flipped.
-
-####  
-
-**equals**
-
-Returns a boolean if both values are equal**.**
-
-![](../../_gitbook/imageccef.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FfSd6nBkXf3jjIY5RWk9J%252FCleanShot%25202022-01-13%2520at%252015.01.13.png%3Falt%3Dmedia%26token%3D8f81895f-63fb-4ffc-ac28-4d9017ce2fce&width=768&dpr=4&quality=100&sign=9e69ffb5&sv=2)
-
-**var\_2 is also 7, so in this example, the result will be true.**
-
-####  
-
-even
-
-Returns whether or not the value is even, this returns a response of true or false.
-
-![](../../_gitbook/image1bcb.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FMPQxgdGanuF7Es86OjDo%252FCleanShot%25202022-01-13%2520at%252015.04.49.png%3Falt%3Dmedia%26token%3D9104e6cf-fcf8-477f-9301-d38bca52cf4b&width=768&dpr=4&quality=100&sign=6982bfc4&sv=2)
-
-In this example, we have a variable with the int 23 after applying the even filter the variable becomes false.
-
-####  
-
-greater\_than
-
-Returns a boolean if the left value is greater than the right value.
-
-![](../../_gitbook/image7403.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252Ffv6BNIQaTn0lXE1x0vvV%252FCleanShot%25202022-01-13%2520at%252015.07.33.png%3Falt%3Dmedia%26token%3D678ec8b8-7c41-4c91-8d8f-06f8ad3456b1&width=768&dpr=4&quality=100&sign=3fea977e&sv=2)
-
-The result will be true because 23 is greater than 5.
-
-####  
-
-greater\_than\_or\_equal
-
-Returns a boolean if the left value is greater than or equal to the right value.
-
-![](../../_gitbook/imagec6e6.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FTcnV6XCZQ0UPOHxGQ1bG%252FCleanShot%25202022-01-13%2520at%252015.09.29.png%3Falt%3Dmedia%26token%3Dbaa19b18-9c80-4066-818f-2fda498c9420&width=768&dpr=4&quality=100&sign=af677fba&sv=2)
-
-The result will be true because 23 is equal to 23.
-
-####  
-
-in
-
-Returns whether or not the value is in the Array, this returns a response of true or false.
-
-![](../../_gitbook/imagef5b3-2.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F5H3013JQvPwP0OCD5tgO%252FCleanShot%25202022-01-13%2520at%252015.14.49.png%3Falt%3Dmedia%26token%3D4f37762b-0daf-458d-b1ef-4c8e15a6a2ec&width=768&dpr=4&quality=100&sign=96596383&sv=2)
-
-var\_2 is the array \[1,2,7,23\]. The result will be true because 23 is IN the array.
-
-####  
-
-is\_array
-
-Returns whether or not the value is a numerical indexed array.
-
-![](../../_gitbook/imagebe2d.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F86i0xZ0fQEGMByguatei%252FCleanShot%25202022-01-13%2520at%252015.19.49.png%3Falt%3Dmedia%26token%3D5b39644f-c828-457b-8eba-c9b1c20e108e&width=768&dpr=4&quality=100&sign=4fcf526e&sv=2)
-
-var*2 is the array \[1,2,7,23\]. The result will be true because var\_2 is an array.*
-
-####  
-
-is\_bool
-
-Returns whether or not the value is a boolean.
-
-![](../../_gitbook/imagedc79.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FvvdfrWeSO4GlGXCGg6oJ%252FCleanShot%25202022-01-13%2520at%252015.21.41.png%3Falt%3Dmedia%26token%3D59c6973f-ea62-4445-87a7-b7065a027460&width=768&dpr=4&quality=100&sign=b05dd561&sv=2)
-
-False is a boolean so the result will be true.
-
-####  
-
-is\_decimal
-
-Returns whether or not the value is a decimal value.
-
-![](../../_gitbook/imagefbb1.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FPYu6GP27JofIiF9rlYb1%252FCleanShot%25202022-01-13%2520at%252015.22.46.png%3Falt%3Dmedia%26token%3D9dfd90b1-0de5-4256-8792-de4e40898941&width=768&dpr=4&quality=100&sign=43d9c000&sv=2)
-
-9.86 is a decimal so the result will be true.
-
-####  
-
-is\_empty
-
-Returns whether or not the value is empty (\"\", null, 0, \[\], {}).
-
-![](../../_gitbook/image0cdb.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FAbJFI1qQ2uU7OTuRcQAX%252FCleanShot%25202022-01-13%2520at%252015.25.25.png%3Falt%3Dmedia%26token%3D23c4705f-8423-4c71-b9cc-f86a5d7132c4&width=768&dpr=4&quality=100&sign=606a3249&sv=2)
-
-The result will be true because the value is an empty object {}.
-
-####  
-
-is\_int
-
-Returns whether or not the value is an integer.
-
-![](../../_gitbook/imagefe16.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FZv0TUxYdZfPJQw6oxk7H%252FCleanShot%25202022-01-13%2520at%252015.28.01.png%3Falt%3Dmedia%26token%3D6fc97736-531d-4eb3-a0ed-625711f71a07&width=768&dpr=4&quality=100&sign=ca913f07&sv=2)
-
--9 is an integer so the result will be true.
-
-####  
-
-is\_null
-
-Returns whether or not the value is null, this returns a response of true or false.
-
-![](../../_gitbook/image67b7.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FTBkueozwxvfbq4nwTkZp%252FCleanShot%25202022-01-13%2520at%252015.40.32.png%3Falt%3Dmedia%26token%3D7a583475-29f2-4b91-b5cb-a0516ea78b3f&width=768&dpr=4&quality=100&sign=4607c7d6&sv=2)
-
-In this example, we have a variable with the int 23 after applying the is\_null filter the variable becomes false.
-
-####  
-
-is\_object
-
-Returns whether or not the value is an object.
-
-![](../../_gitbook/imaged00e.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252Fxj18vQBPmxwDxnDIn06T%252FCleanShot%25202022-01-13%2520at%252016.17.50.png%3Falt%3Dmedia%26token%3D778d52da-3ba4-4680-bdd4-9c97501ba179&width=768&dpr=4&quality=100&sign=80f075e&sv=2)
-
-The result is true because the value is an object {}.
-
-####  
-
-is\_text
-
-Returns whether or not the value is text.
-
-![](../../_gitbook/image7a84.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FtLYeO6W0BJhIS2upCFAO%252FCleanShot%25202022-01-13%2520at%252016.19.56.png%3Falt%3Dmedia%26token%3D9c0f05d0-56e9-4fe9-9864-5dc177cd6a41&width=768&dpr=4&quality=100&sign=b5e60678&sv=2)
-
-Hello there is a text string so the result will be true.
-
-####  
-
-is\_uuid
-
-Returns whether or not the value is a valid UUID
-
-![](../../_gitbook/image6c3a.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FSuUDKK8loPuwuZqVNNts%252FCleanShot%25202025-08-04%2520at%252007.33.01%25402x.png%3Falt%3Dmedia%26token%3Dc124c4ad-9f49-40f1-a0fa-1e4f54066989&width=768&dpr=4&quality=100&sign=2995cb99&sv=2)
-
-####  
-
-less\_than
-
-Returns a boolean if the left value is less than the right value
-
-![](../../_gitbook/image7a1d.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FsE4zK4IoQi5SZ1W3pLoy%252FCleanShot%25202022-01-13%2520at%252016.21.54.png%3Falt%3Dmedia%26token%3D450e95d2-04bc-42a4-962b-9c5d61350f30&width=768&dpr=4&quality=100&sign=557b30cc&sv=2)
-
-The result will be true because 5 is less than 12.
-
-####  
-
-less\_than\_or\_equal
-
-Returns a boolean if the left value is less than or equal to the right value.
-
-![](../../_gitbook/image94d2.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F9BcNulU6SNKWFiK2LCSS%252FCleanShot%25202022-01-13%2520at%252016.23.18.png%3Falt%3Dmedia%26token%3D6277f84f-8bdb-4089-a142-1d0351873a54&width=768&dpr=4&quality=100&sign=828b6039&sv=2)
-
-5 is not less than or equal to 1 so the result will be false.
-
-####  
-
-not
-
-Returns the opposite of the existing value evaluated as a boolean.
-
-![](../../_gitbook/imageb840.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FU6gbedk3nRIPsfQoDfMj%252FCleanShot%25202022-01-13%2520at%252016.25.56.png%3Falt%3Dmedia%26token%3Da7a7dfb4-b95e-4f08-9c39-adf65a2403c8&width=768&dpr=4&quality=100&sign=f171041c&sv=2)
-
-In this example, we first have the odd filter applied to 5 which results in a true boolean. Then, the not filter is applied resulting in the opposite existing value - making the result false.
-
-####  
-
-not\_equals
-
-Returns a boolean if both values are not equal.
-
-![](../../_gitbook/image91b3.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FOXbQARGi13AtHiPKTsFK%252FCleanShot%25202022-01-13%2520at%252016.28.13.png%3Falt%3Dmedia%26token%3D9e759afc-c933-419f-bb7a-526ee12aeb23&width=768&dpr=4&quality=100&sign=4fa7d1d6&sv=2)
-
-The result will be true because 5 is not equal to 6.
-
-####  
-
-odd
-
-Returns whether or not the value is odd, this returns a response of true or false.
-
-![](../../_gitbook/image77a3.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FcoTx2u7vyJzsbkaL76aI%252FCleanShot%25202022-01-13%2520at%252016.29.47.png%3Falt%3Dmedia%26token%3Da0e28c3e-41aa-40c6-8ea1-7c423669de52&width=768&dpr=4&quality=100&sign=6d0ac901&sv=2)
-
-5 is an odd number so the result will be true.
-
-Last updated 8 days ago
-
-Was this helpful?
+# Comparison Functions - Data Matching and Validation
+
+## Quick Summary
+
+> **What it is:** Functions that compare values to make decisions - checking if things are equal, greater than, less than, or match specific patterns
+> 
+> **When to use:** For data validation, filtering records, conditional logic, access control, and any decision-making in your workflows
+> 
+> **Key benefit:** Build intelligent applications that respond differently based on data conditions
+> 
+> **Most common:** Equality checks, range validations, and null checking
+
+## What You'll Learn
+
+- Basic comparison operators and their uses
+- String and number comparisons
+- Null and empty value checking
+- Complex comparison patterns
+- Best practices for n8n and WeWeb integrations
+
+## Basic Comparison Operators
+
+### Equality Operators
+
+```javascript
+// Equal to
+user.role == "admin"  // Is user an admin?
+price == 100         // Is price exactly 100?
+
+// Not equal to
+status != "cancelled"  // Is status anything except cancelled?
+user_id != null       // Does user_id have a value?
+
+// Strict equality (type-safe)
+count === "5"   // false (number vs string)
+count === 5     // true (both numbers)
+```
+
+### Numeric Comparisons
+
+```javascript
+// Greater than
+age > 18              // Over 18?
+price > discount_threshold
+
+// Greater than or equal
+score >= passing_grade  // Did they pass?
+inventory >= minimum_stock
+
+// Less than
+days_remaining < 7     // Less than a week left?
+usage < quota_limit
+
+// Less than or equal
+discount <= max_discount  // Within discount limits?
+attempts <= max_attempts
+```
+
+## String Comparisons
+
+### Text Matching
+
+```javascript
+// Case-sensitive comparison
+username == "JohnDoe"  // Exact match
+
+// Case-insensitive (use LOWER filter)
+LOWER(email) == LOWER(input_email)
+
+// Pattern matching
+email CONTAINS "@company.com"  // Company email?
+phone STARTS_WITH "+1"         // US phone number?
+filename ENDS_WITH ".pdf"      // PDF file?
+```
+
+### String Operations
+
+```javascript
+// Check if text contains substring
+description CONTAINS "urgent"
+tags CONTAINS "featured"
+
+// Check if in list
+status IN ["active", "pending", "processing"]
+category IN allowed_categories
+
+// Regular expression matching
+email MATCHES "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+```
+
+## Null and Empty Checking
+
+### Null Validation
+
+```javascript
+// Check for null/undefined
+user.profile_image != null  // Has profile image?
+optional_field == null      // Is field empty?
+
+// Check for empty string
+name != ""                  // Name provided?
+description != ""           // Has description?
+
+// Combined empty check
+(email != null AND email != "")  // Email exists and not empty
+```
+
+### Default Value Pattern
+
+```javascript
+// Use default if null
+display_name = username || "Guest User"
+profile_image = user.avatar || "/default-avatar.png"
+theme = user.theme || "light"
+```
+
+## Practical Examples
+
+### Example 1: User Access Control
+
+```javascript
+// Multi-level permission check
+can_edit = (
+  user.role == "admin" OR 
+  (user.role == "editor" AND resource.status != "locked") OR
+  (user.id == resource.owner_id AND resource.editable == true)
+)
+
+// Time-based access
+is_business_hours = (
+  current_hour >= 9 AND 
+  current_hour < 17 AND 
+  day_of_week != "Saturday" AND 
+  day_of_week != "Sunday"
+)
+
+// Subscription check
+has_premium_access = (
+  user.subscription_tier IN ["premium", "enterprise"] AND
+  user.subscription_expiry > NOW()
+)
+```
+
+### Example 2: Data Validation
+
+```javascript
+// Form validation
+is_valid_email = (
+  email != null AND 
+  email != "" AND 
+  email CONTAINS "@" AND 
+  email CONTAINS "."
+)
+
+// Password strength
+is_strong_password = (
+  LENGTH(password) >= 8 AND
+  password MATCHES "[A-Z]" AND  // Has uppercase
+  password MATCHES "[a-z]" AND  // Has lowercase
+  password MATCHES "[0-9]"      // Has number
+)
+
+// Age verification
+is_eligible = (
+  age >= 18 AND 
+  age <= 65 AND
+  country IN approved_countries
+)
+```
+
+### Example 3: Dynamic Filtering
+
+```javascript
+// E-commerce filters
+show_product = (
+  (price >= min_price OR min_price == null) AND
+  (price <= max_price OR max_price == null) AND
+  (category == selected_category OR selected_category == "all") AND
+  in_stock == true AND
+  active == true
+)
+
+// Search relevance
+is_relevant = (
+  title CONTAINS search_term OR
+  description CONTAINS search_term OR
+  tags CONTAINS search_term
+)
+```
+
+## Range Comparisons
+
+### Between Values
+
+```javascript
+// Check if value is in range
+is_in_range = (value >= min AND value <= max)
+
+// Business hours check
+is_business_hour = (hour >= 9 AND hour < 17)
+
+// Date range
+is_current_month = (
+  date >= MONTH_START() AND 
+  date <= MONTH_END()
+)
+```
+
+### Threshold Checks
+
+```javascript
+// Inventory alerts
+needs_reorder = (stock_level <= reorder_point)
+is_overstocked = (stock_level > max_inventory)
+
+// Performance thresholds
+is_slow_response = (response_time > 2000)  // Over 2 seconds
+is_high_cpu = (cpu_usage > 80)            // Over 80%
+```
+
+## Integration Patterns
+
+### With n8n
+
+```javascript
+// Webhook validation
+is_valid_webhook = (
+  webhook.signature == expected_signature AND
+  webhook.timestamp > (NOW() - 300) AND  // Within 5 minutes
+  webhook.event_type IN supported_events
+)
+
+// Conditional workflow routing
+route_to_workflow = 
+  IF (priority == "high") THEN "urgent-workflow"
+  ELSE IF (priority == "medium") THEN "standard-workflow"
+  ELSE "low-priority-workflow"
+```
+
+### With WeWeb
+
+```javascript
+// Form field visibility
+show_company_field = (user_type == "business")
+show_vat_field = (country IN eu_countries)
+show_discount_code = (is_first_purchase == false)
+
+// Button state management
+can_submit = (
+  all_required_filled == true AND
+  form_is_valid == true AND
+  is_submitting == false
+)
+```
+
+## Advanced Comparisons
+
+### Fuzzy Matching
+
+```javascript
+// Similarity checking (requires custom function)
+is_similar = SIMILARITY(input_text, target_text) > 0.8
+
+// Approximate number matching
+is_approximately_equal = ABS(value1 - value2) < 0.01
+
+// Date proximity
+is_recent = (NOW() - created_at) < (24 * 60 * 60)  // Within 24 hours
+```
+
+### Set Operations
+
+```javascript
+// Array contains value
+tags CONTAINS "featured"
+users_array CONTAINS user_id
+
+// Array intersection
+has_common_tags = (ARRAY_INTERSECT(tags1, tags2).length > 0)
+
+// Array subset
+has_all_permissions = ARRAY_IS_SUBSET(required_perms, user_perms)
+```
+
+## Common Mistakes to Avoid
+
+1. **Type Mismatches**
+   ```javascript
+   // Bad: Comparing different types
+   "5" == 5  // May cause issues
+   
+   // Good: Ensure same type
+   parseInt("5") == 5
+   ```
+
+2. **Null Reference Errors**
+   ```javascript
+   // Bad: Not checking for null
+   user.profile.image  // Error if profile is null
+   
+   // Good: Safe navigation
+   user.profile != null AND user.profile.image != null
+   ```
+
+3. **Case Sensitivity**
+   ```javascript
+   // Bad: Case-sensitive when shouldn't be
+   email == "John@Example.com"
+   
+   // Good: Case-insensitive for emails
+   LOWER(email) == LOWER(input_email)
+   ```
+
+## Best Practices
+
+### Readable Conditions
+
+```javascript
+// Bad: Complex inline condition
+IF ((a > b AND c != null) OR (d == "x" AND e < 10))
+
+// Good: Named variables
+is_primary_condition = (a > b AND c != null)
+is_secondary_condition = (d == "x" AND e < 10)
+IF (is_primary_condition OR is_secondary_condition)
+```
+
+### Defensive Comparisons
+
+```javascript
+// Always check for null first
+IF (user != null AND user.role == "admin")
+
+// Use parentheses for clarity
+IF ((a AND b) OR (c AND d))
+
+// Provide defaults
+value = input_value || default_value
+```
+
+## Try This
+
+Build a smart filtering system:
+1. Create multiple filter conditions
+2. Combine with AND/OR logic
+3. Handle null/empty filters
+4. Apply to data query
+5. Return filtered results
+
+## Pro Tips
+
+💡 **Order Matters:** Put cheapest comparisons first for performance
+
+💡 **Use Constants:** Define magic numbers as named variables
+
+💡 **Null Safety:** Always check for null before accessing properties
+
+💡 **Type Conversion:** Ensure data types match before comparing
+
+## Performance Optimization
+
+- Simple comparisons are faster than complex ones
+- Use indexed fields for database comparisons
+- Avoid regex when simple operators work
+- Cache comparison results when reused
+
+Remember: Comparisons are the foundation of intelligent applications. Master them to build dynamic, responsive systems!

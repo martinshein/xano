@@ -1,29 +1,20 @@
 ---
+title: "Data Conversion - Transform Between Formats"
+description: "Convert data between different types and formats without code"
 category: function-stack
-difficulty: advanced
+subcategory: filters
+difficulty: intermediate
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2'
+- conversion
+- filters
+- data-types
+- encoding
+- transformation
 ---
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+# Data Conversion - Transform Between Formats
 
 
 
@@ -356,190 +347,49 @@ Was this helpful?
 Copy
 
 
-2.  Filters
+## Quick Summary
 
-Conversion 
-==========
+> **What it is:** Filters that convert data between different formats and types without coding
+> 
+> **When to use:** Transforming data for APIs, encoding/decoding content, or changing data types
+> 
+> **Key benefit:** Handle any data format conversion visually with pre-built filters
+> 
+> **Perfect for:** Non-developers working with various data formats and API integrations
 
--   
-    
-        
-    
-    [**base64\_decode**](conversion.html#base64_decode) **-** Decodes the value represented as base64 and returns the result.
-    
--   
-    
-        
-    
-    [**base64\_decode\_urlsafe**](conversion.html#base64_decode_urlsafe) **-** Decodes the value represented as base64 URL safe text and returns the result.
-    
--   
-    
-        
-    
-    [**base64\_encode**](conversion.html#base64_encode) **-** Encodes the value and returns the result as base64 text.
-    
--   
-    
-        
-    
-    [**base64\_encode\_urlsafe**](conversion.html#base64_encode_urlsafe) **-** Encodes the value and returns the result as base64 URL safe text.
-    
--   
-    
-        
-    
-    [**base\_convert**](conversion.html#base_convert) **-** Converts a value between two bases*.*
-    
--   
-    
-        
-    
-    [**bin2hex**](conversion.html#bin2hex) - Converts a binary value into its hex equivalent.
-    
--   
-    
-        
-    
-    [**decbin**](conversion.html#decbin) **-** Converts a decimal value into its binary string (i.e. 01010) equivalent.
-    
--   
-    
-        
-    
-    [**bindec**](conversion.html#bindec) **-** Converts a binary string (i.e. 01010) into its decimal equivalent.
-    
--   
-    
-        
-    
-    [**create\_object**](conversion.html#create_object) **-** Creates an object based on a list of keys and a list of values.
-    
--   
-    
-        
-    
-    [**csv\_decode**](conversion.html#csv_decode) **-** Decodes the value represented as CSV and returns the result
-    
--   
-    
-        
-    
-    [**csv\_encode**](conversion.html#csv_encode) **-** Encodes the value and returns the result in CSV-formatted text
-    
--   
-    
-        
-    
-    [**dechex**](conversion.html#dechex) **-** Converts a decimal value into its hex equivalent.
-    
--   
-    
-        
-    
-    [**decoct**](conversion.html#decoct) **-** Converts a decimal value into its octal equivalent.
-    
--   
-    
-        
-    
-    [**hex2bin**](conversion.html#hex2bin) **-** Converts a hex value into its binary equivalent.
-    
--   
-    
-        
-    
-    [**hexdec**](conversion.html#hexdec) **-** Converts a hex value into its decimal equivalent.
-    
--   
-    
-        
-    
-    [**json\_decode**](conversion.html#json_decode) **-** Decodes the value represented as json and returns the result.
-    
--   
-    
-        
-    
-    [**json\_encode**](conversion.html#json_encode) **-** Encodes the value and returns the result as json text.
-    
--   
-    
-        
-    
-    [**octdec**](conversion.html#octdec) **-** Converts an octal value into its decimal equivalent.
-    
--   
-    
-        
-    
-    [**to\_bool**](conversion.html#to_bool) **-** Converts text, integer, or decimal types to a bool and returns the result.
-    
--   
-    
-        
-    
-    [**to\_dec**](conversion.html#to_decimal) **-** Converts text, integer, or bool types to a decimal and returns the result.
-    
--   
-    
-        
-    
-    [**to\_int**](conversion.html#to_int) **-** Converts text, integer, or bool types to an integer and returns the result.
-    
--   
-    
-        
-    
-    [**to\_text**](conversion.html#to_text) **-** Converts text, integer, or bool types to text and returns the result.
-    
--   
-    
-        
-    
-    [**to\_timestamp**](conversion.html#to_timestamp) **-** Converts a text expression (now, next Friday) to timestamp comparable format.
-    
--   
-    
-        
-    
-    [**url\_decode**](conversion.html#url_decode) **-** Decodes the value represented as a URL encoded value.
-    
--   
-    
-        
-    
-    [**url\_decode\_rfc3986**](conversion.html#url_decode_rfc3986) **-** Decodes the value represented as a URL encoded value conforming to RFC3986 specifications
-    
--   
-    
-        
-    
-    [**url\_encode**](conversion.html#url_encode) **-** Encodes the value and returns the result as a URL encoded value.
-    
--   
-    
-        
-    
-    [**url\_encode\_rfc3986**](conversion.html#url_encode_rfc3986) **-** Encodes the value and returns the result as a URL encoded value conforming to RFC3986 specifications
-    
--   
-    
-        
-    
-    [**yaml\_decode**](conversion.html#yaml_decode) **-** Decodes the value represented as yaml and returns the result.
-    
--   
-    
-        
-    
-    [**yaml\_encode**](conversion.html#yaml_encode) **-** Encodes the value and returns the result as yaml text.
-    
--   
-    
-        
-    
-    [**xml\_decode**](conversion.html#xml_decode) - Decodes the value represented as XML to JSON and returns the result
+## What You'll Learn
+
+- Converting between data types
+- Encoding and decoding formats
+- Working with different number systems
+- Handling structured data formats
+- URL and text encoding
+
+## Conversion Filters Overview
+
+### Type Conversions
+- **to_int** - Convert to integer
+- **to_text** - Convert to string
+- **to_bool** - Convert to boolean
+- **to_dec** - Convert to decimal
+- **to_timestamp** - Convert text to timestamp
+
+### Encoding/Decoding
+- **base64_encode/decode** - Base64 encoding
+- **url_encode/decode** - URL encoding
+- **json_encode/decode** - JSON format
+- **yaml_encode/decode** - YAML format
+- **xml_decode** - XML to JSON
+- **csv_encode/decode** - CSV format
+
+### Number System Conversions
+- **hexdec/dechex** - Hex conversions
+- **bindec/decbin** - Binary conversions
+- **octdec/decoct** - Octal conversions
+- **base_convert** - Any base conversion
+
+### Data Structure
+- **create_object** - Build objects from arrays
     
 ####  
 
@@ -828,6 +678,47 @@ Decodes the provided data as XML, to JSON, and returns the result.
 
 ![](../../_gitbook/image89c1.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FbWaT1NA7GBD17OVwXaBl%252FCleanShot%25202023-08-30%2520at%252012.52.02.png%3Falt%3Dmedia%26token%3D67e9317e-9bf3-4721-adf0-9293abe1e77a&width=768&dpr=4&quality=100&sign=7f59d5ad&sv=2)
 
-Last updated 6 months ago
+## Try This
 
-Was this helpful?
+Create a data processing pipeline:
+1. Receive CSV data from webhook
+2. Use csv_decode to parse
+3. Transform to JSON with json_encode
+4. Send to external API
+5. Decode response and save
+
+## Pro Tips
+
+💡 **Chain Conversions:** Combine multiple filters for complex transformations
+
+💡 **Check Types:** Always verify data types before converting
+
+💡 **Handle Errors:** Add validation for conversion failures
+
+💡 **Use URL-Safe:** Choose URL-safe encoding for web transmission
+
+💡 **Test Edge Cases:** Try with empty, null, and special characters
+
+## Common Issues
+
+### Encoding Mismatches
+- Problem: Decoding fails
+- Solution: Ensure encoding matches decoding method
+
+### Type Conflicts
+- Problem: Conversion returns unexpected results
+- Solution: Check source data type first
+
+### Special Characters
+- Problem: URL encoding breaks
+- Solution: Use RFC3986 compliant encoding
+
+## Next Steps
+
+1. Practice basic type conversions
+2. Work with encoded data
+3. Build format transformers
+4. Create data pipelines
+5. Handle multiple formats
+
+Remember: Conversion filters let you work with any data format without writing transformation code!

@@ -1,403 +1,369 @@
 ---
+title: "Variables - Store and Use Data"
+description: "Create and manage variables to store data in your function stack"
 category: function-stack
-difficulty: advanced
+subcategory: data-manipulation
+difficulty: beginner
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv'
+- variables
+- data-storage
+- function-stack
+- basics
+- no-code
 ---
 
-[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../index.html)
+# Variables - Store and Use Data
 
 
 
+## Quick Summary
 
+> **What it is:** Containers that hold information in your function stack for later use
+> 
+> **When to use:** Storing API responses, calculations, user data, or any value you need to reference
+> 
+> **Key benefit:** Keep data organized and accessible throughout your backend logic
+> 
+> **Perfect for:** Non-developers learning to manage data flow in their applications
 
+## What You'll Learn
 
+- Creating and naming variables
+- Understanding data types
+- Setting variable values
+- Using variables in functions
+- Best practices for organization
 
+## What Are Variables?
 
+Think of variables like labeled boxes where you store things:
+- **Box** = The variable
+- **Label** = The variable name
+- **Contents** = The data value
 
+You can put anything in the box, look inside later, and use what's there!
 
+## Creating Your First Variable
 
+### Step-by-Step
 
+1. **Add Function**
+   - Click + in function stack
+   - Select "Create Variable"
 
+2. **Name Your Variable**
+   - Use descriptive names
+   - No spaces (use underscore)
+   - Example: `user_email`, `total_price`
 
+3. **Set The Value**
+   - Type directly
+   - Select from dropdowns
+   - Reference other variables
 
--   
+## Data Types Explained
 
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+### Text (String)
+```javascript
+name = "John Smith"
+email = "john@example.com"
+message = "Welcome back!"
+```
 
--   
+### Numbers (Integer/Decimal)
+```javascript
+age = 25              // Integer
+price = 19.99        // Decimal
+quantity = 3         // Integer
+```
 
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../building-with-visual-development/triggers.html)
-        -   [Middleware](../../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../database-requests/get-record.html)
-            -   [Add Record](../database-requests/add-record.html)
-            -   [Edit Record](../database-requests/edit-record.html)
-            -   [Add or Edit Record](../database-requests/add-or-edit-record.html)
-            -   [Patch Record](../database-requests/patch-record.html)
-            -   [Delete Record](../database-requests/delete-record.html)
-            -   [Bulk Operations](../database-requests/bulk-operations.html)
-            -   [Database Transaction](../database-requests/database-transaction.html)
-            -   [External Database Query](../database-requests/external-database-query.html)
-            -   [Direct Database Query](../database-requests/direct-database-query.html)
-            -   [Get Database Schema](../database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](create-variable.html)
-            -   [Update Variable](update-variable.html)
-            -   [Conditional](conditional.html)
-            -   [Switch](switch.html)
-            -   [Loops](loops.html)
-            -   [Math](math.html)
-            -   [Arrays](arrays.html)
-            -   [Objects](objects.html)
-            -   [Text](text.html)
-                    -   [Security](../security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../data-caching-redis.html)
-        -   [Custom Functions](../custom-functions.html)
-        -   [Utility Functions](../utility-functions.html)
-        -   [File Storage](../file-storage.html)
-        -   [Cloud Services](../cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../filters/manipulation.html)
-        -   [Math](../../filters/math.html)
-        -   [Timestamp](../../filters/timestamp.html)
-        -   [Text](../../filters/text.html)
-        -   [Array](../../filters/array.html)
-        -   [Transform](../../filters/transform.html)
-        -   [Conversion](../../filters/conversion.html)
-        -   [Comparison](../../filters/comparison.html)
-        -   [Security](../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../data-types/text.html)
-        -   [Expression](../../data-types/expression.html)
-        -   [Array](../../data-types/array.html)
-        -   [Object](../../data-types/object.html)
-        -   [Integer](../../data-types/integer.html)
-        -   [Decimal](../../data-types/decimal.html)
-        -   [Boolean](../../data-types/boolean.html)
-        -   [Timestamp](../../data-types/timestamp.html)
-        -   [Null](../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+### Boolean (True/False)
+```javascript
+is_active = true
+has_subscription = false
+email_verified = true
+```
 
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+### Objects (Structured Data)
+```javascript
+user = {
+  name: "John",
+  age: 25,
+  email: "john@example.com"
+}
+```
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+### Arrays (Lists)
+```javascript
+colors = ["red", "blue", "green"]
+prices = [10, 20, 30, 40]
+users = [user1, user2, user3]
+```
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+## Common Use Cases
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+### Store API Response
+```javascript
+// After calling external API
+weather_data = API_Response
+temperature = weather_data.current.temp
+```
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+### Calculate Values
+```javascript
+// Store calculation result
+subtotal = 100
+tax_rate = 0.08
+tax_amount = subtotal * tax_rate
+total = subtotal + tax_amount
+```
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+### Build Response Data
+```javascript
+// Prepare data to return
+response = {
+  success: true,
+  message: "Order completed",
+  order_id: 12345,
+  total: total
+}
+```
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../xano-features/metadata-api/search.html)
-        -   [File](../../../xano-features/metadata-api/file.html)
-        -   [Request History](../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+## Integration Examples
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+### With n8n
+```javascript
+// n8n sends data
+webhook_data = Input
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+// Store in variables
+customer_name = webhook_data.name
+order_items = webhook_data.items
+total_amount = webhook_data.total
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+// Process and return
+processed_order = {
+  customer: customer_name,
+  items: order_items,
+  amount: total_amount,
+  status: "received"
+}
+```
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+### With WeWeb
+```javascript
+// WeWeb form submission
+form_data = Input
 
--   
-    Security
-    
-    -   Best Practices
+// Create variables for validation
+email = form_data.email
+password = form_data.password
+confirm_password = form_data.confirm
 
-[Powered by GitBook]
+// Store validation result
+passwords_match = (password == confirm_password)
+```
 
-On this page
+## Variable Scope
 
--   
-    
-    [Creating a variable](#creating-a-variable)
+### Function Stack Scope
+- Variables exist within current function
+- Available to all steps after creation
+- Destroyed when function completes
 
--   [Add a Create Variable function.](#add-a-create-variable-function)
+### Passing Between Functions
+```javascript
+// Function 1: Create variable
+user_id = 123
 
--   [Give your variable a name and a value.](#give-your-variable-a-name-and-a-value)
+// Call Function 2 with variable
+Function2(user_id)
 
-Was this helpful?
+// Function 2: Receive as input
+received_id = Input.user_id
+```
 
-Copy
+## Dynamic Values
 
+### Using Expressions
+```javascript
+// Reference other variables
+full_name = first_name + " " + last_name
 
-2.  Functions
-3.  [Data Manipulation](../data-manipulation.html)
+// Use dot notation
+user_email = user.profile.email
 
-Create Variable 
-===============
+// Array access
+first_item = items[0]
+```
 
-Variables as containers that hold information. Their sole purpose is to label and store data in memory to be sent to your front-end or used in another function.
+### With Filters
+```javascript
+// Apply filters to transform
+upper_name = name | uppercase
+rounded_price = price | round(2)
+formatted_date = timestamp | format("MM/DD/YYYY")
+```
 
- 
+## Best Practices
 
-Creating a variable
+### Naming Conventions
+```javascript
+// Good names
+user_email
+total_price
+is_verified
+order_items
 
-<div>
+// Avoid
+var1
+temp
+data
+x
+```
 
-1
+### Organize by Purpose
+```javascript
+// Input variables
+input_email = Input.email
+input_password = Input.password
 
-###  
+// Processing variables
+hashed_password = hash(input_password)
+user_record = database_result
 
-Add a Create Variable function.
+// Output variables
+response_message = "Success"
+response_data = user_record
+```
 
-2
+### Initialize Early
+```javascript
+// Set defaults at start
+error_messages = []
+total_cost = 0
+is_valid = true
 
-###  
+// Update as needed
+if (condition) {
+  error_messages.push("Invalid input")
+  is_valid = false
+}
+```
 
-Give your variable a name and a value.
+## Common Patterns
 
-The value of the variable can be anything you\'d like, from simple text and integers all the way to large, complex data types.
+### Accumulator Pattern
+```javascript
+// Start with empty/zero
+total = 0
+items = []
 
-Notice how the data type indicator changes as your value is updated. It\'s important to pay attention to this indicator, as incorrect data types can cause problems.
+// Add to it in loop
+For Each item {
+  total = total + item.price
+  items.push(item.name)
+}
+```
 
-![](../../../_gitbook/imageb4e8.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FFdOH8mhwJi15qnDwBMPd%252FCleanShot%25202025-01-10%2520at%252011.24.47.png%3Falt%3Dmedia%26token%3Dc3c61e2a-6a62-46e7-b448-c1778a4f590f&width=768&dpr=4&quality=100&sign=b6a54fcb&sv=2)
+### Flag Pattern
+```javascript
+// Set flag variable
+has_errors = false
 
-</div>
+// Check conditions
+if (email == null) {
+  has_errors = true
+}
 
-Last updated 7 months ago
+// Use flag later
+if (has_errors) {
+  return error_response
+}
+```
 
-Was this helpful?
+### Temporary Storage
+```javascript
+// Store while processing
+temp_user = Get_User()
+temp_user.last_login = now()
+Update_User(temp_user)
+```
+
+## Data Type Indicators
+
+Watch the type indicator to avoid issues:
+- 📝 Text (String)
+- 🔢 Number (Integer/Decimal)
+- ✓❌ Boolean
+- {} Object
+- [] Array
+- ⌀ Null
+
+## Try This
+
+Create a user welcome flow:
+1. Create variable for user name
+2. Create variable for signup date
+3. Create welcome message variable
+4. Combine them into response object
+5. Test with sample data
+
+## Pro Tips
+
+💡 **Use Clear Names:** `customer_email` beats `email1` every time
+
+💡 **Group Related:** Keep similar variables together in your stack
+
+💡 **Check Types:** Always verify the data type indicator
+
+💡 **Document Complex:** Add descriptions for complex variable logic
+
+💡 **Reuse Common:** Create variables for values used multiple times
+
+## Common Gotchas
+
+### Type Mismatches
+```javascript
+// Problem
+age = "25"          // String
+new_age = age + 1   // "251" not 26!
+
+// Solution
+age = 25            // Number
+new_age = age + 1   // 26
+```
+
+### Undefined Variables
+```javascript
+// Problem
+result = user.name  // Error if user doesn't exist
+
+// Solution
+if (user) {
+  result = user.name
+}
+```
+
+### Overwriting Values
+```javascript
+// Problem
+total = 100
+total = 50  // Lost original value!
+
+// Solution
+original_total = 100
+discounted_total = 50
+```
+
+## Next Steps
+
+1. Practice creating variables
+2. Work with different data types
+3. Build calculation chains
+4. Pass variables between functions
+5. Create complex data structures
+
+Remember: Variables are the building blocks of your backend logic - master them and you can build anything!
