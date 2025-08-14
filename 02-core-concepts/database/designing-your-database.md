@@ -1,535 +1,568 @@
 ---
+title: "Designing Your Database - Build a Strong Foundation"
+description: "Learn how to plan and design your database structure in Xano. Master table relationships, field selection, and best practices for scalable no-code applications."
 category: database
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/database
+subcategory: planning
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - Database Design
+  - Table Relationships
+  - Schema Planning
+  - Data Modeling
+  - Best Practices
+  - Normalization
+  - Field Types
+difficulty: intermediate
+reading_time: 10 minutes
+last_updated: '2025-01-23'
+prerequisites:
+  - Basic understanding of databases
+  - Xano workspace created
 ---
 
+# Designing Your Database - Build a Strong Foundation
+
+## 📋 **Quick Summary**
+
+**What it does:** Database design is planning how to organize your data into tables and relationships before building, ensuring efficient storage and easy retrieval of information.
+
+**Why it matters:** Good design means:
+- Faster performance as your app grows
+- Less data duplication and errors
+- Easier maintenance and updates
+- Simpler integration with n8n and WeWeb
+- Scalable foundation for future features
+
+**Time to implement:** 1-2 hours planning saves weeks of rework
+
 ---
-apple-mobile-web-app-status-bar-style: black
-
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'designing-your-database'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../the-function-stack/filters/manipulation.html)
-        -   [Math](../the-function-stack/filters/math.html)
-        -   [Timestamp](../the-function-stack/filters/timestamp.html)
-        -   [Text](../the-function-stack/filters/text.html)
-        -   [Array](../the-function-stack/filters/array.html)
-        -   [Transform](../the-function-stack/filters/transform.html)
-        -   [Conversion](../the-function-stack/filters/conversion.html)
-        -   [Comparison](../the-function-stack/filters/comparison.html)
-        -   [Security](../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../the-function-stack/data-types/text.html)
-        -   [Expression](../the-function-stack/data-types/expression.html)
-        -   [Array](../the-function-stack/data-types/array.html)
-        -   [Object](../the-function-stack/data-types/object.html)
-        -   [Integer](../the-function-stack/data-types/integer.html)
-        -   [Decimal](../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../the-function-stack/data-types/timestamp.html)
-        -   [Null](../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](database-basics/using-the-xano-database.html)
-        -   [Field Types](database-basics/field-types.html)
-        -   [Relationships](database-basics/relationships.html)
-        -   [Database Views](database-basics/database-views.html)
-        -   [Export and Sharing](database-basics/export-and-sharing.html)
-        -   [Data Sources](database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](database-performance-and-maintenance/storage.html)
-        -   [Indexing](database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [Table Relationships](#table-relationships)
-
--   [Database Fields](#database-fields)
-
--   [Planning for the Future](#planning-for-the-future)
-
-Was this helpful?
-
-Copy
-
-1.  [The Database](getting-started-shortcuts.html)
-
-Designing your Database 
-=======================
-
-**Quick Summary**
-
-Good database design starts with organizing your information into logical groups, like putting customer details in one table and order history in another. These groups are then connected through common identifiers using a table reference field - like a customer ID that links a person to all their orders - which helps maintain accuracy and avoid duplicating information.
-
-Think of designing a database like organizing your home. Before you buy storage containers or rearrange your furniture, you need a plan. The same goes for databases - careful planning prevents headaches later.
-
-[**Hint**]
-
-Use a tool like [**Excalidraw**](https://excalidraw.com/) to help you when designing your database.
-
-Start by listing everything you need to store. If you\'re building a bookstore database, you\'ll need to track books, authors, customers, and sales. Just like you wouldn\'t store your kitchen items in your bathroom, each type of information needs its own logical home in the database.
-
-![](../_gitbook/image4cc7.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FbYkpMp4eDyBJsYcIJ9x6%252FCleanShot%25202024-12-14%2520at%252012.56.18.png%3Falt%3Dmedia%26token%3Dd07aa586-87c8-4823-8316-760ba6bbf85a&width=768&dpr=4&quality=100&sign=92488c32&sv=2)
-
-Using Excalidraw to begin the database design process.
-
-Let\'s draw these to look like individual items --- these will represent the tables that we\'ll create.
-
-![](../_gitbook/image66c9.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F8TS57szni2Svwd9G4CZ6%252FCleanShot%25202024-12-14%2520at%252012.57.04.png%3Falt%3Dmedia%26token%3D24371295-06ab-450b-b4fc-05c7308ee61f&width=768&dpr=4&quality=100&sign=8bd639ba&sv=2)
-
- 
-
-Table Relationships
-
-To illustrate multiple examples, we\'ve added a **Publishers** table to our visualization.
-
-Consider how these pieces connect. A book has one or more authors, and an author can write multiple books. A customer can buy many books, and a book can be bought by many customers. These relationships are crucial - they\'re like the hallways connecting rooms in your house, allowing you to move naturally between related information.
-
-**One-to-One**
-
--   
-    
-        
-    
-    Each thing on one side matches exactly one thing on the other side. Like a person and their social security number: one person has one number, and each number belongs to one person
-    
-**One-to-Many**
-
--   
-    
-        
-    
-    One thing on one side can connect to multiple things on the other side, but those multiple things each only connect back to one thing. Like a mother and her children: one mother can have many children, but each child has only one mother
-    
-**Many-to-Many**
-
--   
-    
-        
-    
-    Things on both sides can connect to multiple things on the other side. Like students and classes: one student takes many classes, and each class has many students
-    
-For our book store example, let\'s visualize the relationships between our tables.
-
- 
-
-Database Fields
-
-**Think about the essential characteristics that describe each thing**. Just like how a person\'s profile might include their name, birthday, and contact info, each table should contain the core pieces of information that defines that thing. When referring to all of the fields in a database table as a whole, we\'ll call this **schema**.
-
-Let\'s use our bookstore example:
-
--   
-    
-        
-    
-    For Books: You\'ll want the ISBN (like a book\'s fingerprint), title, publication date, current price, and maybe format (hardcover/paperback). You don\'t need to store the author\'s name here - that\'s what the connection to the Authors table is for.
-    
--   
-    
-        
-    
-    For Authors: You\'ll store their name, perhaps birth date, nationality, and a brief biography. You don\'t need to store a list of their books - the relationship between tables handles that.
-    
--   
-    
-        
-    
-    For Customers: You\'ll want their name, contact information, shipping addresses, and maybe their preferences or a membership status. You don\'t need to store their purchase history here - that\'s tracked through the Sales table.
-    
-**\"Does this information describe the core thing I\'m tracking, or is it really about something else?\"**
-If you find yourself wanting to store a list of things (like \"all books by this author\" or \"all orders from this customer\"), that\'s usually a sign you need a relationship between tables rather than storing that data directly.
-
-**Consider whether the information might change over time**.
-For example, book prices change frequently, so you might want both a \"currentPrice\" in the Books table and a \"salePrice\" in the Sales Items table. This lets you track both what a book costs now and what customers actually paid for it in the past.
-
-**Watch out for duplicate information.**
-If you\'re storing an author\'s contact details, store them once and reference them when needed, rather than copying them into every book record. This is like having one toolbox in your garage instead of keeping duplicate tools in every room. In Xano, this is accomplished with [table reference fields](database-basics/field-types.html#table-reference).
-
-**How many fields is \'too many\'?**
-This is not a black-and-white question to answer. Some tables can have a significant number of fields, but the dataset is small --- this is usually okay. If you expect this table to grow in size over time, it\'s always better to split data types into separate tables --- for example, if users have companies attached, you should probably store those companies in a separate table and use [relationships](designing-your-database.html#table-relationships).
-
- 
-
-Planning for the Future
-
-**Think about what information you\'ll need to find quickly.**
-Just as you might keep frequently used items in easily accessible drawers, consider what data you\'ll search for most often. This helps you decide how to organize and[ ][index][ ]your information.
-
-**Think about how information might expand in the future.**
-Initially, you might only need basic book formats (hardcover and paperback). But what happens when you want to add audiobooks? You\'ll need new fields like runtime, narrator, and audio format. Instead of hard-coding format types, you could create a separate formats table, and use a table reference in your books table that lets you add new types without changing your core structure.
-
-Suppose you create a database table for storing book formats directly within the books table:
-
-**Books Table**
-
-BookID
-
-Title
-
-Author
-
-Hardcover
-
-Paperback
-
-Audiobook
-
-This design is inflexible because each time you introduce a new format, you must alter the table structure. Instead, use a separate formats table and establish a relationship with the books table.
-
-**Books Table**
-
-BookID
-
-Title
-
-Author
-
-**Formats Table**
-
-FormatID
-
-FormatType
-
-**BookFormats Table**
-
-BookID
-
-FormatID
-
-This flexible table design allows you to add new formats easily without changing the core structure.
-
-**Finally, remember that simple is usually better.**
-Like a well-organized home where everything has its place, a good database design should feel natural and intuitive. If you find yourself creating complicated structures to store simple information, step back and reconsider your approach.
-
-Remember: **A well-designed database makes everything else easier.**
-
-Last updated 3 months ago
-
-Was this helpful?
+
+## What You'll Learn
+
+- Planning your database structure effectively
+- Creating and managing table relationships
+- Choosing the right field types
+- Avoiding common design mistakes
+- Building for scalability
+- Optimizing for no-code integrations
+
+## Why Database Design Matters
+
+### 🎯 **The Cost of Poor Design**
+
+Imagine building a house without blueprints:
+```
+Poor Database Design:
+❌ Duplicate customer data in 5 places
+❌ Can't find related orders quickly
+❌ Updates require changing multiple tables
+❌ Performance degrades with growth
+❌ Integration becomes complex
+
+Good Database Design:
+✅ Single source of truth for data
+✅ Fast queries with relationships
+✅ Update once, reflects everywhere
+✅ Scales to millions of records
+✅ Clean API endpoints for n8n/WeWeb
+```
+
+### 💡 **Real-World Impact**
+
+**Without proper design:**
+- A customer address change requires updating 10 different places
+- Finding all orders for a customer takes 30 seconds
+- Your n8n workflows become complex workarounds
+
+**With proper design:**
+- Update address once, automatically reflects everywhere
+- Instant retrieval of customer orders
+- Simple, clean n8n workflows
+
+## Planning Your Database
+
+### 📝 **Step 1: List Your Data Types**
+
+Start by identifying what you need to store:
+
+```yaml
+E-commerce Example:
+- Customers (names, emails, addresses)
+- Products (names, prices, descriptions)
+- Orders (who bought what, when)
+- Categories (product groupings)
+- Reviews (customer feedback)
+- Inventory (stock levels)
+```
+
+**Pro Tip:** Use a visual tool like [Excalidraw](https://excalidraw.com/) or draw.io to map this out!
+
+### 🏗️ **Step 2: Group Related Information**
+
+Create tables for each major entity:
+
+```
+Customers Table:
+├── customer_id (unique identifier)
+├── email
+├── name
+├── created_at
+└── status
+
+Products Table:
+├── product_id
+├── name
+├── price
+├── description
+└── category_id (links to Categories)
+
+Orders Table:
+├── order_id
+├── customer_id (links to Customers)
+├── order_date
+├── total_amount
+└── status
+```
+
+### 🔗 **Step 3: Define Relationships**
+
+Connect your tables logically:
+
+```mermaid
+Customers ──one-to-many──> Orders
+Orders ──many-to-many──> Products
+Products ──many-to-one──> Categories
+Customers ──one-to-many──> Reviews
+```
+
+## Understanding Table Relationships
+
+### 🔄 **Types of Relationships**
+
+#### **One-to-One (1:1)**
+One record in Table A relates to exactly one record in Table B.
+
+```yaml
+Example: User Profile
+User Table ←→ Profile Table
+- Each user has one profile
+- Each profile belongs to one user
+
+When to use:
+- Separating sensitive data
+- Optional detailed information
+- Performance optimization
+```
+
+#### **One-to-Many (1:N)**
+One record in Table A relates to multiple records in Table B.
+
+```yaml
+Example: Customer Orders
+Customer Table → Orders Table
+- One customer has many orders
+- Each order belongs to one customer
+
+When to use:
+- Parent-child relationships
+- Ownership scenarios
+- Hierarchical data
+```
+
+#### **Many-to-Many (M:N)**
+Multiple records in Table A relate to multiple records in Table B.
+
+```yaml
+Example: Students and Courses
+Students Table ←→ Enrollments Table ←→ Courses Table
+- Students take multiple courses
+- Courses have multiple students
+- Junction table (Enrollments) connects them
+
+When to use:
+- Complex relationships
+- Tagging systems
+- Shared resources
+```
+
+### 🎨 **Implementing in Xano**
+
+Use Table Reference fields to create relationships:
+
+```javascript
+// In Orders table
+customer_id: {
+  type: "Table Reference",
+  table: "customers",
+  display: "email"  // Shows customer email in UI
+}
+
+// This automatically enables:
+// - Dropdown selection in forms
+// - Data validation
+// - Cascade options
+// - API relationships
+```
+
+## Choosing the Right Fields
+
+### 📊 **Field Selection Strategy**
+
+Ask yourself for each piece of data:
+
+1. **"Does this describe the main entity?"**
+   - YES → Add as field
+   - NO → Might belong in another table
+
+2. **"Will this have multiple values?"**
+   - YES → Create separate table with relationship
+   - NO → Can be a field
+
+3. **"Will this change independently?"**
+   - YES → Separate table
+   - NO → Can be a field
+
+### 🗂️ **Common Field Patterns**
+
+```yaml
+Core Fields (Every Table):
+- id: Auto-incrementing integer
+- created_at: Timestamp
+- updated_at: Timestamp
+
+User Data:
+- email: Email field (built-in validation)
+- password: Password field (auto-hashed)
+- status: Enum (active, inactive, suspended)
+
+Product Data:
+- price: Decimal (for accuracy)
+- quantity: Integer
+- description: Long text
+- image_url: File reference
+
+Relationships:
+- user_id: Table reference
+- category_id: Table reference
+- tags: Many-to-many junction
+```
+
+## Avoiding Data Duplication
+
+### ❌ **Bad Example: Duplicated Data**
+
+```javascript
+// Orders table with duplicated customer info
+{
+  order_id: 1,
+  customer_name: "John Doe",      // Duplicated
+  customer_email: "john@example", // Duplicated
+  customer_phone: "555-0100",     // Duplicated
+  product_name: "Widget",         // Duplicated
+  product_price: 29.99,           // Duplicated
+  quantity: 2
+}
+
+// Problems:
+// - Customer changes email → Update everywhere
+// - Product price changes → Historical data wrong
+// - Storage waste
+```
+
+### ✅ **Good Example: Normalized Data**
+
+```javascript
+// Orders table with references
+{
+  order_id: 1,
+  customer_id: 42,    // Reference to customers table
+  order_date: "2024-01-15",
+  status: "completed"
+}
+
+// Order_Items junction table
+{
+  order_id: 1,
+  product_id: 99,     // Reference to products
+  quantity: 2,
+  price_at_purchase: 29.99  // Snapshot of price
+}
+
+// Benefits:
+// - Update customer once
+// - Products stay independent
+// - Historical accuracy
+// - Efficient storage
+```
+
+## Planning for Growth
+
+### 📈 **Scalability Considerations**
+
+Design for 10x your expected size:
+
+```yaml
+Current: 100 customers
+Design for: 1,000 customers
+Plan for: 10,000 customers
+
+Why this matters:
+- Indexes become crucial at scale
+- Relationships affect query speed
+- Storage costs multiply
+- API response times matter
+```
+
+### 🔮 **Future-Proofing Strategies**
+
+1. **Use Flexible Schemas**
+   ```javascript
+   // Instead of:
+   has_premium: boolean
+   
+   // Use:
+   subscription_tier: enum ['free', 'basic', 'premium', 'enterprise']
+   ```
+
+2. **Plan for Extensions**
+   ```javascript
+   // Products table ready for variants
+   products: {
+     id, name, base_price, description
+   }
+   
+   product_variants: {
+     id, product_id, size, color, price_modifier
+   }
+   ```
+
+3. **Consider Metadata Fields**
+   ```javascript
+   // Flexible additional data
+   metadata: {
+     type: "JSON",
+     // Can store any additional properties
+   }
+   ```
+
+## Integration Best Practices
+
+### 🔧 **Designing for n8n Workflows**
+
+Structure your data for easy automation:
+
+```yaml
+Good for n8n:
+- Clear single-purpose tables
+- Consistent naming conventions
+- Status fields for workflow triggers
+- Timestamp fields for scheduling
+- Webhook-friendly structures
+
+Example:
+orders table with:
+- status: triggers different workflows
+- processed_at: prevents double processing
+- webhook_sent: tracks notifications
+```
+
+### 🌐 **Designing for WeWeb**
+
+Optimize for frontend display:
+
+```yaml
+Good for WeWeb:
+- Denormalized view tables for lists
+- Computed fields for displays
+- Proper indexes for filtering
+- Pagination-ready structures
+
+Example:
+customer_summary view:
+- Combines customer + order stats
+- Pre-calculated total_spent
+- Ready for collection binding
+```
+
+## Common Design Patterns
+
+### 🏢 **Multi-Tenant SaaS**
+
+```yaml
+Pattern: Company-based isolation
+- companies table (tenant identifier)
+- All tables include company_id
+- Row-level security via company_id
+
+Benefits:
+- Data isolation
+- Easy client filtering
+- Scalable architecture
+```
+
+### 🛒 **E-Commerce**
+
+```yaml
+Pattern: Products-Orders-Customers
+- products ← product_variants
+- customers → orders → order_items → products
+- categories ← products → reviews
+
+Key considerations:
+- Price history in order_items
+- Inventory tracking
+- Cart abandonment data
+```
+
+### 📝 **Content Management**
+
+```yaml
+Pattern: Flexible content types
+- content_types table (defines structures)
+- content table (stores all content)
+- content_fields (metadata/custom fields)
+
+Benefits:
+- Extensible without schema changes
+- Version control ready
+- Multi-language support
+```
+
+## Try This: Design Your First Database
+
+### 📚 **Exercise: Book Library System**
+
+Design a database for a library management system:
+
+**Requirements:**
+- Track books and authors
+- Handle member checkouts
+- Record return dates
+- Fine calculations
+- Multiple copies of same book
+
+**Your design should include:**
+
+1. **Tables needed:**
+   ```
+   books (ISBN, title, publication_year)
+   authors (name, biography)
+   members (name, email, membership_date)
+   copies (book_id, copy_number, status)
+   checkouts (member_id, copy_id, checkout_date, due_date)
+   ```
+
+2. **Relationships:**
+   ```
+   books ←many-to-many→ authors (via book_authors)
+   books →one-to-many→ copies
+   members →one-to-many→ checkouts
+   copies →one-to-many→ checkouts
+   ```
+
+3. **Key fields:**
+   ```
+   checkouts.returned_at (nullable timestamp)
+   checkouts.fine_amount (calculated)
+   copies.status (available, checked_out, lost)
+   ```
+
+## Common Mistakes to Avoid
+
+### ❌ **Mistake 1: Storing Lists in Fields**
+
+```javascript
+// Wrong
+products: {
+  tags: "electronics,sale,featured"  // Comma-separated
+}
+
+// Right
+product_tags: {
+  product_id: 1,
+  tag_id: 5
+}
+```
+
+### ❌ **Mistake 2: Missing Timestamps**
+
+```javascript
+// Always include
+created_at: timestamp
+updated_at: timestamp
+
+// Often useful
+deleted_at: timestamp (soft deletes)
+last_accessed_at: timestamp
+```
+
+### ❌ **Mistake 3: Wrong Field Types**
+
+```javascript
+// Wrong
+price: integer  // Loses decimal precision
+
+// Right
+price: decimal(10,2)  // Maintains accuracy
+```
+
+### ❌ **Mistake 4: Over-Normalization**
+
+```javascript
+// Too normalized (unnecessary complexity)
+person_first_names table
+person_last_names table
+person_middle_names table
+
+// Appropriate
+persons: {
+  first_name, last_name, middle_name
+}
+```
+
+## Performance Tips
+
+### ⚡ **Design for Speed**
+
+1. **Index Strategy**
+   ```sql
+   -- Index fields used in:
+   WHERE clauses (filters)
+   JOIN conditions (relationships)
+   ORDER BY (sorting)
+   ```
+
+2. **Denormalization When Needed**
+   ```javascript
+   // For read-heavy operations, consider:
+   order_summary: {
+     customer_name,  // Duplicated but fast
+     total_items,    // Pre-calculated
+     total_amount    // Pre-calculated
+   }
+   ```
+
+3. **Archival Strategy**
+   ```yaml
+   Active tables: Current year data
+   Archive tables: Historical data
+   Benefits: Faster queries on active data
+   ```
+
+## Next Steps
+
+After designing your database:
+
+1. **Create tables in Xano** following your design
+2. **Set up relationships** using table references
+3. **Add sample data** to test your structure
+4. **Create API endpoints** for CRUD operations
+5. **Test with n8n/WeWeb** integrations
+6. **Monitor and optimize** based on usage
+
+## Related Documentation
+
+- [Database Basics](./database-basics.md)
+- [Field Types](./field-types.md)
+- [Relationships](./relationships.md)
+- [Database Views](./database-views.md)
+- [Performance Optimization](./indexing.md)
