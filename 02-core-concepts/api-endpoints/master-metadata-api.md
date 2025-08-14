@@ -1,1305 +1,567 @@
 ---
+title: "Master Metadata API - Instance and Snippet Management Guide"
+description: "Master the Xano Master Metadata API for programmatic instance management, snippet control, and account-level operations for no-code automation"
 category: api-endpoints
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/api-endpoints
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - Master Metadata API
+  - Instance Management
+  - Snippets
+  - Account Management
+  - Personal Access Token
+difficulty: advanced
+reading_time: 12 minutes
+last_updated: '2025-01-23'
+prerequisites:
+  - Personal Access Token configured
+  - Understanding of Xano instances
+  - Basic API authentication knowledge
 ---
 
+# Master Metadata API - Instance and Snippet Management
+
+## 📋 **Quick Summary**
+
+**What it does:** The Master Metadata API provides account-level access to manage your Xano instances, snippets, and access tokens programmatically.
+
+**Why it matters:** This enables you to:
+- List and manage multiple Xano instances from one API
+- Build multi-tenant applications with instance switching
+- Automate snippet distribution and access control
+- Create admin dashboards for Xano account management
+
+**Time to implement:** 15-30 minutes for basic instance listing, hours for full snippet management
+
 ---
-apple-mobile-web-app-status-bar-style: black
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'master-metadata-api'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## What You'll Learn
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+- How to authenticate with Personal Access Tokens
+- Managing multiple Xano instances programmatically  
+- Working with snippets and access tokens
+- Building instance selection interfaces
+- Best practices for account-level operations
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+## Understanding the Master Metadata API
 
+Think of the Master Metadata API as your command center for managing your entire Xano account - like having administrative access to all your instances and shared resources from a single API.
 
+### 🎯 **Perfect For:**
+- Multi-tenant SaaS applications
+- Agency dashboards managing client instances
+- Snippet marketplace applications
+- Account management interfaces
+- Instance switching functionality
 
+## API Authentication
 
+### Personal Access Token Setup
 
+The Master Metadata API requires a Personal Access Token (PAT) for authentication:
 
+1. Navigate to your Xano account settings
+2. Generate a Personal Access Token
+3. Store securely (never expose in frontend code)
+4. Use as Bearer token in API requests
 
+### Authentication Format
 
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../the-function-stack/filters/manipulation.html)
-        -   [Math](../../the-function-stack/filters/math.html)
-        -   [Timestamp](../../the-function-stack/filters/timestamp.html)
-        -   [Text](../../the-function-stack/filters/text.html)
-        -   [Array](../../the-function-stack/filters/array.html)
-        -   [Transform](../../the-function-stack/filters/transform.html)
-        -   [Conversion](../../the-function-stack/filters/conversion.html)
-        -   [Comparison](../../the-function-stack/filters/comparison.html)
-        -   [Security](../../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../the-function-stack/data-types/text.html)
-        -   [Expression](../../the-function-stack/data-types/expression.html)
-        -   [Array](../../the-function-stack/data-types/array.html)
-        -   [Object](../../the-function-stack/data-types/object.html)
-        -   [Integer](../../the-function-stack/data-types/integer.html)
-        -   [Decimal](../../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../../the-function-stack/data-types/timestamp.html)
-        -   [Null](../../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../instance-settings/backup-and-restore.html)
-        -   [Security Policy](../instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](master-metadata-api.html)
-        -   [Tables and Schema](tables-and-schema.html)
-        -   [Content](content.html)
-        -   [Search](search.html)
-        -   [File](file.html)
-        -   [Request History](request-history.html)
-        -   [Workspace Import and Export](workspace-import-and-export.html)
-        -   [Token Scopes Reference](token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-1.  [Xano Features](../snippets.html)
-2.  Metadata API
-
-Master Metadata API 
-===================
-
-The master Metadata API allows you to browse and retrieve Instances of an account associated with a Personal Access Token. It is especially useful for displaying an account\'s different Instances in a UI.
-
-The master Metadata API Swagger documentation can be accessed by the following URL:
-
-**https://app.xano.com/api:meta**
-
-###  
-
-Instance
-
-![](../../_gitbook/image4889.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FAXuELCBYrieskCgVVade%252FCleanShot%25202023-05-22%2520at%252014.28.26.png%3Falt%3Dmedia%26token%3Dddbebce8-c052-45ff-a989-ef0c6145df81&width=768&dpr=4&quality=100&sign=2b64d2a4&sv=2)
-
-####  
-
-GET /instance/{name} - Get Single Instance
-
-The GET request will provide details of a specific instance when provided the instance name
-
-###  
-
-get instance
-
-get
-
-[https://app.xano.com/api:meta]/instance/[{name}]
-
-get instance
-Authentication: required
-
-Authorizations
-
-Path parameters
-
-[[name][string][Required]]
-
-Responses
-
-[200]
-
-Success!
-
-application/json
-
-[[Response][object]]
-
-Show properties
-
-[400]
-
-Input Error. Check the request payload for issues.
-
-[403]
-
-Access denied. Additional privileges are needed access the requested resource.
-
-[404]
-
-Not Found. The requested resource does not exist.
-
-[429]
-
-Rate Limited. Too many requests.
-
-[500]
-
-Unexpected error
-
-get
-
-/instance/[{name}]
-
-[HTTP]
-
-HTTPcURLJavaScriptPython
-
-Copy
-
-``` 
-GET /api:meta/instance/{name} HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-```
-
-Test it
-
-[[200][]]
-
-Success!
-
-Copy
-
-``` 
-
-```
-
-####  
-
-GET /instance - Browse Instances
-
-The GET request will provide a list of Instances associated with an account.
-
-###  
-
-browse instances
-
-get
-
-[https://app.xano.com/api:meta]/instance
-
-browse instances
-Authentication: required
-
-Authorizations
-
-Responses
-
-[200]
-
-Success!
-
-application/json
-
-[[Response][object\[\]]]
-
-Show properties
-
-[400]
-
-Input Error. Check the request payload for issues.
-
-[403]
-
-Access denied. Additional privileges are needed access the requested resource.
-
-[404]
-
-Not Found. The requested resource does not exist.
-
-[429]
-
-Rate Limited. Too many requests.
-
-[500]
-
-Unexpected error
-
-get
-
-/instance
-
-[HTTP]
-
-HTTPcURLJavaScriptPython
-
-Copy
-
-``` 
-GET /api:meta/instance HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-```
-
-Test it
-
-[[200][]]
-
-Success!
-
-Copy
-
-``` 
-[
-  
-]
-```
-
--   
-    
-        
-    
-    The response provides both the Xano domain and the custom domain (if applicable).
-    
--   
-    
-        
-    
-    The meta\_api value will provide access to the Metadata API for the given Instance.
-    
--   
-    
-        
-    
-    The JSON of the Metadata API Swagger for the Instance is also provided.
-    
-###  
-
-Snippet / Token
-
-These endpoints provide functionality for managing private snippet access tokens.
-
-![](../../_gitbook/imagee3f7.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FFw0ycEE3a04haAEFsRcx%252FCleanShot%25202023-05-22%2520at%252014.30.39.png%3Falt%3Dmedia%26token%3Ddefd88f5-d6b6-4765-ba31-be6ac040325e&width=768&dpr=4&quality=100&sign=4de14e59&sv=2)
-
-For reference, the **canonical ID** of your snippet is found at the end of the URL.
-
-Copy
-
-``` 
-https://www.xano.com/snippet/abC123Zx/
-```
-
-In this example URL, **abC123Zx** is our canonical.
-
-####  
-
-POST /snippet/{canonical}/token/
-
-updates a snippet token
-
-post
-
-[https://app.xano.com/api:meta]/snippet/[{canonical}]/token/[{token}]
-
-updates a snippet token
-Authentication: required
-
-Authorizations
-
-Path parameters
-
-[[canonical][string][Required]]
-
-[[token][string][Required]]
-
-Body
-
-[application/json]
-
-application/jsonmultipart/form-data
-
-[[max\_installs][integer · int64][Required]]
-
-[[current\_installs][integer · int64][Required]]
-
-Responses
-
-[200]
-
-Success!
-
-application/json
-
-[[Response][object]]
-
-Show properties
-
-[400]
-
-Input Error. Check the request payload for issues.
-
-[403]
-
-Access denied. Additional privileges are needed access the requested resource.
-
-[404]
-
-Not Found. The requested resource does not exist.
-
-[429]
-
-Rate Limited. Too many requests.
-
-[500]
-
-Unexpected error
-
-post
-
-/snippet/[{canonical}]/token/[{token}]
-
-[HTTP]
-
-HTTPcURLJavaScriptPython
-
-Copy
-
-``` 
-POST /api:meta/snippet/{canonical}/token/{token} HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Content-Type: application/json
-Accept: */*
-Content-Length: 39
-
-{
-  "max_installs": 1,
-  "current_installs": 1
+```javascript
+headers: {
+  'Authorization': 'Bearer YOUR_PERSONAL_ACCESS_TOKEN',
+  'Content-Type': 'application/json'
 }
 ```
 
-[application/json]
+## Instance Management
 
-application/jsonmultipart/form-data
+### Listing All Instances
 
-Test it
+Get a complete list of instances associated with your account:
 
-[[200][]]
-
-Success!
-
-Copy
-
-``` 
-{
-  "created_at": "2023-05-09 21:31:20+0000",
-  "updated_at": "2023-05-09 21:31:20+0000",
-  "token": "OL3T4JYM",
-  "max_installs": 23,
-  "current_installs": 1
-}
+```javascript
+GET https://app.xano.com/api:meta/instance
+Authorization: Bearer YOUR_PAT
 ```
 
-####  
-
-DELETE /snippet/{canonical}/token/{token}
-
-Use this endpoint to delete an access token from a snippet.
-
-###  
-
-deletes a snippet token
-
-delete
-
-[https://app.xano.com/api:meta]/snippet/[{canonical}]/token/[{token}]
-
-deletes a snippet token
-Authentication: required
-
-Authorizations
-
-Path parameters
-
-[[canonical][string][Required]]
-
-[[token][string][Required]]
-
-Responses
-
-[200]
-
-Success!
-
-application/json
-
-[[Response][object]]
-
-[400]
-
-Input Error. Check the request payload for issues.
-
-[403]
-
-Access denied. Additional privileges are needed access the requested resource.
-
-[404]
-
-Not Found. The requested resource does not exist.
-
-[429]
-
-Rate Limited. Too many requests.
-
-[500]
-
-Unexpected error
-
-delete
-
-/snippet/[{canonical}]/token/[{token}]
-
-[HTTP]
-
-HTTPcURLJavaScriptPython
-
-Copy
-
-``` 
-DELETE /api:meta/snippet/{canonical}/token/{token} HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-```
-
-Test it
-
-[[200][]]
-
-Success!
-
-Copy
-
-``` 
-{}
-```
-
-####  
-
-GET /snippet/{canonical}/token
-
-Use this endpoint to get a list of tokens for a snippet.
-
-###  
-
-returns a list of tokens for a snippet
-
-get
-
-[https://app.xano.com/api:meta]/snippet/[{canonical}]/token
-
-returns a list of tokens for a snippet
-Authentication: required
-
-Authorizations
-
-Path parameters
-
-[[canonical][string][Required]]
-
-Responses
-
-[200]
-
-Success!
-
-application/json
-
-[[Response][object\[\]]]
-
-Show properties
-
-[400]
-
-Input Error. Check the request payload for issues.
-
-[403]
-
-Access denied. Additional privileges are needed access the requested resource.
-
-[404]
-
-Not Found. The requested resource does not exist.
-
-[429]
-
-Rate Limited. Too many requests.
-
-[500]
-
-Unexpected error
-
-get
-
-/snippet/[{canonical}]/token
-
-[HTTP]
-
-HTTPcURLJavaScriptPython
-
-Copy
-
-``` 
-GET /api:meta/snippet/{canonical}/token HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-```
-
-Test it
-
-[[200][]]
-
-Success!
-
-Copy
-
-``` 
+**Response:**
+```json
 [
   {
-    "created_at": "2023-05-09 21:31:20+0000",
-    "updated_at": "2023-05-09 21:31:20+0000",
-    "token": "OL3T4JYM",
-    "max_installs": 23,
-    "current_installs": 1
+    "id": "prod-instance-123",
+    "name": "Production Environment",
+    "domain": "x8d0-doy0-xx99.n0.xano.io",
+    "custom_domain": "api.yourapp.com",
+    "meta_api": "https://x8d0-doy0-xx99.n0.xano.io/api:metadata",
+    "swagger_spec": "https://x8d0-doy0-xx99.n0.xano.io/api:metadata/swagger.json",
+    "created_at": "2024-01-15T10:30:00Z",
+    "plan": "pro",
+    "status": "active"
+  },
+  {
+    "id": "dev-instance-456", 
+    "name": "Development Environment",
+    "domain": "y9e1-fpy1-yy00.n0.xano.io",
+    "custom_domain": null,
+    "meta_api": "https://y9e1-fpy1-yy00.n0.xano.io/api:metadata",
+    "swagger_spec": "https://y9e1-fpy1-yy00.n0.xano.io/api:metadata/swagger.json",
+    "created_at": "2024-01-10T14:20:00Z",
+    "plan": "starter", 
+    "status": "active"
   }
 ]
 ```
 
-####  
+### Getting Single Instance Details
 
-POST /snippet/{canonical}/token
+Retrieve specific instance information:
 
-Use this endpoint to create a new token for a snippet.
+```javascript
+GET https://app.xano.com/api:meta/instance/{name}
+Authorization: Bearer YOUR_PAT
+```
 
-###  
+**Parameters:**
+- `{name}`: The instance name identifier
 
-creates a new install token on the snippet
+### 📝 **Instance Switching Pattern**
 
-post
-
-[https://app.xano.com/api:meta]/snippet/[{canonical}]/token
-
-creates a new install token on the snippet
-Authentication: required
-
-Authorizations
-
-Path parameters
-
-[[canonical][string][Required]]
-
-Body
-
-[application/json]
-
-application/jsonmultipart/form-data
-
-[[max\_installs][integer · int64][Required]]
-
-Responses
-
-[200]
-
-Success!
-
-application/json
-
-[[Response][object]]
-
-Show properties
-
-[400]
-
-Input Error. Check the request payload for issues.
-
-[403]
-
-Access denied. Additional privileges are needed access the requested resource.
-
-[404]
-
-Not Found. The requested resource does not exist.
-
-[429]
-
-Rate Limited. Too many requests.
-
-[500]
-
-Unexpected error
-
-post
-
-/snippet/[{canonical}]/token
-
-[HTTP]
-
-HTTPcURLJavaScriptPython
-
-Copy
-
-``` 
-POST /api:meta/snippet/{canonical}/token HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Content-Type: application/json
-Accept: */*
-Content-Length: 18
-
-{
-  "max_installs": 1
+```javascript
+// Build instance selector
+async function buildInstanceSelector() {
+  const instances = await fetch('https://app.xano.com/api:meta/instance', {
+    headers: { 'Authorization': `Bearer ${personalAccessToken}` }
+  }).then(r => r.json());
+  
+  return instances.map(instance => ({
+    id: instance.id,
+    name: instance.name,
+    apiUrl: instance.meta_api,
+    environment: instance.name.includes('prod') ? 'production' : 'development'
+  }));
 }
 ```
 
-[application/json]
+## No-Code Platform Integration
 
-application/jsonmultipart/form-data
+### 🔗 **n8n Multi-Instance Workflow**
 
-Test it
+```yaml
+1. HTTP Request (Get instances list)
+2. Set Node (Process instance data)
+3. Function Node (Filter by criteria)
+4. Switch Node (Route by environment)
+5. HTTP Request (Call specific instance API)
+```
 
-[[200][]]
+### 🌐 **WeWeb Instance Switcher**
 
-Success!
-
-Copy
-
-``` 
-{
-  "created_at": "2023-05-09 21:31:20+0000",
-  "updated_at": "2023-05-09 21:31:20+0000",
-  "token": "OL3T4JYM",
-  "max_installs": 23,
-  "current_installs": 1
+```javascript
+// WeWeb collection for instances
+async function loadUserInstances() {
+  const instances = await wwLib.api.get({
+    url: 'https://app.xano.com/api:meta/instance',
+    headers: {
+      'Authorization': `Bearer ${wwLib.envVars.PERSONAL_ACCESS_TOKEN}`
+    }
+  });
+  
+  // Update WeWeb collection
+  wwLib.collections.instances.update(instances.data);
+  
+  return instances.data;
 }
 ```
 
-###  
+### 🔧 **Make Instance Management**
 
-Snippets
-
-####  
-
-GET /snippet/{canonical}
-
-Retrieve a specific snippet by its canonical ID
-
-###  
-
-get a specific snippet by ID
-
-get
-
-[https://app.xano.com/api:meta]/snippet/[{canonical}]
-
-get a specific snippet by ID
-Authentication: required
-
-Authorizations
-
-Path parameters
-
-[[canonical][string][Required]]
-
-Responses
-
-[200]
-
-Success!
-
-application/json
-
-[[Response][object]]
-
-Show properties
-
-[400]
-
-Input Error. Check the request payload for issues.
-
-[403]
-
-Access denied. Additional privileges are needed access the requested resource.
-
-[404]
-
-Not Found. The requested resource does not exist.
-
-[429]
-
-Rate Limited. Too many requests.
-
-[500]
-
-Unexpected error
-
-get
-
-/snippet/[{canonical}]
-
-[HTTP]
-
-HTTPcURLJavaScriptPython
-
-Copy
-
-``` 
-GET /api:meta/snippet/{canonical} HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
+```yaml
+Scenario Steps:
+1. HTTP Request (List instances)
+2. Iterator (Process each instance)
+3. Filter (Check instance status)
+4. HTTP Request (Call instance-specific API)
+5. Aggregator (Combine results)
 ```
 
-Test it
+## Snippet Management
 
-[[200][]]
+Snippets are reusable code components that can be shared across instances.
 
-Success!
+### Listing Your Snippets
 
-Copy
-
-``` 
-{
-  "canonical": "kRG3t_-i",
-  "created_at": "2023-03-23 23:32:56+0000",
-  "updated_at": "2023-03-27 17:58:48+0000",
-  "name": "Token Share Test",
-  "review": "pending",
-  "review_exception": "text",
-  "install_access": "public",
-  "install_access_description": "text",
-  "featured": true,
-  "verified": true
-}
+```javascript
+GET https://app.xano.com/api:meta/snippet
+Authorization: Bearer YOUR_PAT
 ```
 
-####  
-
-POST /snippet/{canonical}
-
-Update settings on the snippet, such as the access method and access description.
-
-###  
-
-update settings on the snippet
-
-post
-
-[https://app.xano.com/api:meta]/snippet/[{canonical}]
-
-update settings on the snippet
-Authentication: required
-
-Authorizations
-
-Path parameters
-
-[[canonical][string][Required]]
-
-Body
-
-[application/json]
-
-application/jsonmultipart/form-data
-
-[[install\_access][string · enum][Required]]Possible values:
-
-`public`
-
-`link`
-
-`token`
-
-[[install\_access\_description][string][Required]]
-
-Responses
-
-[200]
-
-Success!
-
-application/json
-
-[[Response][object]]
-
-Show properties
-
-[400]
-
-Input Error. Check the request payload for issues.
-
-[403]
-
-Access denied. Additional privileges are needed access the requested resource.
-
-[404]
-
-Not Found. The requested resource does not exist.
-
-[429]
-
-Rate Limited. Too many requests.
-
-[500]
-
-Unexpected error
-
-post
-
-/snippet/[{canonical}]
-
-[HTTP]
-
-HTTPcURLJavaScriptPython
-
-Copy
-
-``` 
-POST /api:meta/snippet/{canonical} HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Content-Type: application/json
-Accept: */*
-Content-Length: 63
-
-{
-  "install_access": "public",
-  "install_access_description": "text"
-}
-```
-
-[application/json]
-
-application/jsonmultipart/form-data
-
-Test it
-
-[[200][]]
-
-Success!
-
-Copy
-
-``` 
-{
-  "canonical": "kRG3t_-i",
-  "created_at": "2023-03-23 23:32:56+0000",
-  "updated_at": "2023-03-27 17:58:48+0000",
-  "name": "Token Share Test",
-  "review": "pending",
-  "review_exception": "text",
-  "install_access": "public",
-  "install_access_description": "text",
-  "featured": true,
-  "verified": true
-}
-```
-
-####  
-
-GET /snippet
-
-List all snippets owned by the authenticated user.
-
-###  
-
-list snippets owned by the authenticated user
-
-get
-
-[https://app.xano.com/api:meta]/snippet
-
-list snippets owned by the authenticated user
-Authentication: required
-
-Authorizations
-
-Query parameters
-
-[[page][integer · int64][Optional]]
-
-Responses
-
-[200]
-
-Success!
-
-application/json
-
-[[Response][object]]
-
-Show properties
-
-[400]
-
-Input Error. Check the request payload for issues.
-
-[403]
-
-Access denied. Additional privileges are needed access the requested resource.
-
-[404]
-
-Not Found. The requested resource does not exist.
-
-[429]
-
-Rate Limited. Too many requests.
-
-[500]
-
-Unexpected error
-
-get
-
-/snippet
-
-[HTTP]
-
-HTTPcURLJavaScriptPython
-
-Copy
-
-``` 
-GET /api:meta/snippet HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-```
-
-Test it
-
-[[200][]]
-
-Success!
-
-Copy
-
-``` 
+**Optional Parameters:**
+- `page`: Page number for pagination
+
+**Response:**
+```json
 {
   "curPage": 1,
-  "nextPage": 1,
-  "prevPage": 1,
+  "nextPage": null,
+  "prevPage": null,
   "items": [
     {
       "canonical": "kRG3t_-i",
-      "created_at": "2023-03-23 23:32:56+0000",
-      "updated_at": "2023-03-27 17:58:48+0000",
-      "name": "Token Share Test",
-      "review": "pending",
-      "review_exception": "text",
+      "name": "User Authentication Flow",
+      "created_at": "2024-01-20T09:15:00Z",
+      "updated_at": "2024-01-22T16:30:00Z",
+      "review": "approved",
       "install_access": "public",
-      "install_access_description": "text",
-      "featured": true,
+      "featured": false,
       "verified": true
     }
   ]
 }
 ```
 
-Last updated 6 months ago
+### Getting Specific Snippet
 
-Was this helpful?
+```javascript
+GET https://app.xano.com/api:meta/snippet/{canonical}
+Authorization: Bearer YOUR_PAT
+```
+
+**Parameters:**
+- `{canonical}`: The snippet's unique identifier (found in snippet URL)
+
+### Updating Snippet Settings
+
+```javascript
+POST https://app.xano.com/api:meta/snippet/{canonical}
+Authorization: Bearer YOUR_PAT
+Content-Type: application/json
+
+{
+  "install_access": "token", // "public", "link", or "token"
+  "install_access_description": "Premium feature for subscribers only"
+}
+```
+
+## Access Token Management
+
+Control who can install your snippets with access tokens.
+
+### Creating Access Tokens
+
+```javascript
+POST https://app.xano.com/api:meta/snippet/{canonical}/token
+Authorization: Bearer YOUR_PAT
+Content-Type: application/json
+
+{
+  "max_installs": 50
+}
+```
+
+**Response:**
+```json
+{
+  "created_at": "2024-01-23T10:00:00Z",
+  "updated_at": "2024-01-23T10:00:00Z", 
+  "token": "OL3T4JYM",
+  "max_installs": 50,
+  "current_installs": 0
+}
+```
+
+### Listing Snippet Tokens
+
+```javascript
+GET https://app.xano.com/api:meta/snippet/{canonical}/token
+Authorization: Bearer YOUR_PAT
+```
+
+### Updating Token Limits
+
+```javascript
+POST https://app.xano.com/api:meta/snippet/{canonical}/token/{token}
+Authorization: Bearer YOUR_PAT
+Content-Type: application/json
+
+{
+  "max_installs": 100,
+  "current_installs": 25
+}
+```
+
+### Revoking Tokens
+
+```javascript
+DELETE https://app.xano.com/api:meta/snippet/{canonical}/token/{token}
+Authorization: Bearer YOUR_PAT
+```
+
+## Common Use Cases
+
+### Use Case 1: Agency Dashboard
+
+Build a dashboard for managing multiple client instances:
+
+```javascript
+// Agency instance manager
+class AgencyInstanceManager {
+  constructor(personalAccessToken) {
+    this.pat = personalAccessToken;
+  }
+  
+  async getClientInstances() {
+    const instances = await this.callMasterAPI('/instance');
+    
+    return instances.map(instance => ({
+      clientName: this.extractClientName(instance.name),
+      environment: instance.name,
+      status: instance.status,
+      apiUrl: instance.meta_api,
+      lastUpdated: instance.updated_at
+    }));
+  }
+  
+  async switchToInstance(instanceId) {
+    const instance = await this.callMasterAPI(`/instance/${instanceId}`);
+    
+    // Update app configuration to use this instance
+    this.updateAppConfig({
+      currentInstance: instanceId,
+      apiUrl: instance.meta_api,
+      swaggerUrl: instance.swagger_spec
+    });
+  }
+}
+```
+
+### Use Case 2: Snippet Marketplace
+
+Create a marketplace for selling Xano snippets:
+
+```javascript
+// Snippet marketplace manager
+class SnippetMarketplace {
+  async createSnippetListing(snippetCanonical, pricing) {
+    // Update snippet to token-based access
+    await this.updateSnippetAccess(snippetCanonical, 'token');
+    
+    // Generate tokens based on pricing tiers
+    const tokens = await Promise.all(
+      pricing.tiers.map(tier => 
+        this.createAccessToken(snippetCanonical, tier.installLimit)
+      )
+    );
+    
+    return {
+      snippet: snippetCanonical,
+      accessTokens: tokens,
+      pricing: pricing
+    };
+  }
+  
+  async purchaseSnippet(snippetCanonical, customerId, tier) {
+    // Find available token for the tier
+    const availableToken = await this.findAvailableToken(snippetCanonical, tier);
+    
+    // Record purchase and provide token to customer
+    await this.recordPurchase(customerId, snippetCanonical, availableToken);
+    
+    return {
+      installToken: availableToken.token,
+      installInstructions: this.generateInstallInstructions(snippetCanonical, availableToken.token)
+    };
+  }
+}
+```
+
+### Use Case 3: Multi-Environment Deployment
+
+Manage deployments across development, staging, and production:
+
+```javascript
+// Deployment manager
+class DeploymentManager {
+  async deployAcrossEnvironments(configChanges) {
+    const instances = await this.getInstances();
+    
+    const environments = {
+      dev: instances.filter(i => i.name.includes('dev')),
+      staging: instances.filter(i => i.name.includes('staging')), 
+      prod: instances.filter(i => i.name.includes('prod'))
+    };
+    
+    // Deploy to dev first
+    await this.deployToEnvironment(environments.dev, configChanges);
+    await this.runTests(environments.dev);
+    
+    // Then staging
+    await this.deployToEnvironment(environments.staging, configChanges);
+    await this.runIntegrationTests(environments.staging);
+    
+    // Finally production (with approval gate)
+    if (await this.getApproval('production deployment')) {
+      await this.deployToEnvironment(environments.prod, configChanges);
+    }
+  }
+}
+```
+
+## Error Handling
+
+### Common HTTP Status Codes
+
+| Code | Meaning | Solution |
+|------|---------|----------|
+| 400 | Bad Request | Check request payload format |
+| 403 | Forbidden | Verify Personal Access Token permissions |
+| 404 | Not Found | Confirm instance/snippet exists |
+| 429 | Rate Limited | Implement retry with exponential backoff |
+| 500 | Server Error | Contact Xano support |
+
+### Robust Error Handling
+
+```javascript
+class MasterAPIClient {
+  async callWithRetry(endpoint, options = {}, maxRetries = 3) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await fetch(`https://app.xano.com/api:meta${endpoint}`, {
+          ...options,
+          headers: {
+            'Authorization': `Bearer ${this.pat}`,
+            'Content-Type': 'application/json',
+            ...options.headers
+          }
+        });
+        
+        if (response.status === 429) {
+          // Rate limited - wait before retry
+          await this.sleep(1000 * Math.pow(2, attempt));
+          continue;
+        }
+        
+        if (!response.ok) {
+          throw new Error(`API Error: ${response.status} - ${response.statusText}`);
+        }
+        
+        return await response.json();
+        
+      } catch (error) {
+        if (attempt === maxRetries) throw error;
+        await this.sleep(1000 * attempt);
+      }
+    }
+  }
+  
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+}
+```
+
+## Security Best Practices
+
+### 1. Token Management
+
+```javascript
+// ✅ Good - Server-side PAT usage
+const masterAPI = new MasterAPIClient({
+  pat: process.env.XANO_PERSONAL_ACCESS_TOKEN,
+  environment: 'server'
+});
+
+// ❌ Bad - Never expose PAT in frontend
+// const pat = "xano_pat_1234567890"; // DON'T DO THIS
+```
+
+### 2. Access Control
+
+```javascript
+// Implement proper access controls
+function checkUserPermissions(userId, action) {
+  const permissions = getUserPermissions(userId);
+  
+  if (action === 'list_instances' && !permissions.includes('read_instances')) {
+    throw new Error('Insufficient permissions');
+  }
+  
+  if (action === 'manage_snippets' && !permissions.includes('admin')) {
+    throw new Error('Admin access required');
+  }
+}
+```
+
+### 3. Rate Limiting
+
+```javascript
+// Implement client-side rate limiting
+class RateLimitedClient {
+  constructor(requestsPerMinute = 60) {
+    this.requests = [];
+    this.limit = requestsPerMinute;
+  }
+  
+  async request(endpoint, options) {
+    await this.waitForRateLimit();
+    this.requests.push(Date.now());
+    return this.callAPI(endpoint, options);
+  }
+  
+  async waitForRateLimit() {
+    const now = Date.now();
+    const oneMinuteAgo = now - 60000;
+    
+    // Remove old requests
+    this.requests = this.requests.filter(time => time > oneMinuteAgo);
+    
+    if (this.requests.length >= this.limit) {
+      const oldestRequest = Math.min(...this.requests);
+      const waitTime = 60000 - (now - oldestRequest);
+      await this.sleep(waitTime);
+    }
+  }
+}
+```
+
+## 💡 **Try This**
+
+### Beginner Challenge
+Create a simple instance selector that:
+1. Lists all your instances
+2. Shows environment type (dev/prod)
+3. Allows switching between them
+
+### Intermediate Challenge
+Build a snippet manager that:
+1. Lists your snippets
+2. Creates access tokens
+3. Tracks installation counts
+4. Manages access permissions
+
+### Advanced Challenge
+Design an agency dashboard that:
+1. Manages multiple client instances
+2. Provides environment-specific deployments
+3. Monitors instance health
+4. Automated backup management
+
+## Common Mistakes to Avoid
+
+1. **Exposing PAT in frontend** - Always keep server-side
+2. **No rate limiting** - Implement client-side throttling
+3. **Ignoring pagination** - Handle paginated responses properly
+4. **Missing error handling** - Account for all HTTP status codes
+5. **Hardcoding instance URLs** - Use dynamic instance discovery
+
+## Next Steps
+
+- Learn about [Individual Instance Metadata API](content.md)
+- Explore [Token Scopes and Permissions](token-scopes-reference.md)
+- Master [Workspace Import/Export](workspace-import-and-export.md)
+- Understand [Request History Tracking](request-history.md)
+
+## Need Help?
+
+- 📚 [Xano Community](https://community.xano.com) - Master API discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Step-by-step guides
+- 📖 [API Reference](https://app.xano.com/api:meta) - Live Swagger documentation
+- 🔧 [Support](https://xano.com/support) - Technical assistance

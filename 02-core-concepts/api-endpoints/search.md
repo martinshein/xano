@@ -1,541 +1,103 @@
 ---
+title: "Database Search with Metadata API - Complete Guide"
+description: "Master powerful database search and filtering with Xano's Metadata API - perfect for building advanced queries, sorting, and pagination in n8n, WeWeb, and Make"
 category: api-endpoints
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/api-endpoints
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - Database Search
+  - Metadata API
+  - Filtering
+  - Sorting
+  - Pagination
+  - Query Operations
+difficulty: intermediate
+reading_time: 12 minutes
+last_updated: '2025-01-23'
+prerequisites:
+  - Metadata API access token
+  - Understanding of database tables
+  - Basic knowledge of filtering and sorting
 ---
 
+# Database Search with Metadata API
+
+## 📋 **Quick Summary**
+
+**What it does:** The Metadata API's search functionality provides powerful database querying capabilities with advanced filtering, sorting, and pagination - all without writing custom API endpoints.
+
+**Why it matters:** This enables you to:
+- Build complex search interfaces without custom endpoints
+- Create advanced filtering and sorting in no-code tools
+- Implement powerful data discovery features
+- Query database content programmatically from any platform
+
+**Time to implement:** 5-10 minutes for basic searches, 30+ minutes for complex filtering
+
 ---
-apple-mobile-web-app-status-bar-style: black
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: search
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## What You'll Learn
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+- Browse vs Search: when to use each approach
+- Advanced filtering with comparison operators
+- Complex search queries with AND/OR logic
+- Multi-field sorting techniques
+- Pagination strategies for large datasets
+- Integration patterns for no-code platforms
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+## Understanding Search vs Browse
 
+Think of Browse as a simple "show me all records" request, while Search is like having a powerful SQL WHERE clause that you can build visually.
 
+### 🎯 **Browse Content - Perfect For:**
+- Simple table listings
+- Paginated record displays
+- Quick data previews
+- Admin panel overviews
 
+### 🎯 **Search Content - Perfect For:**
+- Advanced filtering interfaces
+- Dynamic search forms
+- Data analytics queries
+- Complex business logic
 
+## Authentication Setup
 
+All search operations require Metadata API authentication:
 
+```javascript
+headers: {
+  'Authorization': 'Bearer YOUR_METADATA_TOKEN',
+  'Content-Type': 'application/json'
+}
+```
 
+## Simple Browse Operations
 
+### Basic Table Browse
 
+Get all records from a table with optional pagination:
 
+```json
+GET /api:metadata/content/browse
+{
+  "workspace_id": 12345,
+  "table_id": 67890,
+  "page": 1,
+  "per_page": 50
+}
+```
 
+### 📝 **Example Response**
 
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../the-function-stack/filters/manipulation.html)
-        -   [Math](../../the-function-stack/filters/math.html)
-        -   [Timestamp](../../the-function-stack/filters/timestamp.html)
-        -   [Text](../../the-function-stack/filters/text.html)
-        -   [Array](../../the-function-stack/filters/array.html)
-        -   [Transform](../../the-function-stack/filters/transform.html)
-        -   [Conversion](../../the-function-stack/filters/conversion.html)
-        -   [Comparison](../../the-function-stack/filters/comparison.html)
-        -   [Security](../../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../the-function-stack/data-types/text.html)
-        -   [Expression](../../the-function-stack/data-types/expression.html)
-        -   [Array](../../the-function-stack/data-types/array.html)
-        -   [Object](../../the-function-stack/data-types/object.html)
-        -   [Integer](../../the-function-stack/data-types/integer.html)
-        -   [Decimal](../../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../../the-function-stack/data-types/timestamp.html)
-        -   [Null](../../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../instance-settings/backup-and-restore.html)
-        -   [Security Policy](../instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](master-metadata-api.html)
-        -   [Tables and Schema](tables-and-schema.html)
-        -   [Content](content.html)
-        -   [Search](search.html)
-        -   [File](file.html)
-        -   [Request History](request-history.html)
-        -   [Workspace Import and Export](workspace-import-and-export.html)
-        -   [Token Scopes Reference](token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [Browse Content](#browse-content)
-
--   [Search](#search)
-
--   [Sort](#sort)
-
-Was this helpful?
-
-Copy
-
-1.  [Xano Features](../snippets.html)
-2.  Metadata API
-
-Search 
-======
-
-This section is broken down into Browse Content and Search. [Browse Content](search.html#browse-content) is a simple method of getting or reading the content of a database table. It can be optionally combined with paging.
-
-[Search](search.html#search) is an advanced method of filtering, sorting, and paging database content. It is flexible and powerful and enables you to return content based on the parameters you define.
-
-Please note that the Metadata APIs for browsing content do not react to API Access settings. All fields will be returned regardless of this setting.
-
- 
-
-Browse Content
-
-Browse table content is a simple method of getting content (database records) in a database table. It requires a workspace ID and table ID, while paging is optional.
-
-![](../../_gitbook/image1ddb.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FR226s9BJbb7tsj76l7Tt%252FCleanShot%25202023-04-12%2520at%252017.29.24.png%3Falt%3Dmedia%26token%3D23fea969-9db4-4f9f-8f46-c0228e20e42a&width=768&dpr=4&quality=100&sign=1ca79470&sv=2)
-
-Example response body:
-
-Copy
-
-``` 
+```json
 {
   "items": [
     {
       "id": 1,
       "created_at": 1681336868222,
       "name": "Basketball",
-      "description": "round ball to shoot hoops",
-      "category_id": 1
-    },
-    {
-      "id": 2,
-      "created_at": 1681336868456,
-      "name": "French Press",
-      "description": "Make delicious coffee with this",
-      "category_id": 2
-    },
-    {
-      "id": 3,
-      "created_at": 1681336868658,
-      "name": "Bluetooth Speaker",
-      "description": "Portable music player",
-      "category_id": 3
-    },
-    {
-      "id": 4,
-      "created_at": 1681336868931,
-      "name": "Camera",
-      "description": "Take photos with this",
-      "category_id": 3
-    }
-  ],
-  "itemsReceived": 4,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 4,
-  "pageTotal": 1
-}
-```
-
- 
-
-Search
-
-Search via the Metadata API is powerful and flexible to return the exact database content you are searching for.
-
-####  
-
-Search where ID = 10
-
-In this example, we will search the Items table where ID = 10
-
-![](../../_gitbook/image8d9f.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F5yYy3Le0iXwxO5F4eui9%252FCleanShot%25202023-04-12%2520at%252017.45.22%25402x.png%3Falt%3Dmedia%26token%3Db5623fa4-f949-4fe8-89c1-5b39d8029cdb&width=768&dpr=4&quality=100&sign=e56ae324&sv=2)
-
-Search can be done as a single object or array if there is only one search parameter. If there are multiple parameters then it must be an array.
-
-You can pass just what you want in the request body. For example, if all we want to do is search then we just need to pass search to the body.
-
-With paging, sort, and search as an array.
-
-Copy
-
-``` 
-{
-  "page": 1,
-  "per_page": 50,
-  "sort": {
-    "id": "desc"
-  },
-  "search": [{
-   "id": 10
-}]
-}
-```
-
-With paging, sort, and search as a single object.
-
-Copy
-
-``` 
-{
-  "page": 1,
-  "per_page": 50,
-  "sort": {
-    "id": "desc"
-  },
-  "search": {
-   "id": 10
-}
-}
-```
-
-With just search, as an array.
-
-Copy
-
-``` 
-{
-  "search": [{
-   "id": 10
-}]
-}
-```
-
-With just search, as a single object.
-
-Copy
-
-``` 
-{
-  "search": {
-   "id": 10
-}
-}
-```
-
-For this example, all of the above are acceptable for the request body.
-
-Example response body:
-
-Copy
-
-``` 
-{
-  "items": [
-    {
-      "id": 10,
-      "created_at": 1681346185431,
-      "name": "Air Fryer",
-      "description": "A new way to fry food without all the grease and oil",
-      "category_id": 2,
-      "price": 75
+      "description": "Round ball to shoot hoops",
+      "category_id": 1,
+      "price": 25.99
     }
   ],
   "itemsReceived": 1,
@@ -543,444 +105,621 @@ Copy
   "nextPage": null,
   "prevPage": null,
   "offset": 0,
-  "itemsTotal": 1,
-  "pageTotal": 1
+  "itemsTotal": 156,
+  "pageTotal": 4
 }
 ```
 
-####  
+### 💡 **Browse Use Cases**
 
-Search where Price \> 30 and Price \< 70
+```yaml
+Perfect for:
+- Product catalogs
+- User lists
+- Content galleries
+- Admin dashboards
+- Data exports
+```
 
-In this example, we are searching for content where price is \> 30 and price is \< 70.
+## Advanced Search Operations
 
-![](../../_gitbook/imageff52.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F6xyYLeSJatWn832Vp3kQ%252FCleanShot%25202023-04-12%2520at%252017.57.16%25402x.png%3Falt%3Dmedia%26token%3D27ffe2e3-f6ef-480d-8a91-0b2fb3ac4801&width=768&dpr=4&quality=100&sign=426fdec4&sv=2)
+### Basic Equality Search
 
-Example request body:
+Find records where a field equals a specific value:
 
-Copy
-
-``` 
+```json
+POST /api:metadata/content/search
 {
-  "search": [{
-   "price|>": 30
-},
-{
-   "price|<": 70
-}]
+  "workspace_id": 12345,
+  "table_id": 67890,
+  "search": {
+    "status": "active"
+  }
 }
 ```
 
-Example response body:
+### Range Searches
 
-Copy
+Find records within a value range:
 
-``` 
+```json
 {
-  "items": [
+  "workspace_id": 12345,
+  "table_id": 67890,
+  "search": [
     {
-      "id": 5,
-      "created_at": 1681346183608,
-      "name": "Microwave",
-      "description": "Reheat leftovers quickly",
-      "category_id": 2,
-      "price": 40
+      "price|>": 30
     },
     {
-      "id": 8,
-      "created_at": 1681346184305,
-      "name": "Blender",
-      "description": "Make smoothies and more",
-      "category_id": 2,
-      "price": 65
-    },
-    {
-      "id": 9,
-      "created_at": 1681346184508,
-      "name": "Running Shoes",
-      "description": "Comfy footwear for long runs",
-      "category_id": 1,
-      "price": 45
+      "price|<": 100
     }
-  ],
-  "itemsReceived": 3,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 3,
-  "pageTotal": 1
+  ]
 }
 ```
 
-####  
+### OR Logic Searches
 
-Search where Price \< 30 or Price \> 70
+Find records matching any of multiple conditions:
 
-In this example, we will search for where the price is \< 30 or the price is \> 70
-
-![](../../_gitbook/image17f5.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F9A2MUPSVBc541ZqpmeZg%252FCleanShot%25202023-04-12%2520at%252018.10.11%25402x.png%3Falt%3Dmedia%26token%3D1c281228-5cbf-453c-9255-6e800108ba85&width=768&dpr=4&quality=100&sign=b5b2e9de&sv=2)
-
-Example request body:
-
-Copy
-
-``` 
+```json
 {
   "search": [
-{
-   "price|<": 30
-},
-{
-   "price|>|or": 70
-}
-]
+    {
+      "category": "electronics"
+    },
+    {
+      "category|or": "computers"
+    },
+    {
+      "category|or": "phones"
+    }
+  ]
 }
 ```
 
-Notice how the or is formatted after the Price is \> 70 expression.
+## Comparison Operators Reference
 
-Example response body:
+| Operator | Syntax | Description | Example |
+|----------|--------|-------------|---------|
+| **Equals** | `"field": value` | Exact match | `"status": "active"` |
+| **Greater than** | `"field|>": value` | Numeric comparison | `"price|>": 50` |
+| **Less than** | `"field|<": value` | Numeric comparison | `"age|<": 30` |
+| **Greater or equal** | `"field|>=": value` | Inclusive comparison | `"rating|>=": 4` |
+| **Less or equal** | `"field|<=": value` | Inclusive comparison | `"quantity|<=": 10` |
+| **Not equal** | `"field|!=": value` | Exclusion | `"status|!=": "deleted"` |
+| **In list** | `"field|in": [values]` | Multiple values | `"category|in": [1,2,3]` |
+| **Not in list** | `"field|not in": [values]` | Exclusion list | `"id|not in": [5,10,15]` |
+| **Contains** | `"field|~": "text"` | Text search | `"name|~": "phone"` |
+| **Starts with** | `"field|^=": "text"` | Prefix search | `"email|^=": "admin"` |
+| **OR condition** | `"field|or": value` | Alternative condition | `"type|or": "premium"` |
 
-Copy
+## Complex Search Examples
 
-``` 
+### Multi-Field Product Search
+
+```json
 {
-  "items": [
+  "workspace_id": 12345,
+  "table_id": 67890,
+  "search": [
     {
-      "id": 1,
-      "created_at": 1681336868222,
-      "name": "Basketball",
-      "description": "round ball to shoot hoops",
-      "category_id": 1,
-      "price": 10
+      "name|~": "phone"
     },
     {
-      "id": 2,
-      "created_at": 1681336868456,
-      "name": "French Press",
-      "description": "Make delicious coffee with this",
-      "category_id": 2,
-      "price": 5
+      "price|>": 100
     },
     {
-      "id": 4,
-      "created_at": 1681336868931,
-      "name": "Camera",
-      "description": "Take photos with this",
-      "category_id": 3,
-      "price": 80
+      "price|<": 800
     },
     {
-      "id": 6,
-      "created_at": 1681346183823,
-      "name": "Resistance Bands",
-      "description": "Stretchy bands for working out",
-      "category_id": 1,
-      "price": 15
+      "category|in": ["electronics", "mobile"]
     },
     {
-      "id": 7,
-      "created_at": 1681346184107,
-      "name": "Tablet",
-      "description": "Browse, stream, and more with a portable tablet",
-      "category_id": 3,
-      "price": 120
-    },
-    {
-      "id": 10,
-      "created_at": 1681346185431,
-      "name": "Air Fryer",
-      "description": "A new way to fry food without all the grease and oil",
-      "category_id": 2,
-      "price": 75
+      "status": "available"
     }
   ],
-  "itemsReceived": 6,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 6,
-  "pageTotal": 1
-}
-```
-
-####  
-
-In and Not In
-
-The IN and NOT IN operators are great for working with lists and can also be thought of as another version of \"or\" operators. In the first example, we will search where the ID is IN \[2,3,7\].
-
-![](../../_gitbook/image9728.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FfuMYqREoVjgUgVLYYKMu%252FCleanShot%25202023-04-12%2520at%252018.15.18.png%3Falt%3Dmedia%26token%3D4df57eab-2f3a-4752-901b-2cc8059766f6&width=768&dpr=4&quality=100&sign=3d3c90f7&sv=2)
-
-Example request body:
-
-Copy
-
-``` 
-{
-
-  "search": {
-  "id|in": [2,3,7]
-}
-}
-```
-
-Example response body:
-
-Copy
-
-``` 
-{
-  "items": [
+  "sort": [
     {
-      "id": 2,
-      "created_at": 1681336868456,
-      "name": "French Press",
-      "description": "Make delicious coffee with this",
-      "category_id": 2,
-      "price": 5
+      "price": "asc"
     },
     {
-      "id": 3,
-      "created_at": 1681336868658,
-      "name": "Bluetooth Speaker",
-      "description": "Portable music player",
-      "category_id": 3,
-      "price": 30
-    },
-    {
-      "id": 7,
-      "created_at": 1681346184107,
-      "name": "Tablet",
-      "description": "Browse, stream, and more with a portable tablet",
-      "category_id": 3,
-      "price": 120
+      "rating": "desc"
     }
   ],
-  "itemsReceived": 3,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 3,
-  "pageTotal": 1
+  "page": 1,
+  "per_page": 20
 }
 ```
 
-In the second example, we will search where ID is NOT IN \[1,2,3,4,6,7,8,9\]
+### User Search with Date Filtering
 
-![](../../_gitbook/imagea59b.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FdzTSph8pEKdqJ5xb5l3A%252FCleanShot%25202023-04-12%2520at%252018.17.43%25402x.png%3Falt%3Dmedia%26token%3D8e59e27b-fe71-4726-a21a-94c1bf906e43&width=768&dpr=4&quality=100&sign=9ea1a5cb&sv=2)
-
-Example request body:
-
-Copy
-
-``` 
+```json
 {
-
-  "search": {
-  "id|not in": [1,2,3,4,6,7,8,9]
-}
-}
-```
-
-Example response body:
-
-Copy
-
-``` 
-{
-  "items": [
+  "search": [
     {
-      "id": 5,
-      "created_at": 1681346183608,
-      "name": "Microwave",
-      "description": "Reheat leftovers quickly",
-      "category_id": 2,
-      "price": 40
+      "created_at|>": 1681305600000
     },
     {
-      "id": 10,
-      "created_at": 1681346185431,
-      "name": "Air Fryer",
-      "description": "A new way to fry food without all the grease and oil",
-      "category_id": 2,
-      "price": 75
+      "email|^=": "admin"
+    },
+    {
+      "status|or": "premium"
+    },
+    {
+      "status|or": "vip"
     }
   ],
-  "itemsReceived": 2,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 2,
-  "pageTotal": 1
-}
-```
-
-###  
-
-Sort
-
-Sort is flexible, like search, in the sense that it accepts a single object or an array for a single sort parameter. It also supports multiple sorts, which require an array format.
-
-####  
-
-Single Sort
-
-In this example, we will sort the category table by the name in ascending order.
-
-![](../../_gitbook/imageae97.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FOlaxrzwhVxaQgjzfDmVF%252FCleanShot%25202023-04-12%2520at%252018.49.41%25402x.png%3Falt%3Dmedia%26token%3D8bbef3ed-7ef1-4cd5-a080-607af0b1a411&width=768&dpr=4&quality=100&sign=a6dc70e2&sv=2)
-
-Example request body:
-
-Copy
-
-``` 
-{
-
   "sort": {
-    "name": "asc"
+    "created_at": "desc"
   }
 }
 ```
 
-Also acceptable:
+### E-commerce Inventory Query
 
-Copy
-
-``` 
+```json
 {
-
-  "sort": [{
-    "name": "asc"
-  }]
-}
-```
-
-Example response body:
-
-Copy
-
-``` 
-{
-  "items": [
+  "search": [
     {
-      "id": 5,
-      "created_at": 1681350452709,
-      "name": "Decor",
-      "rating": 3
+      "quantity|>": 0
     },
     {
-      "id": 3,
-      "created_at": 1681337773911,
-      "name": "Electronics",
-      "rating": 5
+      "category|not in": ["discontinued", "seasonal"]
     },
     {
-      "id": 2,
-      "created_at": 1681337772998,
-      "name": "Kitchen",
-      "rating": 4
+      "price|>=": 10
     },
     {
-      "id": 4,
-      "created_at": 1681350451208,
-      "name": "Outdoor",
-      "rating": 4
-    },
-    {
-      "id": 1,
-      "created_at": 1681337772458,
-      "name": "Sports equipment",
-      "rating": 4
+      "featured": true
     }
-  ],
-  "itemsReceived": 5,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 5,
-  "pageTotal": 1
+  ]
 }
 ```
 
-####  
+## Sorting Strategies
 
-Multi-Sort
+### Single Field Sort
 
-In this example, we will first sort the content by rating in descending order, then the name in ascending order.
-
-![](../../_gitbook/imagee09c.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FVHudZt518wAhSqDoB8Pr%252FCleanShot%25202023-04-12%2520at%252018.53.35%25402x.png%3Falt%3Dmedia%26token%3Db9fd3e3e-e647-4fe6-b8eb-962365ca51f3&width=768&dpr=4&quality=100&sign=32fabe77&sv=2)
-
-Example request body:
-
-Copy
-
-``` 
+```json
 {
+  "sort": {
+    "created_at": "desc"
+  }
+}
+```
 
-  "sort": [{
-    "rating": "desc"
+### Multi-Field Sort
+
+```json
+{
+  "sort": [
+    {
+      "priority": "desc"
+    },
+    {
+      "created_at": "asc"
+    },
+    {
+      "name": "asc"
+    }
+  ]
+}
+```
+
+### 🎯 **Common Sort Patterns**
+
+```yaml
+E-commerce Products:
+- Price (low to high)
+- Rating (high to low)
+- Newest first
+
+User Management:
+- Last login (recent first)
+- Registration date (oldest first)
+- Alphabetical by name
+
+Content Systems:
+- Publication date (newest first)
+- View count (popular first)
+- Category, then title
+```
+
+## Pagination Best Practices
+
+### Standard Pagination
+
+```json
+{
+  "page": 1,
+  "per_page": 25,
+  "search": {...},
+  "sort": {...}
+}
+```
+
+### Large Dataset Handling
+
+```javascript
+// For tables with 10k+ records
+const searchConfig = {
+  per_page: 100, // Larger pages for efficiency
+  page: 1,
+  search: {
+    // Always include indexed fields for performance
+    "created_at|>": lastWeek,
+    "status": "active"
   },
-  {
-    "name": "asc"
+  sort: {
+    "id": "asc" // Use indexed field for consistent ordering
   }
-]
-}
+};
 ```
 
-Example response body:
+### Performance Optimization
 
-Copy
-
-``` 
+```javascript
+// ✅ Good - Use indexed fields
 {
-  "items": [
-    {
-      "id": 3,
-      "created_at": 1681337773911,
-      "name": "Electronics",
-      "rating": 5
-    },
-    {
-      "id": 2,
-      "created_at": 1681337772998,
-      "name": "Kitchen",
-      "rating": 4
-    },
-    {
-      "id": 4,
-      "created_at": 1681350451208,
-      "name": "Outdoor",
-      "rating": 4
-    },
-    {
-      "id": 1,
-      "created_at": 1681337772458,
-      "name": "Sports equipment",
-      "rating": 4
-    },
-    {
-      "id": 5,
-      "created_at": 1681350452709,
-      "name": "Decor",
-      "rating": 3
-    }
-  ],
-  "itemsReceived": 5,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 5,
-  "pageTotal": 1
+  "search": {
+    "id|in": [1, 2, 3, 4, 5],
+    "status": "published"
+  }
+}
+
+// ❌ Avoid - Text search on non-indexed fields
+{
+  "search": {
+    "description|~": "random text search"
+  }
 }
 ```
 
-Last updated 6 months ago
+## No-Code Platform Integration
 
-Was this helpful?
+### 🔗 **n8n Advanced Search Workflow**
+
+```yaml
+1. HTTP Request (Trigger with search parameters)
+2. Set Node (Build search query)
+3. HTTP Request (Call Metadata API search)
+4. Function Node (Process results)
+5. IF Node (Check result count)
+6. Respond to Webhook (Return formatted data)
+```
+
+**n8n Search Query Builder:**
+```javascript
+// Build dynamic search from form inputs
+const searchFilters = [];
+
+if ($input.priceMin) {
+  searchFilters.push({ "price|>": $input.priceMin });
+}
+
+if ($input.priceMax) {
+  searchFilters.push({ "price|<": $input.priceMax });
+}
+
+if ($input.category) {
+  searchFilters.push({ "category": $input.category });
+}
+
+if ($input.searchTerm) {
+  searchFilters.push({ "name|~": $input.searchTerm });
+}
+
+return {
+  workspace_id: 12345,
+  table_id: 67890,
+  search: searchFilters,
+  sort: { [$input.sortBy || 'created_at']: $input.sortOrder || 'desc' },
+  page: $input.page || 1,
+  per_page: $input.limit || 20
+};
+```
+
+### 🌐 **WeWeb Dynamic Search Component**
+
+```javascript
+// WeWeb search function with advanced filtering
+async function searchProducts(filters) {
+  const searchQuery = {
+    workspace_id: wwLib.envVars.WORKSPACE_ID,
+    table_id: wwLib.envVars.PRODUCTS_TABLE_ID,
+    search: [],
+    sort: []
+  };
+  
+  // Add price range filter
+  if (filters.minPrice) {
+    searchQuery.search.push({ "price|>": filters.minPrice });
+  }
+  if (filters.maxPrice) {
+    searchQuery.search.push({ "price|<": filters.maxPrice });
+  }
+  
+  // Add category filter
+  if (filters.categories && filters.categories.length > 0) {
+    searchQuery.search.push({ "category_id|in": filters.categories });
+  }
+  
+  // Add text search
+  if (filters.searchText) {
+    searchQuery.search.push({ "name|~": filters.searchText });
+  }
+  
+  // Add sorting
+  if (filters.sortBy) {
+    searchQuery.sort.push({ [filters.sortBy]: filters.sortOrder || 'asc' });
+  }
+  
+  const response = await wwLib.api.post({
+    url: wwLib.envVars.XANO_METADATA_API + '/content/search',
+    data: searchQuery,
+    headers: {
+      'Authorization': 'Bearer ' + wwLib.envVars.METADATA_TOKEN
+    }
+  });
+  
+  // Update WeWeb collections
+  wwLib.collections.searchResults.update(response.data.items);
+  wwLib.variables.pagination.setValue({
+    currentPage: response.data.curPage,
+    totalPages: response.data.pageTotal,
+    totalItems: response.data.itemsTotal
+  });
+  
+  return response.data;
+}
+```
+
+### 🔧 **Make Search & Filter Scenario**
+
+```yaml
+Scenario: Dynamic Product Search
+1. Webhook (Receive search parameters)
+2. Set Variable (Build search array)
+3. Iterator (Process each filter condition)
+4. HTTP Request (Search Metadata API)
+5. Array Aggregator (Combine results)
+6. Webhook Response (Return formatted data)
+```
+
+**Make Filter Builder Module:**
+```json
+{
+  "search": [
+    {{if(1.minPrice != null; {"price|>": 1.minPrice}; null)}},
+    {{if(1.maxPrice != null; {"price|<": 1.maxPrice}; null)}},
+    {{if(1.category != null; {"category_id": 1.category}; null)}},
+    {{if(1.inStock; {"quantity|>": 0}; null)}}
+  ]
+}
+```
+
+## Common Search Patterns
+
+### Pattern 1: E-commerce Product Filter
+
+```javascript
+class ProductSearchBuilder {
+  constructor() {
+    this.filters = [];
+    this.sorts = [];
+  }
+  
+  priceRange(min, max) {
+    if (min) this.filters.push({ "price|>": min });
+    if (max) this.filters.push({ "price|<": max });
+    return this;
+  }
+  
+  categories(categoryIds) {
+    if (categoryIds.length > 0) {
+      this.filters.push({ "category_id|in": categoryIds });
+    }
+    return this;
+  }
+  
+  inStock() {
+    this.filters.push({ "quantity|>": 0 });
+    return this;
+  }
+  
+  searchText(query) {
+    if (query) {
+      this.filters.push({ "name|~": query });
+    }
+    return this;
+  }
+  
+  sortByPrice(direction = 'asc') {
+    this.sorts.push({ "price": direction });
+    return this;
+  }
+  
+  build() {
+    return {
+      search: this.filters,
+      sort: this.sorts
+    };
+  }
+}
+
+// Usage
+const searchQuery = new ProductSearchBuilder()
+  .priceRange(50, 200)
+  .categories([1, 2, 3])
+  .inStock()
+  .searchText("wireless")
+  .sortByPrice('asc')
+  .build();
+```
+
+### Pattern 2: User Management Search
+
+```javascript
+function buildUserSearchQuery(criteria) {
+  const search = [];
+  
+  // Role-based filtering
+  if (criteria.roles && criteria.roles.length > 0) {
+    search.push({ "role|in": criteria.roles });
+  }
+  
+  // Registration date range
+  if (criteria.registeredAfter) {
+    search.push({ "created_at|>": criteria.registeredAfter });
+  }
+  
+  // Activity status
+  if (criteria.activeOnly) {
+    search.push({ "last_login|>": Date.now() - (30 * 24 * 60 * 60 * 1000) });
+  }
+  
+  // Email domain filtering
+  if (criteria.emailDomain) {
+    search.push({ "email|~": `@${criteria.emailDomain}` });
+  }
+  
+  return {
+    search,
+    sort: [
+      { "last_login": "desc" },
+      { "created_at": "desc" }
+    ]
+  };
+}
+```
+
+### Pattern 3: Content Management Search
+
+```javascript
+function searchContent(params) {
+  const searchFilters = [];
+  
+  // Publication status
+  if (params.published !== undefined) {
+    searchFilters.push({ "status": params.published ? "published" : "draft" });
+  }
+  
+  // Author filtering
+  if (params.authorId) {
+    searchFilters.push({ "author_id": params.authorId });
+  }
+  
+  // Date range
+  if (params.dateFrom) {
+    searchFilters.push({ "published_at|>": params.dateFrom });
+  }
+  if (params.dateTo) {
+    searchFilters.push({ "published_at|<": params.dateTo });
+  }
+  
+  // Tag filtering
+  if (params.tags && params.tags.length > 0) {
+    params.tags.forEach((tag, index) => {
+      if (index === 0) {
+        searchFilters.push({ "tags|~": tag });
+      } else {
+        searchFilters.push({ "tags|~|or": tag });
+      }
+    });
+  }
+  
+  return {
+    search: searchFilters,
+    sort: [
+      { "featured": "desc" },
+      { "published_at": "desc" }
+    ]
+  };
+}
+```
+
+## Error Handling & Performance
+
+### Common Search Errors
+
+| Error Code | Issue | Solution |
+|------------|-------|----------|
+| 400 | Invalid search syntax | Check field names and operators |
+| 401 | Authentication failed | Verify Metadata API token |
+| 413 | Query too complex | Reduce search conditions |
+| 429 | Rate limited | Implement retry logic |
+| 500 | Database timeout | Optimize query or add indexes |
+
+### Performance Optimization
+
+```javascript
+// ✅ Optimized search patterns
+const optimizedSearch = {
+  // Use indexed fields first
+  search: [
+    { "status": "active" },        // Indexed field
+    { "category_id": 5 },          // Foreign key (indexed)
+    { "created_at|>": lastWeek },  // Date field (indexed)
+    { "name|~": searchTerm }       // Text search last
+  ],
+  // Limit results
+  per_page: 50,
+  // Sort by indexed fields
+  sort: { "created_at": "desc" }
+};
+
+// ❌ Avoid inefficient patterns
+const slowSearch = {
+  search: [
+    { "description|~": "long text search" }, // Slow text search
+    { "complex_calculation|>": 100 }         // Computed field
+  ],
+  per_page: 1000, // Too many results
+  sort: { "description": "asc" } // Sorting by text field
+};
+```
+
+## 💡 **Try This**
+
+### Beginner Challenge
+Build a basic product search that:
+1. Filters by price range
+2. Searches product names
+3. Sorts by price or name
+4. Shows 20 results per page
+
+### Intermediate Challenge
+Create an advanced user finder that:
+1. Combines multiple search criteria
+2. Uses OR logic for role filtering
+3. Implements date range filtering
+4. Provides multi-field sorting
+
+### Advanced Challenge
+Design a complex analytics query that:
+1. Filters across multiple related tables
+2. Implements advanced date filtering
+3. Uses statistical aggregation
+4. Optimizes for performance
+
+## Common Mistakes to Avoid
+
+1. **Too many OR conditions** - Can slow down queries significantly
+2. **Text search on large fields** - Use indexed fields when possible
+3. **Missing pagination** - Always limit results for performance
+4. **Complex sorts on unindexed fields** - Can cause timeouts
+5. **No error handling** - Search queries can fail for various reasons
+
+## Next Steps
+
+- Learn about [Content Management](content.md) for creating and updating
+- Explore [Request History](request-history.md) for monitoring searches
+- Master [File Operations](file.md) for media-rich content
+- Understand [Token Security](token-scopes-reference.md) for access control
+
+## Need Help?
+
+- 📚 [Xano Community](https://community.xano.com) - Search and filtering discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Step-by-step examples
+- 📖 [Metadata API Docs](master-metadata-api.md) - Complete reference
+- 🔧 [Support](https://xano.com/support) - Technical assistance
