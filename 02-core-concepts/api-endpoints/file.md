@@ -1,440 +1,541 @@
 ---
+title: "File Management with Metadata API - Complete Guide"
+description: "Master file uploads, management, and integration with Xano's Metadata API - perfect for building media-rich applications with n8n, WeWeb, and Make"
 category: api-endpoints
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/api-endpoints
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - File Management
+  - File Upload
+  - Metadata API
+  - Media Storage
+  - Image Processing
+difficulty: intermediate
+reading_time: 12 minutes
+last_updated: '2025-01-23'
+prerequisites:
+  - Basic understanding of file handling
+  - Xano workspace with Metadata API access
+  - Knowledge of multipart form data
 ---
 
+# File Management with Metadata API
+
+## 📋 **Quick Summary**
+
+**What it does:** The Metadata API's file management capabilities allow you to upload, organize, and manage files programmatically within your Xano workspace.
+
+**Why it matters:** This enables you to:
+- Handle file uploads from any frontend or automation tool
+- Store and organize media files centrally
+- Associate files with database records seamlessly
+- Build media-rich applications without custom file endpoints
+
+**Time to implement:** 10-15 minutes for basic file upload, 30+ minutes for advanced workflows
+
 ---
-apple-mobile-web-app-status-bar-style: black
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: file
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## What You'll Learn
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+- How to upload files via Metadata API
+- Different file types and constraints
+- Associating files with database records
+- File management best practices
+- Error handling and validation
+- Integration patterns for no-code tools
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+## Understanding File Management in Xano
 
+Think of Xano's file storage as your centralized media library - like having a cloud storage service built directly into your backend that automatically integrates with your database.
 
+### 🎯 **Perfect For:**
+- User profile pictures and avatars
+- Product images in e-commerce apps
+- Document storage and management
+- Media galleries and portfolios
+- File-based data imports
 
+## File Upload Fundamentals
 
+### Supported File Types
 
+Xano categorizes files into specific types with different handling:
 
+| Type | Extensions | Max Size | Use Cases |
+|------|------------|----------|-----------|
+| **image** | jpg, jpeg, png, gif, webp | 10MB | Avatars, products, galleries |
+| **video** | mp4, mov, avi, webm | 100MB | Tutorials, demos, content |
+| **audio** | mp3, wav, aac, ogg | 50MB | Podcasts, music, sounds |
+| **attachment** | pdf, doc, txt, zip, etc. | 25MB | Documents, files, data |
 
+### Basic File Upload
 
+The most straightforward way to upload a file:
 
+```javascript
+POST /api:metadata/file
+Content-Type: multipart/form-data
 
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../the-function-stack/filters/manipulation.html)
-        -   [Math](../../the-function-stack/filters/math.html)
-        -   [Timestamp](../../the-function-stack/filters/timestamp.html)
-        -   [Text](../../the-function-stack/filters/text.html)
-        -   [Array](../../the-function-stack/filters/array.html)
-        -   [Transform](../../the-function-stack/filters/transform.html)
-        -   [Conversion](../../the-function-stack/filters/conversion.html)
-        -   [Comparison](../../the-function-stack/filters/comparison.html)
-        -   [Security](../../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../the-function-stack/data-types/text.html)
-        -   [Expression](../../the-function-stack/data-types/expression.html)
-        -   [Array](../../the-function-stack/data-types/array.html)
-        -   [Object](../../the-function-stack/data-types/object.html)
-        -   [Integer](../../the-function-stack/data-types/integer.html)
-        -   [Decimal](../../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../../the-function-stack/data-types/timestamp.html)
-        -   [Null](../../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../instance-settings/backup-and-restore.html)
-        -   [Security Policy](../instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](master-metadata-api.html)
-        -   [Tables and Schema](tables-and-schema.html)
-        -   [Content](content.html)
-        -   [Search](search.html)
-        -   [File](file.html)
-        -   [Request History](request-history.html)
-        -   [Workspace Import and Export](workspace-import-and-export.html)
-        -   [Token Scopes Reference](token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
-Was this helpful?
-
-Copy
-
-1.  [Xano Features](../snippets.html)
-2.  Metadata API
-
-File 
-====
-
-The Metadata API allows you to interact with the files of a given workspace. You can upload, get, delete, and bulk delete files.
-
-<div>
-
-</div>
-
-###  
-
-Upload
-
-Upload a file to a workspace.
-
-![](../../_gitbook/imagecb5b.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FDeERQENXYO5bNgF1bcMo%252FCleanShot%25202023-04-21%2520at%252011.04.25.png%3Falt%3Dmedia%26token%3D82f3114d-c307-483b-973d-225f42fcb487&width=768&dpr=4&quality=100&sign=5e5ee470&sv=2)
-
--   
-    
-        
-    
-    workspace\_id - required to determine which workspace the file should live.
-    
--   
-    
-        
-    
-    content - the file that is being uploaded.
-    
--   
-    
-        
-    
-    type - optionally enforce a file type: image, video, or audio. An attachment is the default selection.
-    
-Example Response Body:
-
-Copy
-
-``` 
-
+{
+  "workspace_id": 12345,
+  "content": [file binary data],
+  "type": "image"  // Optional: image, video, audio, or attachment
+}
 ```
 
-####  
+### 📝 **Example Response**
 
-Upload a File then Add it as Content to a Table
-
-Taking part of the response body from the previous example, we can add the file to a database table.
-
-Copy
-
-``` 
-// required metadata object from the previous example (created_at and id not needed):
-
+```json
+{
+  "id": "file_abc123",
+  "created_at": 1681349436618,
+  "name": "profile-photo.jpg",
+  "url": "https://x8d0-doy0-xx99.n0.xano.io/file/abc123",
+  "size": 245760,
+  "type": "image",
+  "mime_type": "image/jpeg",
+  "metadata": {
+    "width": 800,
+    "height": 600,
+    "format": "JPEG"
+  }
+}
 ```
 
-We can take the metadata object and use it for creating content of an image field.
+## File Upload Patterns
 
-![](../../_gitbook/image26ad.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252Fu3yZh34IJKCZxAelpQ7v%252FCleanShot%25202023-04-21%2520at%252011.12.59.png%3Falt%3Dmedia%26token%3Dc15f6228-fe5b-45e0-a036-4e127cfd56eb&width=768&dpr=4&quality=100&sign=fe10a38b&sv=2)
+### Pattern 1: Direct Upload from Form
 
-In this example, we take part of the object from the Upload File endpoint and use it to create content that includes an image field.
+Perfect for user-generated content:
 
-Last updated 6 months ago
+```yaml
+User Form → File Input → Upload to Metadata API → Store File ID in Database
+```
 
-Was this helpful?
+**Implementation:**
+```javascript
+// Frontend form submission
+const formData = new FormData();
+formData.append('workspace_id', '12345');
+formData.append('content', fileInput.files[0]);
+formData.append('type', 'image');
+
+const response = await fetch('/api:metadata/file', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer ' + metadataToken
+  },
+  body: formData
+});
+```
+
+### Pattern 2: File + Database Record Creation
+
+Upload file and create associated record in one workflow:
+
+```yaml
+1. Upload file via Metadata API
+2. Get file metadata from response
+3. Create database record with file reference
+4. Return success with record and file info
+```
+
+**Example Implementation:**
+```javascript
+// 1. Upload file first
+const fileResponse = await uploadFile(file);
+
+// 2. Create database record with file reference
+const recordResponse = await metadataAPI.createRecord({
+  workspace_id: 12345,
+  table_id: 67890,
+  fields: {
+    title: "Product Image",
+    image: fileResponse.metadata, // File metadata object
+    created_by: userId
+  }
+});
+```
+
+### Pattern 3: Bulk File Processing
+
+For processing multiple files:
+
+```yaml
+Files Array → Process Each → Upload to API → Collect Results → Create Records
+```
+
+## File Metadata and Database Integration
+
+### Understanding File Metadata
+
+When you upload a file, Xano returns a metadata object that you store in your database:
+
+```json
+{
+  "id": "file_abc123",
+  "name": "product-image.jpg",
+  "url": "https://instance.xano.io/file/abc123",
+  "size": 245760,
+  "type": "image",
+  "mime_type": "image/jpeg",
+  "width": 800,
+  "height": 600
+}
+```
+
+### Associating Files with Records
+
+To link a file with a database record, store the file metadata in a field:
+
+**Database Schema:**
+```yaml
+products table:
+  - id (integer, primary)
+  - name (text)
+  - image (file) ← Store file metadata here
+  - gallery (file, array) ← Multiple files
+```
+
+**Creating Record with File:**
+```json
+POST /api:metadata/content
+{
+  "workspace_id": 12345,
+  "table_id": 67890,
+  "fields": {
+    "name": "Wireless Headphones",
+    "price": 99.99,
+    "image": {
+      "id": "file_abc123",
+      "name": "headphones.jpg",
+      "url": "https://instance.xano.io/file/abc123",
+      "size": 245760,
+      "type": "image",
+      "mime_type": "image/jpeg"
+    }
+  }
+}
+```
+
+## No-Code Platform Integrations
+
+### 🔗 **n8n File Upload Workflow**
+
+```yaml
+1. HTTP Request (Receive file from webhook)
+2. Set Node (Prepare file data)
+3. HTTP Request (Upload to Metadata API)
+4. Set Node (Extract file metadata)
+5. HTTP Request (Create database record)
+6. Respond to Webhook (Return success)
+```
+
+**n8n HTTP Request Configuration:**
+```yaml
+Method: POST
+URL: https://[instance].xano.io/api:metadata/file
+Authentication: Header Auth
+Header Name: Authorization
+Header Value: Bearer [metadata-token]
+Body Content Type: multipart-form-data
+Fields:
+  - workspace_id: 12345
+  - content: [file from previous node]
+  - type: image
+```
+
+### 🌐 **WeWeb File Upload Component**
+
+```javascript
+// WeWeb action for file upload
+async function uploadToXano(file) {
+  const formData = new FormData();
+  formData.append('workspace_id', wwLib.envVars.WORKSPACE_ID);
+  formData.append('content', file);
+  formData.append('type', 'image');
+  
+  const response = await wwLib.api.post({
+    url: wwLib.envVars.XANO_METADATA_API + '/file',
+    data: formData,
+    headers: {
+      'Authorization': 'Bearer ' + wwLib.envVars.METADATA_TOKEN
+    }
+  });
+  
+  return response.data;
+}
+```
+
+### 🔧 **Make File Processing**
+
+```yaml
+Scenario Steps:
+1. Webhook (Receive file)
+2. HTTP Request (Upload to Xano)
+3. JSON Parse (Extract metadata)
+4. HTTP Request (Update database)
+5. Email (Notify completion)
+```
+
+## File Validation and Security
+
+### Pre-Upload Validation
+
+Always validate files before uploading:
+
+```javascript
+function validateFile(file, options = {}) {
+  const errors = [];
+  
+  // Size validation
+  const maxSize = options.maxSize || 10 * 1024 * 1024; // 10MB
+  if (file.size > maxSize) {
+    errors.push(`File too large. Max size: ${maxSize / 1024 / 1024}MB`);
+  }
+  
+  // Type validation
+  const allowedTypes = options.allowedTypes || ['image/jpeg', 'image/png'];
+  if (!allowedTypes.includes(file.type)) {
+    errors.push(`Invalid file type. Allowed: ${allowedTypes.join(', ')}`);
+  }
+  
+  // Name validation
+  if (file.name.length > 100) {
+    errors.push('Filename too long. Max 100 characters.');
+  }
+  
+  return errors;
+}
+```
+
+### Security Best Practices
+
+#### 1. **File Type Enforcement**
+```javascript
+// Enforce specific file types
+const uploadConfig = {
+  image: ['image/jpeg', 'image/png', 'image/webp'],
+  document: ['application/pdf', 'text/plain'],
+  video: ['video/mp4', 'video/webm']
+};
+```
+
+#### 2. **Size Limits**
+```javascript
+// Different size limits by type
+const sizeLimits = {
+  image: 5 * 1024 * 1024,    // 5MB
+  video: 50 * 1024 * 1024,   // 50MB
+  document: 10 * 1024 * 1024  // 10MB
+};
+```
+
+#### 3. **Content Scanning**
+```javascript
+// Basic content validation
+function validateImageContent(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => reject(new Error('Invalid image file'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+```
+
+## Error Handling
+
+### Common Upload Errors
+
+| Error Code | Issue | Solution |
+|------------|-------|----------|
+| 400 | Invalid file format | Check file type and size |
+| 401 | Authentication failed | Verify Metadata API token |
+| 413 | File too large | Reduce file size or compress |
+| 415 | Unsupported media type | Use allowed file formats |
+| 500 | Server error | Retry or contact support |
+
+### Robust Error Handling
+
+```javascript
+async function uploadWithRetry(file, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      // Validate file first
+      const errors = validateFile(file);
+      if (errors.length > 0) {
+        throw new Error(`Validation failed: ${errors.join(', ')}`);
+      }
+      
+      // Attempt upload
+      const result = await uploadFile(file);
+      return result;
+      
+    } catch (error) {
+      console.log(`Upload attempt ${attempt} failed:`, error.message);
+      
+      if (attempt === maxRetries) {
+        throw error;
+      }
+      
+      // Wait before retry (exponential backoff)
+      await new Promise(resolve => 
+        setTimeout(resolve, 1000 * Math.pow(2, attempt - 1))
+      );
+    }
+  }
+}
+```
+
+## Advanced File Management
+
+### File Organization Patterns
+
+#### 1. **Folder-like Organization**
+```javascript
+// Use naming conventions for organization
+const fileName = `users/${userId}/profile/${Date.now()}_${originalName}`;
+```
+
+#### 2. **Metadata Tagging**
+```json
+{
+  "name": "profile-photo.jpg",
+  "tags": ["profile", "user-123", "avatar"],
+  "category": "user-content",
+  "visibility": "private"
+}
+```
+
+#### 3. **Version Control**
+```javascript
+// Keep track of file versions
+const versionedName = `${baseFileName}_v${version}.${extension}`;
+```
+
+### File Processing Workflows
+
+#### Image Optimization Pipeline
+
+```yaml
+1. Upload original image
+2. Generate thumbnails (if needed client-side)
+3. Create multiple sizes (small, medium, large)
+4. Store all versions in database
+5. Serve appropriate size based on context
+```
+
+#### Document Processing
+
+```yaml
+1. Upload document
+2. Extract metadata (pages, size, type)
+3. Generate preview (if possible)
+4. Store in searchable format
+5. Create access logs
+```
+
+## Performance Optimization
+
+### Client-Side Optimization
+
+```javascript
+// Compress images before upload
+function compressImage(file, quality = 0.8) {
+  return new Promise((resolve) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    img.onload = () => {
+      // Calculate new dimensions
+      const ratio = Math.min(1920/img.width, 1080/img.height);
+      canvas.width = img.width * ratio;
+      canvas.height = img.height * ratio;
+      
+      // Draw and compress
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob(resolve, 'image/jpeg', quality);
+    };
+    
+    img.src = URL.createObjectURL(file);
+  });
+}
+```
+
+### Upload Progress Tracking
+
+```javascript
+function uploadWithProgress(file, onProgress) {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData();
+    formData.append('workspace_id', workspaceId);
+    formData.append('content', file);
+    
+    const xhr = new XMLHttpRequest();
+    
+    xhr.upload.addEventListener('progress', (event) => {
+      if (event.lengthComputable) {
+        const progress = (event.loaded / event.total) * 100;
+        onProgress(progress);
+      }
+    });
+    
+    xhr.addEventListener('load', () => {
+      if (xhr.status === 200) {
+        resolve(JSON.parse(xhr.responseText));
+      } else {
+        reject(new Error(`Upload failed: ${xhr.statusText}`));
+      }
+    });
+    
+    xhr.open('POST', '/api:metadata/file');
+    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+    xhr.send(formData);
+  });
+}
+```
+
+## 💡 **Try This**
+
+### Beginner Challenge
+Create a simple file upload form that:
+1. Validates file size and type
+2. Shows upload progress
+3. Displays the uploaded file
+4. Saves file metadata to database
+
+### Intermediate Challenge
+Build a photo gallery system that:
+1. Accepts multiple image uploads
+2. Creates thumbnails
+3. Organizes by categories
+4. Provides search functionality
+
+### Advanced Challenge
+Design a document management system that:
+1. Handles various file types
+2. Implements access controls
+3. Provides version history
+4. Generates activity logs
+
+## Common Mistakes to Avoid
+
+1. **Not validating files** - Always validate size, type, and content
+2. **Missing error handling** - Upload failures are common
+3. **Storing files in database** - Use metadata references, not file content
+4. **No progress feedback** - Users need upload progress indication
+5. **Ignoring security** - Validate and sanitize all uploaded content
+
+## Next Steps
+
+- Explore [Content Management](content.md) for database integration
+- Learn about [Search Operations](search.md) for finding files
+- Master [Workspace Management](workspace-import-and-export.md)
+- Understand [Token Security](token-scopes-reference.md)
+
+## Need Help?
+
+- 📚 [Xano Community](https://community.xano.com) - File upload discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Step-by-step guides
+- 📖 [File Storage Docs](../../file-storage/file-storage-in-xano.md) - Comprehensive reference
+- 🔧 [Support](https://xano.com/support) - Technical assistance
