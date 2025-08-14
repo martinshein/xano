@@ -1,476 +1,332 @@
 ---
+title: "Environment Variables - Secure Configuration"
+description: "Store API keys, secrets, and configuration safely across your workspace"
 category: function-stack
-difficulty: advanced
+subcategory: configuration
+difficulty: beginner
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+- environment
+- variables
+- security
+- configuration
+- secrets
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
-
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'environment-variables'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](building-with-visual-development/background-tasks.html)
-        -   [Triggers](building-with-visual-development/triggers.html)
-        -   [Middleware](building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](functions/database-requests/get-record.html)
-            -   [Add Record](functions/database-requests/add-record.html)
-            -   [Edit Record](functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](functions/database-requests/patch-record.html)
-            -   [Delete Record](functions/database-requests/delete-record.html)
-            -   [Bulk Operations](functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](functions/database-requests/database-transaction.html)
-            -   [External Database Query](functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](functions/data-manipulation/create-variable.html)
-            -   [Update Variable](functions/data-manipulation/update-variable.html)
-            -   [Conditional](functions/data-manipulation/conditional.html)
-            -   [Switch](functions/data-manipulation/switch.html)
-            -   [Loops](functions/data-manipulation/loops.html)
-            -   [Math](functions/data-manipulation/math.html)
-            -   [Arrays](functions/data-manipulation/arrays.html)
-            -   [Objects](functions/data-manipulation/objects.html)
-            -   [Text](functions/data-manipulation/text.html)
-                    -   [Security](functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](functions/data-caching-redis.html)
-        -   [Custom Functions](functions/custom-functions.html)
-        -   [Utility Functions](functions/utility-functions.html)
-        -   [File Storage](functions/file-storage.html)
-        -   [Cloud Services](functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](filters/manipulation.html)
-        -   [Math](filters/math.html)
-        -   [Timestamp](filters/timestamp.html)
-        -   [Text](filters/text.html)
-        -   [Array](filters/array.html)
-        -   [Transform](filters/transform.html)
-        -   [Conversion](filters/conversion.html)
-        -   [Comparison](filters/comparison.html)
-        -   [Security](filters/security.html)
-            -   Data Types
-        
-        -   [Text](data-types/text.html)
-        -   [Expression](data-types/expression.html)
-        -   [Array](data-types/array.html)
-        -   [Object](data-types/object.html)
-        -   [Integer](data-types/integer.html)
-        -   [Decimal](data-types/decimal.html)
-        -   [Boolean](data-types/boolean.html)
-        -   [Timestamp](data-types/timestamp.html)
-        -   [Null](data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [Adding Environment Variables](#adding-environment-variables)
-
--   [From the left-hand navigation, click Settings](#from-the-left-hand-navigation-click-settings)
-
--   [On the next screen, click to edit your environment variables](#on-the-next-screen-click-to-edit-your-environment-variables)
-
--   [Click to add a new environment variable.](#click-to-add-a-new-environment-variable)
-
--   [Use environment variables in your function stacks](#use-environment-variables-in-your-function-stacks)
-
--   [Xano-generated Environment Variables](#xano-generated-environment-variables)
-
-Was this helpful?
-
-Copy
-
-
-
-Environment Variables 
-=====================
-
-Environment Variables are persistent variables that are available across your entire workspace. Typically, these are used to store things like external API keys or other sensitive information that you need to use across multiple function stacks, without storing it in a database table.
-
- 
-
-Adding Environment Variables
-
-<div>
-
-1
-
-###  
-
-From the left-hand navigation, click Settings
-
-2
-
-###  
-
-On the next screen, click [![](../_gitbook/imaged7c5.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FX2MQnjBD3Wex03QhCZKw%252FCleanShot%25202025-01-13%2520at%252013.01.29.png%3Falt%3Dmedia%26token%3Dc7155231-2bbd-443f-b059-8423643843bd&width=300&dpr=4&quality=100&sign=cff7be7f&sv=2)] to edit your environment variables
-
-3
-
-###  
-
-Click [![](../_gitbook/image6283.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FMXEIKFcc8ZwFG0OGJG5H%252FCleanShot%25202025-01-13%2520at%252013.01.51.png%3Falt%3Dmedia%26token%3D28b7b055-1ed1-4c35-b9f4-c9ad7e4ff974&width=300&dpr=4&quality=100&sign=18773648&sv=2)] to add a new environment variable.
-
-Give your environment variable a name that you can easily recognize; this is how you\'ll identify it when calling it in function stacks.
-
-Provide a value for the variable.
-
-Environment variables can only be updated from your workspace settings.
-
-4
-
-###  
-
-Use environment variables in your function stacks
-
-They\'ll be available in the dropdown under [**ENV**]
-
-![](../_gitbook/imaged11a.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FREMQciIB6mRkZtAXcoYO%252FCleanShot%25202025-01-13%2520at%252013.03.44.png%3Falt%3Dmedia%26token%3Dd444f173-76ca-4509-a04e-a968fbc9f07d&width=768&dpr=4&quality=100&sign=c5be059d&sv=2)
-
-</div>
-
- 
-
-Xano-generated Environment Variables
-
-Xano maintains several environment variables you can use.
-
-Variable Name
-
-Contents
-
-\$remote\_ip
-
-Contains the IP address the request came from
-
-\$http\_headers
-
-Contains the headers of the request
-
-\$request\_uri
-
-Contains the URL of the request
-
-\$request\_querystring
-
-Contains any URL parameters attached to the request URL
-
-\$datasource
-
-Contains the datasource the request is targeting
-
-\$branch
-
-Contains the branch the request is targeting
-
-\$request\_method
-
-Contains the request method (GET, POST, DELETE, etc\...)
-
-Last updated 7 months ago
-
-Was this helpful?
+# Environment Variables - Secure Configuration
+
+
+
+## Quick Summary
+
+> **What it is:** Secure storage for sensitive data like API keys that work across your entire workspace
+> 
+> **When to use:** Storing credentials, API keys, configuration values, or any sensitive information
+> 
+> **Key benefit:** Keep secrets safe and centralized, never hardcode sensitive data
+> 
+> **Perfect for:** Non-developers managing integrations and API connections securely
+
+## What You'll Learn
+
+- Creating environment variables
+- Using them in functions
+- Security best practices
+- System variables
+- Environment-specific configs
+
+## Why Environment Variables?
+
+### Without Environment Variables (BAD!)
+```javascript
+// NEVER DO THIS!
+api_key = "sk-1234567890abcdef"  // Exposed in code!
+Send_To_API(api_key, data)
+```
+
+### With Environment Variables (GOOD!)
+```javascript
+// Safe and secure
+api_key = env.OPENAI_API_KEY  // Hidden from code
+Send_To_API(api_key, data)
+```
+
+## Setting Up Environment Variables
+
+### Step 1: Navigate to Settings
+1. Click Settings in left navigation
+2. Select Environment Variables
+3. Click Edit button
+
+### Step 2: Add New Variable
+```javascript
+Name: OPENAI_API_KEY
+Value: sk-your-actual-api-key-here
+```
+
+### Step 3: Use in Function Stack
+```javascript
+// Access from dropdown
+api_key = [ENV] → OPENAI_API_KEY
+
+// Use in API call
+External_API_Request {
+  url: "https://api.openai.com/v1/chat",
+  headers: {
+    Authorization: "Bearer " + env.OPENAI_API_KEY
+  }
+}
+```
+
+## Common Use Cases
+
+### API Integrations
+```javascript
+// Store different API keys
+env.STRIPE_SECRET_KEY
+env.SENDGRID_API_KEY
+env.TWILIO_AUTH_TOKEN
+env.AWS_ACCESS_KEY
+env.GOOGLE_MAPS_KEY
+```
+
+### Configuration Values
+```javascript
+// App settings
+env.APP_URL = "https://myapp.com"
+env.SUPPORT_EMAIL = "support@myapp.com"
+env.MAX_UPLOAD_SIZE = "10485760"  // 10MB
+env.TIMEZONE = "America/New_York"
+```
+
+### Feature Flags
+```javascript
+// Toggle features
+env.ENABLE_PAYMENTS = "true"
+env.MAINTENANCE_MODE = "false"
+env.BETA_FEATURES = "true"
+```
+
+## Integration Examples
+
+### With n8n - Webhook Security
+```javascript
+// n8n sends webhook with secret
+webhook_secret = Input.headers.x_webhook_secret
+
+// Verify against environment variable
+if (webhook_secret != env.WEBHOOK_SECRET) {
+  return { 
+    error: "Unauthorized",
+    status: 401 
+  }
+}
+
+// Process verified webhook
+Process_Webhook_Data(Input.body)
+```
+
+### With WeWeb - API Configuration
+```javascript
+// Different APIs per environment
+if (env.ENVIRONMENT == "production") {
+  api_base = env.PROD_API_URL
+} else {
+  api_base = env.DEV_API_URL
+}
+
+// Make API call
+External_API {
+  url: api_base + "/endpoint",
+  key: env.API_KEY
+}
+```
+
+## System Environment Variables
+
+Xano provides built-in variables:
+
+### Request Information
+```javascript
+$remote_ip       // Client IP address
+$http_headers    // Request headers
+$request_uri     // Full request URL
+$request_method  // GET, POST, etc.
+```
+
+### Environment Context
+```javascript
+$datasource      // Current data source
+$branch          // Current branch
+$request_querystring  // URL parameters
+```
+
+### Usage Example
+```javascript
+// Log API access
+Add_Record {
+  table: "api_logs",
+  ip_address: $remote_ip,
+  endpoint: $request_uri,
+  method: $request_method,
+  timestamp: now()
+}
+
+// Rate limit by IP
+rate_key = "rate_limit_" + $remote_ip
+Rate_Limit(rate_key, 100, 3600)
+```
+
+## Environment-Specific Configuration
+
+### Development vs Production
+```javascript
+// Set different values per environment
+DEV_API_URL = "https://api-dev.example.com"
+PROD_API_URL = "https://api.example.com"
+
+DEV_DEBUG_MODE = "true"
+PROD_DEBUG_MODE = "false"
+
+// Use based on current environment
+if (env.ENVIRONMENT == "production") {
+  use_live_payments = true
+  api_url = env.PROD_API_URL
+} else {
+  use_live_payments = false
+  api_url = env.DEV_API_URL
+}
+```
+
+## Security Best Practices
+
+### What to Store
+✅ **Good for Environment Variables:**
+- API keys and secrets
+- Database connection strings
+- Third-party service credentials
+- Configuration values
+- Feature flags
+
+❌ **Don't Store:**
+- User passwords
+- Personal information
+- Large data sets
+- Temporary values
+- Computed values
+
+### Naming Conventions
+```javascript
+// Use clear, consistent names
+STRIPE_SECRET_KEY     // Service + Type
+AWS_ACCESS_KEY_ID     // Service + Specific Key
+DB_CONNECTION_STRING  // Purpose + Type
+SMTP_PASSWORD        // Protocol + Type
+```
+
+## Common Patterns
+
+### API Key Rotation
+```javascript
+// Support multiple keys
+primary_key = env.API_KEY_PRIMARY
+backup_key = env.API_KEY_BACKUP
+
+Try {
+  result = Call_API(primary_key)
+} Catch {
+  // Fallback to backup
+  result = Call_API(backup_key)
+  Log_Alert("Primary key failed")
+}
+```
+
+### Multi-Tenant Configuration
+```javascript
+// Different settings per client
+client = Input.client_id
+
+if (client == "client_a") {
+  api_key = env.CLIENT_A_API_KEY
+  webhook = env.CLIENT_A_WEBHOOK
+} else if (client == "client_b") {
+  api_key = env.CLIENT_B_API_KEY
+  webhook = env.CLIENT_B_WEBHOOK
+}
+```
+
+### Dynamic Configuration
+```javascript
+// Load config from environment
+config = {
+  max_retries: to_int(env.MAX_RETRIES || "3"),
+  timeout: to_int(env.TIMEOUT_SECONDS || "30"),
+  debug: env.DEBUG_MODE == "true"
+}
+```
+
+## Try This
+
+Set up secure API integration:
+1. Add API key to environment variables
+2. Create function using the key
+3. Add error handling
+4. Test with invalid key
+5. Monitor usage
+
+## Pro Tips
+
+💡 **Never Hardcode:** Always use env vars for sensitive data
+
+💡 **Use Descriptive Names:** Make it clear what each variable is for
+
+💡 **Document Variables:** Keep a list of required env vars
+
+💡 **Rotate Regularly:** Change API keys periodically
+
+💡 **Different Per Environment:** Use separate keys for dev/prod
+
+## Common Gotchas
+
+### Missing Variables
+```javascript
+// Problem: Variable doesn't exist
+api_key = env.MISSING_KEY  // Returns null
+
+// Solution: Add default or check
+api_key = env.API_KEY || "default_key"
+
+if (!env.API_KEY) {
+  return { error: "API key not configured" }
+}
+```
+
+### Type Conversion
+```javascript
+// Problem: All env vars are strings
+max_size = env.MAX_SIZE  // "1000" as string
+
+// Solution: Convert types
+max_size = to_int(env.MAX_SIZE)
+enabled = env.FEATURE_ENABLED == "true"
+```
+
+### Case Sensitivity
+```javascript
+// Variables are case-sensitive
+env.api_key  // Different from
+env.API_KEY  // This one
+
+// Be consistent with naming
+```
+
+## Next Steps
+
+1. Audit hardcoded secrets
+2. Move to environment variables
+3. Document all variables
+4. Set up for each environment
+5. Implement key rotation
+
+Remember: Environment variables keep your secrets safe - never expose sensitive data in code!

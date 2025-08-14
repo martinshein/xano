@@ -1,381 +1,270 @@
 ---
+title: "Delete Record - Remove Data Safely"
+description: "Delete database records with proper validation and safety checks"
 category: function-stack
-difficulty: advanced
+subcategory: database
+difficulty: beginner
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
+- delete
 - database
-title: '[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv'
+- crud
+- records
+- operations
 ---
 
-[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../index.html)
+# Delete Record - Remove Data Safely
 
 
 
+## Quick Summary
 
+> **What it is:** Function to permanently remove records from your database
+> 
+> **When to use:** Deleting user accounts, removing old data, cleaning up test records
+> 
+> **Key benefit:** Safe, controlled deletion with proper validation
+> 
+> **Perfect for:** Non-developers managing data cleanup and user requests
 
+## What You'll Learn
 
+- Setting up delete operations
+- Adding safety checks
+- Soft vs hard deletes
+- Cascade deletion
+- Recovery strategies
 
+## Basic Delete Setup
 
+### Step 1: Add Delete Function
+1. Click + in function stack
+2. Select "Database Requests"
+3. Choose "Delete Record"
+4. Select your table
 
+### Step 2: Specify Target
+```javascript
+// Delete by ID
+field_name: "id"
+field_value: Input.user_id
 
+// Delete by email
+field_name: "email"
+field_value: Input.email
+```
 
+## Integration Examples
 
+### With n8n - Cleanup Workflow
+```javascript
+// n8n sends deletion request
+user_id = Webhook.user_id
 
+// Verify before deleting
+user = Get_Record(user_id)
+if (user.can_delete) {
+  Delete_Record {
+    table: "users",
+    field_name: "id",
+    field_value: user_id
+  }
+  return { success: true }
+}
+```
 
+### With WeWeb - User Account
+```javascript
+// User requests deletion
+user_id = Auth.user_id
 
--   
+// Soft delete first
+Edit_Record {
+  id: user_id,
+  deleted_at: timestamp(),
+  status: "deleted"
+}
 
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+// Schedule hard delete later
+Background_Task {
+  delay: 30_days,
+  Delete_Record(user_id)
+}
+```
 
--   
+## Soft Delete Pattern
 
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../building-with-visual-development/triggers.html)
-        -   [Middleware](../../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](query-all-records/external-filtering-examples.html)
-                            -   [Get Record](get-record.html)
-            -   [Add Record](add-record.html)
-            -   [Edit Record](edit-record.html)
-            -   [Add or Edit Record](add-or-edit-record.html)
-            -   [Patch Record](patch-record.html)
-            -   [Delete Record](delete-record.html)
-            -   [Bulk Operations](bulk-operations.html)
-            -   [Database Transaction](database-transaction.html)
-            -   [External Database Query](external-database-query.html)
-            -   [Direct Database Query](direct-database-query.html)
-            -   [Get Database Schema](get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../data-manipulation/create-variable.html)
-            -   [Update Variable](../data-manipulation/update-variable.html)
-            -   [Conditional](../data-manipulation/conditional.html)
-            -   [Switch](../data-manipulation/switch.html)
-            -   [Loops](../data-manipulation/loops.html)
-            -   [Math](../data-manipulation/math.html)
-            -   [Arrays](../data-manipulation/arrays.html)
-            -   [Objects](../data-manipulation/objects.html)
-            -   [Text](../data-manipulation/text.html)
-                    -   [Security](../security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../data-caching-redis.html)
-        -   [Custom Functions](../custom-functions.html)
-        -   [Utility Functions](../utility-functions.html)
-        -   [File Storage](../file-storage.html)
-        -   [Cloud Services](../cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../filters/manipulation.html)
-        -   [Math](../../filters/math.html)
-        -   [Timestamp](../../filters/timestamp.html)
-        -   [Text](../../filters/text.html)
-        -   [Array](../../filters/array.html)
-        -   [Transform](../../filters/transform.html)
-        -   [Conversion](../../filters/conversion.html)
-        -   [Comparison](../../filters/comparison.html)
-        -   [Security](../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../data-types/text.html)
-        -   [Expression](../../data-types/expression.html)
-        -   [Array](../../data-types/array.html)
-        -   [Object](../../data-types/object.html)
-        -   [Integer](../../data-types/integer.html)
-        -   [Decimal](../../data-types/decimal.html)
-        -   [Boolean](../../data-types/boolean.html)
-        -   [Timestamp](../../data-types/timestamp.html)
-        -   [Null](../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+Keep data but mark as deleted:
 
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+```javascript
+// Instead of deleting
+Edit_Record {
+  id: record_id,
+  is_deleted: true,
+  deleted_at: now(),
+  deleted_by: Auth.user_id
+}
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+// Filter in queries
+Query_All_Records {
+  where: is_deleted != true
+}
+```
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+## Safety Checks
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+### Confirm Before Delete
+```javascript
+// Check dependencies
+related_records = Query_All_Records {
+  table: "orders",
+  where: user_id == Input.user_id
+}
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+if (related_records.length > 0) {
+  return {
+    error: "Cannot delete: User has active orders"
+  }
+}
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+// Proceed with deletion
+Delete_Record(Input.user_id)
+```
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../xano-features/metadata-api/search.html)
-        -   [File](../../../xano-features/metadata-api/file.html)
-        -   [Request History](../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+### Archive Before Delete
+```javascript
+// Backup record
+record = Get_Record(id)
+Add_Record {
+  table: "archive",
+  data: record
+}
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+// Then delete
+Delete_Record(id)
+```
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+## Cascade Deletion
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+Delete related records:
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+```javascript
+Transaction {
+  // Delete child records first
+  Delete_All_Records {
+    table: "user_posts",
+    where: user_id == Input.user_id
+  }
+  
+  Delete_All_Records {
+    table: "user_comments",
+    where: user_id == Input.user_id
+  }
+  
+  // Then delete parent
+  Delete_Record {
+    table: "users",
+    id: Input.user_id
+  }
+}
+```
 
--   
-    Security
-    
-    -   Best Practices
+## Bulk Deletion
 
-[Powered by GitBook]
+```javascript
+// Delete old records
+old_date = timestamp() - 365_days
 
-On this page
+old_records = Query_All_Records {
+  where: created_at < old_date
+}
 
-Was this helpful?
+For Each record in old_records {
+  Delete_Record(record.id)
+}
+```
 
-Copy
+## Common Patterns
 
+### GDPR Compliance
+```javascript
+// User data deletion
+1. Export user data
+2. Send copy to user
+3. Delete personal info
+4. Keep anonymized records
+5. Log compliance action
+```
 
-2.  Functions
-3.  [Database Requests](../database-requests.html)
+### Cleanup Job
+```javascript
+// Daily cleanup
+Background_Task {
+  schedule: "daily",
+  Delete old logs,
+  Delete expired sessions,
+  Delete soft-deleted records > 30 days
+}
+```
 
-Delete Record 
-=============
+## Error Handling
 
-Deletes a record from the database.
+```javascript
+Try {
+  Delete_Record(id)
+  Log_Activity("Record deleted", id)
+  return { success: true }
+} Catch (error) {
+  Log_Error("Delete failed", error)
+  return { 
+    success: false, 
+    error: "Could not delete record" 
+  }
+}
+```
 
-Filter
+## Try This
 
-Settings
+Create safe deletion flow:
+1. Add delete function
+2. Check for dependencies
+3. Archive record first
+4. Delete with confirmation
+5. Log the deletion
 
-You need to tell Xano which record you want to target by providing a field\_name and field\_value. `Field_name` is the name of the database field to look inside of, and `field_value` is the value to look for in that field --- for example, `field_name: id` & `field_value: 1`
+## Pro Tips
 
-Give this function a description for easy understanding of what this function achieves.
+💡 **Always Soft Delete First:** Mark as deleted before permanent removal
 
-This description will appear in the function stack, giving you easier readability for complex logic.
+💡 **Check Dependencies:** Verify no related records exist
 
-![](../../../_gitbook/imagea393.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F00SjHKI4fAe0UkiHPtFG%252FCleanShot%25202025-01-08%2520at%252012.46.13.png%3Falt%3Dmedia%26token%3Db3395add-2b03-466e-91e9-0cf386415258&width=768&dpr=4&quality=100&sign=20eb59a6&sv=2)
+💡 **Use Transactions:** Ensure all or nothing deletion
 
-Last updated 7 months ago
+💡 **Keep Audit Logs:** Track who deleted what and when
 
-Was this helpful?
+💡 **Add Recovery Period:** Allow undoing deletions within timeframe
+
+## Common Gotchas
+
+### Foreign Key Constraints
+- Problem: Can't delete parent with children
+- Solution: Delete children first or use cascade
+
+### No Undo
+- Problem: Deletion is permanent
+- Solution: Implement soft delete with recovery
+
+### Performance Issues
+- Problem: Bulk deletion is slow
+- Solution: Delete in batches with background tasks
+
+## Next Steps
+
+1. Implement soft deletes
+2. Add confirmation dialogs
+3. Create archive system
+4. Set up cascade rules
+5. Build recovery features
+
+Remember: Deletion is permanent - always validate and backup before removing data!
