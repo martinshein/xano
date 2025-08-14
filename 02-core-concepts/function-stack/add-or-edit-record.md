@@ -1,424 +1,279 @@
 ---
+title: "Add or Edit Record - Smart Database Updates"
+description: "Automatically add new records or update existing ones with a single function in Xano"
 category: function-stack
-difficulty: advanced
+subcategory: database-operations
+difficulty: intermediate
+has_code_examples: true
 last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
 - database
-title: '[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv'
+- crud
+- upsert
+- records
+- automation
 ---
 
-[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../index.html)
+# Add or Edit Record - Smart Database Updates
 
+## Quick Summary
 
+> **What it is:** A smart database function that automatically decides whether to create a new record or update an existing one based on your criteria
+> 
+> **When to use:** Perfect for syncing data, updating user preferences, managing shopping carts, or any scenario where you're not sure if a record already exists
+> 
+> **Key benefit:** Eliminates the need for separate "check if exists" logic - one function handles both scenarios
+> 
+> **Common name:** Also known as "Upsert" (Update + Insert) in database terminology
 
+## What You'll Learn
 
+- Setting up automatic add-or-update logic
+- Configuring lookup criteria for finding existing records
+- Managing field updates efficiently
+- Real-world patterns for n8n and WeWeb
+- Avoiding common pitfalls with upserts
 
+## How It Works
 
+The Add or Edit Record function follows this simple logic:
+1. **Searches** for a record matching your criteria
+2. **Updates** the record if found
+3. **Creates** a new record if not found
+4. **Returns** the final record (whether new or updated)
 
+Think of it like a smart assistant that knows whether to update your existing shopping cart or create a new one.
 
+## Configuration
 
+### 1. Define Your Lookup Criteria
 
+Tell Xano how to identify if a record already exists:
 
+**Field Name:** The database field to search in
+**Field Value:** The value to look for
 
+**Common Examples:**
+```javascript
+// User preferences (one per user)
+Field Name: user_id
+Field Value: 123
 
+// Shopping cart (one per session)
+Field Name: session_token
+Field Value: "abc-xyz-789"
 
+// Product inventory (by SKU)
+Field Name: sku
+Field Value: "PROD-001"
+```
 
--   
+### 2. Specify Data Fields
 
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+Configure which fields to set when adding or updating:
 
--   
+**Quick Actions:**
+- Click the toggle icon to enable/disable all fields at once
+- Hover and click the disable icon for specific fields
+- Use auto-fill from an existing object variable
 
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../building-with-visual-development/triggers.html)
-        -   [Middleware](../../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](query-all-records/external-filtering-examples.html)
-                            -   [Get Record](get-record.html)
-            -   [Add Record](add-record.html)
-            -   [Edit Record](edit-record.html)
-            -   [Add or Edit Record](add-or-edit-record.html)
-            -   [Patch Record](patch-record.html)
-            -   [Delete Record](delete-record.html)
-            -   [Bulk Operations](bulk-operations.html)
-            -   [Database Transaction](database-transaction.html)
-            -   [External Database Query](external-database-query.html)
-            -   [Direct Database Query](direct-database-query.html)
-            -   [Get Database Schema](get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../data-manipulation/create-variable.html)
-            -   [Update Variable](../data-manipulation/update-variable.html)
-            -   [Conditional](../data-manipulation/conditional.html)
-            -   [Switch](../data-manipulation/switch.html)
-            -   [Loops](../data-manipulation/loops.html)
-            -   [Math](../data-manipulation/math.html)
-            -   [Arrays](../data-manipulation/arrays.html)
-            -   [Objects](../data-manipulation/objects.html)
-            -   [Text](../data-manipulation/text.html)
-                    -   [Security](../security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../data-caching-redis.html)
-        -   [Custom Functions](../custom-functions.html)
-        -   [Utility Functions](../utility-functions.html)
-        -   [File Storage](../file-storage.html)
-        -   [Cloud Services](../cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../filters/manipulation.html)
-        -   [Math](../../filters/math.html)
-        -   [Timestamp](../../filters/timestamp.html)
-        -   [Text](../../filters/text.html)
-        -   [Array](../../filters/array.html)
-        -   [Transform](../../filters/transform.html)
-        -   [Conversion](../../filters/conversion.html)
-        -   [Comparison](../../filters/comparison.html)
-        -   [Security](../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../data-types/text.html)
-        -   [Expression](../../data-types/expression.html)
-        -   [Array](../../data-types/array.html)
-        -   [Object](../../data-types/object.html)
-        -   [Integer](../../data-types/integer.html)
-        -   [Decimal](../../data-types/decimal.html)
-        -   [Boolean](../../data-types/boolean.html)
-        -   [Timestamp](../../data-types/timestamp.html)
-        -   [Null](../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+**Field Management Tips:**
+- Disabled fields keep their current values (on update)
+- Disabled fields use database defaults (on add)
+- Only enable fields you actually need to change
 
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+## Practical Examples
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+### Example 1: User Profile Sync
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+Sync user data from an external system:
+```javascript
+// Lookup
+Field Name: email
+Field Value: "user@example.com"
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+// Data
+{
+  name: "John Doe",
+  last_login: timestamp_now(),
+  subscription_status: "active",
+  updated_at: timestamp_now()
+}
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+// Result: Updates existing user or creates new one
+```
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+### Example 2: Shopping Cart Management
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../xano-features/metadata-api/search.html)
-        -   [File](../../../xano-features/metadata-api/file.html)
-        -   [Request History](../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+Manage cart items intelligently:
+```javascript
+// Lookup
+Field Name: compound_key  // "user_123_prod_456"
+Field Value: user_id + "_" + product_id
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+// Data
+{
+  user_id: 123,
+  product_id: 456,
+  quantity: new_quantity,
+  price: current_price,
+  updated_at: timestamp_now()
+}
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+// Result: Updates quantity or adds new item
+```
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+### Example 3: Activity Tracking
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+Track user activities without duplicates:
+```javascript
+// Lookup
+Field Name: activity_key  // "user_123_video_789"
+Field Value: user_id + "_" + content_type + "_" + content_id
 
--   
-    Security
-    
-    -   Best Practices
+// Data
+{
+  user_id: 123,
+  content_type: "video",
+  content_id: 789,
+  view_count: INCREMENT(1),  // Using expression
+  last_viewed: timestamp_now()
+}
+```
 
-[Powered by GitBook]
+## Advanced Features
 
-On this page
+### Custom Return Fields
 
-Was this helpful?
+Optimize performance by returning only needed fields:
+1. Click the output configuration icon
+2. Select specific fields to return
+3. Reduces response size and improves speed
 
-Copy
+### Variable Naming
 
+Use consistent variable names across conditional logic:
+```javascript
+// Both branches use same variable name
+If (condition) {
+  Add or Edit Record -> user_data
+} Else {
+  Get Record -> user_data
+}
+// Easy to use user_data in response
+```
 
-2.  Functions
-3.  [Database Requests](../database-requests.html)
+### Add Descriptions
 
-Add or Edit Record 
-==================
+Make your function stack readable:
+```javascript
+Description: "Sync user profile from CRM system"
+// This appears in the function stack for clarity
+```
 
-Add or Edit Record takes the best of both Add and Edit Record, and combines them into one function. Using this will\...
+## Integration Patterns
 
--   
-    
-        
-    
-    Edit the record if the record is found
-    
--   
-    
-        
-    
-    Add it if it isn\'t
-    
-Functionally, it is the same as using Edit Record.
+### With n8n
 
-Filter
+**Webhook Data Sync:**
+```javascript
+1. n8n sends webhook with user data
+2. Add or Edit using email as lookup
+3. Return success/failure to n8n
+4. n8n continues workflow based on result
+```
 
-Output
+### With WeWeb
 
-Settings
+**Form Submissions:**
+```javascript
+1. WeWeb form collects user preferences
+2. Add or Edit using user_id
+3. Return updated preferences
+4. WeWeb updates UI with new data
+```
 
-You need to tell Xano which record you want to edit by providing a field\_name and field\_value. `Field_name` is the name of the database field to look inside of, and `field_value` is the value to look for in that field --- for example, `field_name: id` & `field_value: 1`
+## Common Mistakes to Avoid
 
-In this section, you will specify the data to be added to the record.
+1. **Wrong Lookup Field**
+   - Use unique fields (email, user_id, SKU)
+   - Avoid non-unique fields (name, status)
+   - Consider compound keys for complex lookups
 
-Click [![](../../../_gitbook/image9ed5.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FerS9VQthKN0ySSX9rDcH%252FCleanShot%25202025-01-08%2520at%252012.24.30.png%3Falt%3Dmedia%26token%3Deb3d50e5-e86d-4b09-970f-b9cbf66c603d&width=300&dpr=4&quality=100&sign=b682d79&sv=2)] to quickly enable or disable all fields.
+2. **Overwriting Important Data**
+   - Disable fields you don't want to change
+   - Be careful with timestamps and system fields
+   - Test with sample data first
 
-Hover over each field name and click [![](../../../_gitbook/imagef871.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FmRHwtU3XwSB6vrrvi1D2%252FCleanShot%25202025-01-08%2520at%252012.26.55.png%3Falt%3Dmedia%26token%3D28a5350c-3d04-4d85-8747-5a4859a04cd5&width=300&dpr=4&quality=100&sign=513f7fe7&sv=2)] to disable that field --- this means that no data will be written, or the default value in the database will be used instead, if set.
-[![](../../../_gitbook/imagee996.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F2H5DY6K58qanuiby88W1%252FCleanShot%25202025-01-08%2520at%252012.26.32.png%3Falt%3Dmedia%26token%3D5500a1fb-9a5e-4757-978a-853cdd5f199e&width=300&dpr=4&quality=100&sign=25de7b7f&sv=2)]
+3. **Performance Issues**
+   - Index your lookup field for speed
+   - Return only necessary fields
+   - Consider batch operations for multiple records
 
-If you have an object that already contains all of the data to use in the add record step, click [![](../../../_gitbook/image8851.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FTuOb0Uv6AFjHpbvEe8F3%252FCleanShot%25202025-01-08%2520at%252012.27.23.png%3Falt%3Dmedia%26token%3Dcae0e905-a465-4605-a9a7-8d23de7eeb23&width=300&dpr=4&quality=100&sign=9de16989&sv=2)] to auto-fill from that variable.
+4. **Missing Error Handling**
+   - Handle unique constraint violations
+   - Check for required fields
+   - Validate data before upsert
 
-###  
+## Best Practices
 
-Customizing the return
+### 1. Use Appropriate Lookup Fields
+```javascript
+// Good: Unique identifiers
+email, user_id, sku, session_token
 
-Click [![](../../../_gitbook/image4b57.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FvQl01nxlvaoR0EXGwtPv%252FCleanShot%25202025-01-06%2520at%252014.45.09.png%3Falt%3Dmedia%26token%3D396282da-fa99-4cdf-b7e2-888e6b8e6d74&width=300&dpr=4&quality=100&sign=abe763be&sv=2)] to edit the fields returned in the query.
+// Bad: Non-unique fields
+first_name, status, category
+```
 
-Note that customizing to reduce the fields returned will not have an impact on query speed, but may help with other performance issues in your function stacks. It is always good practice to only return the fields necessary.
+### 2. Manage Timestamps Properly
+```javascript
+// Add or Edit data
+{
+  // ... other fields
+  created_at: IF_NULL(existing.created_at, timestamp_now()),
+  updated_at: timestamp_now()
+}
+```
 
-###  
+### 3. Handle Concurrent Updates
+For high-traffic scenarios, consider:
+- Using database transactions
+- Implementing optimistic locking
+- Adding retry logic in your frontend
 
-Return As
+## Try This
 
-Change the variable name that this function will output to.
+Build a user preference system:
+1. Create a preferences table with user_id as unique
+2. Use Add or Edit with user_id lookup
+3. Allow users to update theme, language, notifications
+4. Return preferences on every login
+5. Cache preferences for performance
 
-If you\'re using conditional steps, you can use the same variable name in multiple steps to make satisfying the conditional or outputting data in the response easier.
+## Pro Tips
 
-For example, if we are sending a specific response based on if a variable is true or false, we can set both of those outputs to the same variable, making building our response easier.
+💡 **Compound Keys:** For many-to-many relationships, create a compound key field combining both IDs
 
-Give this function a description for easy understanding of what this function achieves.
+💡 **Audit Trail:** Always update an `updated_at` timestamp to track changes
 
-This description will appear in the function stack, giving you easier readability for complex logic.
+💡 **Partial Updates:** Use PATCH Record if you only need to update, never add
 
-![](../../../_gitbook/imagea393.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F00SjHKI4fAe0UkiHPtFG%252FCleanShot%25202025-01-08%2520at%252012.46.13.png%3Falt%3Dmedia%26token%3Db3395add-2b03-466e-91e9-0cf386415258&width=768&dpr=4&quality=100&sign=20eb59a6&sv=2)
+💡 **Bulk Operations:** For multiple records, use bulk operations instead of loops
 
-Last updated 6 months ago
+## Performance Optimization
 
-Was this helpful?
+- **Index your lookup field** for faster searches
+- **Return minimal fields** to reduce payload size
+- **Use caching** for frequently accessed records
+- **Consider database views** for complex lookups
+
+## When NOT to Use
+
+Avoid Add or Edit when:
+- You always know if the record exists
+- You need different logic for add vs edit
+- You're dealing with sensitive operations requiring explicit control
+- You need to track whether an add or edit occurred
+
+Remember: Add or Edit is your Swiss Army knife for data synchronization - use it wisely to simplify your backend logic!

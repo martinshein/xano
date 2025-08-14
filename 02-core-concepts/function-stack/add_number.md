@@ -1,373 +1,378 @@
 ---
+title: "Math Operations - Calculations and Number Processing"
+description: "Perform mathematical calculations and number manipulations in your Xano function stacks"
 category: function-stack
+subcategory: data-manipulation
+difficulty: beginner
 has_code_examples: true
 last_updated: '2025-01-23'
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Add Number
+- math
+- calculations
+- numbers
+- arithmetic
+- formulas
 ---
 
-# Add Number
+# Math Operations - Calculations and Number Processing
 
-[](../../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Add Number
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../../building-with-visual-development.html)
-2.  Functions
-3.  Data Manipulation
-Math 
-====
-For each of these examples, we\'ll start with a value of 5.
-###  
-Add Number
-Adds one value to another
-###  
-Subtract Number
-Subtracts one value from another
-###  
-Multiply Number
-Multiplies one value by another
-###  
-Divide Number
-Divides one value by another
-###  
-Modulus Number
-Get the remainder when an existing value is divided by a number.
-###  
-Bitwise
-Working on bytes, or Data Types comprising of bytes like ints, floats, doubles or even data structures that store large amounts of bytes is normal for a programmer. In some cases, a programmer needs to go beyond this - that is to say, on a deeper level where the importance of bits is realized.
-Operations with bits are used in **Data Compression** (data is compressed by converting it from one representation to another, to reduce the space), **Exclusive-Or Encryption** (an algorithm to encrypt the data for safety issues). In order to encode, decode, or compress files we have to extract the data at bit level. Bitwise Operations are faster and closer to the system and sometimes optimize the program to a good level.
-1 byte comprises of 8 bits and any integer or character can be represented using bits in computers, which we call its binary form(contains only 1 or 0) or in its base 2 form. Real-world use cases of Bitwise Operators (Stack Overflow)
-**Bitwise AND**
-The output of bitwise AND is 1 if the corresponding bits of two operands is 1. If either bit of an operand is 0, the result of the corresponding bit is evaluated to 0. Here\'s an example with the binary values written out:
-Copy
-``` 
-12 = 00001100 (In Binary)
-25 = 00011001 (In Binary)
-Bit Operation of 12 and 25
-  00001100
-& 00011001
-  ________
-  00001000  = 8 (In decimal)
-```
-We will set up the same example in **Xano** and change the number variable to 12.
-[]
-And for the API action we will use Bitwise AND with the value 25:
-[]
-In the above example, the `number` variable would be **8**
-**Bitwise OR**
-The output of bitwise OR is 1 if at least one corresponding bit of two operands is 1. In C Programming, bitwise OR operator is denoted by \|. Here\'s an example with the binary values written out:
-Copy
-``` 
-12 = 00001100 (In Binary)
-25 = 00011001 (In Binary)
-Bitwise OR Operation of 12 and 25
-  00001100
-| 00011001
-  ________
-  00011101  = 29 (In decimal)
-```
-We will set up the same example in **Xano** and change the number variable to 12.
-[]
-And for the API action we will use Bitwise OR with the value 25:
-[]
-In the above example, the `number` variable would be **29**
-**Bitwise XOR**
-The result of bitwise XOR operator is 1 if the corresponding bits of two operands are opposite. It is denoted by \^. The exclusive-or operation takes two inputs and returns a 1 if either one or the other of the inputs is a 1, but not if both are. That is, if both inputs are 1 or both inputs are 0, it returns 0. Bitwise exclusive-or, with the operator of a caret, \^, performs the exclusive-or operation on each pair of bits. Exclusive-or is commonly abbreviated XOR. Here\'s an example with the binary values written out:
-Copy
-``` 
-12 = 00001100 (In Binary)
-25 = 00011001 (In Binary)
-Bitwise XOR Operation of 12 and 25
-  00001100
-^ 00011001
-  ________
-  00010101  = 21 (In decimal)
-```
-We will set up the same example in **Xano** and change the number variable to 12.
-[]
-And for the API action we will use Bitwise XOR with the value 25:
-[]
-In the above example, the `number` variable would be **21**
-Last updated 7 months ago
-Was this helpful?
+## Quick Summary
 
-## Code Examples
+> **What it is:** A comprehensive set of mathematical functions for performing calculations in your function stacks
+> 
+> **When to use:** Whenever you need arithmetic operations, percentage calculations, rounding, or complex mathematical formulas
+> 
+> **Key benefit:** Visual interface for building calculations without writing complex code
+> 
+> **Common uses:** Pricing calculations, statistics, financial computations, data analysis
 
-```
- 
-12 = 00001100 (In Binary)
-25 = 00011001 (In Binary)
-Bit Operation of 12 and 25
-  00001100
-& 00011001
-  ________
-  00001000  = 8 (In decimal)
+## What You'll Learn
 
+- Basic arithmetic operations
+- Working with decimals and rounding
+- Percentage and financial calculations
+- Statistical functions
+- Complex formula building
+
+## Basic Arithmetic
+
+### Addition and Subtraction
+
+```javascript
+// Simple addition
+total = price + tax + shipping
+
+// Subtraction
+remaining = inventory - quantity_sold
+
+// Combined operations
+net_profit = revenue - (costs + expenses)
 ```
 
-```
- 
-12 = 00001100 (In Binary)
-25 = 00011001 (In Binary)
-Bitwise OR Operation of 12 and 25
-  00001100
-| 00011001
-  ________
-  00011101  = 29 (In decimal)
+### Multiplication and Division
 
-```
+```javascript
+// Multiplication
+line_total = price * quantity
 
-```
- 
-12 = 00001100 (In Binary)
-25 = 00011001 (In Binary)
-Bitwise XOR Operation of 12 and 25
-  00001100
-^ 00011001
-  ________
-  00010101  = 21 (In decimal)
+// Division
+average = total / count
 
+// Percentage calculation
+tax_amount = subtotal * (tax_rate / 100)
 ```
 
+### Order of Operations
+
+```javascript
+// Parentheses control order
+result = (a + b) * c  // Different from a + b * c
+
+// Complex calculations
+final_price = (base_price * quantity - discount) * (1 + tax_rate)
+```
+
+## Working with Decimals
+
+### Rounding Functions
+
+```javascript
+// Round to nearest integer
+ROUND(19.7) = 20
+ROUND(19.4) = 19
+
+// Round up (ceiling)
+CEIL(19.1) = 20
+
+// Round down (floor)
+FLOOR(19.9) = 19
+
+// Round to specific decimal places
+ROUND(19.756, 2) = 19.76
+```
+
+### Precision Control
+
+```javascript
+// Money calculations (2 decimal places)
+price = ROUND(raw_price * discount_rate, 2)
+
+// Percentage display (1 decimal)
+completion = ROUND((done / total) * 100, 1) + "%"
+
+// Scientific precision (4 decimals)
+measurement = ROUND(sensor_value, 4)
+```
+
+## Financial Calculations
+
+### Pricing Examples
+
+```javascript
+// Discount calculation
+discount_amount = original_price * (discount_percent / 100)
+sale_price = original_price - discount_amount
+
+// Markup calculation
+selling_price = cost * (1 + markup_percentage / 100)
+
+// Tax calculation
+tax = subtotal * tax_rate
+total = subtotal + tax
+```
+
+### Commission and Fees
+
+```javascript
+// Tiered commission
+IF (sales < 10000) {
+  commission = sales * 0.05  // 5%
+} ELSE IF (sales < 50000) {
+  commission = sales * 0.08  // 8%
+} ELSE {
+  commission = sales * 0.10  // 10%
+}
+
+// Transaction fees
+processing_fee = MAX(transaction_amount * 0.029 + 0.30, 0.50)
+net_amount = transaction_amount - processing_fee
+```
+
+### Interest Calculations
+
+```javascript
+// Simple interest
+interest = principal * rate * time
+
+// Compound interest
+final_amount = principal * POWER(1 + rate, periods)
+
+// Monthly payment
+payment = principal * (rate * POWER(1 + rate, months)) / (POWER(1 + rate, months) - 1)
+```
+
+## Statistical Functions
+
+### Averages and Totals
+
+```javascript
+// Sum array of numbers
+total = SUM(numbers_array)
+
+// Average (mean)
+average = AVG(scores_array)
+
+// Count non-null values
+count = COUNT(valid_entries)
+```
+
+### Min/Max Operations
+
+```javascript
+// Find minimum
+lowest_price = MIN(price_array)
+
+// Find maximum
+highest_score = MAX(scores)
+
+// Clamp value to range
+clamped = MAX(MIN(value, upper_limit), lower_limit)
+```
+
+### Advanced Statistics
+
+```javascript
+// Median (middle value)
+median_value = MEDIAN(data_array)
+
+// Standard deviation
+std_dev = STDDEV(measurements)
+
+// Variance
+variance = VARIANCE(data_points)
+```
+
+## Practical Examples
+
+### Example 1: E-commerce Cart
+
+```javascript
+// Calculate cart totals
+subtotal = 0
+total_items = 0
+
+FOR EACH item IN cart {
+  line_total = item.price * item.quantity
+  subtotal = subtotal + line_total
+  total_items = total_items + item.quantity
+}
+
+// Apply discounts
+discount = (subtotal > 100) ? subtotal * 0.1 : 0
+after_discount = subtotal - discount
+
+// Calculate tax and shipping
+tax = after_discount * 0.08
+shipping = (after_discount > 50) ? 0 : 9.99
+
+// Final total
+grand_total = ROUND(after_discount + tax + shipping, 2)
+```
+
+### Example 2: Analytics Dashboard
+
+```javascript
+// Calculate metrics
+conversion_rate = ROUND((conversions / visitors) * 100, 2)
+average_order_value = ROUND(total_revenue / order_count, 2)
+cart_abandonment_rate = ROUND((abandoned / total_carts) * 100, 1)
+
+// Growth calculations
+growth_amount = current_month - previous_month
+growth_percentage = ROUND((growth_amount / previous_month) * 100, 1)
+
+// Projections
+daily_average = total_month / days_elapsed
+projected_month_end = daily_average * days_in_month
+```
+
+### Example 3: Inventory Management
+
+```javascript
+// Reorder point calculation
+reorder_point = (daily_usage * lead_time) + safety_stock
+
+// Economic order quantity
+eoq = SQRT((2 * annual_demand * order_cost) / holding_cost)
+
+// Stock value
+total_value = SUM(
+  FOR EACH product IN inventory {
+    product.quantity * product.unit_cost
+  }
+)
+```
+
+## Advanced Math Functions
+
+### Power and Roots
+
+```javascript
+// Square and cube
+squared = POWER(number, 2)
+cubed = POWER(number, 3)
+
+// Square root
+sqrt_value = SQRT(number)
+
+// Nth root
+nth_root = POWER(number, 1/n)
+```
+
+### Logarithms
+
+```javascript
+// Natural logarithm
+ln_value = LN(number)
+
+// Base 10 logarithm
+log_value = LOG10(number)
+
+// Custom base
+log_base = LN(number) / LN(base)
+```
+
+### Trigonometry
+
+```javascript
+// Basic trig functions
+sine = SIN(angle_radians)
+cosine = COS(angle_radians)
+tangent = TAN(angle_radians)
+
+// Convert degrees to radians
+radians = degrees * (PI() / 180)
+```
+
+## Integration Patterns
+
+### With n8n
+
+```javascript
+// Calculate webhook metrics
+processing_time = timestamp_end - timestamp_start
+requests_per_second = request_count / time_window
+average_response = ROUND(total_response_time / request_count, 3)
+
+// Return calculated data
+Return {
+  metrics: {
+    rps: requests_per_second,
+    avg_response_ms: average_response * 1000,
+    success_rate: (success_count / total_count) * 100
+  }
+}
+```
+
+### With WeWeb
+
+```javascript
+// Format numbers for display
+display_price = "$" + ROUND(price, 2)
+percentage_display = ROUND(value * 100, 1) + "%"
+formatted_large = FORMAT_NUMBER(big_number, "#,###")
+
+// Progress calculations
+progress_percentage = MIN(ROUND((current / target) * 100, 0), 100)
+remaining = MAX(target - current, 0)
+```
+
+## Common Mistakes to Avoid
+
+1. **Division by Zero**
+   ```javascript
+   // Bad: Can cause error
+   average = total / count
+   
+   // Good: Check first
+   average = (count > 0) ? total / count : 0
+   ```
+
+2. **Floating Point Precision**
+   ```javascript
+   // Bad: 0.1 + 0.2 = 0.30000000000000004
+   total = 0.1 + 0.2
+   
+   // Good: Round for display
+   total = ROUND(0.1 + 0.2, 2)  // 0.3
+   ```
+
+3. **Integer Division**
+   ```javascript
+   // Bad: Integer division loses precision
+   percentage = (5 / 10) * 100  // Might return 0
+   
+   // Good: Use decimals
+   percentage = (5.0 / 10.0) * 100  // Returns 50
+   ```
+
+## Try This
+
+Build a loan calculator:
+1. Input: principal, interest rate, term
+2. Calculate monthly payment
+3. Generate amortization schedule
+4. Show total interest paid
+5. Display payment breakdown
+
+## Pro Tips
+
+💡 **Constants:** Define PI, E, and other constants as variables for reuse
+
+💡 **Precision:** Always round money calculations to 2 decimal places
+
+💡 **Validation:** Check for null/zero before division operations
+
+💡 **Performance:** Pre-calculate complex formulas outside of loops
+
+Remember: Math functions are the foundation of business logic. Master them to build powerful calculations and data transformations!

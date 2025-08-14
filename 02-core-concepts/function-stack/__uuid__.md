@@ -1,568 +1,269 @@
 ---
+title: "Security Functions and UUID Generation in Xano"
+description: "Generate unique identifiers, create secure tokens, and implement encryption in your Xano applications"
 category: function-stack
-has_code_examples: false
+subcategory: security
+has_code_examples: true
 last_updated: '2025-01-23'
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: '**UUID**'
+- uuid
+- security
+- authentication
+- encryption
+- tokens
 ---
 
-# **UUID**
+# Security Functions and UUID Generation in Xano
 
-[🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    UUID
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../building-with-visual-development.html)
-2.  Functions
-Security 
-========
-Security functions are a mix of helper functions and cryptography/encryption functions to bring added security to your function stack and application.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **UUID** - Generate a globally unique identifier.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Authentication** **Token** - Create a Token used for Authentication.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Validate (Check) Password** - Validate a match against a hashed password.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Generate Password** - Generate a password.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Random Number** - Generate a random number
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Secret Key**  - Create a secret key.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create RSA Secret** - Create a RSA secret.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Elliptic Curve Key**  - Create Elliptic Curve key.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **JWE Encode**  - Encode a payload as a JWS token.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **JWE Decode** - Decode a JWE token.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **JWS Encode**  - Encode a payload as a JWS token.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **JWS Decode**  - Decode a JWS token.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Encrypt** - Encrypt a payload as raw binary data.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Decrypt** - Decrypt a payload to its original form.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Examples and additional content**
-    :::
-###  
-**UUID**
-Generate a globally unique identifier. The industry standard UUID (Universally Unique Identifier - version 4) i.e. 9bcc06a9-9782-4859-a69f-778a7f28d666
-[]
-###  
-**Create Authentication Token**
-Create a Token used for Authentication. Authentication is an important concept in app building, you can read more about it here.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **dbtable**: Refers to a database table that has authentication enabled. Select the table you wish to authenticate against
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **id**: The ID to be stored in the token. Typically, this is a user ID, which you will get from a user record.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **extras**: Extras allow you to store additional data in the authentication token. An example of this may be a user\'s role. Use the SET filter to define a path and the value of the extra. Read more about extras.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **expiration**: The amount of time, in seconds, the authentication token will last. You can set this to a very large number if you don\'t plan on having the token expire.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Return variable:** Contains the output of the created authentication token.
-    :::
-[]
-###  
-**Validate (Check) Password**
-Return the result of a plaintext password matching a hashed password.
-[]
-###  
-**Generate Password**
-Generates a password.
-[]
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **character\_count** - Number of required characters
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **require\_lowercase** - True/false if lowercase characters are required.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **require\_uppercase** - True/false if uppercase characters are required.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **require\_digit** - True/false if a numerical digit is required.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **require\_symbol** - True/false if special symbols are required.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **symbol\_whitelist** - Optionally whitelist a symbol.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Return** variable - Returns the generate password in a variable.
-    :::
-###  
-**Random Number**
-Generate a random number.
-[]
-###  
-Create Secret Key
-[]
-###  
-**Create RSA Secret**
-[]
-###  
-**Create Elliptic Curve Key**
-[]
-###  
-**JWE Encode**
-Encode a payload as a JWE token.
-###  
-JWE Decode
-Decode a JWE token.
-[]
-###  
-JWS Encode
-Encode a payload as a JWS token.
-[]
-###  
-JWS Decode
-Decode a JWS token.
-[]
-###  
-Encrypt
-Encrypt a payload as raw binary data.
-[]
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Data** - add the data or payload that you want to encrypt
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Algorithm** - choose between six algorithms (cbc or gcm)
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Key** - A key can be generated from one key generating function or you can insert raw text as your key. This same key will be needed to decrypt the data.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **IV** - This is either 16 or 12 characters depending on your algorithm (cbc requires 16 characters and gcm requires 12). This information should be kept hidden in an env variable. If you are sending encrypted data to someone, then they would need to know this.
-    :::
-Tip: For certain use cases when passing the encrypted value through a URL, it is recommended to use the `base64_encode_urlsafe `filter.
-###  
-Decrypt
-Decrypt a payload to its original form.
-[]
-###  
-Examples
-####  
-JWS Encode/Decode Example
-**Using your own key**
-We can use our own encryption key when encoding and decoding JWS.
-First, use the Create Secret Key function to generate a secret key.
-[]
-It\'s a good idea to store the key in a safe, reusable place such as in an environment variable. Click the copy result button on the result of the secret key.
-[]
-Navigate to the settings page and add your secret key as an environment variable.
-[]
-Next, use the JWS Encode function to encrypt a payload. In this example, we will encrypt a simple text string.
-Be sure to use the secret key stored in the environment variable as the key.
-Optionally add a ttl or time to live if you want the token to expire.
-[]
-The result is an encrypted JWS token.
-[]
-To decode the JWS token, we must make sure to use the same key used for encrypting it.
-[]
-The result is our decrypted message.
-[]
-###  
-**Using an external key**
-Sometimes you may be using a service that requires you to decode or decrypt a JWS token. Like the above example, it is recommended that you store the key in an environment variable for safe keeping and so that you may call it wherever you may need it in your workspace.
-[]
-When decoding the JWS from the external source, be sure to use the environment variable as the decryption key.
-[]
-Ensure the algorithm matches what\'s defined from the external source.
-Time drift helps account for a leeway if clocks are not aligned. Consider a time drift if there is an expiration on the JWS.
-####  
-JWE vs JWS
-The main difference between JWE and JWS is one is able to be seen but not tampered with and the other is encrypted and not tampered with. JWS is able to be seen (with the right decryption) but not tampered. JWE is encrypted and not tampered with.
-**Example using JWT.IO**
-We can use jwt.io to see an example of the difference between JWE and JWS.
-First let\'s encode a JWE token.
-[]
-When we place the resulting JWE token into jwt.io, we can see that the result is an encrypted payload.
-[]
-Next, let\'s generate a JWS token in Xano.
-[]
-When we place the resulting JWS token in jwt.io and match up the correct algorithm, we are able to see the payload.
-[]
-Last updated 4 months ago
-Was this helpful?
+## Quick Summary
+
+> **What it is:** A comprehensive suite of security functions for generating unique IDs, creating authentication tokens, managing passwords, and encrypting sensitive data
+> 
+> **When to use:** Whenever you need unique identifiers, secure authentication, password management, or data encryption
+> 
+> **Key benefit:** Built-in security best practices without needing cryptography expertise
+> 
+> **Most used:** UUID generation for unique record IDs and authentication token creation
+
+## What You'll Learn
+
+- Generating universally unique identifiers (UUIDs)
+- Creating and managing authentication tokens
+- Password generation and validation
+- Encrypting and decrypting sensitive data
+- Understanding JWS vs JWE tokens
+- Best practices for n8n and WeWeb integrations
+
+## UUID Generation
+
+### What is a UUID?
+
+A UUID (Universally Unique Identifier) is like a digital fingerprint - a string that's guaranteed to be unique across all systems and time. Xano generates version 4 UUIDs that look like: `9bcc06a9-9782-4859-a69f-778a7f28d666`
+
+### When to Use UUIDs
+
+**Perfect for:**
+- Primary keys in distributed systems
+- Public-facing record IDs (hide sequential patterns)
+- Temporary session identifiers
+- File upload references
+- API request tracking
+
+**Example Use Cases:**
+```javascript
+// Order ID visible to customers
+order_uuid: "a4f7b2c9-8e3d-4a1b-9c7e-2d8f6e9a3b5c"
+
+// Instead of sequential IDs that reveal business metrics
+// Bad: order_id: 12345 (reveals you've had 12,345 orders)
+// Good: order_uuid (reveals nothing about your business)
+```
+
+## Authentication Token Management
+
+### Create Authentication Token
+
+Generate secure tokens for user sessions with built-in expiration.
+
+**Configuration:**
+- **Database Table:** Select your users table (must have auth enabled)
+- **User ID:** The user's record ID
+- **Extras:** Additional data to store in token (e.g., user role, permissions)
+- **Expiration:** Token lifetime in seconds
+
+**Example for n8n/WeWeb:**
+```javascript
+// Create a 24-hour session token
+Table: users
+ID: user.id
+Extras: {
+  role: "admin",
+  subscription: "pro",
+  workspace_id: 123
+}
+Expiration: 86400 // 24 hours
+```
+
+### Token Best Practices
+
+1. **Short-lived tokens for sensitive operations**
+   - Payment processing: 5 minutes (300 seconds)
+   - Admin actions: 1 hour (3600 seconds)
+
+2. **Longer tokens for general use**
+   - User sessions: 24 hours to 7 days
+   - API access: 30-90 days with refresh
+
+3. **Store extras wisely**
+   - Include role/permissions for quick access
+   - Avoid sensitive data (use IDs, fetch details later)
+
+## Password Management
+
+### Generate Password
+
+Create secure passwords with customizable requirements.
+
+**Configuration Options:**
+```javascript
+{
+  character_count: 16,        // Length
+  require_lowercase: true,     // a-z
+  require_uppercase: true,     // A-Z
+  require_digit: true,        // 0-9
+  require_symbol: true,       // !@#$%
+  symbol_whitelist: "!@#$"   // Allowed symbols
+}
+```
+
+### Validate Password
+
+Check if a plain text password matches a hashed version.
+
+**Use case:** User login verification
+```javascript
+Input: user_entered_password
+Hashed: stored_password_hash
+Returns: true/false
+```
+
+**Pro Tip:** Never store plain text passwords! Always hash them before storage.
+
+## Encryption and Decryption
+
+### Basic Encryption
+
+Protect sensitive data with military-grade encryption.
+
+**Setup:**
+```javascript
+Data: "sensitive information"
+Algorithm: "aes-256-gcm" // Most secure
+Key: environment.ENCRYPTION_KEY
+IV: environment.ENCRYPTION_IV // 12 chars for GCM
+```
+
+**Important:** Store keys and IVs in environment variables, never in code!
+
+### When to Encrypt
+
+**Always encrypt:**
+- Social Security Numbers
+- Credit card details
+- API keys and secrets
+- Personal health information
+- Private messages
+
+**Don't encrypt:**
+- Data you need to search/filter
+- Public information
+- Already hashed passwords
+
+## JWS vs JWE Tokens
+
+### JWS (JSON Web Signature)
+- **Visible but tamper-proof**
+- Data can be read but not modified
+- Good for: Public claims, user info
+
+### JWE (JSON Web Encryption)
+- **Encrypted and tamper-proof**
+- Data is completely hidden
+- Good for: Sensitive data, private claims
+
+**Example Comparison:**
+```javascript
+// JWS - Readable at jwt.io
+{
+  "user_id": 123,
+  "role": "admin"
+}
+
+// JWE - Completely encrypted
+"eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0..."
+```
+
+## Random Number Generation
+
+Generate cryptographically secure random numbers for:
+- OTP codes
+- Lottery systems
+- Random sampling
+- Game mechanics
+
+**Configuration:**
+```javascript
+Min: 100000  // 6-digit OTP
+Max: 999999
+```
+
+## Integration Examples
+
+### With n8n
+
+**Secure Webhook Authentication:**
+```javascript
+1. Generate UUID for webhook ID
+2. Create auth token with webhook permissions
+3. Validate token on each request
+4. Expire after single use for sensitive operations
+```
+
+### With WeWeb
+
+**User Session Management:**
+```javascript
+// Login flow
+1. Validate password
+2. Create auth token with user extras
+3. Store token in WeWeb auth plugin
+4. Include token in all API requests
+```
+
+## Common Mistakes to Avoid
+
+1. **Using predictable IDs**
+   - Always use UUIDs for public-facing IDs
+   - Keep sequential IDs internal only
+
+2. **Storing sensitive data in tokens**
+   - Tokens are often logged/cached
+   - Store IDs, fetch sensitive data separately
+
+3. **Reusing encryption keys**
+   - Use different keys for different data types
+   - Rotate keys periodically
+
+4. **Long token expiration for sensitive ops**
+   - Payment tokens: minutes not days
+   - Admin actions: hours not weeks
+
+## Try This
+
+Create a secure document sharing system:
+1. Generate UUID for document ID
+2. Encrypt document content
+3. Create time-limited access token
+4. Validate token and decrypt on access
+5. Log all access attempts
+
+## Pro Tips
+
+💡 **Environment Variables:** Always store keys, IVs, and secrets in environment variables
+
+💡 **Token Extras:** Include just enough data to avoid database lookups, but not sensitive info
+
+💡 **UUID Format:** Use UUIDs in URLs - they're URL-safe and reveal nothing about your data
+
+💡 **Encryption Algorithm:** Use AES-256-GCM for best security/performance balance
+
+## Security Checklist
+
+✅ Never log passwords or tokens
+✅ Use HTTPS for all API calls
+✅ Implement rate limiting on auth endpoints
+✅ Monitor failed authentication attempts
+✅ Rotate encryption keys periodically
+✅ Test token expiration handling
+
+Remember: Security is not optional. Use these functions to protect your users' data and maintain trust!

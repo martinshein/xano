@@ -1,306 +1,389 @@
 ---
+title: "Switch Statement - Multiple Path Branching"
+description: "Create efficient multi-path logic flows with switch statements in Xano function stacks"
 category: function-stack
-has_code_examples: false
+subcategory: control-flow
+difficulty: intermediate
+has_code_examples: true
 last_updated: '2025-01-23'
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Add a Switch statement to your function stack.
+- switch
+- branching
+- control-flow
+- conditionals
+- case-logic
 ---
 
-# Add a Switch statement to your function stack.
+# Switch Statement - Multiple Path Branching
 
-[](../../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Using Switch Case
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../../building-with-visual-development.html)
-2.  Functions
-3.  Data Manipulation
-Switch 
-======
-**Quick Summary**
-Switch Case is similar to a conditional statement, but it\'s designed to only check a single value for matches. Where a conditional is great for things like \"If the user joined before 2020 and is also a subscriber\", Switch Case is more efficient and ideal for simple scenarios like \"If the color is red, blue, green, brown, yellow, or orange\", when you want each of those options to have different paths.
-Conditional vs Switch --- which one should you use?
-When deciding between using an If/Then statement and a Switch statement, it\'s important to consider the complexity and clarity of the logic you\'re implementing. An If/Then statement is ideal for situations where you have several conditions that require different actions. It provides straightforward logic for evaluating true or false scenarios.
-On the other hand, a Switch statement is better suited for cases with multiple possible values for a single variable. It makes your function stacks cleaner and more organized by avoiding deep nesting of conditions when the logic involves fixed values. Use If/Then for more advanced conditions and Switch for handling multiple specific scenarios with more concise readability.
-Using Switch Case
-<div>
-1
-###  
-Add a Switch statement to your function stack.
-Switch is located under Data Manipulation.
-2
-###  
-Set the value that Switch should be checking.
-You can hard code a value here, or specify a variable or input.
-3
-###  
-Set your \'default\' functions, if desired.
-The **Default** section of Switch will run if:
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    No matches are found
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    You chose to not break out of Switch after a match is found
-    :::
-This is a good spot to insert any \"catch-all\" situations where you want a standard behavior for unaccounted possibilities.
-4
-###  
-Click []to define a behavior based on a specific value.
-When adding a new **case**, you\'ll be asked to provide the value that determines if this case will run.
-You can also choose to either stop the Switch Case statement after the match is found, or execute the functions under Default after matching.
-5
-###  
-Add functions to your case(s)
-Click []under your cases to add functions to them, or drag and drop functions inside of them. Now, when your Switch function detects that case in the value you specified in step 2, it will execute those functions.
-</div>
-Last updated 5 months ago
-Was this helpful?
+## Quick Summary
+
+> **What it is:** A control flow function that executes different code based on matching a value against multiple cases
+> 
+> **When to use:** When you have 3+ different paths based on a single variable value - much cleaner than nested if/else statements
+> 
+> **Key benefit:** Readable, maintainable code for complex branching logic
+> 
+> **Best for:** Status handling, event routing, user role logic, API response codes
+
+## What You'll Learn
+
+- Building switch statements visually
+- Defining cases and default paths
+- When to use switch vs if/else
+- Real-world patterns for automation
+- Performance considerations
+
+## Understanding Switch Logic
+
+Think of a switch like a smart traffic router:
+```javascript
+SWITCH (status) {
+  CASE "pending": 
+    // Do pending logic
+  CASE "approved":
+    // Do approved logic
+  CASE "rejected":
+    // Do rejected logic
+  DEFAULT:
+    // Handle unexpected values
+}
+```
+
+## Basic Configuration
+
+### Setting Up a Switch
+
+1. **Add Switch Function** to your stack
+2. **Define the switch variable** (what to check)
+3. **Add cases** for each possible value
+4. **Add default** for unmatched values (optional but recommended)
+
+## Practical Examples
+
+### Example 1: Order Status Processing
+
+```javascript
+SWITCH (order.status) {
+  CASE "new":
+    - Send order confirmation email
+    - Create invoice
+    - Update inventory
+    
+  CASE "processing":
+    - Notify warehouse
+    - Generate shipping label
+    - Update tracking
+    
+  CASE "shipped":
+    - Send tracking email
+    - Update delivery estimate
+    - Notify customer
+    
+  CASE "delivered":
+    - Request review
+    - Close order
+    - Update metrics
+    
+  DEFAULT:
+    - Log unknown status
+    - Send alert to admin
+}
+```
+
+### Example 2: User Role Permissions
+
+```javascript
+SWITCH (user.role) {
+  CASE "admin":
+    permissions = {
+      read: true,
+      write: true,
+      delete: true,
+      manage_users: true
+    }
+    
+  CASE "editor":
+    permissions = {
+      read: true,
+      write: true,
+      delete: false,
+      manage_users: false
+    }
+    
+  CASE "viewer":
+    permissions = {
+      read: true,
+      write: false,
+      delete: false,
+      manage_users: false
+    }
+    
+  DEFAULT:
+    permissions = {
+      read: false,
+      write: false,
+      delete: false,
+      manage_users: false
+    }
+}
+```
+
+### Example 3: Webhook Event Router
+
+```javascript
+SWITCH (webhook.event_type) {
+  CASE "payment.success":
+    - Update order to paid
+    - Send receipt
+    - Start fulfillment
+    
+  CASE "payment.failed":
+    - Mark payment failed
+    - Send retry email
+    - Log failure reason
+    
+  CASE "subscription.created":
+    - Create user account
+    - Send welcome email
+    - Set up billing
+    
+  CASE "subscription.cancelled":
+    - Update user status
+    - Send cancellation email
+    - Schedule data export
+    
+  DEFAULT:
+    - Log unhandled event
+    - Send to dead letter queue
+}
+```
+
+## Advanced Patterns
+
+### Multiple Cases Same Action
+
+```javascript
+SWITCH (day_of_week) {
+  CASE "Monday":
+  CASE "Tuesday":
+  CASE "Wednesday":
+  CASE "Thursday":
+  CASE "Friday":
+    business_hours = "9 AM - 5 PM"
+    is_open = true
+    
+  CASE "Saturday":
+    business_hours = "10 AM - 2 PM"
+    is_open = true
+    
+  CASE "Sunday":
+    business_hours = "Closed"
+    is_open = false
+}
+```
+
+### Nested Switch Statements
+
+```javascript
+SWITCH (request.method) {
+  CASE "GET":
+    SWITCH (request.resource) {
+      CASE "users":
+        Return all users
+      CASE "products":
+        Return all products
+    }
+    
+  CASE "POST":
+    SWITCH (request.resource) {
+      CASE "users":
+        Create new user
+      CASE "products":
+        Create new product
+    }
+}
+```
+
+### Switch with Variables
+
+```javascript
+// Calculate discount tier
+SWITCH (customer.loyalty_points) {
+  CASE (points < 100):
+    discount = 0
+    tier = "Bronze"
+    
+  CASE (points < 500):
+    discount = 5
+    tier = "Silver"
+    
+  CASE (points < 1000):
+    discount = 10
+    tier = "Gold"
+    
+  DEFAULT:
+    discount = 15
+    tier = "Platinum"
+}
+```
+
+## Integration Patterns
+
+### With n8n Workflows
+
+```javascript
+// Route n8n webhook by action
+SWITCH (input.action) {
+  CASE "sync_customer":
+    - Query customer data
+    - Format for CRM
+    - Return sync status
+    
+  CASE "generate_report":
+    - Aggregate data
+    - Create PDF
+    - Send email with attachment
+    
+  CASE "trigger_automation":
+    - Validate permissions
+    - Execute automation
+    - Log execution
+}
+```
+
+### With WeWeb Actions
+
+```javascript
+// Handle form submission types
+SWITCH (form.type) {
+  CASE "contact":
+    - Send to support team
+    - Create ticket
+    - Auto-reply to user
+    
+  CASE "registration":
+    - Create account
+    - Send verification
+    - Add to mailing list
+    
+  CASE "feedback":
+    - Store feedback
+    - Analyze sentiment
+    - Route to department
+}
+```
+
+## When to Use Switch vs If/Else
+
+### Use Switch When:
+- Checking one variable against multiple values
+- You have 3+ different paths
+- Values are discrete (not ranges)
+- Code readability is important
+
+### Use If/Else When:
+- Complex conditions with AND/OR
+- Checking ranges or inequalities
+- Only 2 paths needed
+- Multiple variables involved
+
+## Common Mistakes to Avoid
+
+1. **Missing Default Case**
+   ```javascript
+   // Always include default
+   DEFAULT:
+     Log "Unexpected value: " + switch_value
+     Handle gracefully
+   ```
+
+2. **Fall-through Logic**
+   ```javascript
+   // Each case is independent in Xano
+   // No need for 'break' statements
+   ```
+
+3. **Complex Conditions**
+   ```javascript
+   // Bad: Complex logic in switch
+   SWITCH (age > 18 AND status == "active")
+   
+   // Good: Use if/else for complex conditions
+   IF (age > 18 AND status == "active")
+   ```
+
+## Best Practices
+
+### Clear Case Values
+
+```javascript
+// Use constants or enums
+ORDER_STATUS_NEW = "new"
+ORDER_STATUS_PROCESSING = "processing"
+
+SWITCH (order.status) {
+  CASE ORDER_STATUS_NEW:
+    // Clear what this handles
+}
+```
+
+### Document Cases
+
+```javascript
+SWITCH (api_response_code) {
+  CASE 200:  // Success
+    Process successful response
+    
+  CASE 404:  // Not found
+    Handle missing resource
+    
+  CASE 500:  // Server error
+    Retry with backoff
+}
+```
+
+### Group Related Logic
+
+```javascript
+SWITCH (notification.type) {
+  // Email notifications
+  CASE "email_welcome":
+  CASE "email_reset":
+  CASE "email_invoice":
+    Send via email service
+    
+  // SMS notifications  
+  CASE "sms_verify":
+  CASE "sms_alert":
+    Send via SMS service
+}
+```
+
+## Try This
+
+Build a dynamic pricing engine:
+1. Switch on customer type (new, returning, VIP)
+2. Apply appropriate discount
+3. Switch on product category
+4. Apply category rules
+5. Calculate final price
+
+## Pro Tips
+
+💡 **Order Matters:** Put most common cases first for readability
+
+💡 **Use Constants:** Define case values as variables for reusability
+
+💡 **Always Default:** Include default case to catch unexpected values
+
+💡 **Combine Cases:** Multiple cases can share the same logic block
+
+## Performance Optimization
+
+- Switch statements are O(1) - very fast
+- More efficient than multiple if/else chains
+- Consider lookup tables for very large switches
+- Use early returns in complex cases
+
+Remember: Switch statements make your code cleaner and more maintainable when dealing with multiple paths based on a single value!
