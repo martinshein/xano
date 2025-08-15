@@ -1,26 +1,35 @@
 ---
-title: Array Data Type
-description: Understanding arrays (lists) in Xano - the fundamental data structure for storing multiple items together
+title: "Array Data Type - Understanding Lists and Collections"
+description: "Master arrays (lists) in Xano - the fundamental data structure for storing multiple items, perfect for user lists, product catalogs, and collections"
 category: function-stack
-difficulty: beginner
-last_updated: '2025-01-23'
-related_docs:
-  - arrays
-  - data-manipulation
-  - filters
-subcategory: 02-core-concepts/function-stack
 tags:
-  - data-types
-  - arrays
-  - lists
-  - json
-  - collections
+  - Data Types
+  - Arrays
+  - Lists
+  - JSON
+  - Collections
+  - Data Structures
+difficulty: beginner
+reading_time: 8 minutes
+last_updated: '2025-01-15'
+prerequisites:
+  - Basic understanding of data concepts
+  - Familiarity with JSON format
 ---
 
-# Array Data Type
+# Array Data Type - Understanding Lists and Collections
 
-**Quick Summary**
-An array is like a shopping list - it's a collection of items stored together in a specific order. Arrays are perfect for storing multiple pieces of related data like user lists, product catalogs, or any collection of information.
+## 📋 **Quick Summary**
+
+**What it does:** Arrays are ordered lists that store multiple items together, like a shopping list or collection of records.
+
+**Why it matters:** This enables you to:
+- Store and manage collections of data (users, products, orders)
+- Process multiple items efficiently in workflows
+- Build dynamic lists and galleries in frontend applications
+- Handle bulk operations and data transformations
+
+**Time to understand:** 5-10 minutes for basics, essential for all data operations
 
 ## What You'll Learn
 

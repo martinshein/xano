@@ -1,27 +1,37 @@
 ---
-title: APIs & Lambdas
-description: Connect external services and execute custom code with visual API integrations and serverless Lambda functions
+title: "APIs & Lambdas - External Integrations Guide"
+description: "Master external API integrations and Lambda functions in Xano for connecting third-party services, custom code execution, and real-time functionality"
 category: function-stack
-difficulty: intermediate
-last_updated: '2025-01-23'
-related_docs:
-  - external-api-request
-  - lambda-functions
-  - realtime-functions
-subcategory: 02-core-concepts/function-stack
 tags:
-  - apis
-  - lambda
-  - external-integration
-  - serverless
-  - javascript
-  - typescript
+  - APIs
+  - Lambda Functions
+  - External Integration
+  - Serverless
+  - JavaScript
+  - TypeScript
+  - Real-time
+difficulty: intermediate
+reading_time: 12 minutes
+last_updated: '2025-01-15'
+prerequisites:
+  - Basic understanding of APIs
+  - Familiarity with Xano function stacks
+  - JavaScript/TypeScript knowledge helpful
 ---
 
-# APIs & Lambdas
+# APIs & Lambdas - External Integrations Guide
 
-**Quick Summary**
-APIs & Lambdas help you connect with external services and run custom code within your visual workflows. Think of them as bridges that let your Xano backend communicate with other tools and execute specialized logic.
+## 📋 **Quick Summary**
+
+**What it does:** APIs & Lambdas provide powerful tools for external service integration and custom code execution within your Xano function stacks.
+
+**Why it matters:** This enables you to:
+- Connect to any external API or web service
+- Execute custom JavaScript/TypeScript code for complex logic
+- Build real-time functionality and live updates
+- Extend Xano's capabilities beyond visual programming
+
+**Time to implement:** 10-15 minutes for basic API calls, 30+ minutes for complex Lambda functions
 
 ## What You'll Learn
 
@@ -68,9 +78,51 @@ Trigger live updates and events across your application - perfect for chat featu
 - Gaming features
 - Activity feeds
 
+## No-Code Platform Integration
+
+### 🔗 **n8n Workflow Integration**
+
+APIs & Lambdas work seamlessly with n8n automation workflows:
+
+```yaml
+n8n Workflow Pattern:
+1. Webhook Trigger → Receive data from external source
+2. Xano API Call → Process with Lambda function
+3. External API Request → Send to third-party service
+4. Realtime Function → Notify connected users
+```
+
+### 🌐 **WeWeb Application Integration**
+
+Build dynamic applications that leverage external services:
+
+```javascript
+// WeWeb action calling Xano with Lambda processing
+await wwLib.callAPI('processPayment', {
+  amount: orderTotal,
+  customer: customerData
+});
+
+// Lambda function handles complex payment logic
+// External API processes payment
+// Realtime function updates UI instantly
+```
+
+### 🔧 **Make Scenario Integration**
+
+Create powerful automation scenarios:
+
+```yaml
+Make Scenario:
+1. Schedule → Trigger periodic data sync
+2. HTTP Request → Call external API
+3. Xano Lambda → Process and transform data
+4. Realtime Event → Update connected dashboards
+```
+
 ---
 
-## Try This: Build a Payment Notification System
+## 💡 **Try This: Build a Payment Notification System**
 
 **Scenario:** Create a system that processes payments and sends real-time notifications.
 

@@ -1,29 +1,37 @@
 ---
-title: APIs in Xano
-description: Build powerful REST APIs with visual development - from auto-generated CRUD operations to custom endpoints with authentication and CORS
+title: "APIs in Xano - Complete Visual Development Guide"
+description: "Build powerful REST APIs with visual development - from auto-generated CRUD operations to custom endpoints with authentication, CORS, and WeWeb/n8n integration"
 category: function-stack
-difficulty: beginner
-last_updated: '2025-01-23'
-related_docs:
-  - authentication
-  - middleware
-  - custom-functions
-  - swagger-documentation
-subcategory: 02-core-concepts/function-stack
 tags:
-  - apis
-  - rest
-  - endpoints
-  - crud
-  - authentication
-  - cors
-  - swagger
+  - APIs
+  - REST Endpoints
+  - CRUD Operations
+  - Authentication
+  - CORS
+  - Swagger Documentation
+  - Visual Development
+difficulty: beginner
+reading_time: 15 minutes
+last_updated: '2025-01-15'
+prerequisites:
+  - Basic understanding of web APIs
+  - Xano workspace setup
+  - Database tables created
 ---
 
-# APIs in Xano
+# APIs in Xano - Complete Visual Development Guide
 
-**Quick Summary**
-APIs in Xano are like digital waiters in a restaurant - they take requests from your frontend (like WeWeb or mobile apps), process them through your business logic, and deliver exactly what was requested. Xano makes building these APIs visual and intuitive, no coding required.
+## 📋 **Quick Summary**
+
+**What it does:** APIs in Xano are visual endpoints that connect your frontend applications (WeWeb, mobile apps, n8n workflows) to your backend logic and database.
+
+**Why it matters:** This enables you to:
+- Build complete REST APIs without coding
+- Auto-generate CRUD operations from database tables
+- Handle authentication and security visually
+- Create scalable backend services for any frontend
+
+**Time to implement:** 5-10 minutes for auto-generated APIs, 30+ minutes for custom logic
 
 ## What You'll Learn
 
@@ -177,24 +185,63 @@ CORS is like a security guard that controls which websites can talk to your API.
 
 ---
 
-## Integration Patterns for Visual Developers
+## No-Code Platform Integration
 
-### WeWeb Integration
+### 🌐 **WeWeb Application Integration**
+
+Connect your WeWeb frontend directly to Xano APIs:
+
 ```javascript
-// WeWeb workflow calling your Xano API
-1. User clicks "Load Posts" button
-2. WeWeb makes GET request to your /posts endpoint
-3. Xano returns posts array
-4. WeWeb displays posts in repeater component
+// WeWeb collection using Xano API
+{
+  name: "posts",
+  type: "rest",
+  url: "https://[instance].xano.io/api:your-api/posts",
+  method: "GET",
+  headers: {
+    "Authorization": "Bearer [auth-token]"
+  }
+}
+
+// WeWeb action for creating posts
+async function createPost(postData) {
+  return await wwLib.api.post({
+    url: "https://[instance].xano.io/api:your-api/posts",
+    data: {
+      title: postData.title,
+      content: postData.content,
+      author_id: wwLib.auth.user.id
+    }
+  });
+}
 ```
 
-### n8n Automation
-```javascript
-// n8n workflow with Xano APIs
-1. Trigger: New form submission webhook
-2. Action: POST to Xano /users endpoint 
-3. Action: GET from Xano /templates endpoint
-4. Action: Send welcome email with template
+### 🔗 **n8n Workflow Integration**
+
+Automate workflows with Xano APIs:
+
+```yaml
+n8n Workflow: Content Management
+1. Webhook Trigger → New form submission
+2. HTTP Request → POST to Xano /posts
+3. Set Node → Process response data
+4. HTTP Request → GET author details
+5. Email Node → Send notification
+6. HTTP Request → Update analytics
+```
+
+### 🔧 **Make Scenario Integration**
+
+Create powerful automations:
+
+```yaml
+Make Scenario: E-commerce Order Processing
+1. Shopify Webhook → New order received
+2. HTTP Request → POST to Xano /orders
+3. Iterator → Process order items
+4. HTTP Request → Update inventory
+5. Email → Send order confirmation
+6. Slack → Notify fulfillment team
 ```
 
 ---
