@@ -1,939 +1,673 @@
 ---
+title: "Configure - Function Stack Settings and Setup"
+description: "Learn how to configure function stacks in Xano with proper settings, environment variables, and optimization for performance and security"
 category: function-stack
-has_code_examples: false
-last_updated: '2025-01-23'
 tags:
-- API
-- Database
-- Functions
-- Queries
-- CRUD
-title: Configure
+  - Configuration
+  - Settings
+  - Environment Variables
+  - Function Setup
+  - Performance Optimization
+  - Security Configuration
+difficulty: beginner
+reading_time: 8 minutes
+last_updated: '2025-01-15'
+prerequisites:
+  - Basic understanding of Xano
+  - Knowledge of function stacks
+  - Familiarity with configuration concepts
 ---
 
-# Configure
+# Configure - Function Stack Settings and Setup
 
-[🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Elasticsearch
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../building-with-visual-development.html)
-2.  Functions
-Cloud Services 
-==============
-Elasticsearch
-Elasticsearch is a robust search engine designed for quick and efficient data retrieval in applications. It handles diverse data types, employs a distributed architecture, and offers a powerful query language for real-time search needs. Integration into your applications enhances search experiences, enabling developers to implement efficient full-text searches and complex queries. Elasticsearch\'s indexing capabilities make it valuable for applications such as monitoring systems, log analysis tools, and other scenarios requiring fast and relevant data access.
-**Below is a video for our OpenSearch functionality, which can be used as a reference when working with our Elasticsearch functions; they are largely the same.**
-<div>
-</div>
-Xano offers a few functions to make Elasticsearch requests simple.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Elasticsearch: Query Wizard
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Elasticsearch: Document
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Elasticsearch: Request
-    :::
-Connect to Elasticsearch
-Requires an Elasticsearch domain.
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `auth_type`
-    Choose between `Basic` , `Bearer` or `API Key` to set the type of authentication process to use.
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `key_id`
-    If using `Basic`, enter the username you wish to authenticate with.
-    If using `Bearer`, leave this blank.
-    If using `API Key`, enter the API key identifier you wish to authenticate with.
-    :::
-3.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `access_key`
-    If using `Basic`, enter the API key secret you with to authenticate with.
-    If using `Bearer` , no access key is required.
-    If using `API Key` , enter the value that corresponds with the key identifier you wish to authenticate with.
-    :::
-4.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `base_url`
-    Set to the domain endpoint where Elasticsearch is hosted.
-    :::
-5.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `index`
-    Enter the name of the Elasticsearch index to send request.
-    Only applicable on Document and Query functions.
-    :::
-Elasticsearch Query Wizard Function
-Use the query wizard to easily search documents stored in Elasticsearch.
-###  
-Configure
-See Connect to Elasticsearch for details on configuration.
-Then, select a `return_type` from the options below.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `search` - Returns records that match query
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `count` - Returns number of total records matching query
-    :::
-###  
-Query
-**Query Wizard**
-Set filter criteria using the Xano query builder. The left input is the field to filter on. Then set the operator and value to evaluate. Optionally, add multiple conditions using AND / OR logic.
-Select 'Update Payload' to ensure your changes are reflected in the query payload.
-**Output Options**
-These options can only be set on 'search' return type (not 'count').
-Size: the number of results to return (useful for pagination)
-From: the number to offset the results (useful for pagination)
-Included Fields: field names to include in the results. Can be formatted as JSON array or comma separated string.
-Sort: order to return results. Default is by Elasticsearch relevance score. Option to choose one or more fields to sort in ascending or descending order.
-**Payload (auto-generated)**
-The JSON sent as the payload to Elasticsearch. This is generated by the Query Wizard and Output Options sections. Useful for debugging.
-Dynamic values (variables, inputs, etc.) are escaped using parentheses and use Xano expression syntax. These will be evaluated at the time of the request.
-Changes made directly to the payload may be overwritten by other areas of the query wizard. If you already have a query payload you want to use, it is recommended to use the Elasticsearch Request function instead.
-Elasticsearch: Document (CRUD) Function
-Easily get, add, update, or remove documents from an Elasticsearch index.
-###  
-Configure
-See Connect to Elasticsearch for details on configuration.
-###  
-Get Document
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Set method of API request to GET
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Specify doc\_id
-    :::
-###  
-Create or Update Document
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Set `method` to `POST` (create) or `PUT` (update)
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Set `doc_id` (optional for POST)
-    :::
-###  
-Elasticsearch Request
-Send any Elasticsearch API request using similar configuration methods as outlined in Connect to Elasticsearch.
-Set the `url` to use the desired endpoint of the request.
-Set `query` to the JSON payload if necessary.
-OpenSearch
-OpenSearch is an open-source search and analytics tool suite, derived from ElasticSearch, offered as a scalable and flexible solution by Amazon Web Services.
-With OpenSearch, you can apply natural language processing, text analyzers, and built in machine learning to quickly return the most relevant data. This makes it a great tool for log analytics, application monitoring, and website searches.
-<div>
-</div>
-Xano offers a few functions to make OpenSearch requests simple.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    AWS OpenSearch: Query Wizard
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    AWS OpenSearch: Document
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    AWS OpenSearch: Request
-    :::
-Connect to OpenSearch
-Requires an OpenSearch Service domain hosted by AWS.
-Find AWS Documentation on Creating and managing Amazon OpenSearch Service domains.
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `auth_type`
-    Choose between `IAM` (AWS Identity and Access Management) and `master` (basic auth from internal user database) to set the type of authentication process to use.
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `key_id`
-    If using `IAM`, enter the IAM key id you wish to authenticate with.
-    If using `master` , enter the username you wish to authenticate with.
-    :::
-3.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `access_key`
-    If using `IAM`, enter the access key you wish to authenticate with.
-    If using `master` , enter the password you wish to authenticate with.
-    :::
-4.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `region`
-    Only required for `IAM`. Set to the configured OpenSearch region (example: `us-east-2`).
-    :::
-5.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `base_url`
-    Set to the domain endpoint (IPv4) specified on AWS.
-    :::
-6.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `index`
-    Enter the name of the OpenSearch index to send request.
-    Only applicable on Document and Query functions.
-    :::
-Configure OpenSearch connection using IAM or internal user database credentials.
-AWS OpenSearch Query Wizard Function
-Use the query wizard to easily search documents stored in OpenSearch.
-###  
-Configure
-See Connect to OpenSearch for details on configuration.
-Then, select a `return_type` from the options below.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `search -` Returns records that match query
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `count` - Returns number of total records matching query
-    :::
-###  
-Query
-**Query Wizard**
-Set filter criteria using the Xano query builder. The left input is the field to filter on. Then set the operator and value to evaluate. Optionally, add multiple conditions using AND / OR logic.
-Select 'Update Payload' to ensure your changes are reflected in the query payload.
-**Output Options**
-These options can only be set on 'search' return type (not 'count').
-Size: the number of results to return (useful for pagination)
-From: the number to offset the results (useful for pagination)
-Included Fields: field names to include in the results. Can be formatted as JSON array or comma separated string.
-Sort: order to return results. Default is by OpenSearch relevance score. Option to choose one or more fields to sort in ascending or descending order.
-**Payload (auto-generated)**
-The JSON sent as the payload to OpenSearch. This is generated by the Query Wizard and Output Options sections. Useful for debugging.
-Dynamic values (variables, inputs, etc.) are escaped using parentheses and use Xano expression syntax. These will be evaluated at the time of the request.
-Changes made directly to the payload may be overwritten by other areas of the query wizard. If you already have a query payload you want to use, it is recommended to use the OpenSearch Request function instead.
-AWS OpenSearch: Document (CRUD) Function
-Easily get, add, update, or remove documents from an OpenSearch index.
-###  
-Configure
-See Connect to OpenSearch for details on configuration.
-###  
-Get Document
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Set method of API request to GET
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Specify doc\_id
-    :::
-###  
-Create or Update Document
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Set `method` to `POST` (create) or `PUT` (update)
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Set `doc_id` (optional for POST)
-    :::
-3.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Set document payload. Click 'Use Index Schema' if you want to import the schema (mapping) directly from the OpenSearch index set under Configure tab. This will use the credentials provided to make a request to OpenSearch on your behalf to get the mapping.
-    :::
-###  
-AWS OpenSearch Request
-Send any OpenSearch API request using similar configuration methods as outlined in Connect to OpenSearch.
-Set the `url` to use the desired endpoint of the request.
-Set `query` to the JSON payload if necessary.
-Google Cloud Storage
-Manage Google Cloud Storage buckets directly in the Xano function stack.
-<div>
-</div>
-####  
-Google Service Account
-You need to set up a Google Service Account in the Google Cloud Console.
-Navigate to IAM & Admin and select Service Accounts.
-Select **+ Create Service Account.**
-####  
-Roles
-**Be sure to include the following Roles for the Service Account**:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `Service Account User`
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `Storage Admin`
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `Storage Object Admin`
-    :::
-Once the Service Account is created, select actions and **Manage keys.**
-Then add a new key and select the JSON option.
-Google will provide a JSON file for download. Open the file and copy the JSON key. Paste this into your Xano workspace either as an Environment Variable or as a variable in the function stack that you are using the Google Cloud Storage functions.
-The JSON key must be entered as a **text string**. Do not import the key as JSON when adding it to Xano.
-###  
-List Directory
-List the contents of a Google Cloud Storage Bucket.
-**Service Account** - the JSON key, stored as text, from your Google Service Account
-**Bucket** - the name of the Bucket you wish to access.
-**Path** - the path you wish to see the contents of.
-###  
-Signed URL
-Generate a signed URL to provide limited permissions. These can be used with a TTL (time to live) similar to an expiring token.
-**Service Account** - the JSON key, stored as text, from your Google Service Account
-**Bucket** - the name of the Bucket you wish to access.
-**filePath** - the path of the file you wish to generate the URL for.
-**Method** - the HTTP method (GET or POST)
-**TTL** - time to live, in seconds. (How long until the URL expires).
-###  
-Upload a File
-Upload a File to the specific Google Cloud Storage bucket.
-**Service Account** - the JSON key, stored as text, from your Google Service Account
-**Bucket** - the name of the Bucket you upload a file to.
-**filePath** - the path and name of the file you wish to store in the bucket. For example \"files/image1\" will upload the image in the files folder and name it image1.
-**File** - the file being uploaded. This should come from a file resource input or a file resource variable.
-###  
-Delete File
-Delete a specific file from a Bucket.
-**Service Account** - the JSON key, stored as text, from your Google Service Account
-**Bucket** - the name of the Bucket that contains the file.
-**filePath** - the path of the file you wish to delete from the Bucket.
-###  
-Create Variable From File Resource
-Return the file resource as a variable in Xano, including the raw image. This can be used, for example, to send to another service if file transfer is needed.
-**Service Account** - the JSON key, stored as text, from your Google Service Account
-**Bucket** - the name of the Bucket that contains the file.
-**filePath** - the path of the file you wish to create a variable of.
-####  
-Example - Using the Variable Created from File Resource
-Turn your API endpoint into a redirect to the file by returning the data field from the return variable and setting a custom header of Content-Type with the mime of the file resource.
-Here\'s an example return of Create Variable from File Resource:
-If we return the raw image (data) and use a Set Header function to define `Content-Type` the mime (in this example `image/png`). We can have our endpoint URL redirect to the file.
-Amazon S3
-###  
-Access Key and Secret Access Key
-From your AWS Developer Console, navigate to **Security Credentials**.
-Scroll down to **Access Keys** and select **Create access key** unless you have an access key and secret already generated.
-Select **Command Line Interface (CLI)** as the use case and choose next, optionally add a description, then create the access key.
-Store the **Access key** and **Secret access key** in a safe place. It\'s recommended to save these in your Xano workspace as Environment Variables as they will be used in the Amazon S3 Cloud Storage Functions.
-###  
-Bucket and Region
-The s3 bucket name and region will also be required when calling the Amazon s3 Cloud Storage Functions.
-When navigating to your s3 buckets, the bucket name can be found under name. The region is under region but only requires the identifier. For example, in the below image the bucket name is **xano-s3-test** and the region is **us-west-2**.
-###  
-Amazon S3: List Directory
-Lists the directory details of the specific Amazon s3 bucket.
-**Bucket -** The name of the s3 bucket you want to get the details of.
-**Region -** The region of the bucket.
-**Key -** The access key
-**Secret -** The secret access key
-**Next\_page\_token -** optional. The next page token is provided in the response if there is a next page, use this value to get the next page of items. S3 buckets limit 1,000 items per page.
-###  
-Amazon S3: Signed URL
-Creates a signed URL of the file to be shared with an expiration.
-**Bucket -** The name of the s3 bucket you want to get the details of.
-**Region -** The region of the bucket.
-**Key -** The access key
-**Secret -** The secret access key
-**File\_key -** The file key of the file. This can be found in the s3 bucket when selecting the file and finding Key. Additionally, the Key is listed in the payload for List Directory.
-**TTL** - Time to live. How long, in seconds, the signed URL is viewable until it expires.
-###  
-Amazon S3: Upload a File
-Upload a file to a specified Amazon S3 Bucket
-**Bucket -** The name of the s3 bucket you want to get the details of.
-**Region -** The region of the bucket.
-**Key -** The access key
-**Secret -** The secret access key
-**File\_key -** Optionally define the file key. If nothing is defined, one will be automatically assigned by Amazon S3.
-**File** - The file being uploaded. This must come from a file resource input or file resource variable.
-###  
-Amazon S3: Delete File
-Delete a file from a specified S3 Bucket.
-**Bucket -** The name of the s3 bucket you want to get the details of.
-**Region -** The region of the bucket.
-**Key -** The access key
-**Secret -** The secret access key
-**File\_key -** The file key of the file you wish to delete.
-###  
-Amazon S3: Create Var From File Resource
-Return the file resource as a variable in Xano, including the raw image. This can be used, for example, to send to another service if file transfer is needed.
-**Bucket -** The name of the s3 bucket you want to get the details of.
-**Region -** The region of the bucket.
-**Key -** The access key
-**Secret -** The secret access key
-**File\_key -** The file key of the file you wish to return the file resource as a variable.
-The result, shown on the right-hand side of the above image returns an object with the file name, size, mime type, and raw image represented in the path data.
-Check out the example above to return the image through an API request.
-Microsoft Azure Blob Storage
-Manage storage containers from your Microsoft Azure account directly from the Xano function stack.
-###  
-Setup
-Please ensure you have a Microsoft Azure account. If you don\'t yet have an account sign up to Microsoft Azure and navigate to the Azure portal.
-####  
-Create a storage account
-A storage account is required to store files on Azure. First, select **Create a resource** from the portal homepage.
-Select Create a resource from the portal home page.
-Navigate to storage and select **Create** under storage account.
-Create a storage account.
-Fill out the required information in **Basics**, if you don\'t already have a resource group, create a new one.
-Create a storage account.
-Configure any additional settings and create the storage account once you\'re ready.
-####  
-Create a container
-Once the resource is deployed, navigate to containers and create a new container.
-Create a new container.
-####  
-Access key
-After creating a container, you need to retrieve your account access key to use the Azure functions in Xano.
-Find **Access keys** under **Security + Networking** on the left navigation bar. Select **Show** next to **Key** under **key1**. Copy the key and store it as an Environment Variable in Xano.
-Locate your Azure Access Key.
-Do not share your access key. It is recommended to store your access key as an Environment Variable in Xano for safe keeping.
-###  
-List Directory
-List directory will list the blobs, properties, and metadata in a container or at a specified path within the container.
-List the Azure Directory.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_name - Azure storage account name.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_key - Azure Access Key.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    conatiner\_name - Container name within Azure storage account.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    path - (Optional) Use this to specify a specific blob or folder within a container.
-    :::
-###  
-Signed URL
-Creates a signed URL for a file with a specified time to live (TTL) or expiration.
-Create a signed URL for an Azure blob.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_name - Azure storage account name.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_key - Azure Access Key.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    conatiner\_name - Container name within Azure storage account.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    path - The path of the file to create a signed URL for.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    ttl - Time to Live (in seconds); how long the signed URL is accessible.
-    :::
-###  
-Upload a File
-Upload a file to an Azure blob container.
-Upload a file to an Azure blob container.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_name - Azure storage account name.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_key - Azure Access Key.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    conatiner\_name - Container name within Azure storage account.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    filePath - The path name for the file being uploaded.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    file - The file being uploaded. This must come from a file resource.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    metadata - (Optional). Optionally include additional metadata with the file stored in object format.
-    :::
-###  
-Delete a File
-Delete a file from an Azure blob container.
-Delete a file from an Azure blob container.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_name - Azure storage account name.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_key - Azure Access Key.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    conatiner\_name - Container name within Azure storage account.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    filePath - The path name for the file being deleted.
-    :::
-###  
-Create Variable From File Resource
-Create a variable from a file resource in Azure to use it in the Xano Function Stack.
-Create Variable From File Resource.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_name - Azure storage account name.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_key - Azure Access Key.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    conatiner\_name - Container name within Azure storage account.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    filePath - The path name for the file being created as a variable.
-    :::
-Check out the example above of leveraging the Variable from File Resource in the Function Stack.
-###  
-Get File Metadata
-Get the metadata of a file from an Azure blob container.
-Retrieve the metadata from a Azure storage blob.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_name - Azure storage account name.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    account\_key - Azure Access Key.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    conatiner\_name - Container name within Azure storage account.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    filePath - The path name for the file to retrieve the metadata from.
-    :::
-Last updated 6 months ago
-Was this helpful?
+## 📋 **Quick Summary**
+
+**What it does:** Function stack configuration allows you to set up proper settings, environment variables, performance parameters, and security options for your Xano function stacks.
+
+**Why it matters:** Proper configuration enables you to:
+- **Optimize performance** with appropriate settings
+- **Secure your functions** with proper access controls
+- **Manage environments** with configuration variables
+- **Control execution** with timeouts and limits
+- **Enable debugging** and monitoring capabilities
+
+**Time to implement:** 10-15 minutes for basic configuration, 30+ minutes for comprehensive setup
+
+---
+
+## What You'll Learn
+
+- Function stack configuration options
+- Environment variable management
+- Performance and security settings
+- Debugging and monitoring setup
+- Best practices for configuration management
+
+## Basic Function Configuration
+
+### Function Stack Settings
+
+```javascript
+// Function Stack Configuration Example
+{
+  "name": "User Authentication",
+  "description": "Complete user authentication and registration system",
+  "version": "1.2.0",
+  "timeout": 30000,
+  "memory_limit": "512MB",
+  "environment": "production",
+  "public": false,
+  "rate_limiting": {
+    "enabled": true,
+    "requests_per_minute": 100,
+    "burst_limit": 20
+  },
+  "cors": {
+    "enabled": true,
+    "origins": ["https://yourdomain.com", "https://app.yourdomain.com"],
+    "methods": ["GET", "POST", "PUT", "DELETE"],
+    "headers": ["Content-Type", "Authorization"]
+  },
+  "caching": {
+    "enabled": false,
+    "ttl": 300,
+    "cache_key_strategy": "auto"
+  }
+}
+```
+
+### Environment Variables Setup
+
+```javascript
+// Environment Configuration
+const config = {
+  // Database Configuration
+  DATABASE_URL: process.env.DATABASE_URL,
+  DATABASE_POOL_SIZE: parseInt(process.env.DATABASE_POOL_SIZE) || 10,
+  
+  // API Keys and Secrets
+  JWT_SECRET: process.env.JWT_SECRET,
+  ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
+  
+  // External Service APIs
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
+  AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+  
+  // Application Settings
+  FRONTEND_URL: process.env.FRONTEND_URL || 'https://app.yourdomain.com',
+  API_VERSION: process.env.API_VERSION || 'v1',
+  LOG_LEVEL: process.env.LOG_LEVEL || 'info',
+  
+  // Feature Flags
+  ENABLE_ANALYTICS: process.env.ENABLE_ANALYTICS === 'true',
+  ENABLE_RATE_LIMITING: process.env.ENABLE_RATE_LIMITING === 'true',
+  
+  // Performance Settings
+  MAX_REQUEST_SIZE: process.env.MAX_REQUEST_SIZE || '10MB',
+  CACHE_TTL: parseInt(process.env.CACHE_TTL) || 300
+};
+
+// Validation function for required environment variables
+function validateEnvironment() {
+  const required = [
+    'DATABASE_URL',
+    'JWT_SECRET',
+    'ENCRYPTION_KEY'
+  ];
+  
+  const missing = required.filter(key => !process.env[key]);
+  
+  if (missing.length > 0) {
+    throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+  }
+  
+  return true;
+}
+```
+
+## Security Configuration
+
+### Authentication and Authorization Setup
+
+```javascript
+// Security Configuration
+const securityConfig = {
+  // JWT Configuration
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expiresIn: '24h',
+    algorithm: 'HS256',
+    issuer: 'yourdomain.com',
+    audience: 'api.yourdomain.com'
+  },
+  
+  // Password Requirements
+  password: {
+    minLength: 8,
+    requireUppercase: true,
+    requireLowercase: true,
+    requireNumbers: true,
+    requireSymbols: false,
+    maxAttempts: 5,
+    lockoutDuration: 900 // 15 minutes
+  },
+  
+  // Rate Limiting
+  rateLimiting: {
+    windowMs: 60000, // 1 minute
+    maxRequests: 100,
+    skipSuccessfulRequests: false,
+    skipFailedRequests: false,
+    keyGenerator: (req) => req.ip || 'anonymous'
+  },
+  
+  // CORS Settings
+  cors: {
+    origin: function(origin, callback) {
+      const allowedOrigins = [
+        'https://yourdomain.com',
+        'https://app.yourdomain.com'
+      ];
+      
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+    optionsSuccessStatus: 200
+  },
+  
+  // Input Validation
+  validation: {
+    maxPayloadSize: '10MB',
+    sanitizeInput: true,
+    validateJsonSchema: true,
+    preventSqlInjection: true
+  }
+};
+
+// Security middleware configuration
+function configureSecurityMiddleware() {
+  return {
+    helmet: {
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          scriptSrc: ["'self'"],
+          imgSrc: ["'self'", "data:", "https:"]
+        }
+      },
+      hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true
+      }
+    },
+    
+    inputSanitization: {
+      enabled: true,
+      stripHtml: true,
+      trimWhitespace: true,
+      normalizeEmail: true
+    },
+    
+    requestLogging: {
+      enabled: true,
+      logLevel: 'info',
+      sensitiveFields: ['password', 'token', 'secret']
+    }
+  };
+}
+```
+
+## Performance Configuration
+
+### Optimization Settings
+
+```javascript
+// Performance Configuration
+const performanceConfig = {
+  // Function Execution
+  execution: {
+    timeout: 30000, // 30 seconds
+    memoryLimit: '512MB',
+    maxConcurrency: 100,
+    retryAttempts: 3,
+    retryDelay: 1000
+  },
+  
+  // Database Connection
+  database: {
+    poolSize: 20,
+    connectionTimeout: 5000,
+    queryTimeout: 10000,
+    maxRetries: 3,
+    enableQueryCache: true,
+    cacheSize: '128MB'
+  },
+  
+  // Caching Strategy
+  caching: {
+    enabled: true,
+    defaultTtl: 300, // 5 minutes
+    maxKeys: 10000,
+    
+    strategies: {
+      user_data: { ttl: 600 }, // 10 minutes
+      product_catalog: { ttl: 1800 }, // 30 minutes
+      static_content: { ttl: 3600 } // 1 hour
+    }
+  },
+  
+  // Response Compression
+  compression: {
+    enabled: true,
+    threshold: 1024, // 1KB minimum
+    algorithms: ['gzip', 'deflate'],
+    level: 6
+  }
+};
+
+// Performance monitoring configuration
+function configurePerformanceMonitoring() {
+  return {
+    metrics: {
+      enabled: true,
+      interval: 10000, // 10 seconds
+      includeSystemMetrics: true,
+      
+      customMetrics: [
+        'function_execution_time',
+        'database_query_time',
+        'external_api_response_time',
+        'cache_hit_ratio'
+      ]
+    },
+    
+    alerts: {
+      enabled: true,
+      thresholds: {
+        responseTime: 5000, // 5 seconds
+        errorRate: 0.05, // 5%
+        memoryUsage: 0.8, // 80%
+        cpuUsage: 0.8 // 80%
+      }
+    },
+    
+    logging: {
+      enabled: true,
+      level: 'info',
+      format: 'json',
+      includeStackTrace: true
+    }
+  };
+}
+```
+
+## Development vs Production Configuration
+
+### Environment-Specific Settings
+
+```javascript
+// Environment Configuration Manager
+class ConfigManager {
+  constructor() {
+    this.environment = process.env.NODE_ENV || 'development';
+    this.config = this.loadConfig();
+  }
+  
+  loadConfig() {
+    const baseConfig = {
+      app: {
+        name: 'Xano Function Stack',
+        version: '1.0.0',
+        port: process.env.PORT || 3000
+      },
+      
+      security: {
+        jwt: {
+          secret: process.env.JWT_SECRET,
+          expiresIn: '24h'
+        },
+        
+        rateLimiting: {
+          enabled: true,
+          windowMs: 60000,
+          maxRequests: 100
+        }
+      }
+    };
+    
+    const environmentConfigs = {
+      development: {
+        debug: true,
+        logging: {
+          level: 'debug',
+          format: 'pretty'
+        },
+        
+        database: {
+          poolSize: 5,
+          logging: true
+        },
+        
+        caching: {
+          enabled: false
+        },
+        
+        cors: {
+          origin: '*'
+        }
+      },
+      
+      staging: {
+        debug: true,
+        logging: {
+          level: 'info',
+          format: 'json'
+        },
+        
+        database: {
+          poolSize: 10,
+          logging: false
+        },
+        
+        caching: {
+          enabled: true,
+          ttl: 300
+        },
+        
+        cors: {
+          origin: ['https://staging.yourdomain.com']
+        }
+      },
+      
+      production: {
+        debug: false,
+        logging: {
+          level: 'warn',
+          format: 'json'
+        },
+        
+        database: {
+          poolSize: 20,
+          logging: false
+        },
+        
+        caching: {
+          enabled: true,
+          ttl: 600
+        },
+        
+        security: {
+          rateLimiting: {
+            maxRequests: 1000
+          }
+        },
+        
+        cors: {
+          origin: ['https://yourdomain.com', 'https://app.yourdomain.com']
+        }
+      }
+    };
+    
+    return this.mergeConfigs(baseConfig, environmentConfigs[this.environment] || {});
+  }
+  
+  mergeConfigs(base, override) {
+    const merged = { ...base };
+    
+    for (const key in override) {
+      if (typeof override[key] === 'object' && !Array.isArray(override[key])) {
+        merged[key] = this.mergeConfigs(merged[key] || {}, override[key]);
+      } else {
+        merged[key] = override[key];
+      }
+    }
+    
+    return merged;
+  }
+  
+  get(path) {
+    return path.split('.').reduce((obj, key) => obj?.[key], this.config);
+  }
+  
+  getEnv() {
+    return this.environment;
+  }
+  
+  isDevelopment() {
+    return this.environment === 'development';
+  }
+  
+  isProduction() {
+    return this.environment === 'production';
+  }
+}
+
+// Usage example
+const config = new ConfigManager();
+
+// Function stack initialization with configuration
+function initializeFunctionStack() {
+  // Apply security settings
+  if (config.get('security.rateLimiting.enabled')) {
+    enableRateLimiting(config.get('security.rateLimiting'));
+  }
+  
+  // Configure database connection
+  const dbConfig = config.get('database');
+  initializeDatabase(dbConfig);
+  
+  // Setup caching
+  if (config.get('caching.enabled')) {
+    initializeCache(config.get('caching'));
+  }
+  
+  // Configure logging
+  const logConfig = config.get('logging');
+  setupLogging(logConfig);
+  
+  console.log(`Function stack initialized in ${config.getEnv()} mode`);
+}
+```
+
+## Debugging and Monitoring Configuration
+
+### Development Tools Setup
+
+```javascript
+// Debug Configuration
+const debugConfig = {
+  enabled: process.env.NODE_ENV !== 'production',
+  
+  logging: {
+    level: process.env.LOG_LEVEL || 'debug',
+    format: process.env.NODE_ENV === 'production' ? 'json' : 'pretty',
+    
+    categories: {
+      database: true,
+      authentication: true,
+      external_apis: true,
+      performance: true,
+      errors: true
+    }
+  },
+  
+  profiling: {
+    enabled: process.env.ENABLE_PROFILING === 'true',
+    sampleRate: 0.1, // 10% of requests
+    includeStackTrace: true
+  },
+  
+  requestTracing: {
+    enabled: true,
+    includeHeaders: false,
+    includeBody: process.env.NODE_ENV !== 'production',
+    maxBodySize: 1024
+  }
+};
+
+// Debugging utilities
+function setupDebugging() {
+  if (!debugConfig.enabled) return;
+  
+  // Request logging middleware
+  function logRequest(req, res, next) {
+    const startTime = Date.now();
+    
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+    
+    if (debugConfig.requestTracing.includeBody && req.body) {
+      const bodyStr = JSON.stringify(req.body).substring(0, debugConfig.requestTracing.maxBodySize);
+      console.log('Request body:', bodyStr);
+    }
+    
+    res.on('finish', () => {
+      const duration = Date.now() - startTime;
+      console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} - ${res.statusCode} (${duration}ms)`);
+    });
+    
+    next();
+  }
+  
+  // Error handling middleware
+  function logError(error, req, res, next) {
+    console.error(`[ERROR] ${error.message}`);
+    
+    if (debugConfig.profiling.includeStackTrace) {
+      console.error(error.stack);
+    }
+    
+    next(error);
+  }
+  
+  return { logRequest, logError };
+}
+```
+
+## Configuration Validation
+
+### Settings Validation
+
+```javascript
+// Configuration Validator
+class ConfigValidator {
+  static validate(config) {
+    const errors = [];
+    
+    // Validate required fields
+    const required = [
+      'app.name',
+      'security.jwt.secret',
+      'database.url'
+    ];
+    
+    for (const field of required) {
+      if (!this.getNestedValue(config, field)) {
+        errors.push(`Missing required configuration: ${field}`);
+      }
+    }
+    
+    // Validate data types
+    const typeValidations = {
+      'app.port': 'number',
+      'security.rateLimiting.enabled': 'boolean',
+      'database.poolSize': 'number',
+      'caching.ttl': 'number'
+    };
+    
+    for (const [field, expectedType] of Object.entries(typeValidations)) {
+      const value = this.getNestedValue(config, field);
+      if (value !== undefined && typeof value !== expectedType) {
+        errors.push(`Configuration ${field} must be of type ${expectedType}, got ${typeof value}`);
+      }
+    }
+    
+    // Validate ranges
+    const rangeValidations = {
+      'app.port': { min: 1, max: 65535 },
+      'database.poolSize': { min: 1, max: 100 },
+      'caching.ttl': { min: 0, max: 86400 }
+    };
+    
+    for (const [field, range] of Object.entries(rangeValidations)) {
+      const value = this.getNestedValue(config, field);
+      if (typeof value === 'number') {
+        if (value < range.min || value > range.max) {
+          errors.push(`Configuration ${field} must be between ${range.min} and ${range.max}`);
+        }
+      }
+    }
+    
+    if (errors.length > 0) {
+      throw new Error(`Configuration validation failed:\n${errors.join('\n')}`);
+    }
+    
+    return true;
+  }
+  
+  static getNestedValue(obj, path) {
+    return path.split('.').reduce((current, key) => current?.[key], obj);
+  }
+}
+
+// Usage
+try {
+  ConfigValidator.validate(config);
+  console.log('Configuration validated successfully');
+} catch (error) {
+  console.error('Configuration validation failed:', error.message);
+  process.exit(1);
+}
+```
+
+## 💡 **Try This**
+
+### Beginner Challenge
+Set up basic configuration:
+1. Configure environment variables
+2. Set up development vs production settings
+3. Configure basic security options
+4. Test configuration validation
+
+### Intermediate Challenge
+Implement advanced configuration:
+1. Set up performance monitoring
+2. Configure caching strategies
+3. Implement environment-specific settings
+4. Add configuration validation
+
+### Advanced Challenge
+Create enterprise configuration:
+1. Build configuration management system
+2. Implement dynamic configuration updates
+3. Add configuration versioning
+4. Create configuration documentation
+
+## Configuration Best Practices
+
+1. **Use environment variables** for sensitive information
+2. **Validate configuration** on startup
+3. **Separate environments** with different configs
+4. **Document all settings** clearly
+5. **Use secure defaults** for production
+
+## Next Steps
+
+- Learn [Security](security.md) for advanced security configuration
+- Explore [Performance](../../best-practices/performance.md) optimization
+- Master [Environment Variables](environment-variables.md) management
+- Understand [Testing](testing-and-debugging-function-stacks.md) configuration
+
+## Need Help?
+
+- 📚 [Xano Community](https://community.xano.com) - Configuration discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Setup guides
+- 📖 [Best Practices](../../best-practices/configuration.md) - Configuration patterns
+- 🔧 [Support](https://xano.com/support) - Configuration assistance

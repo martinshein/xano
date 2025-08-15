@@ -1,318 +1,524 @@
 ---
+title: "Custom Functions - Reusable Code Components"
+description: "Create and manage custom functions in Xano for reusable code components, modular design patterns, and efficient development workflows"
 category: function-stack
-has_code_examples: false
-last_updated: '2025-01-23'
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: 'Function: Custom Functions'
+  - Custom Functions
+  - Reusable Code
+  - Modular Design
+  - Code Organization
+  - Function Libraries
+difficulty: intermediate
+reading_time: 8 minutes
+last_updated: '2025-01-15'
+prerequisites:
+  - Understanding of function stacks
+  - Knowledge of programming concepts
+  - Familiarity with modular design
 ---
 
-# Function: Custom Functions
+# Custom Functions - Reusable Code Components
 
-[🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    What are custom functions?
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../building-with-visual-development.html)
-2.  Functions
-Custom Functions 
-================
-What are custom functions?
-Custom functions are pieces of reusable logic that you can insert into other function stacks. This is most useful when you have a set of steps that remain the same, but need to be executed in multiple places. Placing those steps inside of a custom function allows you to quickly use those steps in other function stacks, while only needing to maintain them in one place.
-###  
-Using Custom Functions
-<div>
-1
-###  
-From the left-side navigation, click [] to access the Library section, and choose Functions from the submenu that appears.
-2
-###  
-To create a custom function, click []
-Building a custom function is just like building an API. Refer to that documentation for specific instructions on building the function stack.
-3
-###  
-[] your changes
-You can Publish the custom function to ensure that every place it is called uses the same version.
-**Hint**
-When using Run & Debug, you have the option of running draft versions of functions as well, so you don\'t have to publish changes until you are ready.
-4
-###  
-Insert the custom function any place you need to use it.
-In the functions panel, you\'ll see an option labeled Custom Functions, shown below. Just click it to see a list of your custom functions and add them to other function stacks.
-5
-###  
-When you make changes to the custom function, the changes populate across everywhere it is used.
-</div>
-------------------------------------------------------------------------
-Async Execution
-Once you\'ve built your custom function and added it to another function stack, you have the option of running the function **asynchronously**. This just means that the functions will be queued for execution, and the rest of your function stack will continue to execute right away.
-<div>
-</div>
-Asynchronous functions will utilize your background task resources (unless you are on an Enterprise plan), so it\'s important to manage expectations when it comes to execution speed. It would be most appropriate to use asynchronous functions when you need to trigger an operation as part of a larger function stack, but do not need to reference the output in the same stack.
-To enable asynchronous execution, right-click on the custom function in your function stack, and choose **Async Settings**.
-[]
-In the panel that opens, choose your desired execution type.
-[]
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Synchronous** means that the function stack will wait for the custom function to execute before continuing. The custom function will output the result to the defined variable. This is the standard behavior that has always existed for custom functions.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Async** means that the functions will be queued for execution using your background task resources. The function\'s output variable will be populated with a unique identifier for the queued excecution.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Async (dedicated)** is available for Enterprise plans and gives you a method of specificity around the resources used to execute the custom function.
-    :::
-When using async functions, the function request history will still populate, so you can review the requests once they have finished executing. Each request will be labeled with the execution method.
-[]
-####  
-Async Function Await
-In scenarios where you want to use the output of your async functions later in the function stack, you can utilize the **Async Function Await** function, which accepts the UUIDs returned when an async function is executed.
-You can provide an array of IDs to get the output of, and specify how long you\'d like to wait for those functions to finish executing in seconds using the timeout parameter.
-[]
-Last updated 7 months ago
-Was this helpful?
+## 📋 **Quick Summary**
+
+**What it does:** Custom functions allow you to create reusable code components that can be called from multiple function stacks, promoting code reuse, maintainability, and modular design.
+
+**Why it matters:** Custom functions enable you to:
+- **Reduce code duplication** by creating reusable components
+- **Improve maintainability** with centralized logic
+- **Build function libraries** for common operations
+- **Standardize implementations** across your application
+- **Accelerate development** with proven components
+
+**Time to implement:** 10-15 minutes for basic functions, 30+ minutes for complex utilities
+
+---
+
+## What You'll Learn
+
+- How to create and manage custom functions
+- Best practices for reusable code design
+- Common patterns for function libraries
+- Parameter handling and return values
+- Testing and documentation strategies
+
+## Creating Custom Functions
+
+### Basic Function Structure
+
+```javascript
+// Custom Function: validateEmail
+// Input: email (string)
+// Output: { valid: boolean, message: string }
+
+function validateEmail(email) {
+  const result = {
+    valid: false,
+    message: ''
+  };
+  
+  // Check if email is provided
+  if (!email || typeof email !== 'string') {
+    result.message = 'Email is required';
+    return result;
+  }
+  
+  // Trim whitespace
+  email = email.trim();
+  
+  // Check email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    result.message = 'Invalid email format';
+    return result;
+  }
+  
+  // Check email length
+  if (email.length > 254) {
+    result.message = 'Email address too long';
+    return result;
+  }
+  
+  result.valid = true;
+  result.message = 'Valid email address';
+  return result;
+}
+```
+
+## Utility Function Examples
+
+### String Processing
+
+```javascript
+// Generate URL-friendly slug
+function generateSlug(text, maxLength = 50) {
+  if (!text || typeof text !== 'string') {
+    return '';
+  }
+  
+  let slug = text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+  
+  if (slug.length > maxLength) {
+    slug = slug.substring(0, maxLength).replace(/-[^-]*$/, '');
+  }
+  
+  return slug || 'untitled';
+}
+
+// Truncate text with ellipsis
+function truncateText(text, length = 100, suffix = '...') {
+  if (!text || typeof text !== 'string') {
+    return '';
+  }
+  
+  if (text.length <= length) {
+    return text;
+  }
+  
+  return text.substring(0, length - suffix.length).trim() + suffix;
+}
+```
+
+### Date and Time Utilities
+
+```javascript
+// Format date for display
+function formatDate(timestamp, format = 'YYYY-MM-DD') {
+  try {
+    const date = new Date(timestamp);
+    
+    if (isNaN(date.getTime())) {
+      return null;
+    }
+    
+    switch (format) {
+      case 'YYYY-MM-DD':
+        return date.toISOString().split('T')[0];
+      case 'MM/DD/YYYY':
+        return date.toLocaleDateString('en-US');
+      case 'DD/MM/YYYY':
+        return date.toLocaleDateString('en-GB');
+      default:
+        return date.toLocaleDateString();
+    }
+  } catch (error) {
+    return null;
+  }
+}
+
+// Calculate age from birth date
+function calculateAge(birthDate) {
+  try {
+    const birth = new Date(birthDate);
+    const today = new Date();
+    
+    if (isNaN(birth.getTime()) || birth > today) {
+      return null;
+    }
+    
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    
+    return age;
+  } catch (error) {
+    return null;
+  }
+}
+```
+
+### Business Logic Functions
+
+```javascript
+// Calculate tax amount
+function calculateTax(amount, taxRate, inclusive = false) {
+  if (typeof amount !== 'number' || amount < 0) {
+    throw new Error('Invalid amount');
+  }
+  
+  if (typeof taxRate !== 'number' || taxRate < 0 || taxRate > 1) {
+    throw new Error('Tax rate must be between 0 and 1');
+  }
+  
+  let taxAmount, netAmount, totalAmount;
+  
+  if (inclusive) {
+    // Tax included in amount
+    totalAmount = amount;
+    netAmount = amount / (1 + taxRate);
+    taxAmount = amount - netAmount;
+  } else {
+    // Tax added to amount
+    netAmount = amount;
+    taxAmount = amount * taxRate;
+    totalAmount = amount + taxAmount;
+  }
+  
+  return {
+    netAmount: Math.round(netAmount * 100) / 100,
+    taxAmount: Math.round(taxAmount * 100) / 100,
+    totalAmount: Math.round(totalAmount * 100) / 100,
+    taxRate: taxRate
+  };
+}
+
+// Calculate discount
+function calculateDiscount(originalPrice, discountValue, discountType = 'percentage') {
+  if (typeof originalPrice !== 'number' || originalPrice < 0) {
+    throw new Error('Invalid original price');
+  }
+  
+  let discountAmount = 0;
+  
+  switch (discountType) {
+    case 'percentage':
+      if (discountValue > 100) discountValue = 100;
+      discountAmount = (originalPrice * discountValue) / 100;
+      break;
+    case 'fixed':
+      discountAmount = Math.min(discountValue, originalPrice);
+      break;
+    default:
+      throw new Error('Invalid discount type');
+  }
+  
+  const finalPrice = originalPrice - discountAmount;
+  const savingsPercentage = (discountAmount / originalPrice) * 100;
+  
+  return {
+    originalPrice: originalPrice,
+    discountAmount: Math.round(discountAmount * 100) / 100,
+    finalPrice: Math.round(finalPrice * 100) / 100,
+    savingsPercentage: Math.round(savingsPercentage * 100) / 100
+  };
+}
+```
+
+## Advanced Validation Functions
+
+### Comprehensive Input Validator
+
+```javascript
+// Multi-field validation function
+function validateUserInput(userData, rules) {
+  const result = {
+    valid: true,
+    errors: [],
+    cleaned: {}
+  };
+  
+  if (!userData || typeof userData !== 'object') {
+    result.valid = false;
+    result.errors.push('Invalid input data');
+    return result;
+  }
+  
+  for (const [field, fieldRules] of Object.entries(rules)) {
+    const value = userData[field];
+    
+    // Required field check
+    if (fieldRules.required && (!value && value !== 0)) {
+      result.valid = false;
+      result.errors.push(`${field} is required`);
+      continue;
+    }
+    
+    // Skip if optional and empty
+    if (!fieldRules.required && (!value && value !== 0)) {
+      continue;
+    }
+    
+    // Type validation
+    if (fieldRules.type && !validateType(value, fieldRules.type)) {
+      result.valid = false;
+      result.errors.push(`${field} must be of type ${fieldRules.type}`);
+      continue;
+    }
+    
+    // Length validation
+    if (fieldRules.minLength && typeof value === 'string' && value.length < fieldRules.minLength) {
+      result.valid = false;
+      result.errors.push(`${field} must be at least ${fieldRules.minLength} characters`);
+      continue;
+    }
+    
+    // Pattern validation
+    if (fieldRules.pattern && typeof value === 'string' && !new RegExp(fieldRules.pattern).test(value)) {
+      result.valid = false;
+      result.errors.push(`${field} format is invalid`);
+      continue;
+    }
+    
+    // Clean and store
+    result.cleaned[field] = typeof value === 'string' ? value.trim() : value;
+  }
+  
+  return result;
+}
+
+// Type validation helper
+function validateType(value, expectedType) {
+  switch (expectedType) {
+    case 'string': return typeof value === 'string';
+    case 'number': return typeof value === 'number' && !isNaN(value);
+    case 'integer': return Number.isInteger(Number(value));
+    case 'boolean': return typeof value === 'boolean';
+    case 'email': return typeof value === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    case 'url':
+      try {
+        new URL(value);
+        return true;
+      } catch {
+        return false;
+      }
+    default: return true;
+  }
+}
+```
+
+## Security and Authentication
+
+### Password Validation
+
+```javascript
+// Comprehensive password validation
+function validatePassword(password, requirements = {}) {
+  const rules = {
+    minLength: 8,
+    requireUppercase: true,
+    requireLowercase: true,
+    requireNumbers: true,
+    requireSymbols: false,
+    ...requirements
+  };
+  
+  const result = {
+    valid: true,
+    errors: [],
+    strength: 0,
+    strengthLabel: ''
+  };
+  
+  if (!password || typeof password !== 'string') {
+    result.valid = false;
+    result.errors.push('Password is required');
+    return result;
+  }
+  
+  // Length check
+  if (password.length < rules.minLength) {
+    result.valid = false;
+    result.errors.push(`Password must be at least ${rules.minLength} characters`);
+  } else {
+    result.strength += 25;
+  }
+  
+  // Character checks
+  if (rules.requireUppercase && !/[A-Z]/.test(password)) {
+    result.valid = false;
+    result.errors.push('Password must contain uppercase letters');
+  } else if (/[A-Z]/.test(password)) {
+    result.strength += 25;
+  }
+  
+  if (rules.requireLowercase && !/[a-z]/.test(password)) {
+    result.valid = false;
+    result.errors.push('Password must contain lowercase letters');
+  } else if (/[a-z]/.test(password)) {
+    result.strength += 25;
+  }
+  
+  if (rules.requireNumbers && !/\d/.test(password)) {
+    result.valid = false;
+    result.errors.push('Password must contain numbers');
+  } else if (/\d/.test(password)) {
+    result.strength += 25;
+  }
+  
+  if (rules.requireSymbols && !/[^a-zA-Z0-9]/.test(password)) {
+    result.valid = false;
+    result.errors.push('Password must contain special characters');
+  }
+  
+  // Set strength label
+  if (result.strength < 50) result.strengthLabel = 'Weak';
+  else if (result.strength < 75) result.strengthLabel = 'Medium';
+  else result.strengthLabel = 'Strong';
+  
+  return result;
+}
+
+// Generate secure token
+function generateSecureToken(length = 32) {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let token = '';
+  
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    token += chars[randomIndex];
+  }
+  
+  return token;
+}
+```
+
+## Testing Custom Functions
+
+### Function Testing Pattern
+
+```javascript
+// Test runner for custom functions
+function testFunction(functionName, testCases) {
+  const results = [];
+  
+  for (const testCase of testCases) {
+    try {
+      const actual = eval(`${functionName}(${JSON.stringify(testCase.input).slice(1, -1)})`);
+      const passed = JSON.stringify(actual) === JSON.stringify(testCase.expected);
+      
+      results.push({
+        input: testCase.input,
+        expected: testCase.expected,
+        actual: actual,
+        passed: passed,
+        description: testCase.description
+      });
+    } catch (error) {
+      results.push({
+        input: testCase.input,
+        expected: testCase.expected,
+        actual: error.message,
+        passed: false,
+        description: testCase.description,
+        error: true
+      });
+    }
+  }
+  
+  return {
+    functionName: functionName,
+    total: testCases.length,
+    passed: results.filter(r => r.passed).length,
+    failed: results.filter(r => !r.passed).length,
+    results: results
+  };
+}
+
+// Example test suite
+function runEmailValidationTests() {
+  const testCases = [
+    {
+      input: 'test@example.com',
+      expected: { valid: true, message: 'Valid email address' },
+      description: 'Valid email should pass'
+    },
+    {
+      input: 'invalid-email',
+      expected: { valid: false, message: 'Invalid email format' },
+      description: 'Invalid format should fail'
+    },
+    {
+      input: '',
+      expected: { valid: false, message: 'Email is required' },
+      description: 'Empty email should fail'
+    }
+  ];
+  
+  return testFunction('validateEmail', testCases);
+}
+```
+
+## 💡 **Try This**
+
+### Beginner Challenge
+Create basic utility functions:
+1. Email validation function
+2. Date formatting utility
+3. String manipulation helpers
+4. Basic calculation functions
+
+### Intermediate Challenge
+Build function libraries:
+1. Complete validation library
+2. E-commerce calculation suite
+3. Text processing toolkit
+4. Date/time utility collection
+
+### Advanced Challenge
+Create enterprise utilities:
+1. Security function library
+2. Data transformation pipeline
+3. Business rule engine components
+4. Performance optimization utilities
+
+## Best Practices
+
+1. **Single responsibility** - Each function should do one thing well
+2. **Clear naming** - Function names should describe their purpose
+3. **Input validation** - Always validate parameters
+4. **Error handling** - Return meaningful error messages
+5. **Documentation** - Document parameters and return values
+6. **Testing** - Create test functions for validation
+
+## Next Steps
+
+- Learn [Function Stacks](../function-stack/) for using custom functions
+- Explore [Testing](testing-and-debugging-function-stacks.md) for quality assurance
+- Master [Best Practices](../../best-practices/code-organization.md) for maintainable code
+- Understand [Performance](../../best-practices/performance.md) optimization
+
+## Need Help?
+
+- 📚 [Xano Community](https://community.xano.com) - Custom function discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Function development guides
+- 📖 [Code Examples](../../examples/custom-functions.md) - Real-world implementations
+- 🔧 [Support](https://xano.com/support) - Development assistance

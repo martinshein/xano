@@ -1,383 +1,692 @@
 ---
+title: "Filters - Advanced Data Processing Functions"
+description: "Master Xano's powerful filter functions for data transformation, manipulation, text processing, and advanced data operations in function stacks"
 category: function-stack
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%'
+  - Filters
+  - Data Processing
+  - Text Functions
+  - Array Functions
+  - Date Functions
+  - Math Functions
+  - String Manipulation
+difficulty: intermediate
+reading_time: 12 minutes
+last_updated: '2025-01-15'
+prerequisites:
+  - Understanding of function stacks
+  - Basic knowledge of data types
+  - Familiarity with data manipulation concepts
 ---
 
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
+# Filters - Advanced Data Processing Functions
 
+## 📋 **Quick Summary**
 
+**What it does:** Filter functions provide powerful data transformation and manipulation capabilities, enabling you to process, format, and modify data within your function stacks without complex custom code.
 
+**Why it matters:** Filter functions enable you to:
+- **Transform data efficiently** with built-in processing functions
+- **Format output dynamically** for different display requirements
+- **Manipulate strings and arrays** with powerful utilities
+- **Process dates and numbers** with precision and flexibility
+- **Build complex data pipelines** with chained operations
 
+**Time to implement:** 5-10 minutes for basic filters, 30+ minutes for complex data processing workflows
 
+---
 
+## What You'll Learn
 
+- Complete overview of all filter categories
+- Practical examples for common use cases
+- Advanced filter chaining techniques
+- Performance optimization patterns
+- Integration with no-code platforms
 
+## Filter Categories
 
+### 🔤 **Text Filters**
 
+Transform and manipulate string data with powerful text processing functions.
 
+```javascript
+// Common text filters
+const processedText = {
+  uppercase: "hello world".toUpperCase(), // "HELLO WORLD"
+  lowercase: "HELLO WORLD".toLowerCase(), // "hello world"
+  title_case: "hello world".replace(/\w\S*/g, (txt) => 
+    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()), // "Hello World"
+  trim: "  hello world  ".trim(), // "hello world"
+  replace: "hello world".replace("world", "universe"), // "hello universe"
+  substring: "hello world".substring(0, 5), // "hello"
+  length: "hello world".length, // 11
+  split: "hello,world".split(","), // ["hello", "world"]
+  contains: "hello world".includes("world"), // true
+  starts_with: "hello world".startsWith("hello"), // true
+  ends_with: "hello world".endsWith("world") // true
+};
+```
 
+### 🔢 **Math Filters**
 
+Perform mathematical operations and number formatting.
 
+```javascript
+// Math filter examples
+const mathOperations = {
+  add: 10 + 5, // 15
+  subtract: 10 - 5, // 5
+  multiply: 10 * 5, // 50
+  divide: 10 / 5, // 2
+  modulo: 10 % 3, // 1
+  power: Math.pow(2, 3), // 8
+  square_root: Math.sqrt(16), // 4
+  absolute: Math.abs(-10), // 10
+  round: Math.round(3.14159), // 3
+  floor: Math.floor(3.14159), // 3
+  ceiling: Math.ceil(3.14159), // 4
+  random: Math.random(), // 0.123456789...
+  min: Math.min(1, 2, 3), // 1
+  max: Math.max(1, 2, 3) // 3
+};
+```
 
--   
+### 📅 **Date/Timestamp Filters**
 
+Process and format date and time data.
+
+```javascript
+// Date filter utilities
+class DateFilters {
+  static formatDate(timestamp, format = 'YYYY-MM-DD') {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
+    switch (format) {
+      case 'YYYY-MM-DD':
+        return `${year}-${month}-${day}`;
+      case 'MM/DD/YYYY':
+        return `${month}/${day}/${year}`;
+      case 'DD/MM/YYYY':
+        return `${day}/${month}/${year}`;
+      default:
+        return date.toLocaleDateString();
+    }
+  }
+  
+  static addDays(timestamp, days) {
+    const date = new Date(timestamp);
+    date.setDate(date.getDate() + days);
+    return date.toISOString();
+  }
+  
+  static timeDifference(start, end, unit = 'days') {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const diffTime = Math.abs(endDate - startDate);
     
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](building-with-visual-development/background-tasks.html)
-        -   [Triggers](building-with-visual-development/triggers.html)
-        -   [Middleware](building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](functions/database-requests/get-record.html)
-            -   [Add Record](functions/database-requests/add-record.html)
-            -   [Edit Record](functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](functions/database-requests/patch-record.html)
-            -   [Delete Record](functions/database-requests/delete-record.html)
-            -   [Bulk Operations](functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](functions/database-requests/database-transaction.html)
-            -   [External Database Query](functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](functions/data-manipulation/create-variable.html)
-            -   [Update Variable](functions/data-manipulation/update-variable.html)
-            -   [Conditional](functions/data-manipulation/conditional.html)
-            -   [Switch](functions/data-manipulation/switch.html)
-            -   [Loops](functions/data-manipulation/loops.html)
-            -   [Math](functions/data-manipulation/math.html)
-            -   [Arrays](functions/data-manipulation/arrays.html)
-            -   [Objects](functions/data-manipulation/objects.html)
-            -   [Text](functions/data-manipulation/text.html)
-                    -   [Security](functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](functions/data-caching-redis.html)
-        -   [Custom Functions](functions/custom-functions.html)
-        -   [Utility Functions](functions/utility-functions.html)
-        -   [File Storage](functions/file-storage.html)
-        -   [Cloud Services](functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](filters/manipulation.html)
-        -   [Math](filters/math.html)
-        -   [Timestamp](filters/timestamp.html)
-        -   [Text](filters/text.html)
-        -   [Array](filters/array.html)
-        -   [Transform](filters/transform.html)
-        -   [Conversion](filters/conversion.html)
-        -   [Comparison](filters/comparison.html)
-        -   [Security](filters/security.html)
-            -   Data Types
-        
-        -   [Text](data-types/text.html)
-        -   [Expression](data-types/expression.html)
-        -   [Array](data-types/array.html)
-        -   [Object](data-types/object.html)
-        -   [Integer](data-types/integer.html)
-        -   [Decimal](data-types/decimal.html)
-        -   [Boolean](data-types/boolean.html)
-        -   [Timestamp](data-types/timestamp.html)
-        -   [Null](data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
+    switch (unit) {
+      case 'seconds':
+        return Math.floor(diffTime / 1000);
+      case 'minutes':
+        return Math.floor(diffTime / (1000 * 60));
+      case 'hours':
+        return Math.floor(diffTime / (1000 * 60 * 60));
+      case 'days':
+        return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      default:
+        return diffTime;
+    }
+  }
+}
+```
+
+### 📋 **Array Filters**
+
+Process and manipulate array data structures.
+
+```javascript
+// Array filter operations
+class ArrayFilters {
+  static map(array, transformer) {
+    return array.map(transformer);
+  }
+  
+  static filter(array, predicate) {
+    return array.filter(predicate);
+  }
+  
+  static reduce(array, reducer, initialValue) {
+    return array.reduce(reducer, initialValue);
+  }
+  
+  static sort(array, key = null, direction = 'asc') {
+    const sorted = [...array];
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
+    if (key) {
+      sorted.sort((a, b) => {
+        const aVal = a[key];
+        const bVal = b[key];
+        
+        if (direction === 'desc') {
+          return bVal > aVal ? 1 : -1;
+        }
+        return aVal > bVal ? 1 : -1;
+      });
+    } else {
+      sorted.sort((a, b) => {
+        if (direction === 'desc') {
+          return b > a ? 1 : -1;
+        }
+        return a > b ? 1 : -1;
+      });
+    }
     
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+    return sorted;
+  }
+  
+  static unique(array) {
+    return [...new Set(array)];
+  }
+  
+  static flatten(array) {
+    return array.flat();
+  }
+  
+  static join(array, separator = ',') {
+    return array.join(separator);
+  }
+  
+  static slice(array, start, end) {
+    return array.slice(start, end);
+  }
+  
+  static chunk(array, size) {
+    const chunks = [];
+    for (let i = 0; i < array.length; i += size) {
+      chunks.push(array.slice(i, i + size));
+    }
+    return chunks;
+  }
+}
+```
 
--   
-    Build For AI
+### 🔄 **Conversion Filters**
+
+Convert between different data types and formats.
+
+```javascript
+// Type conversion utilities
+class ConversionFilters {
+  static toString(value) {
+    if (value === null || value === undefined) {
+      return '';
+    }
+    return String(value);
+  }
+  
+  static toNumber(value) {
+    const num = Number(value);
+    return isNaN(num) ? 0 : num;
+  }
+  
+  static toBoolean(value) {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') {
+      return ['true', '1', 'yes', 'on'].includes(value.toLowerCase());
+    }
+    if (typeof value === 'number') {
+      return value !== 0;
+    }
+    return Boolean(value);
+  }
+  
+  static toArray(value) {
+    if (Array.isArray(value)) return value;
+    if (value === null || value === undefined) return [];
+    return [value];
+  }
+  
+  static toJSON(value) {
+    return JSON.stringify(value, null, 2);
+  }
+  
+  static fromJSON(jsonString) {
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      return null;
+    }
+  }
+  
+  static toBase64(text) {
+    return btoa(text);
+  }
+  
+  static fromBase64(base64) {
+    try {
+      return atob(base64);
+    } catch (error) {
+      return '';
+    }
+  }
+}
+```
+
+## Real-World Filter Applications
+
+### E-commerce Product Processing
+
+```javascript
+// Product data transformation pipeline
+class ProductProcessor {
+  static processProducts(rawProducts) {
+    return rawProducts
+      .filter(product => product.status === 'active')
+      .map(product => ({
+        ...product,
+        name: this.formatProductName(product.name),
+        price: this.formatCurrency(product.price),
+        description: this.truncateDescription(product.description, 150),
+        tags: this.normalizeTags(product.tags),
+        availability: this.checkAvailability(product.stock_quantity),
+        discount_percentage: this.calculateDiscount(product.original_price, product.price)
+      }))
+      .sort((a, b) => b.featured - a.featured);
+  }
+  
+  static formatProductName(name) {
+    return name
+      .trim()
+      .replace(/\s+/g, ' ')
+      .replace(/\b\w/g, l => l.toUpperCase());
+  }
+  
+  static formatCurrency(amount, currency = 'USD') {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency
+    }).format(amount);
+  }
+  
+  static truncateDescription(text, maxLength) {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength).trim() + '...';
+  }
+  
+  static normalizeTags(tags) {
+    return tags
+      .map(tag => tag.toLowerCase().trim())
+      .filter(tag => tag.length > 0)
+      .filter((tag, index, array) => array.indexOf(tag) === index);
+  }
+  
+  static checkAvailability(stock) {
+    if (stock > 10) return 'in_stock';
+    if (stock > 0) return 'low_stock';
+    return 'out_of_stock';
+  }
+  
+  static calculateDiscount(original, current) {
+    if (original <= current) return 0;
+    return Math.round(((original - current) / original) * 100);
+  }
+}
+```
+
+### User Data Sanitization
+
+```javascript
+// User input processing and sanitization
+class UserDataProcessor {
+  static sanitizeUserInput(userData) {
+    return {
+      name: this.sanitizeName(userData.name),
+      email: this.sanitizeEmail(userData.email),
+      phone: this.sanitizePhone(userData.phone),
+      bio: this.sanitizeText(userData.bio, 500),
+      tags: this.sanitizeArray(userData.tags),
+      preferences: this.sanitizePreferences(userData.preferences)
+    };
+  }
+  
+  static sanitizeName(name) {
+    return name
+      .trim()
+      .replace(/[^\w\s]/gi, '')
+      .replace(/\s+/g, ' ')
+      .substring(0, 50);
+  }
+  
+  static sanitizeEmail(email) {
+    return email.toLowerCase().trim();
+  }
+  
+  static sanitizePhone(phone) {
+    return phone.replace(/[^\d+\-\(\)\s]/g, '');
+  }
+  
+  static sanitizeText(text, maxLength = 1000) {
+    return text
+      .trim()
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .substring(0, maxLength);
+  }
+  
+  static sanitizeArray(array, maxItems = 10) {
+    if (!Array.isArray(array)) return [];
     
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
+    return array
+      .slice(0, maxItems)
+      .map(item => String(item).trim())
+      .filter(item => item.length > 0);
+  }
+  
+  static sanitizePreferences(prefs) {
+    const allowedKeys = ['theme', 'notifications', 'language', 'timezone'];
+    const sanitized = {};
     
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
+    for (const key of allowedKeys) {
+      if (key in prefs) {
+        sanitized[key] = prefs[key];
+      }
+    }
     
-    -   File Storage in Xano
-    -   Private File Storage
+    return sanitized;
+  }
+}
+```
 
--   
-    Realtime
+## No-Code Platform Integration
+
+### 🔗 **n8n Filter Workflows**
+
+```javascript
+// n8n data transformation function
+function transformData($input) {
+  const data = $input.body;
+  
+  // Apply multiple filters in sequence
+  const processed = data
+    .filter(item => item.status === 'active')
+    .map(item => ({
+      id: item.id,
+      title: item.title.trim().toLowerCase().replace(/\b\w/g, l => l.toUpperCase()),
+      price: parseFloat(item.price).toFixed(2),
+      created_date: new Date(item.created_at).toLocaleDateString(),
+      tags: item.tags.split(',').map(tag => tag.trim().toLowerCase()),
+      has_discount: parseFloat(item.original_price) > parseFloat(item.price)
+    }))
+    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+  
+  return {
+    success: true,
+    data: processed,
+    total: processed.length,
+    processed_at: new Date().toISOString()
+  };
+}
+```
+
+### 🌐 **WeWeb Filter Integration**
+
+```javascript
+// WeWeb filter utilities
+class WeWebFilters {
+  static formatCurrency(amount, element) {
+    const formatted = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
     
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
+    if (element) {
+      element.textContent = formatted;
+    }
     
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
+    return formatted;
+  }
+  
+  static formatDate(timestamp, element, format = 'short') {
+    const date = new Date(timestamp);
+    const options = {
+      short: { year: 'numeric', month: 'short', day: 'numeric' },
+      long: { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' },
+      time: { hour: '2-digit', minute: '2-digit' }
+    };
     
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
+    const formatted = date.toLocaleDateString('en-US', options[format]);
     
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
+    if (element) {
+      element.textContent = formatted;
+    }
     
-    -   Using Xano Transform
-
--   
-    Xano Actions
+    return formatted;
+  }
+  
+  static truncateText(text, maxLength = 100, element = null) {
+    const truncated = text.length > maxLength ? 
+      text.substring(0, maxLength) + '...' : text;
     
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
+    if (element) {
+      element.textContent = truncated;
+      element.title = text; // Show full text on hover
+    }
     
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
+    return truncated;
+  }
+  
+  static formatArray(array, element = null, separator = ', ') {
+    const formatted = Array.isArray(array) ? array.join(separator) : '';
     
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
+    if (element) {
+      element.textContent = formatted;
+    }
     
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
+    return formatted;
+  }
+}
+
+// Usage in WeWeb
+wwLib.registerFilter('currency', WeWebFilters.formatCurrency);
+wwLib.registerFilter('date', WeWebFilters.formatDate);
+wwLib.registerFilter('truncate', WeWebFilters.truncateText);
+wwLib.registerFilter('arrayJoin', WeWebFilters.formatArray);
+```
+
+## Advanced Filter Patterns
+
+### Chained Filter Operations
+
+```javascript
+// Complex data processing pipeline
+class FilterPipeline {
+  constructor(data) {
+    this.data = data;
+  }
+  
+  filter(predicate) {
+    this.data = this.data.filter(predicate);
+    return this;
+  }
+  
+  map(transformer) {
+    this.data = this.data.map(transformer);
+    return this;
+  }
+  
+  sort(compareFn) {
+    this.data = this.data.sort(compareFn);
+    return this;
+  }
+  
+  slice(start, end) {
+    this.data = this.data.slice(start, end);
+    return this;
+  }
+  
+  groupBy(keyFn) {
+    const groups = {};
     
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
+    for (const item of this.data) {
+      const key = keyFn(item);
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(item);
+    }
     
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
+    this.data = groups;
+    return this;
+  }
+  
+  get result() {
+    return this.data;
+  }
+}
+
+// Usage example
+const processedData = new FilterPipeline(rawUserData)
+  .filter(user => user.status === 'active')
+  .map(user => ({
+    ...user,
+    full_name: `${user.first_name} ${user.last_name}`,
+    age: Math.floor((Date.now() - new Date(user.birth_date)) / (365.25 * 24 * 60 * 60 * 1000))
+  }))
+  .filter(user => user.age >= 18)
+  .sort((a, b) => a.full_name.localeCompare(b.full_name))
+  .slice(0, 50)
+  .result;
+```
+
+### Conditional Filter Application
+
+```javascript
+// Dynamic filter application based on conditions
+class ConditionalFilters {
+  static applyFilters(data, filterConfig) {
+    let result = [...data];
     
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
+    // Apply filters conditionally
+    if (filterConfig.textSearch) {
+      result = this.applyTextSearch(result, filterConfig.textSearch);
+    }
     
-    -   Best Practices
+    if (filterConfig.dateRange) {
+      result = this.applyDateRange(result, filterConfig.dateRange);
+    }
+    
+    if (filterConfig.statusFilter) {
+      result = this.applyStatusFilter(result, filterConfig.statusFilter);
+    }
+    
+    if (filterConfig.sortBy) {
+      result = this.applySorting(result, filterConfig.sortBy);
+    }
+    
+    if (filterConfig.pagination) {
+      result = this.applyPagination(result, filterConfig.pagination);
+    }
+    
+    return result;
+  }
+  
+  static applyTextSearch(data, searchConfig) {
+    const { query, fields } = searchConfig;
+    
+    return data.filter(item => {
+      return fields.some(field => {
+        const value = item[field];
+        return value && value.toString().toLowerCase().includes(query.toLowerCase());
+      });
+    });
+  }
+  
+  static applyDateRange(data, dateConfig) {
+    const { field, start, end } = dateConfig;
+    
+    return data.filter(item => {
+      const itemDate = new Date(item[field]);
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      
+      return itemDate >= startDate && itemDate <= endDate;
+    });
+  }
+  
+  static applyStatusFilter(data, statusConfig) {
+    const { field, values } = statusConfig;
+    
+    return data.filter(item => values.includes(item[field]));
+  }
+  
+  static applySorting(data, sortConfig) {
+    const { field, direction } = sortConfig;
+    
+    return data.sort((a, b) => {
+      const aVal = a[field];
+      const bVal = b[field];
+      
+      if (direction === 'desc') {
+        return bVal > aVal ? 1 : -1;
+      }
+      return aVal > bVal ? 1 : -1;
+    });
+  }
+  
+  static applyPagination(data, pageConfig) {
+    const { page, limit } = pageConfig;
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    
+    return data.slice(start, end);
+  }
+}
+```
 
-[Powered by GitBook]
+## 💡 **Try This**
 
-On this page
+### Beginner Challenge
+Build basic filter operations:
+1. Create text formatting filters
+2. Implement number formatting
+3. Add date processing functions
+4. Test with sample data
 
-Was this helpful?
+### Intermediate Challenge
+Build filter pipeline:
+1. Create chained filter operations
+2. Add conditional filter application
+3. Implement custom filter functions
+4. Build reusable filter utilities
 
-Copy
+### Advanced Challenge
+Create enterprise filter system:
+1. Build performance-optimized filters
+2. Add filter composition patterns
+3. Create filter documentation system
+4. Implement filter testing framework
 
+## Filter Performance Tips
 
+1. **Filter early** - Apply filters that reduce data size first
+2. **Avoid nested operations** - Flatten complex operations when possible
+3. **Cache computed values** - Store expensive calculations
+4. **Use appropriate data structures** - Choose efficient data types
+5. **Limit filter chains** - Keep pipeline length reasonable
 
-Filters 
-=======
+## Next Steps
 
-[[Manipulation]]
+- Master [Arrays](arrays.md) for collection processing
+- Learn [Text Functions](text.md) for string manipulation
+- Explore [Objects](objects.md) for data structure handling
+- Understand [Math Functions](math.md) for calculations
 
-[[Math]]
+## Need Help?
 
-[[Timestamp]]
-
-[[Text]]
-
-[[Array]]
-
-[[Transform]]
-
-[[Conversion]]
-
-[[Comparison]]
-
-[[Security]]
-
-Last updated 6 months ago
-
-Was this helpful?
+- 📚 [Xano Community](https://community.xano.com) - Filter function discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Data processing guides
+- 📖 [Advanced Patterns](../../best-practices/data-processing.md) - Filter optimization
+- 🔧 [Support](https://xano.com/support) - Complex filter assistance

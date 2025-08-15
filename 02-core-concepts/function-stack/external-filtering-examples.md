@@ -1,697 +1,1221 @@
 ---
+title: "External Filtering Examples - Advanced Query Patterns"
+description: "Master complex external filtering in Xano with practical examples for dynamic queries, advanced operators, and multi-condition filtering patterns"
 category: function-stack
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%'
+  - External Filtering
+  - Query Operations
+  - Database Filtering
+  - Advanced Queries
+  - Dynamic Filters
+  - Conditional Logic
+  - Search Patterns
+  - Data Retrieval
+difficulty: advanced
+reading_time: 15 minutes
+last_updated: '2025-01-15'
+prerequisites:
+  - Understanding of Query All Records function
+  - Knowledge of database filtering concepts
+  - Familiarity with JSON structure
+  - Basic understanding of logical operators
 ---
 
-[![](../../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../../index.html)
+# External Filtering Examples - Advanced Query Patterns
 
+## 📋 **Quick Summary**
 
+**What it does:** External filtering enables you to build complex, dynamic database queries with multiple conditions, logical operators, and advanced patterns that go beyond simple filtering.
 
+**Why it matters:** External filtering enables you to:
+- **Build dynamic search interfaces** with multiple filter criteria
+- **Create complex business logic** with conditional queries
+- **Optimize performance** with precise data retrieval
+- **Support advanced user interfaces** with sophisticated filtering options
+- **Implement real-world query patterns** like e-commerce search and CRM filtering
 
+**Time to implement:** 15-30 minutes for basic patterns, 1-2 hours for complex multi-condition queries
 
+---
 
+## What You'll Learn
 
+- Complete external filtering syntax and structure
+- Practical examples for all major operators
+- Advanced logical combinations (AND/OR)
+- Dynamic filtering patterns for user interfaces
+- Performance optimization techniques
+- Real-world use cases and implementations
 
+## Understanding External Filtering Structure
 
+External filtering uses a JSON-based query language that allows for complex conditional logic:
 
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../../building-with-visual-development/triggers.html)
-        -   [Middleware](../../../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../../ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](external-filtering-examples.html)
-                            -   [Get Record](../get-record.html)
-            -   [Add Record](../add-record.html)
-            -   [Edit Record](../edit-record.html)
-            -   [Add or Edit Record](../add-or-edit-record.html)
-            -   [Patch Record](../patch-record.html)
-            -   [Delete Record](../delete-record.html)
-            -   [Bulk Operations](../bulk-operations.html)
-            -   [Database Transaction](../database-transaction.html)
-            -   [External Database Query](../external-database-query.html)
-            -   [Direct Database Query](../direct-database-query.html)
-            -   [Get Database Schema](../get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../../data-manipulation/create-variable.html)
-            -   [Update Variable](../../data-manipulation/update-variable.html)
-            -   [Conditional](../../data-manipulation/conditional.html)
-            -   [Switch](../../data-manipulation/switch.html)
-            -   [Loops](../../data-manipulation/loops.html)
-            -   [Math](../../data-manipulation/math.html)
-            -   [Arrays](../../data-manipulation/arrays.html)
-            -   [Objects](../../data-manipulation/objects.html)
-            -   [Text](../../data-manipulation/text.html)
-                    -   [Security](../../security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../../apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../../apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../../apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../../data-caching-redis.html)
-        -   [Custom Functions](../../custom-functions.html)
-        -   [Utility Functions](../../utility-functions.html)
-        -   [File Storage](../../file-storage.html)
-        -   [Cloud Services](../../cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../../filters/manipulation.html)
-        -   [Math](../../../filters/math.html)
-        -   [Timestamp](../../../filters/timestamp.html)
-        -   [Text](../../../filters/text.html)
-        -   [Array](../../../filters/array.html)
-        -   [Transform](../../../filters/transform.html)
-        -   [Conversion](../../../filters/conversion.html)
-        -   [Comparison](../../../filters/comparison.html)
-        -   [Security](../../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../../data-types/text.html)
-        -   [Expression](../../../data-types/expression.html)
-        -   [Array](../../../data-types/array.html)
-        -   [Object](../../../data-types/object.html)
-        -   [Integer](../../../data-types/integer.html)
-        -   [Decimal](../../../data-types/decimal.html)
-        -   [Boolean](../../../data-types/boolean.html)
-        -   [Timestamp](../../../data-types/timestamp.html)
-        -   [Null](../../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../../xano-features/metadata-api/search.html)
-        -   [File](../../../../xano-features/metadata-api/file.html)
-        -   [Request History](../../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [Basic Equals Operation](#basic-equals-operation)
-
--   [Between Operation](#between-operation)
-
--   [Contains Operation](#contains-operation)
-
--   [Multiple Conditions Example](#multiple-conditions-example)
-
--   [Case-Insensitive Pattern Matching (ilike)](#case-insensitive-pattern-matching-ilike)
-
--   [Array Membership (in)](#array-membership-in)
-
--   [Complex Multiple Conditions](#complex-multiple-conditions)
-
--   [Using And/Or](#using-and-or)
-
--   [Two Conditions Combined with OR](#two-conditions-combined-with-or)
-
--   [Three Conditions with AND and OR](#three-conditions-with-and-and-or)
-
--   [Using And/Or Groups - (Condition A AND Condition B) OR (Condition C AND Condition D)](#using-and-or-groups-condition-a-and-condition-b-or-condition-c-and-condition-d)
-
-Was this helpful?
-
-Copy
-
-
-2.  Functions
-3.  [Database Requests](../../database-requests.html)
-4.  [Query All Records](../query-all-records.html)
-
-External Filtering Examples 
-===========================
-
- 
-
-**Basic Equals Operation**
-
-Checking if a user ID equals 1:
-
-Copy
-
-``` 
-,
-      "op": "=",
-      "right": {
-        "operand": "1"
-      }
+```json
+{
+  "filters": [
+    {
+      "query": {
+        "column": "field_name",
+        "op": "operator",
+        "right": {
+          "operand": "value"
+        }
+      },
+      "or": false,
+      "type": "statement"
     }
-  }]
+  ]
 }
 ```
 
- 
+### Key Components
 
-**Between Operation**
+| Component | Purpose | Example |
+|-----------|---------|---------|
+| **column** | Database field to filter | `"name"`, `"created_at"`, `"user.email"` |
+| **op** | Comparison operator | `"="`, `">="`, `"contains"`, `"in"` |
+| **operand** | Value to compare against | `"John"`, `100`, `["active", "pending"]` |
+| **or** | Logical operator (default: false = AND) | `true` for OR, `false` for AND |
+| **type** | Statement type | `"statement"` for basic, `"group"` for nested |
 
-Finding transactions with amount between 100 and 1000:
+## Basic Filtering Examples
 
-Copy
+### Simple Equality Filter
 
-``` 
-,
-      "op": "between",
-      "right": {
-        "operand": ["100", "1000"]
-      }
-    }
-  }]
-}
-```
-
- 
-
-**Contains Operation**
-
-Finding users with email containing \'\@company.com\':
-
-Copy
-
-``` 
-,
-      "op": "contains",
-      "right": 
-    }
-  }]
-}
-```
-
- 
-
-**Multiple Conditions Example**
-
-Finding active premium users who have made at least 5 purchases:
-
-Copy
-
-``` 
-,
+```json
+{
+  "filters": [
+    {
+      "query": {
+        "column": "status",
         "op": "=",
         "right": {
           "operand": "active"
         }
-      }
+      },
+      "type": "statement"
+    }
+  ]
+}
+```
+
+**Use Case:** Find all active users
+**Xano Implementation:**
+```javascript
+const activeUsers = await queryAllRecords({
+  table: 'users',
+  filters: {
+    status: 'active'
+  }
+});
+```
+
+### Numeric Comparison
+
+```json
+{
+  "filters": [
+    {
+      "query": {
+        "column": "age",
+        "op": ">=",
+        "right": {
+          "operand": "18"
+        }
+      },
+      "type": "statement"
+    }
+  ]
+}
+```
+
+**Use Case:** Find adult users (18+)
+
+### Date Range Filtering
+
+```json
+{
+  "filters": [
+    {
+      "query": {
+        "column": "created_at",
+        "op": ">=",
+        "right": {
+          "operand": "2024-01-01"
+        }
+      },
+      "type": "statement"
     },
-    ,
+    {
+      "query": {
+        "column": "created_at",
+        "op": "<=",
+        "right": {
+          "operand": "2024-12-31"
+        }
+      },
+      "type": "statement"
+    }
+  ]
+}
+```
+
+**Use Case:** Find records created in 2024
+
+## Advanced Operator Examples
+
+### Text Search with LIKE/ILIKE
+
+```json
+{
+  "filters": [
+    {
+      "query": {
+        "column": "name",
+        "op": "ilike",
+        "right": {
+          "operand": "%john%"
+        }
+      },
+      "type": "statement"
+    }
+  ]
+}
+```
+
+**Use Case:** Case-insensitive search for names containing "john"
+**Patterns:**
+- `"john%"` - Starts with "john"
+- `"%john"` - Ends with "john"  
+- `"%john%"` - Contains "john"
+
+### Array Membership (IN)
+
+```json
+{
+  "filters": [
+    {
+      "query": {
+        "column": "status",
+        "op": "in",
+        "right": {
+          "operand": ["pending", "processing", "shipped"]
+        }
+      },
+      "type": "statement"
+    }
+  ]
+}
+```
+
+**Use Case:** Find orders with multiple possible statuses
+
+### Between Range
+
+```json
+{
+  "filters": [
+    {
+      "query": {
+        "column": "price",
+        "op": "between",
+        "right": {
+          "operand": ["100", "1000"]
+        }
+      },
+      "type": "statement"
+    }
+  ]
+}
+```
+
+**Use Case:** Find products in a price range
+
+### NULL Checks
+
+```json
+{
+  "filters": [
+    {
+      "query": {
+        "column": "deleted_at",
+        "op": "is",
+        "right": {
+          "operand": null
+        }
+      },
+      "type": "statement"
+    }
+  ]
+}
+```
+
+**Use Case:** Find non-deleted records (soft delete pattern)
+
+## Logical Combinations (AND/OR)
+
+### Multiple AND Conditions
+
+```json
+{
+  "filters": [
+    {
+      "query": {
+        "column": "status",
+        "op": "=",
+        "right": {
+          "operand": "active"
+        }
+      },
+      "type": "statement"
+    },
+    {
+      "query": {
+        "column": "subscription_type",
         "op": "=",
         "right": {
           "operand": "premium"
         }
-      }
+      },
+      "type": "statement"
     },
-    ,
+    {
+      "query": {
+        "column": "purchase_count",
         "op": ">=",
         "right": {
           "operand": "5"
         }
-      }
+      },
+      "type": "statement"
     }
   ]
 }
 ```
 
- 
+**Use Case:** Find active premium users with 5+ purchases
 
-**Case-Insensitive Pattern Matching (ilike)**
+### OR Conditions
 
-Finding products with names starting with \'phone\', regardless of case:
-
-Copy
-
-``` 
-,
-      "op": "ilike",
-      "right": {
-        "operand": "phone%"
-      }
-    }
-  }]
-}
-```
-
- 
-
-**Array Membership (in)**
-
-Finding orders with specific status values:
-
-Copy
-
-``` 
-,
-      "op": "in",
-      "right": {
-        "operand": ["pending", "processing", "shipped"]
-      }
-    }
-  }]
-}
-```
-
- 
-
-**Complex Multiple Conditions**
-
-Finding high-value transactions (\>1000) made in the last 30 days by premium users:
-
-Copy
-
-``` 
-,
-        "op": ">",
-        "right": {
-          "operand": "1000"
-        }
-      }
-    },
-    ,
-        "op": ">=",
-        "right": {
-          "operand": "2024-12-29"
-        }
-      }
-    },
-    ,
-        "op": "=",
-        "right": {
-          "operand": "premium"
-        }
-      }
-    }
-  ]
-}
-```
-
- 
-
-Using And/Or
-
-By default, all statements will be considered an \'and\' statement, and nothing needs to be specified. You\'ll only need to specify whether `or` is `true` when you want to use it.
-
-For readability purposes, however, you can specify `or` is `false` if you\'d like.
-
-The two examples below demonstrate this and would return the same result.
-
-Copy
-
-``` 
-,
-        "op": "=",
-        "right": {
-          "operand": "1"
-        }
-      }
-    }
-  ]
-}
-```
-
-Copy
-
-``` 
-// Verbose specification of "or"
-
-,
-        "op": "=",
-        "right": {
-          "operand": "1"
-        }
-      }
-    }
-  ]
-}
-```
-
-###  
-
-Two Conditions Combined with OR
-
-This example filters for users whose status is \'inactive\' OR whose account type is \'basic\'.
-
-Copy
-
-``` 
-,
+```json
+{
+  "filters": [
+    {
+      "query": {
+        "column": "status",
         "op": "=",
         "right": {
           "operand": "inactive"
         }
-      }
+      },
+      "type": "statement"
     },
-    ,
+    {
+      "query": {
+        "column": "account_type",
         "op": "=",
         "right": {
           "operand": "basic"
         }
-      }
+      },
+      "or": true,
+      "type": "statement"
     }
   ]
 }
 ```
 
-###  
+**Use Case:** Find inactive users OR basic account users
 
-Three Conditions with AND and OR
+### Complex Grouping: (A AND B) OR (C AND D)
 
-This example filters for active users AND (whose purchase count is less than 10 OR whose last login is before a specific date).
+```json
+{
+  "filters": [
+    {
+      "filters": [
+        {
+          "query": {
+            "column": "status",
+            "op": "=",
+            "right": {
+              "operand": "active"
+            }
+          },
+          "type": "statement"
+        },
+        {
+          "query": {
+            "column": "subscription_type",
+            "op": "=",
+            "right": {
+              "operand": "premium"
+            }
+          },
+          "type": "statement"
+        }
+      ],
+      "type": "group"
+    },
+    {
+      "filters": [
+        {
+          "query": {
+            "column": "trial_active",
+            "op": "=",
+            "right": {
+              "operand": true
+            }
+          },
+          "type": "statement"
+        },
+        {
+          "query": {
+            "column": "trial_expires",
+            "op": ">",
+            "right": {
+              "operand": "2024-12-01"
+            }
+          },
+          "type": "statement"
+        }
+      ],
+      "or": true,
+      "type": "group"
+    }
+  ]
+}
+```
 
-Copy
+**Use Case:** Find (active premium users) OR (users with active unexpired trials)
 
-``` 
-,
+## Real-World Implementation Patterns
+
+### E-commerce Product Search
+
+```javascript
+// Dynamic product filtering function
+class ProductFilter {
+  static buildProductFilters(searchCriteria) {
+    const filters = [];
+    
+    // Text search in name or description
+    if (searchCriteria.search) {
+      filters.push({
+        "filters": [
+          {
+            "query": {
+              "column": "name",
+              "op": "ilike",
+              "right": {
+                "operand": `%${searchCriteria.search}%`
+              }
+            },
+            "type": "statement"
+          },
+          {
+            "query": {
+              "column": "description",
+              "op": "ilike",
+              "right": {
+                "operand": `%${searchCriteria.search}%`
+              }
+            },
+            "or": true,
+            "type": "statement"
+          }
+        ],
+        "type": "group"
+      });
+    }
+    
+    // Price range
+    if (searchCriteria.min_price) {
+      filters.push({
+        "query": {
+          "column": "price",
+          "op": ">=",
+          "right": {
+            "operand": searchCriteria.min_price.toString()
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    if (searchCriteria.max_price) {
+      filters.push({
+        "query": {
+          "column": "price",
+          "op": "<=",
+          "right": {
+            "operand": searchCriteria.max_price.toString()
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    // Category filter
+    if (searchCriteria.categories && searchCriteria.categories.length > 0) {
+      filters.push({
+        "query": {
+          "column": "category_id",
+          "op": "in",
+          "right": {
+            "operand": searchCriteria.categories
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    // Availability
+    filters.push({
+      "query": {
+        "column": "stock_quantity",
+        "op": ">",
+        "right": {
+          "operand": "0"
+        }
+      },
+      "type": "statement"
+    });
+    
+    // Active products only
+    filters.push({
+      "query": {
+        "column": "status",
         "op": "=",
         "right": {
           "operand": "active"
         }
+      },
+      "type": "statement"
+    });
+    
+    return { filters };
+  }
+}
+
+// Usage in Xano function stack
+const searchFilters = ProductFilter.buildProductFilters({
+  search: input.search_term,
+  min_price: input.min_price,
+  max_price: input.max_price,
+  categories: input.category_ids
+});
+
+const products = await queryAllRecords({
+  table: 'products',
+  external_filters: searchFilters,
+  sort: { [input.sort_by || 'name']: input.sort_direction || 'asc' },
+  limit: input.limit || 24
+});
+```
+
+### User Management with Complex Permissions
+
+```javascript
+// Advanced user filtering with role-based access
+class UserManagementFilter {
+  static buildUserFilters(currentUser, filterCriteria) {
+    const filters = [];
+    
+    // Base visibility rules
+    if (currentUser.role !== 'super_admin') {
+      // Regular admins can only see users in their organization
+      filters.push({
+        "query": {
+          "column": "organization_id",
+          "op": "=",
+          "right": {
+            "operand": currentUser.organization_id.toString()
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    // Status filtering
+    if (filterCriteria.status) {
+      if (Array.isArray(filterCriteria.status)) {
+        filters.push({
+          "query": {
+            "column": "status",
+            "op": "in",
+            "right": {
+              "operand": filterCriteria.status
+            }
+          },
+          "type": "statement"
+        });
+      } else {
+        filters.push({
+          "query": {
+            "column": "status",
+            "op": "=",
+            "right": {
+              "operand": filterCriteria.status
+            }
+          },
+          "type": "statement"
+        });
       }
-    },
-    ,
-        "op": "<",
-        "right": {
-          "operand": "10"
+    }
+    
+    // Role filtering
+    if (filterCriteria.roles && filterCriteria.roles.length > 0) {
+      filters.push({
+        "query": {
+          "column": "role",
+          "op": "in",
+          "right": {
+            "operand": filterCriteria.roles
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    // Date range for last login
+    if (filterCriteria.last_login_after || filterCriteria.last_login_before) {
+      if (filterCriteria.last_login_after && filterCriteria.last_login_before) {
+        // Both dates provided - use between
+        filters.push({
+          "query": {
+            "column": "last_login_at",
+            "op": "between",
+            "right": {
+              "operand": [filterCriteria.last_login_after, filterCriteria.last_login_before]
+            }
+          },
+          "type": "statement"
+        });
+      } else {
+        // Single date boundary
+        if (filterCriteria.last_login_after) {
+          filters.push({
+            "query": {
+              "column": "last_login_at",
+              "op": ">=",
+              "right": {
+                "operand": filterCriteria.last_login_after
+              }
+            },
+            "type": "statement"
+          });
         }
-      }
-    },
-    ,
-        "op": "<",
-        "right": {
-          "operand": "2024-01-01"
+        
+        if (filterCriteria.last_login_before) {
+          filters.push({
+            "query": {
+              "column": "last_login_at",
+              "op": "<=",
+              "right": {
+                "operand": filterCriteria.last_login_before
+              }
+            },
+            "type": "statement"
+          });
         }
       }
     }
-  ]
+    
+    // Search in name or email
+    if (filterCriteria.search) {
+      filters.push({
+        "filters": [
+          {
+            "query": {
+              "column": "name",
+              "op": "ilike",
+              "right": {
+                "operand": `%${filterCriteria.search}%`
+              }
+            },
+            "type": "statement"
+          },
+          {
+            "query": {
+              "column": "email",
+              "op": "ilike",
+              "right": {
+                "operand": `%${filterCriteria.search}%`
+              }
+            },
+            "or": true,
+            "type": "statement"
+          }
+        ],
+        "type": "group"
+      });
+    }
+    
+    return { filters };
+  }
 }
 ```
 
-###  
+### Analytics and Reporting Filters
 
-Using And/Or Groups - (Condition A AND Condition B) OR (Condition C AND Condition D)
-
-Here\'s how the logic `(a = 1 AND b = 2) OR (a = 4 AND b = 5)` would be represented:
-
-Copy
-
-``` 
-,
-                "op": "=",
-                "right": { "operand": "1" }
-              },
-              "type": "statement"
-            },
-            ,
-                "op": "=",
-                "right": { "operand": "2" }
-              },
-              "type": "statement"
-            }
-          ]
+```javascript
+// Complex reporting filters
+class ReportingFilter {
+  static buildAnalyticsFilters(reportType, dateRange, segmentation) {
+    const filters = [];
+    
+    // Date range (always required for analytics)
+    filters.push({
+      "query": {
+        "column": "created_at",
+        "op": ">=",
+        "right": {
+          "operand": dateRange.start
         }
       },
-      ,
+      "type": "statement"
+    });
+    
+    filters.push({
+      "query": {
+        "column": "created_at",
+        "op": "<=",
+        "right": {
+          "operand": dateRange.end
+        }
+      },
+      "type": "statement"
+    });
+    
+    // Report-specific filters
+    switch (reportType) {
+      case 'revenue':
+        // Only completed transactions
+        filters.push({
+          "query": {
+            "column": "status",
+            "op": "=",
+            "right": {
+              "operand": "completed"
+            }
+          },
+          "type": "statement"
+        });
+        
+        // Exclude refunds
+        filters.push({
+          "query": {
+            "column": "type",
+            "op": "!=",
+            "right": {
+              "operand": "refund"
+            }
+          },
+          "type": "statement"
+        });
+        break;
+        
+      case 'user_engagement':
+        // Active users only
+        filters.push({
+          "query": {
+            "column": "status",
+            "op": "=",
+            "right": {
+              "operand": "active"
+            }
+          },
+          "type": "statement"
+        });
+        
+        // Users with activity in the period
+        filters.push({
+          "query": {
+            "column": "last_activity_at",
+            "op": ">=",
+            "right": {
+              "operand": dateRange.start
+            }
+          },
+          "type": "statement"
+        });
+        break;
+        
+      case 'conversion':
+        // Trial or freemium users who converted
+        filters.push({
+          "filters": [
+            {
+              "query": {
+                "column": "previous_plan",
                 "op": "=",
-                "right": { "operand": "4" }
+                "right": {
+                  "operand": "trial"
+                }
               },
               "type": "statement"
             },
-            ,
+            {
+              "query": {
+                "column": "previous_plan",
                 "op": "=",
-                "right": { "operand": "5" }
+                "right": {
+                  "operand": "freemium"
+                }
               },
+              "or": true,
               "type": "statement"
             }
-          ]
-        }
-      }
-    ]
+          ],
+          "type": "group"
+        });
+        
+        filters.push({
+          "query": {
+            "column": "current_plan",
+            "op": "in",
+            "right": {
+              "operand": ["basic", "premium", "enterprise"]
+            }
+          },
+          "type": "statement"
+        });
+        break;
+    }
+    
+    // Segmentation filters
+    if (segmentation.geography && segmentation.geography.length > 0) {
+      filters.push({
+        "query": {
+          "column": "country",
+          "op": "in",
+          "right": {
+            "operand": segmentation.geography
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    if (segmentation.user_type) {
+      filters.push({
+        "query": {
+          "column": "user_type",
+          "op": "=",
+          "right": {
+            "operand": segmentation.user_type
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    return { filters };
   }
+}
 ```
 
-Last updated 3 months ago
+## No-Code Platform Integration
 
-Was this helpful?
+### 🔗 **n8n Dynamic Filtering**
+
+```yaml
+Dynamic Filter Workflow:
+1. Webhook (Receive filter criteria)
+2. Function Node (Build external filter JSON)
+3. HTTP Request (Query Xano with filters)
+4. Function Node (Process and format results)
+5. HTTP Response (Return filtered data)
+```
+
+**n8n Filter Builder Function:**
+```javascript
+// Build dynamic external filters
+const filterCriteria = $input.body;
+const filters = [];
+
+// Text search
+if (filterCriteria.search) {
+  filters.push({
+    "query": {
+      "column": "name",
+      "op": "ilike",
+      "right": {
+        "operand": `%${filterCriteria.search}%`
+      }
+    },
+    "type": "statement"
+  });
+}
+
+// Status filter
+if (filterCriteria.status && filterCriteria.status.length > 0) {
+  filters.push({
+    "query": {
+      "column": "status",
+      "op": "in",
+      "right": {
+        "operand": filterCriteria.status
+      }
+    },
+    "type": "statement"
+  });
+}
+
+// Date range
+if (filterCriteria.date_from) {
+  filters.push({
+    "query": {
+      "column": "created_at",
+      "op": ">=",
+      "right": {
+        "operand": filterCriteria.date_from
+      }
+    },
+    "type": "statement"
+  });
+}
+
+if (filterCriteria.date_to) {
+  filters.push({
+    "query": {
+      "column": "created_at",
+      "op": "<=",
+      "right": {
+        "operand": filterCriteria.date_to
+      }
+    },
+    "type": "statement"
+  });
+}
+
+// Return the filter structure
+return {
+  external_filters: { filters },
+  table: filterCriteria.table || 'records',
+  limit: filterCriteria.limit || 50,
+  sort: filterCriteria.sort || { created_at: 'desc' }
+};
+```
+
+### 🌐 **WeWeb Advanced Search Interface**
+
+```javascript
+// WeWeb dynamic search with external filtering
+class WeWebAdvancedSearch {
+  constructor(tableName) {
+    this.tableName = tableName;
+    this.filters = [];
+    this.currentFilters = {};
+  }
+  
+  // Add text search filter
+  addTextSearch(fields, searchTerm) {
+    if (!searchTerm) return this;
+    
+    const textFilters = fields.map((field, index) => ({
+      "query": {
+        "column": field,
+        "op": "ilike",
+        "right": {
+          "operand": `%${searchTerm}%`
+        }
+      },
+      "or": index > 0,
+      "type": "statement"
+    }));
+    
+    this.filters.push({
+      "filters": textFilters,
+      "type": "group"
+    });
+    
+    return this;
+  }
+  
+  // Add status filter
+  addStatusFilter(statuses) {
+    if (!statuses || statuses.length === 0) return this;
+    
+    this.filters.push({
+      "query": {
+        "column": "status",
+        "op": "in",
+        "right": {
+          "operand": statuses
+        }
+      },
+      "type": "statement"
+    });
+    
+    return this;
+  }
+  
+  // Add date range filter
+  addDateRange(column, startDate, endDate) {
+    if (startDate) {
+      this.filters.push({
+        "query": {
+          "column": column,
+          "op": ">=",
+          "right": {
+            "operand": startDate
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    if (endDate) {
+      this.filters.push({
+        "query": {
+          "column": column,
+          "op": "<=",
+          "right": {
+            "operand": endDate
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    return this;
+  }
+  
+  // Add numeric range filter
+  addNumericRange(column, min, max) {
+    if (min !== null && min !== undefined) {
+      this.filters.push({
+        "query": {
+          "column": column,
+          "op": ">=",
+          "right": {
+            "operand": min.toString()
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    if (max !== null && max !== undefined) {
+      this.filters.push({
+        "query": {
+          "column": column,
+          "op": "<=",
+          "right": {
+            "operand": max.toString()
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    return this;
+  }
+  
+  // Execute the search
+  async execute(options = {}) {
+    const searchConfig = {
+      external_filters: { filters: this.filters },
+      sort: options.sort || { created_at: 'desc' },
+      limit: options.limit || 50,
+      offset: options.offset || 0
+    };
+    
+    try {
+      const response = await wwLib.api.post({
+        url: `${wwLib.envVars.XANO_API_URL}/search/${this.tableName}`,
+        data: searchConfig,
+        headers: {
+          'Authorization': 'Bearer ' + wwLib.auth.getAuthToken(),
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      return {
+        success: true,
+        data: response.data,
+        total: response.data.length
+      };
+      
+    } catch (error) {
+      console.error('Search failed:', error);
+      return {
+        success: false,
+        error: error.message,
+        data: []
+      };
+    }
+  }
+  
+  // Clear all filters
+  clear() {
+    this.filters = [];
+    return this;
+  }
+}
+
+// Usage in WeWeb
+const productSearch = new WeWebAdvancedSearch('products');
+
+async function performProductSearch() {
+  const searchTerm = wwLib.form.getValue('search');
+  const selectedCategories = wwLib.form.getValue('categories');
+  const minPrice = wwLib.form.getValue('min_price');
+  const maxPrice = wwLib.form.getValue('max_price');
+  const dateFrom = wwLib.form.getValue('date_from');
+  const dateTo = wwLib.form.getValue('date_to');
+  
+  const results = await productSearch
+    .clear()
+    .addTextSearch(['name', 'description'], searchTerm)
+    .addStatusFilter(['active', 'featured'])
+    .addNumericRange('price', minPrice, maxPrice)
+    .addDateRange('created_at', dateFrom, dateTo)
+    .execute({
+      sort: { name: 'asc' },
+      limit: 20
+    });
+  
+  if (results.success) {
+    wwLib.collections.products.update(results.data);
+    wwLib.showAlert(`Found ${results.total} products`);
+  } else {
+    wwLib.showAlert('Search failed: ' + results.error);
+  }
+}
+```
+
+## Performance Optimization
+
+### Efficient Filtering Patterns
+
+```javascript
+// Optimized external filtering for performance
+class OptimizedFiltering {
+  static buildIndexedFilters(criteria) {
+    const filters = [];
+    
+    // Always filter by indexed columns first
+    if (criteria.status) {
+      filters.push({
+        "query": {
+          "column": "status", // Ensure this column is indexed
+          "op": "=",
+          "right": {
+            "operand": criteria.status
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    // Use precise date ranges instead of open-ended queries
+    if (criteria.date_range) {
+      filters.push({
+        "query": {
+          "column": "created_at", // Ensure this column is indexed
+          "op": "between",
+          "right": {
+            "operand": [criteria.date_range.start, criteria.date_range.end]
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    // Limit text searches to specific needs
+    if (criteria.search && criteria.search.length >= 3) { // Minimum 3 characters
+      filters.push({
+        "query": {
+          "column": "search_vector", // Use full-text search if available
+          "op": "@@",
+          "right": {
+            "operand": criteria.search
+          }
+        },
+        "type": "statement"
+      });
+    }
+    
+    return { filters };
+  }
+}
+```
+
+## 💡 **Try This**
+
+### Beginner Challenge
+Create basic external filters:
+1. Build a simple status filter
+2. Add text search functionality
+3. Implement date range filtering
+4. Test with sample data
+
+### Intermediate Challenge
+Build complex search interface:
+1. Combine multiple filter types
+2. Implement OR logic between groups
+3. Add dynamic filter building
+4. Create filter presets for common searches
+
+### Advanced Challenge
+Create enterprise search system:
+1. Build role-based filtering
+2. Implement complex nested conditions
+3. Add search analytics and optimization
+4. Create filter performance monitoring
+
+## Common External Filtering Mistakes
+
+1. **No index optimization** - Filter by indexed columns first
+2. **Overly complex queries** - Simplify logic where possible
+3. **Missing input validation** - Validate filter values before queries
+4. **No performance limits** - Set reasonable limits on results
+5. **Poor error handling** - Handle malformed filter JSON gracefully
+
+## Quick Reference Guide
+
+### Operator Reference
+
+```yaml
+Comparison Operators:
+  - "=": Equality
+  - "!=": Not equal
+  - ">": Greater than
+  - ">=": Greater than or equal
+  - "<": Less than
+  - "<=": Less than or equal
+  - "between": Range (requires array)
+
+Text Operators:
+  - "like": Case-sensitive pattern matching
+  - "ilike": Case-insensitive pattern matching
+  - "contains": String contains
+  - "starts_with": String starts with
+  - "ends_with": String ends with
+
+Array Operators:
+  - "in": Value in array
+  - "not_in": Value not in array
+
+Null Operators:
+  - "is": IS NULL (operand: null)
+  - "is_not": IS NOT NULL (operand: null)
+```
+
+## Next Steps
+
+- Master [Query All Records](query-all-records.md) for basic filtering
+- Learn [Database Requests](database-requests.md) for complete CRUD operations
+- Explore [Data Manipulation](data-manipulation.md) for processing results
+- Understand [Performance Optimization](../best-practices/performance.md)
+
+## Need Help?
+
+- 📚 [Xano Community](https://community.xano.com) - External filtering discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Query building guides
+- 📖 [Advanced Patterns](../../best-practices/query-optimization.md) - Performance techniques
+- 🔧 [Support](https://xano.com/support) - Complex query assistance

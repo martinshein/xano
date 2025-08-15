@@ -1,29 +1,447 @@
 ---
+title: "Data Manipulation - Transform and Process Data"
+description: "Master Xano's data manipulation functions for transforming, processing, and organizing data efficiently in function stacks"
 category: function-stack
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2'
+  - Data Manipulation
+  - Variables
+  - Conditionals
+  - Loops
+  - Data Processing
+  - Logic Functions
+difficulty: intermediate
+reading_time: 10 minutes
+last_updated: '2025-01-15'
+prerequisites:
+  - Understanding of function stacks
+  - Basic knowledge of data types
+  - Familiarity with programming logic
 ---
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+# Data Manipulation - Transform and Process Data
+
+## 📋 **Quick Summary**
+
+**What it does:** Data manipulation functions provide essential tools for transforming, processing, and organizing data within your function stacks using variables, conditionals, loops, and logical operations.
+
+**Why it matters:** Data manipulation enables you to:
+- **Control program flow** with conditionals and switches
+- **Store and update values** with variables
+- **Process collections** with loops and iterations
+- **Implement business logic** with complex decision trees
+- **Transform data structures** efficiently
+
+**Time to implement:** 5-10 minutes for basic operations, 30+ minutes for complex logic workflows
+
+---
+
+## What You'll Learn
+
+- Core data manipulation functions
+- Variable management techniques
+- Conditional logic patterns
+- Loop operations for data processing
+- Best practices for efficient data manipulation
+
+## Core Functions
+
+### 📦 **Variables**
+
+Store and manage data throughout your function stack.
+
+```javascript
+// Create and update variables
+let userCount = 0;
+let processedItems = [];
+let currentUser = null;
+
+// Variable operations
+function createVariable(name, value) {
+  // Initialize variable
+  return { [name]: value };
+}
+
+function updateVariable(variables, name, value) {
+  // Update existing variable
+  return { ...variables, [name]: value };
+}
+```
+
+### 🔀 **Conditionals**
+
+Implement decision logic with if/else statements.
+
+```javascript
+// Basic conditional logic
+function processUserBasedOnRole(user) {
+  if (user.role === 'admin') {
+    return {
+      access_level: 'full',
+      permissions: ['read', 'write', 'delete', 'admin']
+    };
+  } else if (user.role === 'editor') {
+    return {
+      access_level: 'limited',
+      permissions: ['read', 'write']
+    };
+  } else {
+    return {
+      access_level: 'basic',
+      permissions: ['read']
+    };
+  }
+}
+```
+
+### 🔄 **Switch Statements**
+
+Handle multiple conditions efficiently.
+
+```javascript
+// Switch-based logic
+function getResponseByStatus(status) {
+  switch (status) {
+    case 'pending':
+      return { message: 'Request is being processed', color: 'yellow' };
+    case 'approved':
+      return { message: 'Request approved', color: 'green' };
+    case 'rejected':
+      return { message: 'Request rejected', color: 'red' };
+    case 'cancelled':
+      return { message: 'Request cancelled', color: 'gray' };
+    default:
+      return { message: 'Unknown status', color: 'black' };
+  }
+}
+```
+
+### 🔁 **Loops**
+
+Iterate through collections and process data.
+
+```javascript
+// For each loop processing
+function processUserArray(users) {
+  const processed = [];
+  
+  for (const user of users) {
+    processed.push({
+      id: user.id,
+      full_name: `${user.first_name} ${user.last_name}`,
+      email_domain: user.email.split('@')[1],
+      is_active: user.status === 'active'
+    });
+  }
+  
+  return processed;
+}
+
+// While loop for specific conditions
+function processUntilCondition(items, maxProcessed = 100) {
+  const results = [];
+  let index = 0;
+  
+  while (index < items.length && results.length < maxProcessed) {
+    const item = items[index];
+    
+    if (item.status === 'ready') {
+      results.push({
+        ...item,
+        processed_at: new Date().toISOString()
+      });
+    }
+    
+    index++;
+  }
+  
+  return results;
+}
+```
+
+## Real-World Applications
+
+### User Permission System
+
+```javascript
+// Complex permission logic
+class PermissionProcessor {
+  static determineUserAccess(user, resource) {
+    let permissions = [];
+    
+    // Role-based permissions
+    switch (user.role) {
+      case 'super_admin':
+        permissions = ['create', 'read', 'update', 'delete', 'admin'];
+        break;
+      case 'admin':
+        permissions = ['create', 'read', 'update', 'delete'];
+        break;
+      case 'editor':
+        permissions = ['create', 'read', 'update'];
+        break;
+      case 'viewer':
+        permissions = ['read'];
+        break;
+      default:
+        permissions = [];
+    }
+    
+    // Resource-specific restrictions
+    if (resource.type === 'sensitive' && user.role !== 'super_admin') {
+      permissions = permissions.filter(p => p !== 'delete');
+    }
+    
+    // User-specific overrides
+    if (user.permissions_override) {
+      for (const override of user.permissions_override) {
+        if (override.action === 'grant') {
+          permissions.push(override.permission);
+        } else if (override.action === 'revoke') {
+          permissions = permissions.filter(p => p !== override.permission);
+        }
+      }
+    }
+    
+    return {
+      user_id: user.id,
+      resource_id: resource.id,
+      permissions: [...new Set(permissions)],
+      access_granted: permissions.length > 0
+    };
+  }
+}
+```
+
+### E-commerce Order Processing
+
+```javascript
+// Order processing workflow
+class OrderProcessor {
+  static processOrder(order) {
+    let processingSteps = [];
+    let orderStatus = 'pending';
+    let totalAmount = 0;
+    
+    // Calculate total amount
+    for (const item of order.items) {
+      const itemTotal = item.quantity * item.price;
+      
+      if (item.discount_percentage > 0) {
+        const discount = itemTotal * (item.discount_percentage / 100);
+        totalAmount += itemTotal - discount;
+      } else {
+        totalAmount += itemTotal;
+      }
+    }
+    
+    // Apply taxes
+    const taxAmount = totalAmount * (order.tax_rate || 0.08);
+    totalAmount += taxAmount;
+    
+    // Validate inventory
+    let inventoryValid = true;
+    for (const item of order.items) {
+      if (item.stock_quantity < item.quantity) {
+        inventoryValid = false;
+        processingSteps.push({
+          step: 'inventory_check',
+          status: 'failed',
+          message: `Insufficient stock for ${item.name}`
+        });
+      }
+    }
+    
+    if (!inventoryValid) {
+      orderStatus = 'inventory_failed';
+    } else {
+      processingSteps.push({
+        step: 'inventory_check',
+        status: 'passed',
+        message: 'All items in stock'
+      });
+      
+      // Process payment
+      if (order.payment_method === 'credit_card') {
+        if (this.validateCreditCard(order.payment_details)) {
+          orderStatus = 'payment_processed';
+          processingSteps.push({
+            step: 'payment',
+            status: 'completed',
+            message: 'Payment successful'
+          });
+        } else {
+          orderStatus = 'payment_failed';
+          processingSteps.push({
+            step: 'payment',
+            status: 'failed',
+            message: 'Credit card validation failed'
+          });
+        }
+      }
+    }
+    
+    return {
+      order_id: order.id,
+      status: orderStatus,
+      total_amount: totalAmount,
+      tax_amount: taxAmount,
+      processing_steps: processingSteps,
+      processed_at: new Date().toISOString()
+    };
+  }
+  
+  static validateCreditCard(cardDetails) {
+    // Simplified validation
+    return cardDetails.number && 
+           cardDetails.expiry && 
+           cardDetails.cvv && 
+           cardDetails.number.length >= 13;
+  }
+}
+```
+
+## No-Code Integration Examples
+
+### 🔗 **n8n Data Processing**
+
+```javascript
+// n8n function for data manipulation
+function processWebhookData($input) {
+  const data = $input.body;
+  let results = [];
+  
+  // Process each item
+  for (const item of data.items) {
+    let processedItem = {
+      id: item.id,
+      processed: false,
+      errors: []
+    };
+    
+    // Validation logic
+    if (!item.email) {
+      processedItem.errors.push('Email required');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(item.email)) {
+      processedItem.errors.push('Invalid email format');
+    }
+    
+    if (!item.name || item.name.length < 2) {
+      processedItem.errors.push('Name must be at least 2 characters');
+    }
+    
+    // Set processing status
+    if (processedItem.errors.length === 0) {
+      processedItem.processed = true;
+      processedItem.formatted_name = item.name.trim().toLowerCase()
+        .replace(/\b\w/g, l => l.toUpperCase());
+    }
+    
+    results.push(processedItem);
+  }
+  
+  return {
+    total_items: data.items.length,
+    processed_items: results.filter(r => r.processed).length,
+    failed_items: results.filter(r => !r.processed).length,
+    results: results
+  };
+}
+```
+
+### 🌐 **WeWeb Logic Implementation**
+
+```javascript
+// WeWeb conditional display logic
+class WeWebLogicHelper {
+  static showElementBasedOnConditions(element, conditions) {
+    let shouldShow = true;
+    
+    // Check user role
+    if (conditions.requiredRole) {
+      const userRole = wwLib.auth.getUserRole();
+      shouldShow = shouldShow && (userRole === conditions.requiredRole);
+    }
+    
+    // Check subscription status
+    if (conditions.requiresSubscription) {
+      const hasSubscription = wwLib.user.hasActiveSubscription();
+      shouldShow = shouldShow && hasSubscription;
+    }
+    
+    // Check custom conditions
+    if (conditions.customLogic) {
+      shouldShow = shouldShow && conditions.customLogic();
+    }
+    
+    // Apply visibility
+    if (element) {
+      element.style.display = shouldShow ? 'block' : 'none';
+    }
+    
+    return shouldShow;
+  }
+  
+  static processFormData(formData, validationRules) {
+    const processed = {
+      valid: true,
+      errors: [],
+      data: {}
+    };
+    
+    for (const [field, value] of Object.entries(formData)) {
+      const rules = validationRules[field];
+      
+      if (rules) {
+        // Required field check
+        if (rules.required && (!value || value.trim() === '')) {
+          processed.errors.push(`${field} is required`);
+          processed.valid = false;
+          continue;
+        }
+        
+        // Length validation
+        if (rules.minLength && value.length < rules.minLength) {
+          processed.errors.push(`${field} must be at least ${rules.minLength} characters`);
+          processed.valid = false;
+        }
+        
+        // Pattern validation
+        if (rules.pattern && !new RegExp(rules.pattern).test(value)) {
+          processed.errors.push(`${field} format is invalid`);
+          processed.valid = false;
+        }
+      }
+      
+      // Store processed value
+      processed.data[field] = value ? value.trim() : value;
+    }
+    
+    return processed;
+  }
+}
+```
+
+## Best Practices
+
+1. **Keep logic simple** - Break complex operations into smaller functions
+2. **Validate inputs** - Always check data before processing
+3. **Handle errors gracefully** - Provide meaningful error messages
+4. **Use appropriate data structures** - Choose the right approach for each task
+5. **Optimize loops** - Avoid unnecessary iterations
+
+## Next Steps
+
+- Learn [Arrays](arrays.md) for collection processing
+- Master [Objects](objects.md) for data structures
+- Explore [Filters](filters.md) for data transformation
+- Understand [Variables](create-variable.md) for state management
+
+## Need Help?
+
+- 📚 [Xano Community](https://community.xano.com) - Logic and processing discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Data manipulation guides
+- 📖 [Best Practices](../../best-practices/logic-patterns.md) - Efficient processing techniques
+- 🔧 [Support](https://xano.com/support) - Complex logic assistance
 
 
 
