@@ -1,375 +1,419 @@
 ---
+title: "Get Database Schema Function"
+description: "Learn how to retrieve database table schemas programmatically using Xano's Get Database Schema function for dynamic API responses"
 category: function-stack
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
+difficulty: intermediate
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv'
+  - database
+  - schema
+  - functions
+  - api
+  - metadata
+  - dynamic-forms
+related_docs:
+  - database-requests
+  - get-record
+  - query-all-records
+  - external-database-query
+last_updated: '2025-01-23'
 ---
 
-[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../index.html)
+# Get Database Schema Function
 
+## Quick Summary
+The Get Database Schema function retrieves complete table structure information in JSON format, including field types, relationships, and validation rules. This is essential for building dynamic forms, API documentation, and schema-aware applications.
 
+## What You'll Learn
+- How to retrieve database table schemas programmatically
+- Using schema data to build dynamic forms and interfaces
+- Filtering schema results to specific fields
+- Real-world applications for schema introspection
+- Integration patterns with n8n and WeWeb
 
+## What This Function Does
 
+The Get Database Schema function returns detailed information about your database table structure, including:
+- Field names and data types
+- Required field indicators
+- Relationship definitions
+- Validation rules
+- Default values
+- Enum options for select fields
 
+## Basic Usage
 
+### Retrieve Complete Table Schema
+```json
+{
+  "table": "users",
+  "path": null  // Returns all fields
+}
+```
 
+**Response Example:**
+```json
+{
+  "schema": {
+    "id": {
+      "type": "integer",
+      "required": true,
+      "auto_increment": true,
+      "primary_key": true
+    },
+    "email": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "max_length": 255
+    },
+    "role": {
+      "type": "enum",
+      "required": true,
+      "options": ["admin", "user", "moderator"],
+      "default": "user"
+    },
+    "created_at": {
+      "type": "timestamp",
+      "required": true,
+      "auto_populate": true
+    }
+  }
+}
+```
 
+### Get Specific Field Schema
+```json
+{
+  "table": "users",
+  "path": "role"  // Returns only the 'role' field schema
+}
+```
 
+## Integration with n8n
 
+### Dynamic Form Generation
+Use schema data to create dynamic forms in your n8n workflows:
 
+```javascript
+// n8n Function Node - Generate form fields from schema
+const schema = $json.schema;
+const formFields = [];
 
+Object.keys(schema).forEach(fieldName => {
+  const field = schema[fieldName];
+  
+  if (!field.auto_increment && fieldName !== 'id') {
+    formFields.push({
+      name: fieldName,
+      type: field.type,
+      required: field.required || false,
+      options: field.options || null,
+      maxLength: field.max_length || null
+    });
+  }
+});
 
+return { formFields };
+```
 
+### Validation Rules Generation
+Create validation rules automatically:
 
--   
+```javascript
+// Generate validation rules from schema
+const validationRules = {};
 
+Object.keys(schema).forEach(fieldName => {
+  const field = schema[fieldName];
+  const rules = [];
+  
+  if (field.required) rules.push('required');
+  if (field.max_length) rules.push(`max:${field.max_length}`);
+  if (field.type === 'email') rules.push('email');
+  if (field.options) rules.push(`in:${field.options.join(',')}`);
+  
+  validationRules[fieldName] = rules;
+});
+
+return { validationRules };
+```
+
+## Integration with WeWeb
+
+### Dynamic Form Components
+Build adaptive forms that adjust to your database schema:
+
+```javascript
+// WeWeb component using schema data
+export default {
+  data() {
+    return {
+      schema: {},
+      formData: {},
+      formFields: []
+    };
+  },
+  
+  async mounted() {
+    // Fetch schema from Xano
+    const response = await this.$xano.get('/api/get-schema', {
+      table: 'users'
+    });
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
+    this.schema = response.data.schema;
+    this.generateFormFields();
+  },
+  
+  methods: {
+    generateFormFields() {
+      this.formFields = Object.keys(this.schema)
+        .filter(key => !this.schema[key].auto_increment)
+        .map(key => ({
+          name: key,
+          label: this.formatLabel(key),
+          type: this.mapFieldType(this.schema[key].type),
+          required: this.schema[key].required,
+          options: this.schema[key].options
+        }));
+    },
     
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../building-with-visual-development/triggers.html)
-        -   [Middleware](../../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](query-all-records/external-filtering-examples.html)
-                            -   [Get Record](get-record.html)
-            -   [Add Record](add-record.html)
-            -   [Edit Record](edit-record.html)
-            -   [Add or Edit Record](add-or-edit-record.html)
-            -   [Patch Record](patch-record.html)
-            -   [Delete Record](delete-record.html)
-            -   [Bulk Operations](bulk-operations.html)
-            -   [Database Transaction](database-transaction.html)
-            -   [External Database Query](external-database-query.html)
-            -   [Direct Database Query](direct-database-query.html)
-            -   [Get Database Schema](get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../data-manipulation/create-variable.html)
-            -   [Update Variable](../data-manipulation/update-variable.html)
-            -   [Conditional](../data-manipulation/conditional.html)
-            -   [Switch](../data-manipulation/switch.html)
-            -   [Loops](../data-manipulation/loops.html)
-            -   [Math](../data-manipulation/math.html)
-            -   [Arrays](../data-manipulation/arrays.html)
-            -   [Objects](../data-manipulation/objects.html)
-            -   [Text](../data-manipulation/text.html)
-                    -   [Security](../security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../data-caching-redis.html)
-        -   [Custom Functions](../custom-functions.html)
-        -   [Utility Functions](../utility-functions.html)
-        -   [File Storage](../file-storage.html)
-        -   [Cloud Services](../cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../filters/manipulation.html)
-        -   [Math](../../filters/math.html)
-        -   [Timestamp](../../filters/timestamp.html)
-        -   [Text](../../filters/text.html)
-        -   [Array](../../filters/array.html)
-        -   [Transform](../../filters/transform.html)
-        -   [Conversion](../../filters/conversion.html)
-        -   [Comparison](../../filters/comparison.html)
-        -   [Security](../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../data-types/text.html)
-        -   [Expression](../../data-types/expression.html)
-        -   [Array](../../data-types/array.html)
-        -   [Object](../../data-types/object.html)
-        -   [Integer](../../data-types/integer.html)
-        -   [Decimal](../../data-types/decimal.html)
-        -   [Boolean](../../data-types/boolean.html)
-        -   [Timestamp](../../data-types/timestamp.html)
-        -   [Null](../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
+    mapFieldType(xanoType) {
+      const typeMap = {
+        'string': 'text',
+        'text': 'textarea',
+        'integer': 'number',
+        'decimal': 'number',
+        'boolean': 'checkbox',
+        'enum': 'select',
+        'timestamp': 'datetime-local'
+      };
+      return typeMap[xanoType] || 'text';
+    }
+  }
+};
+```
+
+## Real-World Use Cases
+
+### 1. API Documentation Generator
+Automatically generate API documentation from your schema:
+
+```javascript
+// Generate OpenAPI documentation
+function generateAPIDoc(schema, tableName) {
+  const properties = {};
+  const required = [];
+  
+  Object.keys(schema).forEach(fieldName => {
+    const field = schema[fieldName];
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
+    properties[fieldName] = {
+      type: mapToOpenAPIType(field.type),
+      description: field.description || `${fieldName} field`
+    };
     
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
+    if (field.required) {
+      required.push(fieldName);
+    }
     
-    -   Agents
-        
-        -   [Templates](../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+    if (field.options) {
+      properties[fieldName].enum = field.options;
+    }
+  });
+  
+  return {
+    [tableName]: {
+      type: 'object',
+      properties,
+      required
+    }
+  };
+}
+```
 
--   
-    Build With AI
+### 2. Database Migration Helper
+Compare schemas across environments:
+
+```javascript
+// Compare production vs development schemas
+function compareSchemas(prodSchema, devSchema) {
+  const differences = {
+    added: [],
+    removed: [],
+    modified: []
+  };
+  
+  // Find added fields
+  Object.keys(devSchema).forEach(field => {
+    if (!prodSchema[field]) {
+      differences.added.push(field);
+    }
+  });
+  
+  // Find removed fields
+  Object.keys(prodSchema).forEach(field => {
+    if (!devSchema[field]) {
+      differences.removed.push(field);
+    }
+  });
+  
+  // Find modified fields
+  Object.keys(prodSchema).forEach(field => {
+    if (devSchema[field] && 
+        JSON.stringify(prodSchema[field]) !== JSON.stringify(devSchema[field])) {
+      differences.modified.push({
+        field,
+        production: prodSchema[field],
+        development: devSchema[field]
+      });
+    }
+  });
+  
+  return differences;
+}
+```
+
+### 3. Dynamic Search Interface
+Build search forms that adapt to table structure:
+
+```javascript
+// Generate search filters based on schema
+function generateSearchFilters(schema) {
+  const searchableFields = Object.keys(schema).filter(key => {
+    const field = schema[key];
+    return ['string', 'text', 'enum', 'integer', 'decimal'].includes(field.type);
+  });
+  
+  return searchableFields.map(fieldName => {
+    const field = schema[fieldName];
     
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+    return {
+      name: fieldName,
+      label: formatLabel(fieldName),
+      type: getSearchInputType(field.type),
+      options: field.options || null,
+      operators: getAvailableOperators(field.type)
+    };
+  });
+}
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+function getAvailableOperators(fieldType) {
+  const operatorMap = {
+    'string': ['contains', 'equals', 'starts_with', 'ends_with'],
+    'text': ['contains', 'equals'],
+    'integer': ['equals', 'greater_than', 'less_than', 'between'],
+    'decimal': ['equals', 'greater_than', 'less_than', 'between'],
+    'enum': ['equals', 'in'],
+    'boolean': ['equals'],
+    'timestamp': ['equals', 'greater_than', 'less_than', 'between']
+  };
+  
+  return operatorMap[fieldType] || ['equals'];
+}
+```
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+## Try This: Build a Schema Explorer
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+1. **Create a schema endpoint:**
+   - Add Get Database Schema function
+   - Allow table name as parameter
+   - Return formatted schema data
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../xano-features/metadata-api/search.html)
-        -   [File](../../../xano-features/metadata-api/file.html)
-        -   [Request History](../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+2. **Build a simple schema viewer:**
+   - List all tables in your database
+   - Show field details for each table
+   - Display relationships and constraints
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+3. **Add export functionality:**
+   - Generate CSV of schema information
+   - Create TypeScript interfaces
+   - Export OpenAPI specifications
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+## Common Use Cases
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+### Form Generation
+- **Dynamic user registration** - Adapt forms based on user types
+- **Content management** - Generate edit forms for any content type
+- **Survey builders** - Create forms from database definitions
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+### API Management
+- **Documentation generation** - Automatic API docs from schema
+- **Validation rules** - Generate client-side validation
+- **Type definitions** - Create TypeScript/Flow types
 
--   
-    Security
-    
-    -   Best Practices
+### Data Migration
+- **Schema comparison** - Compare across environments
+- **Migration scripts** - Generate database migration code
+- **Backup validation** - Verify schema integrity
 
-[Powered by GitBook]
+## Common Mistakes to Avoid
 
-On this page
+❌ **Caching schema too aggressively** - Schema can change, refresh periodically
+❌ **Ignoring field constraints** - Always respect required fields and validation rules
+❌ **Not handling enum options** - Use the provided options for select fields
+❌ **Hardcoding field types** - Use schema data to determine appropriate input types
+❌ **Forgetting relationships** - Include related table information where needed
 
-Was this helpful?
+## Pro Tips
 
-Copy
+💡 **Cache schema responses** but implement cache invalidation when schema changes
+💡 **Use path parameter** to fetch only needed field information for performance
+💡 **Combine with metadata API** for complete database documentation
+💡 **Create schema version tracking** to manage database evolution
+💡 **Build schema-aware validation** that updates automatically
+💡 **Use for API contract testing** to ensure frontend/backend compatibility
+💡 **Generate database seeds** based on schema constraints
 
+## Performance Considerations
 
-2.  Functions
-3.  [Database Requests](../database-requests.html)
+### Optimize Schema Requests
+- Use specific field paths when possible
+- Cache schema data at the application level
+- Combine multiple schema requests when building complex forms
 
-Get Database Schema 
-===================
+### Schema Change Management
+```javascript
+// Implement schema versioning
+const schemaCache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-You can use the Get Database Schema function to retrieve all of the schema in JSON format for a particular table.
+async function getCachedSchema(tableName) {
+  const cacheKey = `schema_${tableName}`;
+  const cached = schemaCache.get(cacheKey);
+  
+  if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
+    return cached.data;
+  }
+  
+  const schema = await fetchSchemaFromXano(tableName);
+  schemaCache.set(cacheKey, {
+    data: schema,
+    timestamp: Date.now()
+  });
+  
+  return schema;
+}
+```
 
-![](../../../_gitbook/imagede33.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FTWqNaqODb6hpp3byZOHD%252FCleanShot%25202024-01-18%2520at%252015.48.39.png%3Falt%3Dmedia%26token%3D93729766-9699-4766-89c4-76a95b72e6cd&width=768&dpr=4&quality=100&sign=7911730&sv=2)
+## Security Considerations
 
-You can use the Path option to only get a specific field from the database if you don\'t need the entire table delivered.
+### Field Filtering
+Always filter sensitive fields from schema responses:
 
-This function is great for scenarios where you need your APIs to react based on a table\'s schema, or you need to provide option lists (an enum field) to a front-end connection.
+```javascript
+// Remove sensitive field information
+function sanitizeSchema(schema) {
+  const sensitiveFields = ['password', 'secret', 'token'];
+  const sanitized = { ...schema };
+  
+  sensitiveFields.forEach(field => {
+    if (sanitized[field]) {
+      delete sanitized[field];
+    }
+  });
+  
+  return sanitized;
+}
+```
 
-Last updated 7 months ago
-
-Was this helpful?
+The Get Database Schema function is powerful for building dynamic, schema-aware applications that adapt automatically as your database evolves.
