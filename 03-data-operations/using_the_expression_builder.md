@@ -1,466 +1,607 @@
 ---
-category: 03-data-operations
-has_code_examples: false
-last_updated: '2025-01-23'
+title: "Expression Builder - Dynamic Query Logic"
+description: "Master Xano's Expression Builder for creating dynamic, computed fields, conditional logic, and advanced data transformations in your database operations"
+category: data-operations
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Using the Expression Builder
+  - Expression Builder
+  - Dynamic Expressions
+  - Computed Fields
+  - Conditional Logic
+  - Data Transformation
+  - Advanced Queries
+difficulty: advanced
+reading_time: 15 minutes
+last_updated: '2025-01-15'
+prerequisites:
+  - Understanding of database operations
+  - Familiarity with JavaScript expressions
+  - Knowledge of Xano data types
 ---
 
-# Using the Expression Builder
+# Expression Builder - Dynamic Query Logic
 
-[](../../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Bulk Operations
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../../building-with-visual-development.html)
-2.  Functions
-3.  Database Requests
-Bulk Operations 
-===============
-Perform actions on multiple records at once.
-Bulk Operations
-Using bulk operations in Xano is largely the same between operation types. Each function expects an array of data or a custom query that it will use to apply the bulk operation, with the exception of Clear All Records.
-The available bulk operations are:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Bulk Add Records**
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Bulk Delete Records**
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Bulk Patch Records**
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Bulk Update Records**
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Clear App Records**
-    :::
-For **Bulk Add Records, Bulk Patch Records, and Bulk Update Records**, you\'ll need to provide an array of items to add or update in the table.
-**Bulk Add** and **Bulk Update** require the entire contents of the record. Make sure to include the record IDs in Bulk Update.
-**Bulk Patch** only requires each object to have the ID and the fields you want updated.
-For operations like **Bulk Delete**, use the custom query expression to determine which records to delete.
-###  
-Using the Expression Builder
-Each conditional has four different components.
-**Conditional Type**
-The conditional type determines how this condition is weighted in the final return. You can choose between **AND** and **OR. AND** conditionals require the present conditional and any others before it to be satisfied, such as \"where the date is before today **AND** the user is an admin\". **OR** conditionals do not require any other conditionals to be satisfied, such as \"if the user is an admin **OR** if the user is a manager\".
-**Left Value**
-This is the first value you\'re using in the conditional. In a database query, this is usually going to be a column that you want to check against.
-**Operators**
-Please note that operators may differ based on where you are building the expression. Database queries will have different operators available than regular conditional statements. Learn More
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Equals (==)** - an exact match
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Not Equals (!=)** - does not equal
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Equals with type matching (===)** - an exact value match and an exact type match
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Ex. Variable **var\_1** has a value of 123, with a type of text. You set up a conditional statement to check if **var\_1 === 123**, but your value in the conditional statement is of type integer. This would return false, because the types do not match.
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Not equals with type matching (!==)** - does not equal value or type, similar to ===
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Greater than (\>)** - the value on the left is greater than the value on the right
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Greater than or equals (≥)** - the value on the left is greater than or equals to the value on the right.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Less than (\<)** - the value on the left is less than the value on the right.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Less than or equals (≤)** - the value on the left is less than or equals to the value on the right.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **LIKE** - Used for comparing text. Like is case-insensitive and compares if a text string is like another text string. It can be thought of as equals for text but upper case and lower case does not matter.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **NOT LIKE** - Used for comparing text. Not Like is case-insensitive and compares if a text string is not like another. It is like not equals for text but upper case and lower case does not matter.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **INCLUDES** - Used for comparing text. Includes is a flexible operator and is case-insensitive. It is able to determine if there is a partial match in a text string.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **DOES NOT INCLUDE** - Used for comparing text. Does not include determines if a text string is not included in another text string.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **IN** - If a single value is found in an array (list). Start with the single value on the left side and the right side should contain the array.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **NOT IN** - If a single value is not found in an array (list). The single value should be on the left side and the array on the right side.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **REGEX MATCHES** - Regular Expression used for finding patterns in text.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **REGEX DOES NOT MATCH** - Regular Expression used for finding a pattern that does not match in text.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **OVERLAPS** - Used for comparing two arrays. Overlaps determines if any values in one array are present in the second array.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **DOES NOT OVERLAP** - Used for comparing two arrays. Does not overlaps determines if no values in the first array are present in the second array.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **CONTAINS** - Contains is an advanced filter used for JSON and arrays. It looks for an exact schema match.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **DOES NOT CONTAIN** - Does not contain is the opposite of contains. It determines if there is not an exact schema match.
-    :::
-####  
-Right Value
-The right value is whatever you are checking against the left value. This could be a hardcoded value, a variable, or even a database field from the same record.
-Clear All Records
-Clear All Records will delete every record in the table.
-Last updated 4 months ago
-Was this helpful?
+## 📋 **Quick Summary**
+
+**What it does:** The Expression Builder allows you to create dynamic, computed fields and conditional logic using JavaScript-like expressions within your database operations and function stacks.
+
+**Why it matters:** Expression Builder enables you to:
+- **Create computed fields** that calculate values dynamically
+- **Build conditional logic** for complex data processing
+- **Transform data** on-the-fly during queries
+- **Implement business rules** directly in your database layer
+- **Reduce code complexity** with declarative expressions
+
+**Time to implement:** 15-20 minutes for basic expressions, 1+ hour for complex business logic
+
+---
+
+## What You'll Learn
+
+- How to use Xano's Expression Builder effectively
+- Creating computed fields and dynamic calculations
+- Building conditional expressions and business rules
+- Performance optimization for expression-heavy queries
+- Integration patterns with no-code platforms
+
+## Basic Expression Syntax
+
+### Simple Computed Fields
+
+```javascript
+// Basic mathematical expressions
+{
+  "total_price": "quantity * unit_price",
+  "discount_amount": "total_price * (discount_percentage / 100)",
+  "final_price": "total_price - discount_amount",
+  "tax_amount": "final_price * 0.08"
+}
+
+// String concatenation
+{
+  "full_name": "first_name + ' ' + last_name",
+  "email_display": "name + ' <' + email + '>'",
+  "formatted_phone": "'+1 (' + area_code + ') ' + phone_number"
+}
+
+// Date calculations
+{
+  "days_since_created": "(now() - created_at) / (24 * 60 * 60 * 1000)",
+  "is_recent": "days_since_created <= 30",
+  "expiry_date": "created_at + (30 * 24 * 60 * 60 * 1000)"
+}
+```
+
+### Conditional Expressions
+
+```javascript
+// If-then-else logic
+{
+  "status_label": "status === 'active' ? 'Active User' : status === 'pending' ? 'Pending Approval' : 'Inactive'",
+  
+  "priority_level": "total_spent > 1000 ? 'high' : total_spent > 500 ? 'medium' : 'low'",
+  
+  "shipping_cost": "total_amount > 50 ? 0 : weight > 5 ? 15.99 : 9.99",
+  
+  "user_type": "subscription_type ? 'premium' : total_orders > 10 ? 'valued' : 'standard'"
+}
+```
+
+## Advanced Expression Patterns
+
+### Complex Business Logic
+
+```javascript
+// E-commerce pricing logic
+class PricingExpressions {
+  static getProductPricingExpressions() {
+    return {
+      // Base calculations
+      "base_price": "original_price",
+      
+      // Quantity discounts
+      "quantity_discount": `
+        quantity >= 100 ? 0.20 :
+        quantity >= 50 ? 0.15 :
+        quantity >= 20 ? 0.10 :
+        quantity >= 10 ? 0.05 : 0
+      `,
+      
+      // Seasonal pricing
+      "seasonal_multiplier": `
+        (function() {
+          const month = new Date().getMonth() + 1;
+          return month === 12 || month === 1 ? 1.2 :
+                 month >= 6 && month <= 8 ? 0.9 : 1.0;
+        })()
+      `,
+      
+      // Customer tier pricing
+      "tier_discount": `
+        customer_tier === 'platinum' ? 0.25 :
+        customer_tier === 'gold' ? 0.15 :
+        customer_tier === 'silver' ? 0.10 : 0
+      `,
+      
+      // Final price calculation
+      "final_price": `
+        base_price * 
+        (1 - quantity_discount) * 
+        seasonal_multiplier * 
+        (1 - tier_discount)
+      `,
+      
+      // Savings display
+      "total_savings": "base_price - final_price",
+      "savings_percentage": "(total_savings / base_price) * 100"
+    };
+  }
+}
+```
+
+### User Segmentation Logic
+
+```javascript
+// Dynamic user segmentation
+const userSegmentationExpressions = {
+  // Activity score calculation
+  "activity_score": `
+    (login_count * 0.3) + 
+    (order_count * 0.4) + 
+    (review_count * 0.2) + 
+    (referral_count * 0.1)
+  `,
+  
+  // Engagement level
+  "engagement_level": `
+    activity_score >= 100 ? 'high' :
+    activity_score >= 50 ? 'medium' :
+    activity_score >= 20 ? 'low' : 'inactive'
+  `,
+  
+  // Customer lifetime value prediction
+  "predicted_ltv": `
+    (average_order_value * order_frequency * 12) * 
+    (engagement_level === 'high' ? 2.5 :
+     engagement_level === 'medium' ? 1.8 :
+     engagement_level === 'low' ? 1.2 : 0.5)
+  `,
+  
+  // Churn risk assessment
+  "churn_risk": `
+    (function() {
+      const daysSinceLastOrder = (Date.now() - last_order_date) / (24 * 60 * 60 * 1000);
+      const daysSinceLastLogin = (Date.now() - last_login_date) / (24 * 60 * 60 * 1000);
+      
+      if (daysSinceLastOrder > 90 || daysSinceLastLogin > 60) return 'high';
+      if (daysSinceLastOrder > 60 || daysSinceLastLogin > 30) return 'medium';
+      return 'low';
+    })()
+  `,
+  
+  // Personalization tags
+  "personalization_tags": `
+    [
+      churn_risk === 'high' ? 'retention_campaign' : null,
+      predicted_ltv > 1000 ? 'vip_treatment' : null,
+      engagement_level === 'high' ? 'brand_advocate' : null,
+      order_count === 1 ? 'first_time_buyer' : null
+    ].filter(tag => tag !== null)
+  `
+};
+```
+
+## Function Stack Integration
+
+### Dynamic Query Building
+
+```javascript
+// Function that uses expressions to build dynamic queries
+function buildDynamicProductQuery(filters) {
+  const baseQuery = {
+    table: 'products',
+    fields: [
+      'id',
+      'name',
+      'original_price',
+      'category',
+      'stock_quantity',
+      // Dynamic computed fields
+      {
+        field: 'current_price',
+        expression: `
+          original_price * 
+          (1 - (sale_discount || 0)) * 
+          (category === 'clearance' ? 0.7 : 1.0)
+        `
+      },
+      {
+        field: 'availability_status',
+        expression: `
+          stock_quantity > 20 ? 'in_stock' :
+          stock_quantity > 0 ? 'low_stock' : 'out_of_stock'
+        `
+      },
+      {
+        field: 'price_tier',
+        expression: `
+          current_price > 100 ? 'premium' :
+          current_price > 50 ? 'mid_range' : 'budget'
+        `
+      },
+      {
+        field: 'is_featured',
+        expression: `
+          featured === true || 
+          (new Date() - created_at) / (24 * 60 * 60 * 1000) <= 7 ||
+          rating >= 4.5
+        `
+      }
+    ]
+  };
+  
+  // Add dynamic filters based on user input
+  const dynamicFilters = {};
+  
+  if (filters.priceRange) {
+    dynamicFilters.current_price = {
+      $gte: filters.priceRange.min,
+      $lte: filters.priceRange.max
+    };
+  }
+  
+  if (filters.availability) {
+    dynamicFilters.availability_status = filters.availability;
+  }
+  
+  if (filters.featured) {
+    dynamicFilters.is_featured = true;
+  }
+  
+  baseQuery.filters = dynamicFilters;
+  
+  return baseQuery;
+}
+```
+
+### Real-time Data Processing
+
+```javascript
+// Order processing with dynamic calculations
+function processOrderWithExpressions(orderData) {
+  const orderCalculations = {
+    // Line item calculations
+    line_items: orderData.items.map(item => ({
+      ...item,
+      // Dynamic line total with complex business rules
+      line_total: `
+        (function() {
+          const baseTotal = quantity * unit_price;
+          
+          // Volume discount
+          const volumeDiscount = quantity >= 10 ? 0.1 : 
+                                quantity >= 5 ? 0.05 : 0;
+          
+          // Product-specific discount
+          const productDiscount = product_category === 'clearance' ? 0.2 : 0;
+          
+          // Apply discounts
+          return baseTotal * (1 - Math.max(volumeDiscount, productDiscount));
+        })()
+      `,
+      
+      // Tax calculation per item
+      tax_amount: `
+        line_total * (tax_rate || 0.08)
+      `
+    })),
+    
+    // Order-level calculations
+    subtotal: `
+      line_items.reduce((sum, item) => sum + item.line_total, 0)
+    `,
+    
+    total_tax: `
+      line_items.reduce((sum, item) => sum + item.tax_amount, 0)
+    `,
+    
+    // Shipping calculation
+    shipping_cost: `
+      (function() {
+        if (subtotal >= 75) return 0; // Free shipping
+        
+        const weight = line_items.reduce((sum, item) => sum + (item.weight * item.quantity), 0);
+        const baseShipping = weight <= 5 ? 9.99 : 15.99;
+        
+        // Express shipping multiplier
+        return shipping_method === 'express' ? baseShipping * 1.5 : baseShipping;
+      })()
+    `,
+    
+    // Final total
+    grand_total: `subtotal + total_tax + shipping_cost`,
+    
+    // Order classification
+    order_type: `
+      grand_total > 500 ? 'large' :
+      grand_total > 200 ? 'medium' : 'small'
+    `,
+    
+    // Processing priority
+    processing_priority: `
+      customer_tier === 'platinum' ? 1 :
+      shipping_method === 'express' ? 2 :
+      order_type === 'large' ? 3 : 5
+    `
+  };
+  
+  return orderCalculations;
+}
+```
+
+## No-Code Platform Integration
+
+### 🔗 **n8n Expression Workflows**
+
+```javascript
+// n8n workflow with dynamic expressions
+function processDataWithExpressions($input) {
+  const data = $input.body;
+  
+  // Apply expressions to transform data
+  const transformedData = data.map(record => ({
+    ...record,
+    
+    // Computed fields using expressions
+    computed_fields: {
+      // Age calculation
+      age: `Math.floor((Date.now() - new Date(birth_date)) / (365.25 * 24 * 60 * 60 * 1000))`,
+      
+      // Status determination
+      status: `
+        age >= 65 ? 'senior' :
+        age >= 18 ? 'adult' :
+        age >= 13 ? 'teen' : 'child'
+      `,
+      
+      // Score calculation
+      engagement_score: `
+        (email_opens * 2) + 
+        (link_clicks * 5) + 
+        (purchases * 10) + 
+        (referrals * 15)
+      `,
+      
+      // Segment assignment
+      segment: `
+        engagement_score >= 100 ? 'champion' :
+        engagement_score >= 50 ? 'loyal' :
+        engagement_score >= 20 ? 'potential' : 'new'
+      `
+    }
+  }));
+  
+  return {
+    success: true,
+    processed_count: transformedData.length,
+    data: transformedData
+  };
+}
+```
+
+### 🌐 **WeWeb Dynamic Display**
+
+```javascript
+// WeWeb component with expression-based display logic
+class WeWebExpressionHelper {
+  static setupDynamicDisplay() {
+    // Register computed properties
+    wwLib.computed.register('userDisplayInfo', (user) => {
+      return {
+        // Dynamic name formatting
+        display_name: user.preferred_name || `${user.first_name} ${user.last_name}`,
+        
+        // Status badge
+        status_badge: {
+          text: user.subscription_active ? 'Premium' : 
+                user.trial_active ? 'Trial' : 'Free',
+          color: user.subscription_active ? 'gold' : 
+                 user.trial_active ? 'blue' : 'gray'
+        },
+        
+        // Progress indicators
+        profile_completion: Math.round(
+          (Object.values(user.profile).filter(v => v).length / 
+           Object.keys(user.profile).length) * 100
+        ),
+        
+        // Activity status
+        activity_level: (() => {
+          const daysSinceLogin = Math.floor(
+            (Date.now() - new Date(user.last_login)) / (24 * 60 * 60 * 1000)
+          );
+          
+          return daysSinceLogin <= 1 ? 'very_active' :
+                 daysSinceLogin <= 7 ? 'active' :
+                 daysSinceLogin <= 30 ? 'moderate' : 'inactive';
+        })()
+      };
+    });
+    
+    // Dynamic content visibility
+    wwLib.computed.register('contentVisibility', (user, content) => {
+      return {
+        show_premium: user.subscription_active || user.trial_active,
+        show_upgrade: !user.subscription_active,
+        show_onboarding: user.profile_completion < 50,
+        show_activity_prompt: user.activity_level === 'inactive'
+      };
+    });
+  }
+  
+  static applyDynamicStyling(element, expressions) {
+    Object.keys(expressions).forEach(property => {
+      const value = this.evaluateExpression(expressions[property]);
+      element.style[property] = value;
+    });
+  }
+  
+  static evaluateExpression(expression) {
+    // Safe expression evaluation with context
+    try {
+      const context = {
+        user: wwLib.auth.getCurrentUser(),
+        theme: wwLib.theme.getCurrent(),
+        viewport: wwLib.viewport.getInfo(),
+        ...wwLib.variables
+      };
+      
+      return new Function('ctx', `with(ctx) { return ${expression}; }`)(context);
+    } catch (error) {
+      console.error('Expression evaluation failed:', error);
+      return null;
+    }
+  }
+}
+```
+
+## Performance Optimization
+
+### Expression Optimization Strategies
+
+```javascript
+// Optimize expressions for better performance
+class ExpressionOptimizer {
+  static optimizeExpressions(expressions) {
+    const optimized = {};
+    
+    Object.keys(expressions).forEach(key => {
+      const expr = expressions[key];
+      
+      // Cache complex calculations
+      if (this.isComplexExpression(expr)) {
+        optimized[key] = this.addCaching(expr);
+      }
+      
+      // Simplify redundant calculations
+      else if (this.hasRedundantCalculations(expr)) {
+        optimized[key] = this.simplifyExpression(expr);
+      }
+      
+      // Keep simple expressions as-is
+      else {
+        optimized[key] = expr;
+      }
+    });
+    
+    return optimized;
+  }
+  
+  static isComplexExpression(expr) {
+    // Check for function calls, loops, or heavy calculations
+    return expr.includes('function') || 
+           expr.includes('reduce') || 
+           expr.includes('map') ||
+           expr.split('*').length > 3;
+  }
+  
+  static addCaching(expr) {
+    return `
+      (function() {
+        const cacheKey = JSON.stringify(arguments);
+        if (this._cache && this._cache[cacheKey]) {
+          return this._cache[cacheKey];
+        }
+        
+        const result = ${expr};
+        
+        if (!this._cache) this._cache = {};
+        this._cache[cacheKey] = result;
+        
+        return result;
+      })()
+    `;
+  }
+  
+  static simplifyExpression(expr) {
+    // Basic expression simplification
+    return expr
+      .replace(/\s+/g, ' ')
+      .replace(/\(\s*([^)]+)\s*\)/g, '($1)')
+      .trim();
+  }
+  
+  static getPerformanceRecommendations(expressions) {
+    const recommendations = [];
+    
+    Object.keys(expressions).forEach(key => {
+      const expr = expressions[key];
+      
+      if (this.isComplexExpression(expr)) {
+        recommendations.push({
+          field: key,
+          type: 'performance',
+          message: 'Consider caching this complex expression',
+          severity: 'medium'
+        });
+      }
+      
+      if (expr.includes('Date.now()')) {
+        recommendations.push({
+          field: key,
+          type: 'optimization',
+          message: 'Consider passing current time as parameter instead of recalculating',
+          severity: 'low'
+        });
+      }
+    });
+    
+    return recommendations;
+  }
+}
+```
+
+## 💡 **Try This**
+
+### Beginner Challenge
+Create basic computed fields:
+1. Calculate user age from birth date
+2. Create full name from first and last name
+3. Determine account status based on subscription
+4. Calculate days since last login
+
+### Intermediate Challenge
+Build conditional business logic:
+1. Create dynamic pricing based on quantity and customer tier
+2. Implement user segmentation with multiple criteria
+3. Build order priority calculation system
+4. Create engagement score formula
+
+### Advanced Challenge
+Design complex expression system:
+1. Build comprehensive product recommendation engine
+2. Create dynamic personalization system
+3. Implement real-time risk assessment
+4. Build performance-optimized expression cache
+
+## Best Practices
+
+1. **Keep expressions readable** - Use clear variable names and formatting
+2. **Avoid over-complexity** - Break complex logic into multiple expressions
+3. **Cache expensive calculations** - Store results of heavy computations
+4. **Test thoroughly** - Validate expressions with various data inputs
+5. **Document business rules** - Explain the logic behind complex expressions
+6. **Monitor performance** - Track execution time for expression-heavy queries
+
+## Next Steps
+
+- Master [Query All Records](query_all_records.md) for expression-enhanced queries
+- Learn [Database Requests](database_requests.md) for comprehensive operations
+- Explore [OR Conditions](two_conditions_combined_with_or.md) for complex filtering
+- Understand [Database Transactions](add_a_database_transaction_function_to_your_function_stack_.md) for atomic operations
+
+## Need Help?
+
+- 📚 [Xano Community](https://community.xano.com) - Expression building discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Advanced expression guides
+- 📖 [Expression Examples](../examples/expressions.md) - Real-world patterns
+- 🔧 [Support](https://xano.com/support) - Complex expression assistance

@@ -1,829 +1,362 @@
 ---
-category: 03-data-operations
-has_code_examples: true
-last_updated: '2025-01-23'
+title: "OR Conditions - Complex Query Logic"
+description: "Master complex database filtering with OR conditions in Xano. Learn to combine multiple criteria, build flexible search functionality, and optimize query performance"
+category: data-operations
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Two Conditions Combined with OR
+  - OR Conditions
+  - Query Logic
+  - Database Filtering
+  - Complex Queries
+  - Search Functionality
+  - Query Optimization
+difficulty: intermediate
+reading_time: 10 minutes
+last_updated: '2025-01-15'
+prerequisites:
+  - Basic understanding of database queries
+  - Familiarity with Query All Records
+  - Knowledge of filtering concepts
 ---
 
-# Two Conditions Combined with OR
+# OR Conditions - Complex Query Logic
 
-[](../../../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Basic Equals Operation
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../../../building-with-visual-development.html)
-2.  Functions
-3.  Database Requests
-4.  Query All Records
-External Filtering Examples 
-===========================
-**Basic Equals Operation**
-Checking if a user ID equals 1:
-Copy
-``` 
-{
-  "expression": [{
-    "statement": {
-      "left": ,
-      "op": "=",
-      "right": 
-    }
-  }]
-}
+## 📋 **Quick Summary**
+
+**What it does:** OR conditions allow you to combine multiple filter criteria where records match if ANY of the conditions are true, enabling flexible and powerful search functionality.
+
+**Why it matters:** OR logic enables you to:
+- **Build flexible search features** with multiple criteria
+- **Create inclusive filtering** that captures broader result sets
+- **Handle user preferences** with optional filters
+- **Implement complex business rules** with conditional logic
+- **Optimize user experience** with smart search capabilities
+
+**Time to implement:** 10-15 minutes for basic OR conditions, 30+ minutes for complex multi-field logic
+
+---
+
+## What You'll Learn
+
+- How to structure OR conditions in database queries
+- Complex filtering patterns with multiple criteria
+- Performance optimization for OR queries
+- Integration with search interfaces
+- Best practices for maintainable query logic
+
+## Basic OR Condition Syntax
+
+### Simple Two-Condition OR
+
+```javascript
+// Find users who are either premium subscribers OR have made recent purchases
+const activeUsers = await queryAllRecords({
+  table: 'users',
+  filters: {
+    $or: [
+      { subscription_type: 'premium' },
+      { last_purchase_date: { $gte: '2024-01-01' } }
+    ]
+  }
+});
+
+// SQL equivalent: WHERE subscription_type = 'premium' OR last_purchase_date >= '2024-01-01'
 ```
-**Between Operation**
-Finding transactions with amount between 100 and 1000:
-Copy
-``` 
-{
-  "expression": [{
-    "statement": {
-      "left": ,
-      "op": "between",
-      "right": 
-    }
-  }]
-}
+
+### Multiple OR Conditions
+
+```javascript
+// Find products that match any of multiple categories or price ranges
+const searchResults = await queryAllRecords({
+  table: 'products',
+  filters: {
+    $or: [
+      { category: 'electronics' },
+      { category: 'computers' },
+      { price: { $lte: 50 } },      // Under $50
+      { sale_price: { $gte: 0 } }    // On sale
+    ]
+  },
+  sort: [{ field: 'name', direction: 'asc' }]
+});
 ```
-**Contains Operation**
-Finding users with email containing \'\@company.com\':
-Copy
-``` 
-{
-  "expression": [{
-    "statement": {
-      "left": ,
-      "op": "contains",
-      "right": 
-    }
-  }]
-}
-```
-**Multiple Conditions Example**
-Finding active premium users who have made at least 5 purchases:
-Copy
-``` 
-{
-  "expression": [
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    },
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    },
-    {
-      "statement": {
-        "left": ,
-        "op": ">=",
-        "right": 
-      }
-    }
-  ]
-}
-```
-**Case-Insensitive Pattern Matching (ilike)**
-Finding products with names starting with \'phone\', regardless of case:
-Copy
-``` 
-{
-  "expression": [{
-    "statement": {
-      "left": ,
-      "op": "ilike",
-      "right": 
-    }
-  }]
-}
-```
-**Array Membership (in)**
-Finding orders with specific status values:
-Copy
-``` 
-{
-  "expression": [{
-    "statement": {
-      "left": ,
-      "op": "in",
-      "right": 
-    }
-  }]
-}
-```
-**Complex Multiple Conditions**
-Finding high-value transactions (\>1000) made in the last 30 days by premium users:
-Copy
-``` 
-{
-  "expression": [
-    {
-      "statement": {
-        "left": ,
-        "op": ">",
-        "right": 
-      }
-    },
-    {
-      "statement": {
-        "left": ,
-        "op": ">=",
-        "right": 
-      }
-    },
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    }
-  ]
-}
-```
-Using And/Or
-By default, all statements will be considered an \'and\' statement, and nothing needs to be specified. You\'ll only need to specify whether `or` is `true` when you want to use it.
-For readability purposes, however, you can specify `or` is `false` if you\'d like.
-The two examples below demonstrate this and would return the same result.
-Copy
-``` 
-{
-  "expression": [
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    }
-  ]
-}
-```
-Copy
-``` 
-// Verbose specification of "or"
-{
-  "expression": [
-    {
-      "or": false,
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    }
-  ]
-}
-```
-###  
-Two Conditions Combined with OR
-This example filters for users whose status is \'inactive\' OR whose account type is \'basic\'.
-Copy
-``` 
-{
-  "expression": [
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    },
-    {
-      "or": true,
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    }
-  ]
-}
-```
-###  
-Three Conditions with AND and OR
-This example filters for active users AND (whose purchase count is less than 10 OR whose last login is before a specific date).
-Copy
-``` 
-{
-  "expression": [
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    },
-    {
-      "statement": {
-        "left": ,
-        "op": "<",
-        "right": 
-      }
-    },
-    {
-      "or": true,
-      "statement": {
-        "left": ,
-        "op": "<",
-        "right": 
-      }
-    }
-  ]
-}
-```
-###  
-Using And/Or Groups - (Condition A AND Condition B) OR (Condition C AND Condition D)
-Here\'s how the logic `(a = 1 AND b = 2) OR (a = 4 AND b = 5)` would be represented:
-Copy
-``` 
-{
-    "expression": [
-      {
-        "or": false,
-        "type": "group",
-        "group": {
-          "expression": [
-            {
-              "or": false,
-              "statement": {
-                "left": ,
-                "op": "=",
-                "right": 
-              },
-              "type": "statement"
-            },
-            {
-              "or": false,
-              "statement": {
-                "left": ,
-                "op": "=",
-                "right": 
-              },
-              "type": "statement"
-            }
-          ]
-        }
-      },
-      {
-        "or": true,
-        "type": "group",
-        "group": {
-          "expression": [
-            {
-              "or": false,
-              "statement": {
-                "left": ,
-                "op": "=",
-                "right": 
-              },
-              "type": "statement"
-            },
-            {
-              "or": false,
-              "statement": {
-                "left": ,
-                "op": "=",
-                "right": 
-              },
-              "type": "statement"
-            }
-          ]
-        }
+
+## Advanced OR Patterns
+
+### Combining AND and OR Logic
+
+```javascript
+// Complex search: Find active users who are either premium OR have recent activity
+const complexSearch = await queryAllRecords({
+  table: 'users',
+  filters: {
+    status: 'active',  // AND condition (all must have active status)
+    $or: [
+      { subscription_type: 'premium' },
+      { 
+        $and: [
+          { last_login: { $gte: '2024-01-01' } },
+          { total_orders: { $gte: 5 } }
+        ]
       }
     ]
   }
-```
-Last updated 3 months ago
-Was this helpful?
+});
 
-## Code Examples
+// SQL equivalent: 
+// WHERE status = 'active' 
+// AND (subscription_type = 'premium' 
+//      OR (last_login >= '2024-01-01' AND total_orders >= 5))
+```
+
+### Dynamic Search Builder
 
 ```javascript
- 
-{
-  "expression": [{
-    "statement": {
-      "left": ,
-      "op": "=",
-      "right": 
+// Flexible search function that builds OR conditions dynamically
+class SearchBuilder {
+  static buildFlexibleSearch(searchParams) {
+    const filters = {};
+    const orConditions = [];
+    
+    // Add text search across multiple fields
+    if (searchParams.query) {
+      orConditions.push(
+        { name: { $ilike: `%${searchParams.query}%` } },
+        { description: { $ilike: `%${searchParams.query}%` } },
+        { tags: { $ilike: `%${searchParams.query}%` } }
+      );
     }
-  }]
-}
-
-```
-
-```javascript
- 
-{
-  "expression": [{
-    "statement": {
-      "left": ,
-      "op": "between",
-      "right": 
+    
+    // Add category options
+    if (searchParams.categories && searchParams.categories.length > 0) {
+      const categoryConditions = searchParams.categories.map(cat => ({ category: cat }));
+      orConditions.push(...categoryConditions);
     }
-  }]
-}
-
-```
-
-```javascript
- 
-{
-  "expression": [{
-    "statement": {
-      "left": ,
-      "op": "contains",
-      "right": 
+    
+    // Add price ranges
+    if (searchParams.priceRanges) {
+      searchParams.priceRanges.forEach(range => {
+        orConditions.push({
+          price: { $gte: range.min, $lte: range.max }
+        });
+      });
     }
-  }]
-}
-
-```
-
-```javascript
- 
-{
-  "expression": [
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    },
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    },
-    {
-      "statement": {
-        "left": ,
-        "op": ">=",
-        "right": 
-      }
+    
+    // Add date ranges
+    if (searchParams.dateOptions) {
+      searchParams.dateOptions.forEach(option => {
+        orConditions.push({
+          created_at: { $gte: option.start, $lte: option.end }
+        });
+      });
     }
-  ]
-}
-
-```
-
-```javascript
- 
-{
-  "expression": [{
-    "statement": {
-      "left": ,
-      "op": "ilike",
-      "right": 
+    
+    // Only add OR conditions if we have any
+    if (orConditions.length > 0) {
+      filters.$or = orConditions;
     }
-  }]
-}
-
-```
-
-```javascript
- 
-{
-  "expression": [{
-    "statement": {
-      "left": ,
-      "op": "in",
-      "right": 
+    
+    // Add required filters (AND conditions)
+    if (searchParams.requiredStatus) {
+      filters.status = searchParams.requiredStatus;
     }
-  }]
-}
-
-```
-
-```javascript
- 
-{
-  "expression": [
-    {
-      "statement": {
-        "left": ,
-        "op": ">",
-        "right": 
-      }
-    },
-    {
-      "statement": {
-        "left": ,
-        "op": ">=",
-        "right": 
-      }
-    },
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    }
-  ]
-}
-
-```
-
-```javascript
- 
-{
-  "expression": [
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    }
-  ]
-}
-
-```
-
-```javascript
- 
-// Verbose specification of "or"
-{
-  "expression": [
-    {
-      "or": false,
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    }
-  ]
-}
-
-```
-
-```javascript
- 
-{
-  "expression": [
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    },
-    {
-      "or": true,
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    }
-  ]
-}
-
-```
-
-```javascript
- 
-{
-  "expression": [
-    {
-      "statement": {
-        "left": ,
-        "op": "=",
-        "right": 
-      }
-    },
-    {
-      "statement": {
-        "left": ,
-        "op": "<",
-        "right": 
-      }
-    },
-    {
-      "or": true,
-      "statement": {
-        "left": ,
-        "op": "<",
-        "right": 
-      }
-    }
-  ]
-}
-
-```
-
-```javascript
- 
-{
-    "expression": [
-      {
-        "or": false,
-        "type": "group",
-        "group": {
-          "expression": [
-            {
-              "or": false,
-              "statement": {
-                "left": ,
-                "op": "=",
-                "right": 
-              },
-              "type": "statement"
-            },
-            {
-              "or": false,
-              "statement": {
-                "left": ,
-                "op": "=",
-                "right": 
-              },
-              "type": "statement"
-            }
-          ]
-        }
-      },
-      {
-        "or": true,
-        "type": "group",
-        "group": {
-          "expression": [
-            {
-              "or": false,
-              "statement": {
-                "left": ,
-                "op": "=",
-                "right": 
-              },
-              "type": "statement"
-            },
-            {
-              "or": false,
-              "statement": {
-                "left": ,
-                "op": "=",
-                "right": 
-              },
-              "type": "statement"
-            }
-          ]
-        }
-      }
-    ]
+    
+    return {
+      table: searchParams.table || 'products',
+      filters: filters,
+      sort: searchParams.sort || [{ field: 'created_at', direction: 'desc' }],
+      limit: searchParams.limit || 20,
+      offset: searchParams.offset || 0
+    };
   }
+}
 
+// Usage example
+const searchResults = await queryAllRecords(
+  SearchBuilder.buildFlexibleSearch({
+    query: 'laptop',
+    categories: ['electronics', 'computers'],
+    priceRanges: [
+      { min: 0, max: 500 },
+      { min: 1000, max: 2000 }
+    ],
+    requiredStatus: 'active'
+  })
+);
 ```
 
+## No-Code Platform Integration
+
+### 🔗 **n8n OR Condition Workflows**
+
+```javascript
+// n8n function for building dynamic OR conditions
+function buildDynamicQuery($input) {
+  const searchParams = $input.body;
+  const orConditions = [];
+  
+  // Handle multiple search criteria
+  if (searchParams.name) {
+    orConditions.push({ name: { $ilike: `%${searchParams.name}%` } });
+  }
+  
+  if (searchParams.email) {
+    orConditions.push({ email: { $ilike: `%${searchParams.email}%` } });
+  }
+  
+  if (searchParams.phone) {
+    orConditions.push({ phone: { $ilike: `%${searchParams.phone}%` } });
+  }
+  
+  if (searchParams.tags && searchParams.tags.length > 0) {
+    searchParams.tags.forEach(tag => {
+      orConditions.push({ tags: { $ilike: `%${tag}%` } });
+    });
+  }
+  
+  // Build final query
+  const query = {
+    table: 'contacts',
+    filters: {
+      status: 'active'
+    }
+  };
+  
+  if (orConditions.length > 0) {
+    query.filters.$or = orConditions;
+  }
+  
+  return {
+    query: query,
+    conditions_count: orConditions.length,
+    search_type: 'flexible_or_search'
+  };
+}
+```
+
+### 🌐 **WeWeb Search Interface**
+
+```javascript
+// WeWeb search component with OR conditions
+class WeWebSearchHandler {
+  static async performFlexibleSearch() {
+    const searchForm = wwLib.form.getFormData('searchForm');
+    
+    try {
+      // Show loading
+      wwLib.showLoading();
+      
+      // Build OR conditions from form
+      const orConditions = [];
+      
+      if (searchForm.productName) {
+        orConditions.push({ name: { $ilike: `%${searchForm.productName}%` } });
+      }
+      
+      if (searchForm.category && searchForm.category !== 'all') {
+        orConditions.push({ category: searchForm.category });
+      }
+      
+      if (searchForm.priceRange) {
+        const [min, max] = searchForm.priceRange.split('-').map(Number);
+        orConditions.push({ price: { $gte: min, $lte: max } });
+      }
+      
+      if (searchForm.onSale) {
+        orConditions.push({ sale_price: { $gt: 0 } });
+      }
+      
+      // Build query
+      const queryData = {
+        table: 'products',
+        filters: {
+          status: 'active'
+        },
+        limit: 20,
+        offset: (wwLib.variables.currentPage - 1) * 20
+      };
+      
+      if (orConditions.length > 0) {
+        queryData.filters.$or = orConditions;
+      }
+      
+      // Execute search
+      const response = await wwLib.api.post({
+        url: `${wwLib.envVars.XANO_API_URL}/search/products`,
+        data: queryData,
+        headers: {
+          'Authorization': 'Bearer ' + wwLib.auth.getAuthToken()
+        }
+      });
+      
+      // Update results
+      wwLib.collections.searchResults.set(response.data);
+      wwLib.variables.totalResults = response.data.length;
+      wwLib.variables.hasMoreResults = response.data.length === 20;
+      
+      // Update UI
+      if (response.data.length === 0) {
+        wwLib.showAlert('No products found matching your criteria', 'info');
+      }
+      
+    } catch (error) {
+      console.error('Search failed:', error);
+      wwLib.showAlert('Search failed. Please try again.', 'error');
+    } finally {
+      wwLib.hideLoading();
+    }
+  }
+  
+  static clearSearch() {
+    wwLib.form.reset('searchForm');
+    wwLib.collections.searchResults.clear();
+    wwLib.variables.totalResults = 0;
+    wwLib.variables.currentPage = 1;
+  }
+}
+```
+
+## 💡 **Try This**
+
+### Beginner Challenge
+Create basic OR search:
+1. Build a simple product search with name OR category matching
+2. Add price range as an additional OR condition
+3. Test with various combinations
+4. Add basic result sorting
+
+### Intermediate Challenge
+Build flexible user search:
+1. Create search across name, email, and phone fields
+2. Add date range options (created this week OR this month)
+3. Include status conditions (active OR pending)
+4. Implement pagination for results
+
+### Advanced Challenge
+Design comprehensive search system:
+1. Build dynamic query builder with unlimited OR conditions
+2. Add performance monitoring for complex queries
+3. Implement search result caching
+4. Create search analytics and optimization
+
+## Best Practices
+
+1. **Index strategically** - Ensure all OR condition fields are indexed
+2. **Limit OR conditions** - Too many can impact performance
+3. **Use specific conditions** - Avoid overly broad OR logic
+4. **Test performance** - Monitor query execution times
+5. **Consider alternatives** - Full-text search for complex text matching
+6. **Cache results** - Store frequently used OR query results
+
+## Next Steps
+
+- Master [Query All Records](query_all_records.md) for advanced filtering
+- Learn [Using the Expression Builder](using_the_expression_builder.md) for dynamic conditions
+- Explore [External Filtering Examples](external_filtering_examples.md) for complex patterns
+- Understand [Database Requests](database_requests.md) for comprehensive operations
+
+## Need Help?
+
+- 📚 [Xano Community](https://community.xano.com) - Query logic discussions
+- 🎥 [Video Tutorials](https://university.xano.com) - Advanced filtering guides
+- 📖 [Query Examples](../examples/complex-queries.md) - Real-world patterns
+- 🔧 [Support](https://xano.com/support) - Complex query assistance
