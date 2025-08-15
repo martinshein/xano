@@ -1,498 +1,379 @@
 ---
+title: "Timestamp Data Type and Functions"
+description: "Master date and time handling in Xano function stacks for accurate temporal data processing and formatting"
 category: function-stack
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
+difficulty: intermediate
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - timestamp
+  - datetime
+  - data-types
+  - formatting
+  - timezone
+  - calendar
+related_docs:
+  - data-types
+  - filters
+  - expressions
+  - scheduling
+last_updated: '2025-01-23'
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
-
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: timestamp
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../building-with-visual-development/triggers.html)
-        -   [Middleware](../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../functions/database-requests/get-record.html)
-            -   [Add Record](../functions/database-requests/add-record.html)
-            -   [Edit Record](../functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../functions/database-requests/patch-record.html)
-            -   [Delete Record](../functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../functions/database-requests/database-transaction.html)
-            -   [External Database Query](../functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../functions/data-manipulation/update-variable.html)
-            -   [Conditional](../functions/data-manipulation/conditional.html)
-            -   [Switch](../functions/data-manipulation/switch.html)
-            -   [Loops](../functions/data-manipulation/loops.html)
-            -   [Math](../functions/data-manipulation/math.html)
-            -   [Arrays](../functions/data-manipulation/arrays.html)
-            -   [Objects](../functions/data-manipulation/objects.html)
-            -   [Text](../functions/data-manipulation/text.html)
-                    -   [Security](../functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../functions/data-caching-redis.html)
-        -   [Custom Functions](../functions/custom-functions.html)
-        -   [Utility Functions](../functions/utility-functions.html)
-        -   [File Storage](../functions/file-storage.html)
-        -   [Cloud Services](../functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../filters/manipulation.html)
-        -   [Math](../filters/math.html)
-        -   [Timestamp](../filters/timestamp.html)
-        -   [Text](../filters/text.html)
-        -   [Array](../filters/array.html)
-        -   [Transform](../filters/transform.html)
-        -   [Conversion](../filters/conversion.html)
-        -   [Comparison](../filters/comparison.html)
-        -   [Security](../filters/security.html)
-            -   Data Types
-        
-        -   [Text](text.html)
-        -   [Expression](expression.html)
-        -   [Array](array.html)
-        -   [Object](object.html)
-        -   [Integer](integer.html)
-        -   [Decimal](decimal.html)
-        -   [Boolean](boolean.html)
-        -   [Timestamp](timestamp.html)
-        -   [Null](null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../xano-features/metadata-api/content.html)
-        -   [Search](../../xano-features/metadata-api/search.html)
-        -   [File](../../xano-features/metadata-api/file.html)
-        -   [Request History](../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [Timestamps](#timestamps)
-
--   [What is the difference between a timezone region, a timezone abbreviation, and a timezone offset?](#what-is-the-difference-between-a-timezone-region-a-timezone-abbreviation-and-a-timezone-offset)
-
--   [When I choose a time from the database table viewer, what timezone is used there?](#when-i-choose-a-time-from-the-database-table-viewer-what-timezone-is-used-there)
-
--   [
-    What are my options for inputting a timestamp into Xano through the API?](#what-are-my-options-for-inputting-a-timestamp-into-xano-through-the-api)
-
--   [What are my options with formatting date and time?](#what-are-my-options-with-formatting-date-and-time)
-
-Was this helpful?
-
-Copy
-
-
-2.  Data Types
-
-Timestamp 
-=========
-
-###  
-
-Timestamps
-
-<div>
-
-</div>
-
-Xano stores timestamps as a **unix timestamp in milliseconds**. Unix timestamp is a way to track time as a running total of seconds. This count starts at the Unix Epoch on January 1st, 1970 at UTC.
-
-For example:
-1604959474 seconds since Jan 01 1970. (UTC).
-This epoch translates to 11/09/2020 @ 10:04pm (UTC).
-Since Xano uses milliseconds, the timestamp would be **1604959474000**.
-
-There is **no timezone in a timestamp** because it is the number of milliseconds from the unix epoch - Jan 1, 1970.
-
-###  
-
-**What is the difference between a timezone region, a timezone abbreviation, and a timezone offset?**
-
-A **timezone region** handles daylight savings time for you. For example:
-America/Los\_Angeles will automatically be PST or PDT depending on the actual timestamp. It handles this behind the scenes so you always have the right timezone offset.
-[Timezone regions are listed here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
-
-A **timezone abbreviation** is the shortened 3 letter abbreviation (PST, PDT, etc.).
-This represents a **timezone offset**:
-PST is -0800 and PDT is -0700. These values are always the same.
-It is recommended to use the timezone region mentioned above so you don't need to keep changing the abbreviation selection with daylight savings time changes.
-
-###  
-
-**When I choose a time from the database table viewer, what timezone is used there?**
-
-The database table view is using the unix timestamp internally but transforming it in the spreadsheet view to the timezone of your browser. This means that if someone else was looking at it from a different timezone, they would see the time that is local to themselves. However, you can change the browser default settings to your preferences for the date & time format and timezone offset that is shown in your database on the [account](https://app.xano.com/admin/account) page.
-
-###  
-
-**What are my options for inputting a timestamp into Xano through the API?**
-
--   
-    
-        
-    
-    **Raw timestamp** in milliseconds (this would not need any timezone information). For example:
-    1604959474000
-    
--   
-    
-        
-    
-    **ISO 8601** format, which is Year-Month-Day then a "T" and then 24hour-minute-second then "the timezone offset in hours and minutes":
-
-    2004-02-12T15:19:21+00:00
-    
--   
-    
-        
-    
-    **Postgres** database format, which is similar to the ISO 8601 format:
-    2020-11-09 14:13:18-0800
-    (Note: a space is used to separate the date from the time instead of the "T" character in ISO 8601. Also, the offset does not include the colon.)
-    
--   
-    
-        
-    
-    **Relative time**. Xano uses relative time [formats](https://www.php.net/manual/en/datetime.formats.php#datetime.formats.relative) from php.net[.](https://www.php.net/manual/en/datetime.formats.php#datetime.formats.relative) For example:
-    now, last Monday, +7 days, etc.
-    (Relative times normally don't have any timezone information, so it will often be important to reference the timezone in any type of [filter](../filters/timestamp.html#parse_timestamp).)
-    
--   
-    
-        
-    
-    **Parse Timestamp** the parse\_timestamp [filter](../filters/timestamp.html#parse_timestamp) allows you to take a human-readable time format and parse it into a Unix timestamp in milliseconds to be stored in the Xano database. The characters used are the same as formatting date and time and can be found [here from php.net](https://www.php.net/manual/en/datetime.format.php).
-    
-###  
-
-**What are my options with formatting date and time?**
-
-There are lots of options available. [A full list is available here from php.net](https://www.php.net/manual/en/datetime.format.php).
-Here are a just few examples:
-
--   
-    
-        
-    
-    c = 2004-02-12T15:19:21+00:00
-    
--   
-    
-        
-    
-    r = Thu, 21 Dec 2000 16:01:07 +0200
-    
--   
-    
-        
-    
-    Y-m-d H:i:s = 2000-01-01 00:00:00
-    
-See the [Timestamp Filters](../filters/timestamp.html) page to see how to use timestamp filters in Xano.
-
-Last updated 6 months ago
-
-Was this helpful?
+# Timestamp Data Type and Functions
+
+## Quick Summary
+Timestamp functions in Xano handle date and time operations with precision, supporting timezone conversions, formatting, and calculations. Essential for applications requiring accurate temporal data management.
+
+## What You'll Learn
+- Working with timestamp data types
+- Date and time formatting options
+- Timezone handling and conversions
+- Timestamp calculations and comparisons
+- Best practices for temporal data
+- Integration with scheduling systems
+
+## Understanding Timestamps
+
+### Timestamp Basics
+
+Xano stores timestamps as UTC (Coordinated Universal Time) internally:
+
+```javascript
+// Timestamp examples
+{
+  "created_at": "2025-01-23T15:30:00Z",
+  "updated_at": "2025-01-23T15:45:30.123Z",
+  "scheduled_date": "2025-01-24T09:00:00Z",
+  "expires_at": "2025-01-30T23:59:59Z"
+}
+```
+
+### Timestamp Components
+- **Date**: Year, month, day (YYYY-MM-DD)
+- **Time**: Hour, minute, second (HH:MM:SS)
+- **Milliseconds**: Optional fractional seconds
+- **Timezone**: UTC offset or timezone identifier
+
+## Core Timestamp Functions
+
+### Creating Timestamps
+
+**Now**: Get current timestamp
+```javascript
+// Current moment
+now()
+result: "2025-01-23T15:30:00Z"
+```
+
+**Date**: Create from date components
+```javascript
+// Specific date creation
+date(2025, 1, 23, 15, 30, 0)
+result: "2025-01-23T15:30:00Z"
+```
+
+**Parse**: Convert string to timestamp
+```javascript
+// Parse date string
+parse("2025-01-23 15:30:00")
+result: "2025-01-23T15:30:00Z"
+```
+
+### Formatting Timestamps
+
+**Format**: Convert timestamp to string
+```javascript
+// Custom formatting
+timestamp: "2025-01-23T15:30:00Z"
+format: "Y-m-d H:i:s"
+result: "2025-01-23 15:30:00"
+```
+
+**ISO Format**: Standard timestamp format
+```javascript
+// ISO 8601 format
+timestamp: "2025-01-23T15:30:00Z"
+iso_format: true
+result: "2025-01-23T15:30:00.000Z"
+```
+
+**Human Readable**: User-friendly formatting
+```javascript
+// Readable format
+timestamp: "2025-01-23T15:30:00Z"
+format: "F j, Y g:i A"
+result: "January 23, 2025 3:30 PM"
+```
+
+### Timestamp Calculations
+
+**Add Time**: Add duration to timestamp
+```javascript
+// Add 7 days
+timestamp: "2025-01-23T15:30:00Z"
+add: {
+  "days": 7,
+  "hours": 2,
+  "minutes": 30
+}
+result: "2025-01-30T18:00:00Z"
+```
+
+**Subtract Time**: Remove duration from timestamp
+```javascript
+// Subtract 1 week
+timestamp: "2025-01-23T15:30:00Z"
+subtract: {
+  "weeks": 1
+}
+result: "2025-01-16T15:30:00Z"
+```
+
+**Difference**: Calculate time between timestamps
+```javascript
+// Time difference
+start: "2025-01-23T15:30:00Z"
+end: "2025-01-25T18:45:30Z"
+difference: "hours"
+result: 51.25
+```
+
+## Timezone Operations
+
+### Timezone Conversion
+
+```javascript
+// Convert timezone
+timestamp: "2025-01-23T15:30:00Z"
+from_timezone: "UTC"
+to_timezone: "America/New_York"
+result: "2025-01-23T10:30:00-05:00"
+```
+
+### Common Timezone Examples
+
+```javascript
+// Global timezone conversions
+{
+  "UTC": "2025-01-23T15:30:00Z",
+  "Eastern": "2025-01-23T10:30:00-05:00",
+  "Pacific": "2025-01-23T07:30:00-08:00",
+  "London": "2025-01-23T15:30:00+00:00",
+  "Tokyo": "2025-01-24T00:30:00+09:00"
+}
+```
+
+## Integration Patterns
+
+### For n8n Users
+Date/time workflow automation:
+
+```javascript
+// n8n datetime processing
+{
+  "current_time": "{{$now}}",
+  "formatted_date": "{{$now.format('YYYY-MM-DD')}}",
+  "next_week": "{{$now.plus({days: 7}).toISO()}}",
+  "business_hours": {
+    "start": "{{$now.set({hour: 9, minute: 0, second: 0})}}",
+    "end": "{{$now.set({hour: 17, minute: 0, second: 0})}}"
+  }
+}
+```
+
+### For WeWeb Users
+Dynamic date display and calculations:
+
+```javascript
+// WeWeb date binding
+{
+  "display_date": "{{created_at.toLocaleDateString()}}",
+  "time_ago": "{{formatDistanceToNow(created_at)}}",
+  "is_recent": "{{differenceInDays(now, created_at) < 7}}",
+  "formatted_time": "{{format(created_at, 'MMM dd, yyyy HH:mm')}}"
+}
+```
+
+### API Response Formatting
+
+```json
+{
+  "event": {
+    "id": 123,
+    "title": "Team Meeting",
+    "start_time": "2025-01-24T09:00:00Z",
+    "end_time": "2025-01-24T10:00:00Z",
+    "duration_minutes": 60,
+    "formatted_date": "January 24, 2025",
+    "formatted_time": "9:00 AM UTC",
+    "timezone": "UTC",
+    "created_at": "2025-01-23T15:30:00Z",
+    "updated_at": "2025-01-23T15:30:00Z"
+  }
+}
+```
+
+## Common Use Cases
+
+### Event Scheduling
+
+```javascript
+// Meeting scheduler
+1. Parse user input date/time
+2. Convert to UTC for storage
+3. Calculate duration
+4. Check for conflicts
+5. Send calendar invitations
+```
+
+### Content Management
+
+```javascript
+// Blog post workflow
+1. Set publication timestamp
+2. Calculate reading time
+3. Format display date
+4. Handle scheduled publishing
+5. Track modification dates
+```
+
+### Data Analytics
+
+```javascript
+// Time-based analytics
+1. Group events by time periods
+2. Calculate average response times
+3. Identify peak usage hours
+4. Generate time-series reports
+5. Compare period-over-period metrics
+```
+
+## Try This
+1. **Basic Operations**: Practice creating and formatting timestamps
+2. **Timezone Handling**: Convert between different timezones
+3. **Calculations**: Add/subtract time and calculate differences
+4. **Scheduling Logic**: Build event scheduling functionality
+5. **Analytics**: Create time-based data aggregations
+
+## Common Mistakes to Avoid
+
+❌ **Don't:**
+- Store timestamps in local timezone
+- Ignore daylight saving time changes
+- Use inconsistent date formats
+- Forget to validate date inputs
+- Mix different timezone representations
+
+✅ **Do:**
+- Always store timestamps in UTC
+- Convert to local timezone for display
+- Use consistent formatting patterns
+- Validate date ranges and formats
+- Handle timezone changes properly
+
+## Pro Tips
+
+💡 **Storage Best Practices:**
+- Store all timestamps in UTC
+- Convert to user timezone for display
+- Use ISO 8601 format for APIs
+- Include timezone info when needed
+
+🚀 **Performance Optimization:**
+- Cache timezone conversion results
+- Use database indexes on timestamp fields
+- Batch timestamp operations
+- Pre-calculate common date ranges
+
+⚡ **User Experience:**
+- Show relative times ("2 hours ago")
+- Display in user's local timezone
+- Provide multiple format options
+- Handle invalid dates gracefully
+
+## Advanced Techniques
+
+### Business Hours Calculation
+
+```javascript
+// Check business hours
+function isBusinessHours(timestamp, timezone) {
+  const local = convertTimezone(timestamp, timezone);
+  const hour = extractHour(local);
+  const day = extractDayOfWeek(local);
+  
+  return day >= 1 && day <= 5 && hour >= 9 && hour <= 17;
+}
+```
+
+### Recurring Events
+
+```javascript
+// Generate recurring dates
+function generateRecurring(start, pattern, count) {
+  const dates = [];
+  for (let i = 0; i < count; i++) {
+    const date = addTime(start, {
+      [pattern.unit]: pattern.interval * i
+    });
+    dates.push(date);
+  }
+  return dates;
+}
+```
+
+### Time Zone Detection
+
+```javascript
+// Auto-detect user timezone
+function getUserTimezone() {
+  // From user agent or IP geolocation
+  return detectTimezone() || "UTC";
+}
+```
+
+## Date Format Reference
+
+### Common Patterns
+
+```javascript
+// Format examples
+{
+  "Y-m-d": "2025-01-23",
+  "d/m/Y": "23/01/2025",
+  "F j, Y": "January 23, 2025",
+  "H:i:s": "15:30:00",
+  "g:i A": "3:30 PM",
+  "c": "2025-01-23T15:30:00+00:00",
+  "r": "Thu, 23 Jan 2025 15:30:00 +0000"
+}
+```
+
+### Relative Formatting
+
+```javascript
+// Relative time examples
+{
+  "now": "just now",
+  "1 minute ago": "1 minute ago",
+  "1 hour ago": "1 hour ago",
+  "yesterday": "yesterday",
+  "last week": "last week",
+  "2 months ago": "2 months ago"
+}
+```
+
+## Performance Considerations
+
+### Timestamp Processing
+- Use database functions for complex date calculations
+- Cache frequently used timezone conversions
+- Index timestamp fields for fast queries
+- Batch timestamp operations when possible
+
+### Memory Management
+- Avoid creating unnecessary timestamp objects
+- Use efficient date libraries
+- Cache formatted date strings
+- Clean up temporary date calculations
+
+Proper timestamp handling ensures your applications work accurately across different timezones and provide excellent user experiences with temporal data.

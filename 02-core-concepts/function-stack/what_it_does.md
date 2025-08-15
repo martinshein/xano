@@ -1,13 +1,37 @@
 ---
+title: "Function Stack Overview"
+description: "Understand what function stacks do in Xano and how they power your backend logic and API operations"
 category: function-stack
-has_code_examples: true
-last_updated: '2025-01-23'
+difficulty: beginner
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
+  - overview
+  - concept
+  - workflow
+  - logic
+  - backend
+  - api
+related_docs:
+  - functions
+  - building-with-visual-development
+  - apis
+  - database
+last_updated: '2025-01-23'
+---
+
+# Function Stack Overview
+
+## Quick Summary
+Function stacks are the core of Xano's visual development platform, defining the step-by-step logic that executes when APIs are called or events are triggered. They transform inputs, process data, and generate responses through a sequence of connected functions.
+
+## What You'll Learn
+- Function stack fundamentals
+- How function stacks execute
+- Types of functions available
+- Data flow through function stacks
+- Best practices for stack design
+- Common function stack patterns
+
+Function stacks are the building blocks that transform your business requirements into executable backend logic, making complex operations simple and maintainable.
 title: What it does
 ---
 

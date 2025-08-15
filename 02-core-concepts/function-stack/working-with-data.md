@@ -1,13 +1,37 @@
 ---
+title: "Working with Data in Function Stacks"
+description: "Master data handling, manipulation, and transformation techniques in Xano function stacks for robust backend operations"
 category: function-stack
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
+difficulty: intermediate
 tags:
-- authentication
-- api
-- webhook
+  - data
+  - manipulation
+  - variables
+  - objects
+  - arrays
+  - processing
+related_docs:
+  - data-types
+  - variables
+  - expressions
+  - database
+last_updated: '2025-01-23'
+---
+
+# Working with Data in Function Stacks
+
+## Quick Summary
+Data handling in Xano function stacks involves creating, manipulating, and transforming variables, objects, and arrays throughout your backend logic. Master these techniques to build powerful, data-driven applications.
+
+## What You'll Learn
+- Data variable fundamentals
+- Object and array manipulation
+- Data transformation techniques
+- Complex data processing patterns
+- Performance optimization for data operations
+- Best practices for data handling
+
+Effective data handling in function stacks ensures your applications process information accurately, efficiently, and reliably across all operations.
 - trigger
 - query
 - transformation

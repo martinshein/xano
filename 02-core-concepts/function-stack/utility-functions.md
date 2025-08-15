@@ -1,13 +1,37 @@
 ---
+title: "Utility Functions"
+description: "Master Xano utility functions for common operations, calculations, and data processing tasks"
 category: function-stack
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
+difficulty: intermediate
 tags:
-- authentication
-- api
-- webhook
+  - utility
+  - helpers
+  - calculations
+  - formatting
+  - validation
+  - conversion
+related_docs:
+  - functions
+  - expressions
+  - filters
+  - data-types
+last_updated: '2025-01-23'
+---
+
+# Utility Functions
+
+## Quick Summary
+Utility functions in Xano provide common operations for calculations, formatting, validation, and data processing. These reusable functions streamline development by handling routine tasks efficiently.
+
+## What You'll Learn
+- Essential utility function categories
+- Mathematical and statistical operations
+- Text formatting and validation utilities
+- Date/time helper functions
+- Data conversion utilities
+- Custom utility function creation
+
+Utility functions provide the building blocks for efficient, maintainable applications by handling common operations consistently and reliably.
 - trigger
 - query
 - filter
