@@ -1,426 +1,541 @@
 ---
+title: "Response Caching"
+description: "Improve API performance and reduce server load using Xano's response caching mechanisms"
 category: function-stack
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
+difficulty: intermediate
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- cache
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - caching
+  - performance
+  - optimization
+  - redis
+  - api-response
+  - speed
+related_docs:
+  - data-caching-redis
+  - performance
+  - optimization
+  - middleware
+last_updated: '2025-01-23'
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
+# Response Caching
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'response-caching'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## Quick Summary
+Response caching stores API responses temporarily to improve performance, reduce database load, and provide faster user experiences for frequently accessed data. Essential for high-traffic applications and data-heavy operations.
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+## What You'll Learn
+- Implementing response caching strategies
+- Cache invalidation and TTL management
+- Performance optimization techniques
+- Integration with Redis and memory caching
+- Best practices for cache-aware API design
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+## Core Caching Concepts
 
+### Cache Types
+- **Memory Cache** - Fast in-memory storage for immediate access
+- **Redis Cache** - Distributed caching for scalable applications
+- **CDN Caching** - Edge caching for global content delivery
+- **Browser Cache** - Client-side caching with HTTP headers
+- **Database Query Cache** - Cache expensive database operations
 
+### Cache Strategies
+- **Cache-Aside** - Application manages cache explicitly
+- **Write-Through** - Write to cache and database simultaneously
+- **Write-Behind** - Write to cache first, database later
+- **Refresh-Ahead** - Proactively refresh before expiration
 
+## Basic Response Caching
 
+### Simple Cache Implementation
+```javascript
+// Basic response caching function
+function getCachedResponse(cacheKey, fetchFunction, ttl = 300) {
+  // 1. Check if cached response exists
+  const cached = getFromCache(cacheKey);
+  
+  if (cached && !isExpired(cached)) {
+    return cached.data;
+  }
+  
+  // 2. Fetch fresh data
+  const freshData = fetchFunction();
+  
+  // 3. Store in cache with TTL
+  storeInCache(cacheKey, {
+    data: freshData,
+    timestamp: Date.now(),
+    ttl: ttl
+  });
+  
+  return freshData;
+}
+```
 
-
-
-
-
-
-
-
-
-
-
--   
-
+### Cache Key Generation
+```javascript
+// Generate unique cache keys
+function generateCacheKey(endpoint, params = {}) {
+  const sortedParams = Object.keys(params)
+    .sort()
+    .map(key => `${key}:${params[key]}`)
+    .join('|');
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+  return `api:${endpoint}:${sortedParams}`;
+}
 
--   
+// Examples
+generateCacheKey('products', { category: 'electronics', page: 1 });
+// Result: "api:products:category:electronics|page:1"
+```
 
+## Advanced Caching Patterns
+
+### Conditional Caching
+```javascript
+// Cache based on data characteristics
+function smartCache(data, context) {
+  let ttl = 300; // Default 5 minutes
+  
+  // Adjust TTL based on data type
+  if (context.dataType === 'user_profile') {
+    ttl = 900; // 15 minutes for profiles
+  } else if (context.dataType === 'product_catalog') {
+    ttl = 1800; // 30 minutes for products
+  } else if (context.dataType === 'real_time_data') {
+    ttl = 30; // 30 seconds for real-time
+  }
+  
+  // Don't cache error responses
+  if (data.error) {
+    return data;
+  }
+  
+  // Don't cache personalized data
+  if (context.isPersonalized) {
+    return data;
+  }
+  
+  return cacheResponse(data, ttl);
+}
+```
+
+### Multi-Layer Caching
+```javascript
+// Implement cache hierarchy
+async function getWithMultiLayerCache(key, fetchFunction) {
+  // Layer 1: Memory cache (fastest)
+  let result = memoryCache.get(key);
+  if (result) {
+    return result;
+  }
+  
+  // Layer 2: Redis cache (fast)
+  result = await redisCache.get(key);
+  if (result) {
+    // Promote to memory cache
+    memoryCache.set(key, result, 60); // 1 minute in memory
+    return result;
+  }
+  
+  // Layer 3: Database (slowest)
+  result = await fetchFunction();
+  
+  // Store in both cache layers
+  await redisCache.set(key, result, 900); // 15 minutes in Redis
+  memoryCache.set(key, result, 60); // 1 minute in memory
+  
+  return result;
+}
+```
+
+## Cache Invalidation Strategies
+
+### Time-Based Invalidation (TTL)
+```javascript
+// TTL-based cache management
+const cacheTTLConfig = {
+  'user_profiles': 900,      // 15 minutes
+  'product_data': 1800,      // 30 minutes
+  'system_config': 3600,     // 1 hour
+  'analytics_data': 7200,    // 2 hours
+  'static_content': 86400    // 24 hours
+};
+
+function setCacheWithTTL(key, data, category) {
+  const ttl = cacheTTLConfig[category] || 300;
+  return cache.set(key, data, ttl);
+}
+```
+
+### Event-Based Invalidation
+```javascript
+// Invalidate cache when data changes
+function invalidateCacheOnUpdate(tableName, recordId) {
+  const keysToInvalidate = [
+    `${tableName}:${recordId}`,
+    `${tableName}:list:*`,
+    `dashboard:${tableName}:*`
+  ];
+  
+  keysToInvalidate.forEach(pattern => {
+    if (pattern.includes('*')) {
+      // Wildcard invalidation
+      const keys = cache.keys(pattern);
+      cache.del(keys);
+    } else {
+      cache.del(pattern);
+    }
+  });
+}
+```
+
+### Tag-Based Invalidation
+```javascript
+// Cache with tags for grouped invalidation
+function cacheWithTags(key, data, tags, ttl = 300) {
+  // Store main data
+  cache.set(key, data, ttl);
+  
+  // Store tag associations
+  tags.forEach(tag => {
+    const tagKey = `tag:${tag}`;
+    cache.sadd(tagKey, key);
+    cache.expire(tagKey, ttl);
+  });
+}
+
+function invalidateByTag(tag) {
+  const tagKey = `tag:${tag}`;
+  const keys = cache.smembers(tagKey);
+  
+  if (keys.length > 0) {
+    cache.del(keys);
+    cache.del(tagKey);
+  }
+}
+
+// Example usage
+cacheWithTags('product:123', productData, ['products', 'electronics', 'featured']);
+// Later: invalidate all electronics products
+invalidateByTag('electronics');
+```
+
+## Integration with n8n
+
+### Cache-Aware Data Processing
+```javascript
+// n8n workflow with caching
+const cacheKey = `report:${$json.report_type}:${$json.date_range}`;
+
+// Check cache first
+const cachedResult = await $httpRequest({
+  method: 'GET',
+  url: `https://your-instance.xano.io/api:cache/get/${cacheKey}`
+});
+
+if (cachedResult.data) {
+  // Use cached data
+  return cachedResult.data;
+} else {
+  // Generate fresh report
+  const reportData = await generateReport($json);
+  
+  // Cache the result
+  await $httpRequest({
+    method: 'POST',
+    url: 'https://your-instance.xano.io/api:cache/set',
+    body: {
+      key: cacheKey,
+      data: reportData,
+      ttl: 3600 // 1 hour
+    }
+  });
+  
+  return reportData;
+}
+```
+
+### Cache Warming
+```javascript
+// n8n workflow to warm cache with popular data
+const popularProducts = await $httpRequest({
+  method: 'GET',
+  url: 'https://your-instance.xano.io/api:analytics/popular-products'
+});
+
+// Pre-cache popular products
+for (const product of popularProducts.data) {
+  const productData = await $httpRequest({
+    method: 'GET',
+    url: `https://your-instance.xano.io/api:products/${product.id}`
+  });
+  
+  // Cache for 1 hour
+  await $httpRequest({
+    method: 'POST',
+    url: 'https://your-instance.xano.io/api:cache/set',
+    body: {
+      key: `product:${product.id}`,
+      data: productData,
+      ttl: 3600
+    }
+  });
+}
+```
+
+## Integration with WeWeb
+
+### Client-Side Cache Management
+```javascript
+// WeWeb component with intelligent caching
+export default {
+  data() {
+    return {
+      cache: new Map(),
+      cacheTTL: 5 * 60 * 1000, // 5 minutes
+      loading: false
+    };
+  },
+  
+  methods: {
+    async fetchWithCache(endpoint, params = {}) {
+      const cacheKey = this.generateCacheKey(endpoint, params);
+      const cached = this.cache.get(cacheKey);
+      
+      // Check if cache is still valid
+      if (cached && Date.now() - cached.timestamp < this.cacheTTL) {
+        return cached.data;
+      }
+      
+      this.loading = true;
+      
+      try {
+        // Fetch fresh data
+        const response = await this.$xano.get(endpoint, { params });
+        
+        // Store in cache
+        this.cache.set(cacheKey, {
+          data: response.data,
+          timestamp: Date.now()
+        });
+        
+        return response.data;
+      } finally {
+        this.loading = false;
+      }
+    },
     
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../building-with-visual-development/triggers.html)
-        -   [Middleware](../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../functions/database-requests/get-record.html)
-            -   [Add Record](../functions/database-requests/add-record.html)
-            -   [Edit Record](../functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../functions/database-requests/patch-record.html)
-            -   [Delete Record](../functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../functions/database-requests/database-transaction.html)
-            -   [External Database Query](../functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../functions/data-manipulation/update-variable.html)
-            -   [Conditional](../functions/data-manipulation/conditional.html)
-            -   [Switch](../functions/data-manipulation/switch.html)
-            -   [Loops](../functions/data-manipulation/loops.html)
-            -   [Math](../functions/data-manipulation/math.html)
-            -   [Arrays](../functions/data-manipulation/arrays.html)
-            -   [Objects](../functions/data-manipulation/objects.html)
-            -   [Text](../functions/data-manipulation/text.html)
-                    -   [Security](../functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../functions/data-caching-redis.html)
-        -   [Custom Functions](../functions/custom-functions.html)
-        -   [Utility Functions](../functions/utility-functions.html)
-        -   [File Storage](../functions/file-storage.html)
-        -   [Cloud Services](../functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../filters/manipulation.html)
-        -   [Math](../filters/math.html)
-        -   [Timestamp](../filters/timestamp.html)
-        -   [Text](../filters/text.html)
-        -   [Array](../filters/array.html)
-        -   [Transform](../filters/transform.html)
-        -   [Conversion](../filters/conversion.html)
-        -   [Comparison](../filters/comparison.html)
-        -   [Security](../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../data-types/text.html)
-        -   [Expression](../data-types/expression.html)
-        -   [Array](../data-types/array.html)
-        -   [Object](../data-types/object.html)
-        -   [Integer](../data-types/integer.html)
-        -   [Decimal](../data-types/decimal.html)
-        -   [Boolean](../data-types/boolean.html)
-        -   [Timestamp](../data-types/timestamp.html)
-        -   [Null](../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](response-caching.html)
-        
--   
-    Testing and Debugging
+    invalidateCache(pattern) {
+      // Remove matching cache entries
+      for (const [key] of this.cache) {
+        if (key.includes(pattern)) {
+          this.cache.delete(key);
+        }
+      }
+    },
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+    generateCacheKey(endpoint, params) {
+      const paramString = JSON.stringify(params);
+      return `${endpoint}:${btoa(paramString)}`;
+    }
+  }
+};
+```
 
--   
-    The Database
+### Cache-First Component Pattern
+```javascript
+// WeWeb product list with smart caching
+export default {
+  data() {
+    return {
+      products: [],
+      cacheStatus: 'checking'
+    };
+  },
+  
+  async mounted() {
+    await this.loadProducts();
+  },
+  
+  methods: {
+    async loadProducts() {
+      this.cacheStatus = 'checking';
+      
+      try {
+        // Try cache first
+        const cached = await this.checkCache();
+        
+        if (cached) {
+          this.products = cached;
+          this.cacheStatus = 'cached';
+          
+          // Optionally refresh in background
+          this.refreshInBackground();
+        } else {
+          // Fetch fresh data
+          await this.fetchFreshProducts();
+        }
+      } catch (error) {
+        console.error('Error loading products:', error);
+        this.cacheStatus = 'error';
+      }
+    },
     
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
+    async checkCache() {
+      const cacheKey = 'products:list';
+      const cached = localStorage.getItem(cacheKey);
+      
+      if (cached) {
+        const { data, timestamp } = JSON.parse(cached);
+        const maxAge = 10 * 60 * 1000; // 10 minutes
         
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
+        if (Date.now() - timestamp < maxAge) {
+          return data;
+        }
+      }
+      
+      return null;
+    },
     
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
+    async fetchFreshProducts() {
+      this.cacheStatus = 'fetching';
+      
+      const response = await this.$xano.get('/products');
+      this.products = response.data;
+      
+      // Cache the results
+      localStorage.setItem('products:list', JSON.stringify({
+        data: response.data,
+        timestamp: Date.now()
+      }));
+      
+      this.cacheStatus = 'fresh';
+    },
     
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+    async refreshInBackground() {
+      // Silent refresh for next visit
+      try {
+        const response = await this.$xano.get('/products');
+        localStorage.setItem('products:list', JSON.stringify({
+          data: response.data,
+          timestamp: Date.now()
+        }));
+      } catch (error) {
+        // Silent fail for background refresh
+        console.warn('Background refresh failed:', error);
+      }
+    }
+  }
+};
+```
 
--   
-    File Storage
+## Performance Optimization
+
+### Cache Hit Rate Monitoring
+```javascript
+// Track cache performance
+const cacheMetrics = {
+  hits: 0,
+  misses: 0,
+  errors: 0
+};
+
+function trackCacheHit(key, hit) {
+  if (hit) {
+    cacheMetrics.hits++;
+  } else {
+    cacheMetrics.misses++;
+  }
+  
+  // Log metrics periodically
+  if ((cacheMetrics.hits + cacheMetrics.misses) % 100 === 0) {
+    const hitRate = cacheMetrics.hits / (cacheMetrics.hits + cacheMetrics.misses);
+    console.log(`Cache hit rate: ${(hitRate * 100).toFixed(2)}%`);
+  }
+}
+```
+
+### Memory Usage Optimization
+```javascript
+// Implement cache size limits
+class LRUCache {
+  constructor(maxSize = 1000) {
+    this.maxSize = maxSize;
+    this.cache = new Map();
+  }
+  
+  get(key) {
+    if (this.cache.has(key)) {
+      // Move to end (most recent)
+      const value = this.cache.get(key);
+      this.cache.delete(key);
+      this.cache.set(key, value);
+      return value;
+    }
+    return null;
+  }
+  
+  set(key, value) {
+    if (this.cache.has(key)) {
+      this.cache.delete(key);
+    } else if (this.cache.size >= this.maxSize) {
+      // Remove oldest entry
+      const firstKey = this.cache.keys().next().value;
+      this.cache.delete(firstKey);
+    }
     
-    -   File Storage in Xano
-    -   Private File Storage
+    this.cache.set(key, value);
+  }
+}
+```
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+## Try This: Build a Smart Caching System
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+1. **Implement Multi-Layer Cache**
+   ```
+   1. Create memory cache for immediate access
+   2. Add Redis cache for persistence
+   3. Implement cache-aside pattern
+   4. Add cache warming for popular data
+   5. Monitor cache hit rates and performance
+   ```
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../xano-features/metadata-api/content.html)
-        -   [Search](../../xano-features/metadata-api/search.html)
-        -   [File](../../xano-features/metadata-api/file.html)
-        -   [Request History](../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+2. **Add Intelligent Invalidation**
+   ```
+   1. Tag-based invalidation by data type
+   2. Event-driven cache clearing
+   3. Partial cache updates for efficiency
+   4. Cache versioning for rolling updates
+   5. Background cache refresh
+   ```
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+3. **Frontend Integration**
+   ```
+   1. Client-side caching in WeWeb
+   2. Cache-first loading strategies
+   3. Background refresh patterns
+   4. Cache synchronization across tabs
+   5. Offline cache capabilities
+   ```
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+## Common Mistakes to Avoid
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+❌ **Caching personalized data** - Never cache user-specific content
+❌ **Not setting TTL** - All cached data should have expiration
+❌ **Cache stampede** - Multiple requests fetching same data simultaneously
+❌ **Ignoring cache size** - Implement size limits to prevent memory issues
+❌ **Caching errors** - Don't cache error responses or failed requests
+❌ **Not monitoring performance** - Track cache hit rates and effectiveness
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+## Pro Tips
 
--   
-    Security
-    
-    -   Best Practices
+💡 **Use cache tags** for grouped invalidation strategies
+💡 **Implement cache warming** for better user experience
+💡 **Monitor cache hit rates** to optimize strategy
+💡 **Use compression** for large cached objects
+💡 **Implement graceful degradation** when cache is unavailable
+💡 **Set appropriate TTL** based on data change frequency
+💡 **Use cache hierarchies** for optimal performance
 
-[Powered by GitBook]
-
-On this page
-
-Was this helpful?
-
-Copy
-
-
-2.  Additional Features
-
-Response Caching 
-================
-
-####  
-
-Response Caching
-
-[**Watch a practical example**](https://youtu.be/TTQky7FqRQE) of Response Caching using the [Star Wars API](https://swapi.dev/)
-
-From the settings of an [API Endpoint](../building-with-visual-development/apis.html) or [Custom Function](../functions/custom-functions.html) response caching can be accessed. Response caching is an abstracted caching method to cache the response of an endpoint or function.
-
-[![](../../_gitbook/image2acd.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fassets%252F-M8Si5XvG2QHSLi9JcVY%252F-MfjDlawtMnevbHx45uw%252F-MfjK_cyiFbXxTGORZLt%252Fcaching.png%3Falt%3Dmedia%26token%3D91dea8b1-08ec-4c0e-b820-843a5f31a09d&width=768&dpr=4&quality=100&sign=2f79e768&sv=2)]
-
-You can choose from a number of different settings to determine how to cache the response.
-
-[![](../../_gitbook/image26eb.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fassets%252F-M8Si5XvG2QHSLi9JcVY%252F-MfjDlawtMnevbHx45uw%252F-MfjLdGctLvT-WNeHBMp%252Fcaching%2520%281%29.png%3Falt%3Dmedia%26token%3D3b769e18-6e47-4fbc-9a5e-1cf5cce1b814&width=768&dpr=4&quality=100&sign=11aae88a&sv=2)]
-
-**TTL** - Stands for time to live. This defines how long to cache the response for. Options range from 5 seconds to 7 days. After the TTL expires, the query will run normally and reset the response cache.
-
-**Use inputs for caching signature** - This is defaulted to yes. It will create a response cache for each new or unique set of inputs for the duration of the TTL.
-
-**Use IP address for caching signature** - This is defaulted to no. It can be used if you wish to record a response cache on a per IP address basis.
-
-**HTTP Request Header Names** - This is optional. You are able to cache the HTTP request headers of the response. Add the request header name or names that you wish to cache.
-
-**Environment Variable Names** - This is optional. It allows you to cache any defined [environment variable](../environment-variables.html) names to the response cache.
-
-**Use Authentication ID for caching signature** - When an API endpoint requires [authentication](../../building-backend-features/user-authentication-and-user-data.html), this option becomes available. This can be turned on to enable a caching on a per user basis for authenticated endpoints.
-
-[![](../../_gitbook/image5640.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fassets%252F-M8Si5XvG2QHSLi9JcVY%252F-MfoE9ds9tUfjoofzMUU%252F-MfoFDfB70ntclRxZDPd%252Fcaching%2520%282%29.png%3Falt%3Dmedia%26token%3D55616bd0-c466-4cb8-bb52-15270bac0cbb&width=768&dpr=4&quality=100&sign=b09d4684&sv=2)]
-
-####  
-
-Example Use Cases
-
-**Use inputs and disable authentication ID for caching signature**
-
-Company statistics for your entire team. If you need to display company statistics for your entire team then you may consider using inputs and disabling authentication ID for caching signature. You API endpoint would require authentication so that only your team can access the API but you would disable the authentication ID for caching. This would make it so the cache response is not on a per user basis. Since it is company statistics you want each user to see the same statistics. Using inputs enables each searched or inputted value gets cached, so if other team members search or input the same values then the response will already be there.
-
-**Use inputs and use authentication ID for caching signature**
-
-Personal statistics. In this scenario you would enable both inputs and authentication ID for caching signature. This would cache responses on a per user basis. For example, you might have each individual sales rep reviewing their own statistics for the quarter. Enabling inputs would cache the response for each inputted value. Additionally, enabling authentication ID for caching signature (with the appropriate business logic) would cache the responses on a per user basis.
-
-**Disable inputs and disable authentication ID for caching signature**
-
-There\'s a movie night event and you want to generate a random movie. Imagine you have an API that inputs a category or genre of movie and based on that, returns a random movie. By disabling both inputs and authentication ID for caching signature, this will allow for the first search on this API to generate a random movie to be played during movie night. It won\'t matter what other people search. So if the first person searched Science-Fiction and the result is Star Wars then all other searches (drama, action, comedy, etc.) will return Star Wars. Now you have your random movie for movie night.
-
-Last updated 6 months ago
-
-Was this helpful?
+Response caching is essential for building fast, scalable applications that provide excellent user experiences even under heavy load.

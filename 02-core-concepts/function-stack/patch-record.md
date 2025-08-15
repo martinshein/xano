@@ -1,457 +1,372 @@
 ---
+title: "Patch Record Function"
+description: "Update specific database record fields efficiently using Xano's Patch Record function for flexible data updates"
 category: function-stack
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 02-core-concepts/function-stack
+difficulty: intermediate
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv'
+  - database
+  - patch
+  - update
+  - crud
+  - partial-update
+  - flexible-editing
+related_docs:
+  - edit-record
+  - add-or-edit-record
+  - get-record
+  - database-requests
+last_updated: '2025-01-23'
 ---
 
-[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../index.html)
+# Patch Record Function
 
+## Quick Summary
+Patch Record allows you to update only specific fields in a database record without needing to specify every field. Perfect for flexible user profiles, settings updates, and APIs where you don't know which fields will be modified in advance.
 
+## What You'll Learn
+- When to use Patch Record vs Edit Record
+- Building flexible update endpoints
+- Working with partial data updates
+- Best practices for safe patching operations
 
+## Patch Record vs Edit Record
 
+### Use Patch Record When:
+- **Updating variable fields** - Not all fields will be modified every time
+- **User profile editors** - Users may only update some profile information
+- **Settings panels** - Only changed preferences need updating
+- **Mobile apps** - Bandwidth-conscious partial updates
+- **Form builders** - Dynamic forms with varying field sets
 
+### Use Edit Record When:
+- **Complete record replacement** - You know exactly which fields to update
+- **Validation requirements** - Need to process each field individually
+- **Complex transformations** - Fields require individual processing
+- **Audit trails** - Need detailed tracking of each field change
 
+## How Patch Record Works
 
+### Basic Structure
+Unlike Edit Record, Patch Record expects:
+1. **Record identifier** (ID or unique field)
+2. **JSON object** containing only the fields to update
+3. **Table specification**
 
+### Example: User Profile Update
 
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../building-with-visual-development/triggers.html)
-        -   [Middleware](../../building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](query-all-records/external-filtering-examples.html)
-                            -   [Get Record](get-record.html)
-            -   [Add Record](add-record.html)
-            -   [Edit Record](edit-record.html)
-            -   [Add or Edit Record](add-or-edit-record.html)
-            -   [Patch Record](patch-record.html)
-            -   [Delete Record](delete-record.html)
-            -   [Bulk Operations](bulk-operations.html)
-            -   [Database Transaction](database-transaction.html)
-            -   [External Database Query](external-database-query.html)
-            -   [Direct Database Query](direct-database-query.html)
-            -   [Get Database Schema](get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../data-manipulation/create-variable.html)
-            -   [Update Variable](../data-manipulation/update-variable.html)
-            -   [Conditional](../data-manipulation/conditional.html)
-            -   [Switch](../data-manipulation/switch.html)
-            -   [Loops](../data-manipulation/loops.html)
-            -   [Math](../data-manipulation/math.html)
-            -   [Arrays](../data-manipulation/arrays.html)
-            -   [Objects](../data-manipulation/objects.html)
-            -   [Text](../data-manipulation/text.html)
-                    -   [Security](../security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../data-caching-redis.html)
-        -   [Custom Functions](../custom-functions.html)
-        -   [Utility Functions](../utility-functions.html)
-        -   [File Storage](../file-storage.html)
-        -   [Cloud Services](../cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../filters/manipulation.html)
-        -   [Math](../../filters/math.html)
-        -   [Timestamp](../../filters/timestamp.html)
-        -   [Text](../../filters/text.html)
-        -   [Array](../../filters/array.html)
-        -   [Transform](../../filters/transform.html)
-        -   [Conversion](../../filters/conversion.html)
-        -   [Comparison](../../filters/comparison.html)
-        -   [Security](../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../data-types/text.html)
-        -   [Expression](../../data-types/expression.html)
-        -   [Array](../../data-types/array.html)
-        -   [Object](../../data-types/object.html)
-        -   [Integer](../../data-types/integer.html)
-        -   [Decimal](../../data-types/decimal.html)
-        -   [Boolean](../../data-types/boolean.html)
-        -   [Timestamp](../../data-types/timestamp.html)
-        -   [Null](../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../xano-features/metadata-api/search.html)
-        -   [File](../../../xano-features/metadata-api/file.html)
-        -   [Request History](../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
-Was this helpful?
-
-Copy
-
-
-2.  Functions
-3.  [Database Requests](../database-requests.html)
-
-Patch Record 
-============
-
-**Patch** is most appropriate when you aren\'t sure what fields will be updated when editing the record.
-
-####  
-
-What\'s the difference between Edit Record and Patch Record?
-
--   
-    
-        
-    
-    **Edit Record** is best used when you have a static expectation for which fields need to be updated when the function is executed. For example, maybe you have an endpoint specifically to allow a user to update their password. Edit Record would make sense here, because you would not be changing any other information.
-    
--   
-    
-        
-    
-    **Patch Record** is best used when you have an endpoint that can update multiple fields, but may not always need to do so. Something like a user submitting a collection of edits to their user profile would fall under this example.
-    
-**Patch Record** is a little different than **Edit Record** in the way values are provided to it. While Edit Record gives you the option to address each field individually inside of the function, **Patch** only expects a field name and field value (so it knows which record to patch) and a JSON object representing all of the values to be updated.
-
-In the following example, let\'s say that our record currently looks like this:
-
-Copy
-
-``` 
+**Current record:**
+```json
 {
-    "id": 1,
-    "name": "Chris",
-    "email": "[email protected]",
-    "city": "Chicago"
-    }
+  "id": 123,
+  "firstName": "Chris",
+  "lastName": "Johnson", 
+  "email": "chris@example.com",
+  "city": "New York",
+  "country": "USA",
+  "phone": "555-0123",
+  "newsletter": true
+}
 ```
 
-We want to build an endpoint that allows our users to update one or more of these fields in one swing. This means that we need to construct a JSON object that contains **only** the values to be updated and provide that to our Patch Record statement.
-
-If Chris wants to update only his city, the object we provide to Patch would look like this:
-
-Copy
-
-``` 
+**User wants to update only city:**
+```json
 {
-    "city": "Seattle"
-    }
+  "city": "Los Angeles"
+}
 ```
 
-And our patch statement might look like this:
+**Result:** Only the city field gets updated, all other fields remain unchanged.
 
-![](../../../_gitbook/imagecc45.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F1fBCzAq3Dv0rQLm17QUu%252FCleanShot%25202024-09-10%2520at%252006.07.16.png%3Falt%3Dmedia%26token%3Dfa054734-45f5-4f41-815b-8ad443063ca6&width=768&dpr=4&quality=100&sign=a91272b8&sv=2)
+## Building Flexible Update Endpoints
 
-However, using the **set filter** in the scenario where multiple fields **might** be provided is not recommended. This is because if Patch is provided empty or null values, it will write those to the record, and the goal is to only write the fields we want.
+### Method 1: Get All Raw Input + Patch Record
 
-**Please be aware that Patch will write every field provided in the JSON object to the record, even blank and null values.
-The JSON object used for Patch should only provide the fields you want to update, and nothing more. Providing empty or null values unintentionally can result in data loss.**
+This combination creates extremely flexible endpoints:
 
-Some frontends will always send empty or null values regardless of what data points are actually defined.
+1. **Get All Raw Input** - Captures whatever fields the client sends
+2. **Patch Record** - Updates only those fields in the database
 
-To make Patch work as it is normally expected, you\'ll want to leverage filters like:
+```json
+// Client can send any combination of fields
+{
+  "firstName": "Christopher",
+  "city": "Los Angeles"
+}
+// Only these two fields get updated
+```
 
--   
+### Method 2: Selective Field Processing
+
+For more control, process specific fields:
+
+```json
+// Function stack logic
+1. Get input fields
+2. Validate required fields exist
+3. Build patch object with only allowed fields
+4. Apply Patch Record
+5. Return updated record
+```
+
+## Integration with n8n
+
+### Webhook-Driven Updates
+```javascript
+// n8n webhook data for user profile updates
+{
+  "userId": 123,
+  "updates": {
+    "preferences": {
+      "theme": "dark",
+      "language": "es"
+    },
+    "notifications": {
+      "email": false,
+      "push": true
+    }
+  }
+}
+```
+
+### n8n Function Node Processing
+```javascript
+// Prepare data for Xano Patch Record
+const userId = $json.userId;
+const updates = $json.updates;
+
+// Flatten nested updates if needed
+const flatUpdates = {
+  theme: updates.preferences.theme,
+  language: updates.preferences.language,
+  emailNotifications: updates.notifications.email,
+  pushNotifications: updates.notifications.push
+};
+
+return {
+  id: userId,
+  patchData: flatUpdates
+};
+```
+
+## Integration with WeWeb
+
+### WeWeb Profile Editor Component
+```javascript
+// WeWeb component for user profile editing
+export default {
+  data() {
+    return {
+      user: {},
+      changedFields: {},
+      isUpdating: false
+    };
+  },
+  
+  methods: {
+    // Track which fields have changed
+    trackChange(fieldName, newValue) {
+      this.changedFields[fieldName] = newValue;
+    },
     
+    // Save only changed fields
+    async saveChanges() {
+      if (Object.keys(this.changedFields).length === 0) {
+        return; // No changes to save
+      }
+      
+      this.isUpdating = true;
+      
+      try {
+        // Send only changed fields to Xano
+        const response = await this.$xano.patch(`/users/${this.user.id}`, {
+          ...this.changedFields
+        });
         
-    
-    `filter_null` to remove null values
-    
--   
-    
+        // Update local user object
+        this.user = { ...this.user, ...response.data };
+        this.changedFields = {}; // Clear changes
         
+        this.$toast.success('Profile updated successfully');
+      } catch (error) {
+        this.$toast.error('Failed to update profile');
+      } finally {
+        this.isUpdating = false;
+      }
+    },
     
-    `filter_empty_text` to remove empty text strings
-    
-Using a **Get All Raw Input** function along with **Patch Record** can be a perfect combination.
+    // Check if form has unsaved changes
+    hasUnsavedChanges() {
+      return Object.keys(this.changedFields).length > 0;
+    }
+  },
+  
+  // Warn user about unsaved changes
+  beforeUnload() {
+    if (this.hasUnsavedChanges()) {
+      return 'You have unsaved changes. Are you sure you want to leave?';
+    }
+  }
+};
+```
 
--   
-    
-        
-    
-    **Get All Raw Input** provides a JSON object of all of the input fields passed to the API.
-    
--   
-    
-        
-    
-    We can then provide the output of this function to **Patch Record**, giving us an easy and fast method of building a flexible endpoint for editing records.
-    
-Our final endpoint might look something like this:
+## Real-World Use Cases
 
-![](../../../_gitbook/imageaa72.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FHXTDYZW2ddh6hdnQCqN8%252FCleanShot%25202024-09-10%2520at%252006.11.02.png%3Falt%3Dmedia%26token%3Dabd3539c-f609-432d-85e1-afeb58cf30df&width=768&dpr=4&quality=100&sign=60474e69&sv=2)
+### 1. User Settings Panel
+```json
+// User updates only notification preferences
+{
+  "emailNotifications": false,
+  "pushNotifications": true,
+  "marketingEmails": false
+}
+// Profile, contact info, etc. remain unchanged
+```
 
-![](../../../_gitbook/image1897.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F4cu09liemLkCyEllz2D5%252FCleanShot%25202024-09-10%2520at%252006.11.28.png%3Falt%3Dmedia%26token%3D9daf9dfc-ad7c-4e0a-9ee4-58bf888e942f&width=768&dpr=4&quality=100&sign=7b5d8ca8&sv=2)
+### 2. E-commerce Order Status Update
+```json
+// Update only order status and tracking
+{
+  "status": "shipped",
+  "trackingNumber": "1234567890",
+  "shippedAt": "2025-01-23T10:30:00Z"
+}
+// Customer info, items, etc. stay the same
+```
 
-Last updated 4 months ago
+### 3. Content Management
+```json
+// Author updates only article content
+{
+  "content": "Updated article content...",
+  "updatedAt": "2025-01-23T10:30:00Z"
+}
+// Title, author, creation date unchanged
+```
 
-Was this helpful?
+## Try This: Build a Flexible User Profile Endpoint
+
+1. **Create endpoint** with Patch Record function
+2. **Use Get All Raw Input** to capture any fields sent
+3. **Add validation** for required fields (like ID)
+4. **Filter allowed fields** for security
+5. **Return updated record** for client confirmation
+
+**Example implementation:**
+```
+1. Get All Raw Input → captures client data
+2. Conditional → check if user ID provided
+3. Create Variable → filter allowed fields only
+4. Patch Record → update database
+5. Get Record → fetch updated record
+6. Return → send confirmation to client
+```
+
+## Security Best Practices
+
+### Field Whitelisting
+```json
+// Only allow specific fields to be updated
+{
+  "allowedFields": [
+    "firstName",
+    "lastName", 
+    "city",
+    "country",
+    "phone",
+    "preferences"
+  ],
+  "forbiddenFields": [
+    "id",
+    "email", 
+    "createdAt",
+    "role",
+    "permissions"
+  ]
+}
+```
+
+### Input Validation
+```json
+// Validate field types and values
+{
+  "validations": {
+    "firstName": "string, max 50 chars",
+    "phone": "string, phone format",
+    "age": "integer, 13-120",
+    "email": "string, email format"
+  }
+}
+```
+
+### Permission Checks
+```json
+// Ensure user can update this record
+{
+  "checks": [
+    "User is authenticated",
+    "User owns record OR has admin role",
+    "Field-level permissions respected"
+  ]
+}
+```
+
+## Common Mistakes to Avoid
+
+❌ **Not validating ownership** - Always check user can update the record
+❌ **Allowing dangerous fields** - Block updates to ID, timestamps, permissions
+❌ **Missing input validation** - Validate data types and formats
+❌ **Not handling conflicts** - Consider concurrent updates
+❌ **Forgetting audit trails** - Log who changed what and when
+
+## Pro Tips
+
+💡 **Use field whitelisting** instead of blacklisting for better security
+💡 **Track change history** by logging patches in separate audit table
+💡 **Implement optimistic locking** to handle concurrent updates
+💡 **Return the full updated record** so clients can sync their state
+💡 **Use transactions** when patching multiple related records
+💡 **Validate business rules** before applying patches
+💡 **Consider rate limiting** for patch endpoints to prevent abuse
+
+## Error Handling Patterns
+
+### Common Error Responses
+```json
+{
+  "error": "VALIDATION_FAILED",
+  "message": "Invalid field values provided",
+  "details": {
+    "email": "Must be valid email format",
+    "age": "Must be between 13 and 120"
+  }
+}
+
+{
+  "error": "PERMISSION_DENIED", 
+  "message": "Cannot update this record"
+}
+
+{
+  "error": "RECORD_NOT_FOUND",
+  "message": "User with ID 123 not found"
+}
+```
+
+### Optimistic Locking
+```json
+// Include version field to detect conflicts
+{
+  "id": 123,
+  "version": 5,
+  "firstName": "Updated Name"
+}
+
+// If version doesn't match current record
+{
+  "error": "CONFLICT",
+  "message": "Record was modified by another user",
+  "currentVersion": 6
+}
+```
+
+Patch Record is essential for building modern, efficient APIs that minimize data transfer and provide flexible update capabilities.

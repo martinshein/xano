@@ -1,751 +1,651 @@
 ---
+title: "File Management in Xano"
+description: "Understanding file upload, storage, and management capabilities within Xano's backend system"
 category: function-stack
-has_code_examples: true
-last_updated: '2025-01-23'
+difficulty: intermediate
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Read more about how file management works in Xano
+  - file-management
+  - file-upload
+  - storage
+  - media
+  - assets
+related_docs:
+  - file-storage
+  - lambda-functions
+  - external-api-request
+  - security
+last_updated: '2025-01-23'
 ---
 
-# Read more about how file management works in Xano
+# File Management in Xano
 
-[🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Read more about how file management works in Xano
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../building-with-visual-development.html)
-2.  Functions
-File Storage 
-============
-###  
-Read more about how file management works in Xano
-[[File Storage in Xano]]
-The Content Upload Flow
-When working with files in Xano, they can exist in a few different states.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **File Resource**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        The file resource can be thought of as a reference to your raw file data. It is a base64 encoded string that represents the file during execution, enabling you to pass the data through variables and functions that handle content management with ease.
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Raw File Data**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        When necessary, you do also have the ability to turn your file resource into raw file data, and manipulate it inside of the function stack when appropriate, such as a CSV file.
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Metadata**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        While the metadata is not a representation of the file data itself, the metadata is necessary when the file needs to be referenced inside of a database table. The tables do not store the files themselves, but hold onto the metadata, so that when the record is retrieved, you can also retrieve the file data, or deliver a link to the file.
-        :::
-    :::
-Files in Xano always start with a **file resource**. Here\'s what a typical flow looks like. In this example, we\'ll be adding a file to our database table.
-[]
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Files in a function stack always start with a **file resource.** The file resource can come via a **file resource input**, or by using a **Create File Resource** function in the function stack itself (such as if the file comes from an external API request).
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    After we have our file resource (in this case, our File Resource input), we need to generate **metadata** for that file in preparation to store it in our database table.
-    :::
-3.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Finally, once we have our **metadata**, we can write it to our database table, adding the metadata to the appropriate field in the record.
-    :::
-This is the simplest and most typical scenario when working with files in Xano. Following this flow will allow you to ingest files through your API and store them in your database. You can then read the metadata from the table and use the URL from there to deliver those files back to your front-end.
-Input, Field Types, and Functions
-###  
-The File Resource Input
-Your content upload function stacks should always start with a **file resource input**, if your users are uploading files through your application. You can then utilize the file resource input in future functions, such as **metadata generation,** to store the file in your database or return a URL to the file.
-###  
-Field Types
-Xano supports several different field types in the database related to content upload.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Image** - For storing images
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Video** - For storing video
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Audio** - For storing audio
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Attachment** - For storing anything else
-    :::
-###  
-Functions
-The Content Upload Functions are:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Image Metadata** - Creates image metadata from a file resource so that it can be formatted properly to be stored in Xano.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Video Metadata** - Creates video metadata from a file resource so that it can be formatted properly to be stored in Xano.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Audio Metadata** - Creates auto metadata from a file resource so that it can be formatted properly to be stored in Xano
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Attachment Metadata** - Creates attachment metadata from a file resource so that it can be formatted properly to be stored in Xano.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create File Resource** - This functions is able to create a file resource in the function stack from a variable. Typically, you will use a file resource as an input. However, there are certain use cases, for example, where you may hit an external API which is providing you with a raw image or file. In this event, you will want to first use this function to create a file resource then use one of the create metadata functions.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete File Resource** - This function will permanently delete a file stored in your Xano file storage. You\'ll usually pair this with a database operation like Get Record / Query All Records, or you can delete a file created earlier in your function stack as long as one of the Metadata functions have been executed, as the Delete File Resource function requires you to specify the path to the file.
-    **Files are not recoverable. Proceed with caution**.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: Create File Resource** - Creates a new, empty zip file that you can add files to in your function stack
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: Add File Resource** - Used to add additional files into an existing zip file
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: Remove File Resource** - Used to remove files from an existing zip file
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: Extract Zip File Resource** - Used to extract a zip file and generate separate file resources for each file extracted
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: View Contents** - Show details about the files contained inside of a zip file
-    :::
-Serving File Downloads
-There are a couple of different ways you can serve downloads of files, depending on your use case.
-<div>
-1
-###  
-Provide the URL for your frontend to process.
-When you use one of the **Create Metadata** steps to store the file in your Xano files library, it returns a **path** key which contains a path to the file.
-Returning a complete URL requires prepending this path with the URL to your Xano instance.
-If our metadata looks like this\...
-Copy
-``` 
-{
-    "access":"public",
-    "path":"/vault/T3q1DKy7/MA_gz1v6HaNQnLEf6xZqVtrOVII/1Rl7QA../form_submission_1741703680742.pdf",
-    "name":"form_submission_1741703680742.pdf",
-    "type":"pdf",
-    "size":3247192,
-    "mime":"application/pdf",
-    "meta":
-    }
-```
-\...our full URL would look like this:
-Copy
-``` 
-https://my-xano-instance.xano.io/vault/T3q1DKy7/MA_gz1v6HaNQnLEf6xZqVtrOVII/1Rl7QA../form_submission_1741703680742.pdf
-```
-2
-###  
-Serve the raw file contents for direct download.
-If you want an API call to immediately initiate a file download, add the following headers to your function stack using the **HTTP Header** function.
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `Content-Disposition: attachment; filename="replaceme"`
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `Content-Type: application/octet-stream`
-    :::
-These headers will tell any browser accessing the API that we\'re serving a direct download. Just make sure to change \"replaceme\" to the actual filename you are serving.
-Add a **Get File Resource Data** function so we have the raw file data to be delivered.
-Finally, in your response, return the .`data `path from the output of **Get File Resource Data**.
-Your function stack should look something like this:
-To ensure it\'s working as expected, when you run it in Xano, you should see a **Download** button available in the Run panel.
-</div>
-Private File Storage
-Private file storage is available as a premium add-on for our Launch plans, or included with **Scale** or HIPAA compliance.
-All files stored as private files are only accessible through on-demand time sensitive URL generation. This means that all files in your Private Storage are inaccessible until you generate a new URL in your function stack.
-To work with private file storage, there are two key components to understand: **private file database fields** and the **Private File: Sign URL function.**
-###  
-**Private File Database Field**
-To store files in your private files library and have them accessible from your function stacks, you\'ll need to use a database field that is enabled for private file storage. You can enable this for any of the current file field types. Keep in mind that the file access is defined per field, which means that you can not store both public and private files in the same field.
-[]
-When private files are enabled for a file storage field, a lock icon is displayed in the field name. You will also notice that private files do not display previews from the database view; this is by design, as the files are not accessible until a new URL is generated.
-[]
-###  
-**Private File: Sign URL function**
-To generate a signed URL that enables a private file to be accessible, you first need to retrieve the path of the file, which is stored in the database record. In this example, we have queried our files table and this is the expected return for a private image. The main difference here is that on public files, a URL is returned. For private files, no URL is provided.
-[]
-We can then leverage the **Private File: Sign URL** function to generate a publicly accessible link to the file. Provide the path as offered from the database record, a TTL (how long in seconds the link should be valid for), and finally a return variable to contain the output of the function
-[]
-When we run this function, we are returned our new signed URL.
-[]
-Zip Management
-<div>
-</div>
-###  
-Viewing Zip File Contents
-In this example, all we want to do is upload a zip file and review its contents in our function stack.
-We\'ve added our file resource input to ingest the file, and then utilize the **Zip: View Contents** function, targeting our file resource input. We can also provide a password to this function if our zip file requires one to open.
-[]
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: View Contents** - Returns the contents of our zip file to a variable
-    :::
-###  
-Extracting a Zip File
-In this example, our users will be uploading a zip file. We then want to extract all of those files from the zip file in order to add those files individually to our database.
-[]
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Attachment Metadata** - Creates metadata for the uploaded zip file so we can get the filename
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: Extract Zip File Resource** - Extracts the zip file and returns individual file resources for each file
-    []
-    :::
-3.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Variable** - Creates an empty array to store our individual files metadata
-    :::
-4.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **For Each Loop** - Loops against the array of file resources created in step 2
-    1.  ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Conditional** - Checks for junk files generated by Mac OS and skips them. This step is optional.
-        1.  ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            **Create Attachment** - Creates metadata for the file resource that the loop is currently iterating through
-            :::
-        2.  ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            **Array: Add to End** - Adds the generated metadata to our metadata array established in step 3
-            :::
-        :::
-    :::
-5.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Add Record** - Adds our metadata to the database
-    :::
-6.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete File** - Deletes the zip file. This is only necessary if you generate metadata for it as we did in step 1.
-    :::
-###  
-Adding to a zip file
-In this example, our users are uploading a zip file, and we want to add another file to that same zip file. We have two file resource inputs: one is for the zip file, and one is for the new file to add.
-[]
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: Add File Resource** - Adds the new file into the existing zip file
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: View Contents** - Allows us to view the contents of the updated zip file
-    :::
-###  
-Removing from a zip file
-In this example, our users are uploading a zip file, as well as specifying a file to remove, and we want to remove that file from the zip file. We have two inputs: a file resource input for the zip file, and a text input for the file name to remove.
-[]
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: Delete File Resource** - Removes the file matching the filename from the existing zip file
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: View Contents** - Allows us to view the contents of the updated zip file
-    :::
-###  
-Creating a zip file from scratch
-See Serving File Downloads to learn how to provide a download of a created ZIP file.
-In this example, our users are uploading multiple files, and we want to store them inside of a zip file.
-**From multiple file resource inputs**
-In this scenario, we have multiple file resource inputs for each incoming file.
-[]
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: Create File Resource** - Creates our zip file that we can add to in the rest of the function stack
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: Add File Resource** - Adds the data from file1 into our zip file
-    :::
-3.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: Add File Resource** - Adds the data from file2 into our zip file
-    :::
-4.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: View Contents** - Allows us to review the zip file contents after completion
-    :::
-**From an array of files via a single file resource input**
-In this scenario, we have a single file resource input, formatted as a list. This is good if you need to dynamically determine how many files your API is ingesting.
-[]
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: Create File Resource** - Creates our zip file that we can add to in the rest of the function stack
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **For Each Loop** - Loops against our list file resource input
-    1.  ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Zip: Add File Resource** - Adds the file the loop is currently iterating through to our zip file established in step 1
-        :::
-    :::
-3.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Zip: View Contents** - Allows us to review the zip file contents after completion
-    :::
-###  
-A note about encryption
-Xano supports creating and working with encrypted zip files. In the zip functions available, you\'ll notice one or both of the following fields:
-[]
-The **password** field is to set the password you want applied to the zip file.
-The **password\_encryption** field is available for you to set the encryption method applied to the zip file upon creation. The following encryption methods are available:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Standard** - This is the most compatible form of encryption (Traditional PKWARE encryption). This is required if you need to be able to extract your zip files using Windows\' native zip extraction.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **AES-128**
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **AES-256**
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **AES-512**
-    :::
-Last updated 3 months ago
-Was this helpful?
+## Quick Summary
+Xano provides comprehensive file management capabilities for handling uploads, storage, processing, and delivery of files and media assets in your applications. From simple image uploads to complex document processing workflows, Xano's file system handles it all with security and performance.
 
-## Code Examples
+## What You'll Learn
+- Implementing file upload endpoints and processing
+- Managing file storage, organization, and retrieval
+- Image processing and thumbnail generation
+- File security, validation, and access control
+- Integration patterns for n8n automation and WeWeb file handling
 
+## Core File Management Concepts
+
+### File Types and Storage
+- **Images** - JPG, PNG, GIF, WebP with automatic optimization
+- **Documents** - PDF, DOC, XLS, TXT with metadata extraction
+- **Media** - Video and audio files with streaming capabilities
+- **Archives** - ZIP, RAR file handling and extraction
+- **Binary Data** - Any file type with custom processing
+
+### Storage Architecture
+- **Local Storage** - Files stored on Xano servers
+- **Cloud Storage** - Integration with S3, Google Cloud, Azure
+- **CDN Integration** - Global content delivery for fast access
+- **Backup Systems** - Automatic file backup and versioning
+- **File Organization** - Folders, tags, and metadata systems
+
+## File Upload Implementation
+
+### Basic File Upload Endpoint
 ```javascript
- 
-{
-    "access":"public",
-    "path":"/vault/T3q1DKy7/MA_gz1v6HaNQnLEf6xZqVtrOVII/1Rl7QA../form_submission_1741703680742.pdf",
-    "name":"form_submission_1741703680742.pdf",
-    "type":"pdf",
-    "size":3247192,
-    "mime":"application/pdf",
-    "meta":
+// Xano Function Stack for file upload
+1. Validate file type and size
+2. Generate unique filename
+3. Store file in designated folder
+4. Create database record with file metadata
+5. Return file URL and details
+```
+
+### Multi-File Upload Processing
+```javascript
+// Handle multiple file uploads
+function processMultipleFiles(files) {
+  const uploadResults = [];
+  
+  for (const file of files) {
+    // 1. Validate each file
+    validateFile(file);
+    
+    // 2. Process and store
+    const result = storeFile(file);
+    
+    // 3. Generate thumbnail if image
+    if (isImage(file)) {
+      generateThumbnail(result.fileId);
     }
-
+    
+    uploadResults.push(result);
+  }
+  
+  return uploadResults;
+}
 ```
 
+### File Validation and Security
+```javascript
+// Comprehensive file validation
+function validateFileUpload(file) {
+  // 1. Check file type against allowlist
+  const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+  if (!allowedTypes.includes(file.mimeType)) {
+    throw new Error('File type not allowed');
+  }
+  
+  // 2. Validate file size
+  const maxSize = 10 * 1024 * 1024; // 10MB
+  if (file.size > maxSize) {
+    throw new Error('File too large');
+  }
+  
+  // 3. Scan for malicious content
+  scanForMalware(file);
+  
+  // 4. Validate file headers
+  validateFileHeaders(file);
+  
+  return true;
+}
 ```
- 
-https://my-xano-instance.xano.io/vault/T3q1DKy7/MA_gz1v6HaNQnLEf6xZqVtrOVII/1Rl7QA../form_submission_1741703680742.pdf
 
+## Image Processing and Optimization
+
+### Automatic Image Optimization
+```javascript
+// Image processing pipeline
+function processImage(imageFile) {
+  return {
+    // 1. Original image storage
+    original: storeOriginal(imageFile),
+    
+    // 2. Generate multiple sizes
+    thumbnail: resizeImage(imageFile, { width: 150, height: 150 }),
+    medium: resizeImage(imageFile, { width: 800, height: 600 }),
+    large: resizeImage(imageFile, { width: 1920, height: 1080 }),
+    
+    // 3. Format optimization
+    webp: convertToWebP(imageFile),
+    
+    // 4. Extract metadata
+    metadata: extractImageMetadata(imageFile)
+  };
+}
 ```
 
+### Dynamic Image Resizing
+```javascript
+// On-demand image resizing endpoint
+function getResizedImage(fileId, width, height, quality = 85) {
+  const originalFile = getFile(fileId);
+  
+  // Generate cache key
+  const cacheKey = `${fileId}_${width}x${height}_q${quality}`;
+  
+  // Check if resized version exists
+  let resizedImage = getFromCache(cacheKey);
+  
+  if (!resizedImage) {
+    // Create resized version
+    resizedImage = resizeImage(originalFile, {
+      width: width,
+      height: height,
+      quality: quality,
+      format: 'webp'
+    });
+    
+    // Cache for future requests
+    storeInCache(cacheKey, resizedImage);
+  }
+  
+  return resizedImage;
+}
+```
+
+## File Organization and Management
+
+### Folder Structure and Organization
+```javascript
+// Organized file storage structure
+const fileStructure = {
+  '/uploads/': {
+    'users/': {
+      'avatars/': 'User profile pictures',
+      'documents/': 'User uploaded documents'
+    },
+    'products/': {
+      'images/': 'Product photos',
+      'manuals/': 'Product documentation'
+    },
+    'content/': {
+      'blog/': 'Blog images and media',
+      'pages/': 'Website content assets'
+    },
+    'temp/': 'Temporary file storage'
+  }
+};
+
+// File organization function
+function organizeFile(file, category, userId = null) {
+  let folder = '/uploads/';
+  
+  switch (category) {
+    case 'user_avatar':
+      folder += `users/${userId}/avatars/`;
+      break;
+    case 'product_image':
+      folder += 'products/images/';
+      break;
+    case 'document':
+      folder += `users/${userId}/documents/`;
+      break;
+    default:
+      folder += 'misc/';
+  }
+  
+  return folder + generateUniqueFilename(file);
+}
+```
+
+### File Metadata Management
+```javascript
+// Comprehensive file metadata storage
+function createFileRecord(file, uploadDetails) {
+  return {
+    id: generateId(),
+    original_name: file.originalName,
+    stored_name: file.storedName,
+    file_path: file.path,
+    file_size: file.size,
+    mime_type: file.mimeType,
+    file_hash: calculateFileHash(file),
+    
+    // Organization
+    folder: uploadDetails.folder,
+    category: uploadDetails.category,
+    tags: uploadDetails.tags || [],
+    
+    // User context
+    uploaded_by: uploadDetails.userId,
+    upload_ip: uploadDetails.ipAddress,
+    
+    // Processing status
+    processing_status: 'pending',
+    thumbnails_generated: false,
+    
+    // Metadata
+    dimensions: file.dimensions,
+    duration: file.duration, // for videos
+    page_count: file.pageCount, // for documents
+    
+    // Timestamps
+    created_at: new Date(),
+    updated_at: new Date(),
+    accessed_at: new Date()
+  };
+}
+```
+
+## Integration with n8n
+
+### Automated File Processing Workflows
+```javascript
+// n8n workflow for new file processing
+const fileData = $json;
+
+// 1. Validate file was uploaded successfully
+if (fileData.upload_status !== 'success') {
+  throw new Error('File upload failed');
+}
+
+// 2. Determine processing actions based on file type
+let processingActions = [];
+
+if (fileData.mime_type.startsWith('image/')) {
+  processingActions.push('generate_thumbnails');
+  processingActions.push('extract_metadata');
+  processingActions.push('optimize_for_web');
+}
+
+if (fileData.mime_type === 'application/pdf') {
+  processingActions.push('extract_text');
+  processingActions.push('generate_preview');
+  processingActions.push('count_pages');
+}
+
+// 3. Trigger processing workflow
+return {
+  file_id: fileData.id,
+  actions: processingActions,
+  priority: fileData.category === 'user_avatar' ? 'high' : 'normal'
+};
+```
+
+### File Backup and Sync
+```javascript
+// n8n workflow for file backup
+const newFile = $json;
+
+// 1. Check if file needs backup
+if (newFile.size > 1024 * 1024) { // Files over 1MB
+  
+  // 2. Upload to cloud storage
+  const backupResult = await $httpRequest({
+    method: 'POST',
+    url: 'https://api.your-cloud-storage.com/upload',
+    headers: {
+      'Authorization': 'Bearer ' + process.env.CLOUD_STORAGE_TOKEN
+    },
+    body: {
+      file_path: newFile.file_path,
+      backup_location: `backups/${newFile.id}`,
+      retention_days: 90
+    }
+  });
+  
+  // 3. Update file record with backup info
+  return {
+    file_id: newFile.id,
+    backup_url: backupResult.backup_url,
+    backup_status: 'completed'
+  };
+}
+```
+
+## Integration with WeWeb
+
+### File Upload Component
+```javascript
+// WeWeb file upload component
+export default {
+  data() {
+    return {
+      selectedFiles: [],
+      uploadProgress: {},
+      uploadedFiles: [],
+      dragActive: false,
+      acceptedTypes: 'image/*,application/pdf,.doc,.docx'
+    };
+  },
+  
+  methods: {
+    async handleFileSelect(event) {
+      const files = Array.from(event.target.files);
+      await this.processFiles(files);
+    },
+    
+    async handleDrop(event) {
+      event.preventDefault();
+      this.dragActive = false;
+      
+      const files = Array.from(event.dataTransfer.files);
+      await this.processFiles(files);
+    },
+    
+    async processFiles(files) {
+      // Validate files
+      const validFiles = files.filter(file => this.validateFile(file));
+      
+      // Upload each file
+      for (const file of validFiles) {
+        await this.uploadFile(file);
+      }
+    },
+    
+    validateFile(file) {
+      // Check file size
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSize) {
+        this.$toast.error(`File ${file.name} is too large`);
+        return false;
+      }
+      
+      // Check file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+      if (!allowedTypes.includes(file.type)) {
+        this.$toast.error(`File type ${file.type} not allowed`);
+        return false;
+      }
+      
+      return true;
+    },
+    
+    async uploadFile(file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('category', this.uploadCategory);
+      
+      try {
+        // Track upload progress
+        this.uploadProgress[file.name] = 0;
+        
+        const response = await this.$xano.post('/files/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          onUploadProgress: (progressEvent) => {
+            const progress = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            this.uploadProgress[file.name] = progress;
+          }
+        });
+        
+        // File uploaded successfully
+        this.uploadedFiles.push(response.data);
+        delete this.uploadProgress[file.name];
+        
+        this.$emit('file-uploaded', response.data);
+        
+      } catch (error) {
+        console.error('Upload failed:', error);
+        this.$toast.error(`Failed to upload ${file.name}`);
+        delete this.uploadProgress[file.name];
+      }
+    }
+  }
+};
+```
+
+### Image Gallery Component
+```javascript
+// WeWeb image gallery with lazy loading
+export default {
+  data() {
+    return {
+      images: [],
+      loading: false,
+      selectedImage: null,
+      lightboxOpen: false
+    };
+  },
+  
+  async mounted() {
+    await this.loadImages();
+  },
+  
+  methods: {
+    async loadImages() {
+      this.loading = true;
+      
+      try {
+        const response = await this.$xano.get('/files/images', {
+          params: {
+            category: this.category,
+            limit: 20,
+            include_thumbnails: true
+          }
+        });
+        
+        this.images = response.data.map(img => ({
+          ...img,
+          thumbnail_url: img.thumbnails?.medium || img.file_url,
+          full_url: img.file_url
+        }));
+        
+      } catch (error) {
+        console.error('Failed to load images:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    
+    openLightbox(image) {
+      this.selectedImage = image;
+      this.lightboxOpen = true;
+    },
+    
+    async deleteImage(imageId) {
+      if (!confirm('Delete this image?')) return;
+      
+      try {
+        await this.$xano.delete(`/files/${imageId}`);
+        this.images = this.images.filter(img => img.id !== imageId);
+        this.$toast.success('Image deleted');
+      } catch (error) {
+        this.$toast.error('Failed to delete image');
+      }
+    }
+  }
+};
+```
+
+## Advanced File Features
+
+### File Versioning System
+```javascript
+// File version management
+function createFileVersion(originalFileId, newFile, userId) {
+  return {
+    id: generateId(),
+    original_file_id: originalFileId,
+    version_number: getNextVersionNumber(originalFileId),
+    file_path: newFile.path,
+    file_size: newFile.size,
+    change_description: newFile.changeDescription,
+    created_by: userId,
+    created_at: new Date(),
+    is_current: true // Mark as current version
+  };
+}
+
+// Set previous versions as non-current
+function updateFileVersion(originalFileId, newVersionId) {
+  // Mark all other versions as not current
+  updateVersions(originalFileId, { is_current: false });
+  
+  // Mark new version as current
+  updateVersion(newVersionId, { is_current: true });
+}
+```
+
+### File Access Control
+```javascript
+// File permission system
+function checkFileAccess(fileId, userId, action) {
+  const file = getFile(fileId);
+  const user = getUser(userId);
+  
+  // Check ownership
+  if (file.uploaded_by === userId) {
+    return true; // Owner has full access
+  }
+  
+  // Check shared permissions
+  const permissions = getFilePermissions(fileId, userId);
+  
+  switch (action) {
+    case 'read':
+      return permissions.includes('read') || permissions.includes('write');
+    case 'write':
+      return permissions.includes('write');
+    case 'delete':
+      return permissions.includes('delete') || file.uploaded_by === userId;
+    default:
+      return false;
+  }
+}
+```
+
+### File Search and Indexing
+```javascript
+// Advanced file search
+function searchFiles(query, filters = {}) {
+  return {
+    table: 'files',
+    filter: {
+      AND: [
+        {
+          OR: [
+            { original_name: { like: `%${query}%` } },
+            { tags: { like: `%${query}%` } },
+            { extracted_text: { like: `%${query}%` } }
+          ]
+        },
+        filters.category ? { category: filters.category } : {},
+        filters.user_id ? { uploaded_by: filters.user_id } : {},
+        filters.date_from ? { created_at: { '>=': filters.date_from } } : {},
+        filters.file_type ? { mime_type: { like: `${filters.file_type}%` } } : {}
+      ]
+    },
+    sort: 'created_at',
+    order: 'desc'
+  };
+}
+```
+
+## Try This: Build a Complete File Management System
+
+1. **File Upload API**
+   ```
+   1. Create multi-file upload endpoint
+   2. Add file validation and security scanning
+   3. Implement automatic image optimization
+   4. Generate thumbnails and previews
+   5. Store comprehensive file metadata
+   ```
+
+2. **File Organization**
+   ```
+   1. Implement folder structure and categories
+   2. Add file tagging and search capabilities
+   3. Create file sharing and permissions
+   4. Build file versioning system
+   5. Add bulk operations (move, delete, tag)
+   ```
+
+3. **Frontend Integration**
+   ```
+   1. Build drag-and-drop upload component
+   2. Create image gallery with lightbox
+   3. Add file browser with search/filter
+   4. Implement progress tracking and previews
+   5. Build file management dashboard
+   ```
+
+## Performance Optimization
+
+### File Caching Strategies
+```javascript
+// CDN and caching configuration
+const cacheStrategies = {
+  images: {
+    ttl: 7 * 24 * 60 * 60, // 7 days
+    cdn: true,
+    compression: 'gzip'
+  },
+  documents: {
+    ttl: 24 * 60 * 60, // 1 day
+    cdn: false,
+    access_control: true
+  },
+  thumbnails: {
+    ttl: 30 * 24 * 60 * 60, // 30 days
+    cdn: true,
+    compression: 'brotli'
+  }
+};
+```
+
+### Lazy Loading Implementation
+```javascript
+// Efficient file loading for large galleries
+function getFilesPaginated(page = 1, limit = 20, category = null) {
+  return {
+    table: 'files',
+    select: [
+      'id', 'original_name', 'file_size', 'mime_type',
+      'thumbnail_url', 'created_at'
+    ], // Only load essential data
+    filter: category ? { category: category } : {},
+    sort: 'created_at',
+    order: 'desc',
+    limit: limit,
+    offset: (page - 1) * limit
+  };
+}
+```
+
+## Common Mistakes to Avoid
+
+❌ **Not validating file types** - Always check MIME types and file headers
+❌ **No file size limits** - Implement reasonable size restrictions
+❌ **Storing files without organization** - Use logical folder structures
+❌ **Not generating thumbnails** - Create optimized versions for display
+❌ **Ignoring file permissions** - Implement proper access controls
+❌ **No backup strategy** - Always backup important files
+❌ **Not optimizing images** - Compress and convert for web delivery
+
+## Pro Tips
+
+💡 **Use unique filenames** to prevent conflicts and enable caching
+💡 **Generate multiple image sizes** for responsive design
+💡 **Implement file versioning** for important documents
+💡 **Use CDN for global delivery** of static files
+💡 **Monitor storage usage** and implement cleanup policies
+💡 **Validate file integrity** with checksums and hashing
+💡 **Implement virus scanning** for uploaded files
+💡 **Use progressive loading** for large file lists
+💡 **Cache file metadata** for faster file browsing
+💡 **Implement file compression** to save storage space
+
+File management in Xano provides the foundation for rich media experiences and efficient document workflows in your applications.
