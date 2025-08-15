@@ -1,28 +1,38 @@
 ---
-title: Array Functions
-description: Master array manipulation in Xano with powerful functions for filtering, sorting, transforming, and processing collections of data
+title: "Array Functions - Powerful Data Collection Operations"
+description: "Master array manipulation in Xano with advanced functions for filtering, sorting, transforming, and processing collections - essential for dynamic data processing"
 category: function-stack
-difficulty: intermediate
-last_updated: '2025-01-23'
-related_docs:
-  - array
-  - data-manipulation
-  - loops
-  - filters
-subcategory: 02-core-concepts/function-stack
 tags:
-  - arrays
-  - data-manipulation
-  - functions
-  - collections
-  - filtering
-  - transformation
+  - Array Functions
+  - Data Manipulation
+  - Collections
+  - Filtering
+  - Sorting
+  - Transformation
+  - Map Operations
+  - Data Processing
+difficulty: intermediate
+reading_time: 15 minutes
+last_updated: '2025-01-15'
+prerequisites:
+  - Understanding of array data types
+  - Basic function stack knowledge
+  - Familiarity with data manipulation concepts
 ---
 
-# Array Functions
+# Array Functions - Powerful Data Collection Operations
 
-**Quick Summary**
-Array functions are like powerful tools for working with lists of data. They help you add, remove, find, sort, and transform collections efficiently - whether you're managing user lists, product catalogs, or any group of related information.
+## 📋 **Quick Summary**
+
+**What it does:** Array functions provide powerful tools for manipulating, filtering, sorting, and transforming collections of data within your Xano function stacks.
+
+**Why it matters:** This enables you to:
+- Process large datasets efficiently with built-in operations
+- Filter and sort data dynamically based on user criteria
+- Transform arrays into different formats for frontend consumption
+- Perform complex data operations without custom code
+
+**Time to implement:** 10-15 minutes for basic operations, 45+ minutes for complex transformations
 
 ## What You'll Learn
 
