@@ -14,6 +14,7 @@ Transform all Xano documentation markdown files into clean, accessible documenta
 - **Branch:** main
 - **Deploy Script:** /root/xano-knowledge/deploy.sh
 - **Commit Strategy:** After every 10 files (batch strategy)
+- **📋 IMPORTANT:** Update this projectplan.md file after every completed batch with current progress and status
 
 ## Quality Standards for Each File
 ✅ **Required Elements:**
@@ -166,6 +167,13 @@ Transform all Xano documentation markdown files into clean, accessible documenta
 2. **Review Current Branch:** Should be on `main`
 3. **Check Last Commit:** `git log --oneline -5`
 4. **Resume from Next Directory:** Continue with `/02-core-concepts/authentication/`
+
+### After Each Batch Completion:
+🔄 **MANDATORY STEPS:**
+1. **Update Progress**: Update "Files Properly Optimized" count in this file
+2. **Update Status**: Mark completed batches/directories as ✅ COMPLETED
+3. **Update Date**: Change "Last Updated" timestamp
+4. **Commit Documentation**: Always commit projectplan.md updates with batch completion
 
 ### Important Notes:
 - ✅ **function-stack directory is COMPLETE** - Don't redo this work
