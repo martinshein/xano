@@ -1,634 +1,810 @@
 ---
+title: Configuring Expressions - Advanced Conditional Logic and Data Validation
+description: Complete guide to configuring expressions and conditional logic in Xano, including operators, data validation, and best practices for no-code platforms
 category: expressions
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
+difficulty: intermediate
+last_updated: '2025-01-16'
+related_docs:
+  - api__master_metadata_api.md
+  - advanced_back_end_features.md
+  - allow_direct_query.md
 subcategory: 05-advanced-features/expressions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2'
+  - expressions
+  - conditional-logic
+  - data-validation
+  - operators
+  - filtering
+  - no-code
 ---
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+## 📋 **Quick Summary**
 
+Expressions in Xano provide powerful conditional logic and data validation capabilities using a comprehensive set of operators. This system enables complex data filtering, validation rules, and business logic implementation essential for building sophisticated applications with n8n, WeWeb, and other no-code platforms.
 
+## What You'll Learn
 
+- Understanding expression builder components and operators
+- Implementing conditional logic with AND/OR combinations
+- Using comparison, text, and array operators effectively
+- Building complex validation rules and filters
+- Best practices for expression optimization and debugging
+- Integration patterns for no-code platform automation
 
+# Configuring Expressions
 
+## Overview
 
+**Expressions** in Xano are the foundation for implementing conditional logic, data validation, and filtering operations throughout your application. The expression builder provides a visual interface for creating complex conditional statements that determine how data flows through your function stacks and API endpoints.
 
+### Expression Components
 
+**Basic Structure:**
+- **Conditional Type**: Determines logical combination (AND/OR)
+- **Left Value**: The data field or variable being evaluated
+- **Operator**: The comparison or evaluation method
+- **Right Value**: The comparison value or reference
 
+**Advanced Features:**
+- Nested conditional groups for complex logic
+- Variable references and dynamic value evaluation
+- Type-aware comparisons and validations
+- Real-time expression testing and debugging
 
+## 🔧 **Expression Builder Components**
 
+### Conditional Types
 
+**AND Conditionals:**
+- Require all conditions to be satisfied
+- Used for restrictive filtering and validation
+- Example: "User is admin AND account is active"
+- Best for security and access control logic
 
+**OR Conditionals:**
+- Require any condition to be satisfied
+- Used for inclusive filtering and alternatives
+- Example: "User is admin OR user is manager"
+- Best for flexible access patterns and fallbacks
 
+### n8n Expression Integration
 
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
+```javascript
+// n8n workflow for dynamic expression building and evaluation
+{
+  "nodes": [
+    {
+      "name": "Build Dynamic Expression",
+      "type": "Code",
+      "parameters": {
+        "jsCode": `
+          // Expression builder for dynamic Xano filters
+          const expressionBuilder = {
+            conditions: [],
             
-            -   [Swagger (OpenAPI
-                Documentation)](apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
+            addCondition(leftValue, operator, rightValue, conditionalType = 'AND') {
+              this.conditions.push({
+                conditional_type: conditionalType,
+                left_value: leftValue,
+                operator: operator,
+                right_value: rightValue
+              });
+              return this;
+            },
             
-            -   [Async
-                Functions](custom-functions/async-functions.html)
-                    -   [Background Tasks](background-tasks.html)
-        -   [Triggers](triggers.html)
-        -   [Middleware](middleware.html)
-        -   [Configuring
-            Expressions](configuring-expressions.html)
-        -   [Working with Data](working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../functions/ai-tools.html)
-        -   Database Requests
+            addGroup(groupConditions, conditionalType = 'AND') {
+              this.conditions.push({
+                conditional_type: conditionalType,
+                group: groupConditions
+              });
+              return this;
+            },
             
-            -   Query All Records
-                
-                -   [External Filtering
-                    Examples](../functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get
-                Record](../functions/database-requests/get-record.html)
-            -   [Add
-                Record](../functions/database-requests/add-record.html)
-            -   [Edit
-                Record](../functions/database-requests/edit-record.html)
-            -   [Add or Edit
-                Record](../functions/database-requests/add-or-edit-record.html)
-            -   [Patch
-                Record](../functions/database-requests/patch-record.html)
-            -   [Delete
-                Record](../functions/database-requests/delete-record.html)
-            -   [Bulk
-                Operations](../functions/database-requests/bulk-operations.html)
-            -   [Database
-                Transaction](../functions/database-requests/database-transaction.html)
-            -   [External Database
-                Query](../functions/database-requests/external-database-query.html)
-            -   [Direct Database
-                Query](../functions/database-requests/direct-database-query.html)
-            -   [Get Database
-                Schema](../functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
+            build() {
+              return {
+                filter_type: 'expression',
+                conditions: this.conditions
+              };
+            },
             
-            -   [Create
-                Variable](../functions/data-manipulation/create-variable.html)
-            -   [Update
-                Variable](../functions/data-manipulation/update-variable.html)
-            -   [Conditional](../functions/data-manipulation/conditional.html)
-            -   [Switch](../functions/data-manipulation/switch.html)
-            -   [Loops](../functions/data-manipulation/loops.html)
-            -   [Math](../functions/data-manipulation/math.html)
-            -   [Arrays](../functions/data-manipulation/arrays.html)
-            -   [Objects](../functions/data-manipulation/objects.html)
-            -   [Text](../functions/data-manipulation/text.html)
-                    -   [Security](../functions/security.html)
-        -   APIs & Lambdas
+            // Pre-built expression templates
+            createUserAccessFilter(userId, roles = []) {
+              return this
+                .addCondition('user_id', '==', userId)
+                .addCondition('status', '==', 'active', 'AND')
+                .addCondition('role', 'IN', roles, 'AND')
+                .build();
+            },
             
-            -   [Realtime
-                Functions](../functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API
-                Request](../functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda
-                Functions](../functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching
-            (Redis)](../functions/data-caching-redis.html)
-        -   [Custom
-            Functions](../functions/custom-functions.html)
-        -   [Utility
-            Functions](../functions/utility-functions.html)
-        -   [File
-            Storage](../functions/file-storage.html)
-        -   [Cloud
-            Services](../functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../filters/manipulation.html)
-        -   [Math](../filters/math.html)
-        -   [Timestamp](../filters/timestamp.html)
-        -   [Text](../filters/text.html)
-        -   [Array](../filters/array.html)
-        -   [Transform](../filters/transform.html)
-        -   [Conversion](../filters/conversion.html)
-        -   [Comparison](../filters/comparison.html)
-        -   [Security](../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../data-types/text.html)
-        -   [Expression](../data-types/expression.html)
-        -   [Array](../data-types/array.html)
-        -   [Object](../data-types/object.html)
-        -   [Integer](../data-types/integer.html)
-        -   [Decimal](../data-types/decimal.html)
-        -   [Boolean](../data-types/boolean.html)
-        -   [Timestamp](../data-types/timestamp.html)
-        -   [Null](../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response
-            Caching](../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano
-            Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field
-            Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database
-            Views](../../the-database/database-basics/database-views.html)
-        -   [Export and
-            Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data
-            Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to
-            Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to
-            Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import &
-            Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema
-            Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting
-            Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP
-            Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User
-            Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access
-            (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth
-            (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track
-            Preferences](../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP
-            (Outgoing)](../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server
-            Region](../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database
-            Connector](../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and
-            Restore](../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security
-            Policy](../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit
-            Logs](../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano
-            Link](../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API
-            (Deprecated)](../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata
-            API](../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and
-            Schema](../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../xano-features/metadata-api/content.html)
-        -   [Search](../../xano-features/metadata-api/search.html)
-        -   [File](../../xano-features/metadata-api/file.html)
-        -   [Request
-            History](../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and
-            Export](../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes
-            Reference](../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency
-            Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client
-            Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer
-            Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency
-            Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private
-            Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
+            createDateRangeFilter(startDate, endDate, dateField = 'created_at') {
+              return this
+                .addCondition(dateField, '>=', startDate)
+                .addCondition(dateField, '<=', endDate, 'AND')
+                .build();
+            },
             
-            -   Ollama
-                
-                -   [Choosing a
-                    Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant
-            Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance
-            Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security
-            Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance
-            Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access
-            Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano
-            Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource
-            Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels
-            slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels
-            slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM
-            Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack
-            Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting
-            Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of
-            Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification
-            Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and
-            Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
-Was this helpful?
-
-Copy
-
-1.  [[🛠️]The Visual
-    Builder](../building-with-visual-development.html)
-2.  Building with Visual Development
-
-Configuring Expressions 
-=======================
-
-###  
-
-Using the Expression Builder
-
-Each conditional has four different components.
-
-**Conditional Type**
-
-The conditional type determines how this condition is weighted in the
-final return. You can choose between **AND** and **OR. AND**
-conditionals require the present conditional and any others before it to
-be satisfied, such as \"where the date is before today **AND** the user
-is an admin\". **OR** conditionals do not require any other conditionals
-to be satisfied, such as \"if the user is an admin **OR** if the user is
-a manager\".
-
-**Left Value**
-
-This is the first value you\'re using in the conditional. In a database
-query, this is usually going to be a column that you want to check
-against.
-
-**Operators**
-
-Please note that operators may differ based on where you are building
-the expression. Database queries will have different operators available
-than regular conditional statements. Learn More
-
--   
-    
-        
-    
-    **Equals (==)** - an exact match
-    
--   
-    
-        
-    
-    **Not Equals (!=)** - does not equal
-    
--   
-    
-        
-    
-    **Equals with type matching (===)** - an exact value match and an
-    exact type match
-
-    -   
-        
-                
-        
-        Ex. Variable **var\_1** has a value of 123, with a type of text.
-        You set up a conditional statement to check if **var\_1 ===
-        123**, but your value in the conditional statement is of type
-        integer. This would return false, because the types do not
-        match.
+            createTextSearchFilter(searchTerm, fields = ['name', 'description']) {
+              const searchConditions = fields.map((field, index) => ({
+                conditional_type: index === 0 ? 'OR' : 'OR',
+                left_value: field,
+                operator: 'INCLUDES',
+                right_value: searchTerm
+              }));
+              
+              return {
+                filter_type: 'expression',
+                conditions: searchConditions
+              };
+            },
             
--   
-    
-        
-    
-    **Not equals with type matching (!==)** - does not equal value or
-    type, similar to ===
-    
--   
-    
-        
-    
-    **Greater than (\>)** - the value on the left is greater than the
-    value on the right
-    
--   
-    
-        
-    
-    **Greater than or equals (≥)** - the value on the left is greater
-    than or equals to the value on the right.
-    
--   
-    
-        
-    
-    **Less than (\<)** - the value on the left is less than the value on
-    the right.
-    
--   
-    
-        
-    
-    **Less than or equals (≤)** - the value on the left is less than or
-    equals to the value on the right.
-    
--   
-    
-        
-    
-    **LIKE** - Used for comparing text. Like is case-insensitive and
-    compares if a text string is like another text string. It can be
-    thought of as equals for text but upper case and lower case does not
-    matter.
-    
--   
-    
-        
-    
-    **NOT LIKE** - Used for comparing text. Not Like is case-insensitive
-    and compares if a text string is not like another. It is like not
-    equals for text but upper case and lower case does not matter.
-    
--   
-    
-        
-    
-    **INCLUDES** - Used for comparing text. Includes is a flexible
-    operator and is case-insensitive. It is able to determine if there
-    is a partial match in a text string.
-    
--   
-    
-        
-    
-    **DOES NOT INCLUDE** - Used for comparing text. Does not include
-    determines if a text string is not included in another text string.
-    
--   
-    
-        
-    
-    **IN** - If a single value is found in an array (list). Start with
-    the single value on the left side and the right side should contain
-    the array.
-    
--   
-    
-        
-    
-    **NOT IN** - If a single value is not found in an array (list). The
-    single value should be on the left side and the array on the right
-    side.
-    
--   
-    
-        
-    
-    **REGEX MATCHES** - [Regular
-    Expression](https://regex101.com/) used for finding patterns in text.
-    
--   
-    
-        
-    
-    **REGEX DOES NOT MATCH** - [Regular
-    Expression](https://regex101.com/) used for finding a pattern that does not match in
-    text.
-    
--   
-    
-        
-    
-    **OVERLAPS** - Used for comparing two arrays. Overlaps determines if
-    any values in one array are present in the second array.
-    
--   
-    
-        
-    
-    **DOES NOT OVERLAP** - Used for comparing two arrays. Does not
-    overlaps determines if no values in the first array are present in
-    the second array.
-    
--   
-    
-        
-    
-    **CONTAINS** - Contains is an advanced filter used for JSON and
-    arrays. It looks for an exact schema match.
-    
--   
-    
-        
-    
-    **DOES NOT CONTAIN** - Does not contain is the opposite of contains.
-    It determines if there is not an exact schema match.
-    
-####  
+            createAdvancedProductFilter(criteria) {
+              const { category, priceMin, priceMax, inStock, tags, rating } = criteria;
+              
+              this.addCondition('category', '==', category);
+              
+              if (priceMin !== undefined) {
+                this.addCondition('price', '>=', priceMin, 'AND');
+              }
+              
+              if (priceMax !== undefined) {
+                this.addCondition('price', '<=', priceMax, 'AND');
+              }
+              
+              if (inStock) {
+                this.addCondition('stock_quantity', '>', 0, 'AND');
+              }
+              
+              if (tags && tags.length > 0) {
+                this.addCondition('tags', 'OVERLAPS', tags, 'AND');
+              }
+              
+              if (rating) {
+                this.addCondition('average_rating', '>=', rating, 'AND');
+              }
+              
+              return this.build();
+            }
+          };
+          
+          // Example usage with dynamic criteria
+          const userCriteria = {
+            user_id: $env.USER_ID,
+            roles: ['admin', 'manager'],
+            start_date: $env.START_DATE,
+            end_date: $env.END_DATE
+          };
+          
+          // Build user access filter
+          const userFilter = expressionBuilder.createUserAccessFilter(
+            userCriteria.user_id,
+            userCriteria.roles
+          );
+          
+          // Build date range filter
+          const dateFilter = expressionBuilder.createDateRangeFilter(
+            userCriteria.start_date,
+            userCriteria.end_date
+          );
+          
+          // Build combined expression
+          const combinedExpression = {
+            filter_type: 'expression',
+            conditions: [
+              {
+                conditional_type: 'AND',
+                group: userFilter.conditions
+              },
+              {
+                conditional_type: 'AND',
+                group: dateFilter.conditions
+              }
+            ]
+          };
+          
+          return [{
+            json: {
+              user_filter: userFilter,
+              date_filter: dateFilter,
+              combined_expression: combinedExpression,
+              expression_count: combinedExpression.conditions.length
+            }
+          }];
+        `
+      }
+    },
+    {
+      "name": "Execute Xano Query with Expression",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/query-with-expression",
+        "method": "POST",
+        "headers": {
+          "Authorization": "Bearer {{ $env.XANO_API_KEY }}",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "table": "{{ $env.TARGET_TABLE }}",
+          "expression": "{{ $json.combined_expression }}",
+          "limit": "{{ $env.QUERY_LIMIT || 50 }}",
+          "sort": "{{ $env.SORT_FIELD || 'created_at' }} {{ $env.SORT_ORDER || 'desc' }}"
+        }
+      }
+    },
+    {
+      "name": "Validate Expression Results",
+      "type": "Code",
+      "parameters": {
+        "jsCode": `
+          const queryResult = $input.first().json;
+          const expressionData = $('Build Dynamic Expression').first().json;
+          
+          // Validate and analyze query results
+          const validation = {
+            success: queryResult.success || false,
+            results_count: queryResult.data?.length || 0,
+            expression_complexity: calculateExpressionComplexity(expressionData.combined_expression),
+            performance_metrics: {
+              execution_time: queryResult.execution_time || null,
+              rows_scanned: queryResult.rows_scanned || null,
+              index_usage: queryResult.index_usage || null
+            },
+            recommendations: generateOptimizationRecommendations(queryResult, expressionData)
+          };
+          
+          function calculateExpressionComplexity(expression) {
+            let complexity = 0;
+            
+            if (expression.conditions) {
+              expression.conditions.forEach(condition => {
+                complexity += 1;
+                if (condition.group) {
+                  complexity += condition.group.length;
+                }
+              });
+            }
+            
+            return {
+              total_conditions: complexity,
+              complexity_level: complexity <= 3 ? 'simple' : 
+                               complexity <= 7 ? 'moderate' : 'complex'
+            };
+          }
+          
+          function generateOptimizationRecommendations(result, expressionData) {
+            const recommendations = [];
+            
+            // Performance recommendations
+            if (result.execution_time > 1000) {
+              recommendations.push({
+                type: 'performance',
+                priority: 'high',
+                message: 'Query execution time is high. Consider adding database indexes.',
+                suggestion: 'Add indexes on frequently filtered columns'
+              });
+            }
+            
+            // Expression complexity recommendations
+            if (expressionData.combined_expression.conditions.length > 5) {
+              recommendations.push({
+                type: 'complexity',
+                priority: 'medium',
+                message: 'Complex expression detected. Consider breaking into multiple queries.',
+                suggestion: 'Split complex filters into multiple simpler queries'
+              });
+            }
+            
+            // Result count recommendations
+            if (validation.results_count === 0) {
+              recommendations.push({
+                type: 'results',
+                priority: 'low',
+                message: 'No results returned. Verify filter criteria.',
+                suggestion: 'Check if filter conditions are too restrictive'
+              });
+            }
+            
+            return recommendations;
+          }
+          
+          return [{ json: validation }];
+        `
+      }
+    }
+  ]
+}
+```
 
-Right Value
+### WeWeb Expression Builder Interface
 
-The right value is whatever you are checking against the left value.
-This could be a hardcoded value, a variable, or even a database field
-from the same record.
+```javascript
+// WeWeb component for dynamic expression building
+class XanoExpressionBuilder {
+  constructor() {
+    this.conditions = [];
+    this.operators = this.initializeOperators();
+    this.dataTypes = this.initializeDataTypes();
+  }
+  
+  initializeOperators() {
+    return {
+      comparison: [
+        { value: '==', label: 'Equals', types: ['all'] },
+        { value: '!=', label: 'Not Equals', types: ['all'] },
+        { value: '===', label: 'Equals (Type Match)', types: ['all'] },
+        { value: '!==', label: 'Not Equals (Type Match)', types: ['all'] },
+        { value: '>', label: 'Greater Than', types: ['number', 'date'] },
+        { value: '>=', label: 'Greater Than or Equal', types: ['number', 'date'] },
+        { value: '<', label: 'Less Than', types: ['number', 'date'] },
+        { value: '<=', label: 'Less Than or Equal', types: ['number', 'date'] }
+      ],
+      text: [
+        { value: 'LIKE', label: 'Like (Case Insensitive)', types: ['text'] },
+        { value: 'NOT LIKE', label: 'Not Like', types: ['text'] },
+        { value: 'INCLUDES', label: 'Includes (Partial Match)', types: ['text'] },
+        { value: 'DOES NOT INCLUDE', label: 'Does Not Include', types: ['text'] },
+        { value: 'REGEX MATCHES', label: 'Regex Matches', types: ['text'] },
+        { value: 'REGEX DOES NOT MATCH', label: 'Regex Does Not Match', types: ['text'] }
+      ],
+      array: [
+        { value: 'IN', label: 'In Array', types: ['array'] },
+        { value: 'NOT IN', label: 'Not In Array', types: ['array'] },
+        { value: 'OVERLAPS', label: 'Arrays Overlap', types: ['array'] },
+        { value: 'DOES NOT OVERLAP', label: 'Arrays Do Not Overlap', types: ['array'] },
+        { value: 'CONTAINS', label: 'Contains (Exact Schema)', types: ['json', 'array'] },
+        { value: 'DOES NOT CONTAIN', label: 'Does Not Contain', types: ['json', 'array'] }
+      ]
+    };
+  }
+  
+  initializeDataTypes() {
+    return {
+      text: { validation: /^.+$/, defaultValue: '' },
+      number: { validation: /^-?\d*\.?\d+$/, defaultValue: 0 },
+      boolean: { validation: /^(true|false)$/, defaultValue: false },
+      date: { validation: /^\d{4}-\d{2}-\d{2}/, defaultValue: new Date().toISOString().split('T')[0] },
+      array: { validation: null, defaultValue: [] },
+      json: { validation: null, defaultValue: {} }
+    };
+  }
+  
+  addCondition(conditionalType = 'AND') {
+    const newCondition = {
+      id: this.generateConditionId(),
+      conditional_type: conditionalType,
+      left_value: '',
+      operator: '==',
+      right_value: '',
+      data_type: 'text',
+      validation_errors: []
+    };
+    
+    this.conditions.push(newCondition);
+    this.updateWeWebVariables();
+    return newCondition;
+  }
+  
+  removeCondition(conditionId) {
+    this.conditions = this.conditions.filter(condition => condition.id !== conditionId);
+    this.updateWeWebVariables();
+  }
+  
+  updateCondition(conditionId, updates) {
+    const condition = this.conditions.find(c => c.id === conditionId);
+    if (condition) {
+      Object.assign(condition, updates);
+      
+      // Validate the updated condition
+      condition.validation_errors = this.validateCondition(condition);
+      
+      // Auto-adjust operator based on data type
+      if (updates.data_type) {
+        condition.operator = this.getDefaultOperatorForType(updates.data_type);
+      }
+      
+      this.updateWeWebVariables();
+    }
+  }
+  
+  validateCondition(condition) {
+    const errors = [];
+    
+    // Validate left value
+    if (!condition.left_value.trim()) {
+      errors.push('Left value is required');
+    }
+    
+    // Validate right value based on data type
+    const dataType = this.dataTypes[condition.data_type];
+    if (dataType && dataType.validation) {
+      if (!dataType.validation.test(condition.right_value)) {
+        errors.push(`Invalid ${condition.data_type} format`);
+      }
+    }
+    
+    // Validate operator compatibility
+    const validOperators = this.getOperatorsForType(condition.data_type);
+    if (!validOperators.includes(condition.operator)) {
+      errors.push(`Operator '${condition.operator}' not valid for ${condition.data_type}`);
+    }
+    
+    return errors;
+  }
+  
+  getOperatorsForType(dataType) {
+    const allOperators = [...this.operators.comparison, ...this.operators.text, ...this.operators.array];
+    return allOperators
+      .filter(op => op.types.includes('all') || op.types.includes(dataType))
+      .map(op => op.value);
+  }
+  
+  getDefaultOperatorForType(dataType) {
+    switch (dataType) {
+      case 'text': return 'INCLUDES';
+      case 'number': case 'date': return '>=';
+      case 'boolean': return '==';
+      case 'array': return 'IN';
+      case 'json': return 'CONTAINS';
+      default: return '==';
+    }
+  }
+  
+  generateConditionId() {
+    return `condition_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+  
+  buildExpression() {
+    // Validate all conditions first
+    const validConditions = this.conditions.filter(condition => {
+      condition.validation_errors = this.validateCondition(condition);
+      return condition.validation_errors.length === 0;
+    });
+    
+    if (validConditions.length === 0) {
+      throw new Error('No valid conditions found');
+    }
+    
+    return {
+      filter_type: 'expression',
+      conditions: validConditions.map(condition => ({
+        conditional_type: condition.conditional_type,
+        left_value: condition.left_value,
+        operator: condition.operator,
+        right_value: this.formatRightValue(condition.right_value, condition.data_type)
+      })),
+      metadata: {
+        created_at: new Date().toISOString(),
+        condition_count: validConditions.length,
+        complexity_score: this.calculateComplexityScore(validConditions)
+      }
+    };
+  }
+  
+  formatRightValue(value, dataType) {
+    switch (dataType) {
+      case 'number':
+        return parseFloat(value);
+      case 'boolean':
+        return value === 'true' || value === true;
+      case 'array':
+        return Array.isArray(value) ? value : value.split(',').map(v => v.trim());
+      case 'json':
+        return typeof value === 'object' ? value : JSON.parse(value);
+      default:
+        return value;
+    }
+  }
+  
+  calculateComplexityScore(conditions) {
+    let score = conditions.length;
+    
+    // Add complexity for advanced operators
+    conditions.forEach(condition => {
+      if (['REGEX MATCHES', 'CONTAINS', 'OVERLAPS'].includes(condition.operator)) {
+        score += 2;
+      } else if (['INCLUDES', 'IN'].includes(condition.operator)) {
+        score += 1;
+      }
+    });
+    
+    return score;
+  }
+  
+  testExpression(sampleData) {
+    try {
+      const expression = this.buildExpression();
+      const results = sampleData.filter(item => this.evaluateExpression(item, expression));
+      
+      return {
+        success: true,
+        matched_count: results.length,
+        total_count: sampleData.length,
+        match_percentage: (results.length / sampleData.length * 100).toFixed(1),
+        sample_results: results.slice(0, 5),
+        expression: expression
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        expression: null
+      };
+    }
+  }
+  
+  evaluateExpression(item, expression) {
+    // Simple client-side expression evaluation for testing
+    let result = true;
+    let currentOperator = 'AND';
+    
+    expression.conditions.forEach((condition, index) => {
+      const leftValue = this.getValueFromPath(item, condition.left_value);
+      const rightValue = condition.right_value;
+      const conditionResult = this.evaluateCondition(leftValue, condition.operator, rightValue);
+      
+      if (index === 0) {
+        result = conditionResult;
+      } else {
+        if (currentOperator === 'AND') {
+          result = result && conditionResult;
+        } else {
+          result = result || conditionResult;
+        }
+      }
+      
+      currentOperator = condition.conditional_type;
+    });
+    
+    return result;
+  }
+  
+  getValueFromPath(object, path) {
+    return path.split('.').reduce((obj, key) => obj && obj[key], object);
+  }
+  
+  evaluateCondition(leftValue, operator, rightValue) {
+    switch (operator) {
+      case '==': return leftValue == rightValue;
+      case '!=': return leftValue != rightValue;
+      case '===': return leftValue === rightValue;
+      case '!==': return leftValue !== rightValue;
+      case '>': return leftValue > rightValue;
+      case '>=': return leftValue >= rightValue;
+      case '<': return leftValue < rightValue;
+      case '<=': return leftValue <= rightValue;
+      case 'INCLUDES': return String(leftValue).toLowerCase().includes(String(rightValue).toLowerCase());
+      case 'LIKE': return String(leftValue).toLowerCase() === String(rightValue).toLowerCase();
+      case 'IN': return Array.isArray(rightValue) && rightValue.includes(leftValue);
+      case 'OVERLAPS': 
+        return Array.isArray(leftValue) && Array.isArray(rightValue) && 
+               leftValue.some(val => rightValue.includes(val));
+      default: return false;
+    }
+  }
+  
+  updateWeWebVariables() {
+    wwLib.wwVariable.updateValue('expression_conditions', this.conditions);
+    wwLib.wwVariable.updateValue('expression_valid', this.conditions.every(c => c.validation_errors.length === 0));
+    wwLib.wwVariable.updateValue('condition_count', this.conditions.length);
+  }
+  
+  loadTemplate(template) {
+    switch (template) {
+      case 'user_filter':
+        this.conditions = [
+          {
+            id: this.generateConditionId(),
+            conditional_type: 'AND',
+            left_value: 'status',
+            operator: '==',
+            right_value: 'active',
+            data_type: 'text',
+            validation_errors: []
+          },
+          {
+            id: this.generateConditionId(),
+            conditional_type: 'AND',
+            left_value: 'role',
+            operator: 'IN',
+            right_value: ['admin', 'manager'],
+            data_type: 'array',
+            validation_errors: []
+          }
+        ];
+        break;
+      case 'date_range':
+        this.conditions = [
+          {
+            id: this.generateConditionId(),
+            conditional_type: 'AND',
+            left_value: 'created_at',
+            operator: '>=',
+            right_value: new Date(Date.now() - 30*24*60*60*1000).toISOString().split('T')[0],
+            data_type: 'date',
+            validation_errors: []
+          },
+          {
+            id: this.generateConditionId(),
+            conditional_type: 'AND',
+            left_value: 'created_at',
+            operator: '<=',
+            right_value: new Date().toISOString().split('T')[0],
+            data_type: 'date',
+            validation_errors: []
+          }
+        ];
+        break;
+      case 'text_search':
+        this.conditions = [
+          {
+            id: this.generateConditionId(),
+            conditional_type: 'OR',
+            left_value: 'name',
+            operator: 'INCLUDES',
+            right_value: '',
+            data_type: 'text',
+            validation_errors: []
+          },
+          {
+            id: this.generateConditionId(),
+            conditional_type: 'OR',
+            left_value: 'description',
+            operator: 'INCLUDES',
+            right_value: '',
+            data_type: 'text',
+            validation_errors: []
+          }
+        ];
+        break;
+    }
+    this.updateWeWebVariables();
+  }
+}
 
-Last updated 6 months ago
+// Initialize expression builder
+const expressionBuilder = new XanoExpressionBuilder();
 
-Was this helpful?
+// Usage functions for WeWeb
+function addNewCondition() {
+  const conditionalType = wwLib.wwVariable.getValue('new_condition_type') || 'AND';
+  expressionBuilder.addCondition(conditionalType);
+}
+
+function removeCondition() {
+  const conditionId = wwLib.wwVariable.getValue('condition_to_remove');
+  expressionBuilder.removeCondition(conditionId);
+}
+
+function updateConditionField() {
+  const conditionId = wwLib.wwVariable.getValue('current_condition_id');
+  const field = wwLib.wwVariable.getValue('update_field');
+  const value = wwLib.wwVariable.getValue('update_value');
+  
+  expressionBuilder.updateCondition(conditionId, { [field]: value });
+}
+
+function buildAndTestExpression() {
+  try {
+    const expression = expressionBuilder.buildExpression();
+    wwLib.wwVariable.updateValue('built_expression', expression);
+    wwLib.wwUtils.showSuccessToast('Expression built successfully');
+    
+    // Test with sample data if available
+    const sampleData = wwLib.wwVariable.getValue('test_data');
+    if (sampleData && Array.isArray(sampleData)) {
+      const testResults = expressionBuilder.testExpression(sampleData);
+      wwLib.wwVariable.updateValue('test_results', testResults);
+    }
+  } catch (error) {
+    wwLib.wwUtils.showErrorToast(`Expression error: ${error.message}`);
+  }
+}
+
+function loadExpressionTemplate() {
+  const template = wwLib.wwVariable.getValue('selected_template');
+  expressionBuilder.loadTemplate(template);
+}
+
+// Auto-save functionality
+setInterval(() => {
+  const expression = expressionBuilder.conditions;
+  localStorage.setItem('xano_expression_draft', JSON.stringify(expression));
+}, 5000);
+
+// Load saved draft on initialization
+const savedDraft = localStorage.getItem('xano_expression_draft');
+if (savedDraft) {
+  try {
+    expressionBuilder.conditions = JSON.parse(savedDraft);
+    expressionBuilder.updateWeWebVariables();
+  } catch (error) {
+    console.error('Failed to load expression draft:', error);
+  }
+}
+```
+
+## 📊 **Comprehensive Operator Reference**
+
+### Comparison Operators
+
+**Equals (==)**
+- **Use Case**: Exact value matching
+- **Example**: `user_id == 12345`
+- **Best For**: ID matching, status checks, boolean values
+
+**Not Equals (!=)**
+- **Use Case**: Exclusion filtering
+- **Example**: `status != 'deleted'`
+- **Best For**: Excluding specific values or states
+
+**Type-Strict Equals (===)**
+- **Use Case**: Value and type matching
+- **Example**: `age === 25` (number 25, not string "25")
+- **Best For**: Ensuring data type consistency
+
+**Greater/Less Than (>, >=, <, <=)**
+- **Use Case**: Numeric and date comparisons
+- **Example**: `price >= 100`, `created_at < '2023-01-01'`
+- **Best For**: Range filtering, date filtering, numeric thresholds
+
+### Text Operators
+
+**LIKE (Case Insensitive)**
+- **Use Case**: Exact text matching ignoring case
+- **Example**: `name LIKE 'John'` matches "john", "JOHN", "John"
+- **Best For**: Name matching, case-insensitive equality
+
+**INCLUDES (Partial Match)**
+- **Use Case**: Substring searching
+- **Example**: `description INCLUDES 'premium'`
+- **Best For**: Search functionality, keyword filtering
+
+**REGEX MATCHES**
+- **Use Case**: Pattern matching with regular expressions
+- **Example**: `email REGEX MATCHES '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$'`
+- **Best For**: Email validation, phone number formats, complex patterns
+
+### Array and JSON Operators
+
+**IN/NOT IN**
+- **Use Case**: Checking if value exists in array
+- **Example**: `category IN ['electronics', 'computers']`
+- **Best For**: Multi-select filters, role checking
+
+**OVERLAPS/DOES NOT OVERLAP**
+- **Use Case**: Comparing two arrays for common elements
+- **Example**: `user_tags OVERLAPS ['premium', 'vip']`
+- **Best For**: Tag matching, permission checking
+
+**CONTAINS/DOES NOT CONTAIN**
+- **Use Case**: Exact schema matching in JSON/arrays
+- **Example**: `metadata CONTAINS {'verified': true}`
+- **Best For**: Complex object validation, nested data filtering
+
+## 💡 **Pro Tips**
+
+- **Performance**: Use indexed fields in left values for faster queries
+- **Type Safety**: Always use type-strict operators (===, !==) when type matters
+- **Readability**: Group related conditions and use clear variable names
+- **Testing**: Test expressions with sample data before deployment
+- **Optimization**: Avoid complex regex in high-volume queries
+- **Maintenance**: Document complex expressions with comments in function stacks
+
+## 🔧 **Troubleshooting**
+
+### Common Expression Issues
+
+**Problem**: Expression returns unexpected results  
+**Solution**: Check data types and use appropriate operators; test with sample data
+
+**Problem**: Performance issues with complex expressions  
+**Solution**: Simplify expressions, add database indexes, or split into multiple queries
+
+**Problem**: Type mismatch errors  
+**Solution**: Use type-strict operators and validate data types before comparison
+
+**Problem**: Regex patterns not matching  
+**Solution**: Test regex patterns separately and escape special characters properly
+
+---
+
+**Next Steps**: Ready to implement advanced conditional logic? Explore [Advanced Backend Features](advanced_back_end_features.md) for comprehensive data handling or check [Master Metadata API](api__master_metadata_api.md) for programmatic access

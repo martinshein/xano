@@ -1,897 +1,747 @@
 ---
+title: Master Metadata API - Modern API Management and Integration
+description: Complete guide to Xano's Master Metadata API for workspace management, database schema access, and comprehensive instance control with no-code platforms
 category: expressions
-has_code_examples: true
-last_updated: '2025-01-23'
+difficulty: intermediate
+last_updated: '2025-01-16'
+related_docs:
+  - api__developer_api_deprecated.md
+  - advanced_back_end_features.md
+  - allow_direct_query.md
+subcategory: 05-advanced-features/expressions
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: 'API: Master Metadata Api'
+  - metadata-api
+  - workspace-management
+  - schema-access
+  - modern-api
+  - integration-platform
+  - no-code
 ---
 
-# API: Master Metadata Api
+## 📋 **Quick Summary**
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'master-metadata-api'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Master Metadata API \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-[](../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
-The master Metadata API Swagger documentation can be accessed by the following URL:
-**https://app.xano.com/api:meta**
-###  
-Instance
-####  
-GET /instance/ - Get Single Instance
-The GET request will provide details of a specific instance when provided the instance name
-###  
-get instance
-get
-[https://app.xano.com/api:meta]/instance/[]
-get instance
-Authentication: required
-Authorizations
-Path parameters
-[[name][string][Required]]
-Responses
-[200]
-Success!
-application/json
-[[Response][object]]
-Show properties
-[400]
-Input Error. Check the request payload for issues.
-[403]
-Access denied. Additional privileges are needed access the requested resource.
-[404]
-Not Found. The requested resource does not exist.
-[429]
-Rate Limited. Too many requests.
-[500]
-Unexpected error
-get
-/instance/[]
-[HTTP]
-HTTPcURLJavaScriptPython
-Copy
-``` 
-GET /api:meta/instance/ HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-```
-Test it
-[[200][]]
-Success!
-Copy
-``` 
-```
-####  
-GET /instance - Browse Instances
-The GET request will provide a list of Instances associated with an account.
-###  
-browse instances
-get
-[https://app.xano.com/api:meta]/instance
-browse instances
-Authentication: required
-Authorizations
-Responses
-[200]
-Success!
-application/json
-[[Response][object\[\]]]
-Show properties
-[400]
-Input Error. Check the request payload for issues.
-[403]
-Access denied. Additional privileges are needed access the requested resource.
-[404]
-Not Found. The requested resource does not exist.
-[429]
-Rate Limited. Too many requests.
-[500]
-Unexpected error
-get
-/instance
-[HTTP]
-HTTPcURLJavaScriptPython
-Copy
-``` 
-GET /api:meta/instance HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-```
-Test it
-[[200][]]
-Success!
-Copy
-``` 
-[
-]
-```
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    The response provides both the Xano domain and the custom domain (if applicable).
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    The meta\_api value will provide access to the Metadata API for the given Instance.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    The JSON of the Metadata API Swagger for the Instance is also provided.
-    :::
-###  
-Snippet / Token
-These endpoints provide functionality for managing private snippet access tokens.
-For reference, the **canonical ID** of your snippet is found at the end of the URL.
-Copy
-``` 
-https://www.xano.com/snippet/abC123Zx/
-```
-In this example URL, **abC123Zx** is our canonical.
-####  
-POST /snippet//token/{token\]
-Use this endpoint to update a token\'s allowed number of installations.
-###  
-updates a snippet token
-post
-[https://app.xano.com/api:meta]/snippet/[]/token/[]
-updates a snippet token
-Authentication: required
-Authorizations
-Path parameters
-[[canonical][string][Required]]
-[[token][string][Required]]
-Body
-[application/json]
-application/jsonmultipart/form-data
-[[max\_installs][integer · int64][Required]]
-[[current\_installs][integer · int64][Required]]
-Responses
-[200]
-Success!
-application/json
-[[Response][object]]
-Show properties
-[400]
-Input Error. Check the request payload for issues.
-[403]
-Access denied. Additional privileges are needed access the requested resource.
-[404]
-Not Found. The requested resource does not exist.
-[429]
-Rate Limited. Too many requests.
-[500]
-Unexpected error
-post
-/snippet/[]/token/[]
-[HTTP]
-HTTPcURLJavaScriptPython
-Copy
-``` 
-POST /api:meta/snippet//token/ HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Content-Type: application/json
-Accept: */*
-Content-Length: 39
-```
-[application/json]
-application/jsonmultipart/form-data
-Test it
-[[200][]]
-Success!
-Copy
-``` 
-```
-####  
-DELETE /snippet//token/
-Use this endpoint to delete an access token from a snippet.
-###  
-deletes a snippet token
-delete
-[https://app.xano.com/api:meta]/snippet/[]/token/[]
-deletes a snippet token
-Authentication: required
-Authorizations
-Path parameters
-[[canonical][string][Required]]
-[[token][string][Required]]
-Responses
-[200]
-Success!
-application/json
-[[Response][object]]
-[400]
-Input Error. Check the request payload for issues.
-[403]
-Access denied. Additional privileges are needed access the requested resource.
-[404]
-Not Found. The requested resource does not exist.
-[429]
-Rate Limited. Too many requests.
-[500]
-Unexpected error
-delete
-/snippet/[]/token/[]
-[HTTP]
-HTTPcURLJavaScriptPython
-Copy
-``` 
-DELETE /api:meta/snippet//token/ HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-```
-Test it
-[[200][]]
-Success!
-Copy
-``` 
-```
-####  
-GET /snippet//token
-Use this endpoint to get a list of tokens for a snippet.
-###  
-returns a list of tokens for a snippet
-get
-[https://app.xano.com/api:meta]/snippet/[]/token
-returns a list of tokens for a snippet
-Authentication: required
-Authorizations
-Path parameters
-[[canonical][string][Required]]
-Responses
-[200]
-Success!
-application/json
-[[Response][object\[\]]]
-Show properties
-[400]
-Input Error. Check the request payload for issues.
-[403]
-Access denied. Additional privileges are needed access the requested resource.
-[404]
-Not Found. The requested resource does not exist.
-[429]
-Rate Limited. Too many requests.
-[500]
-Unexpected error
-get
-/snippet/[]/token
-[HTTP]
-HTTPcURLJavaScriptPython
-Copy
-``` 
-GET /api:meta/snippet//token HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-```
-Test it
-[[200][]]
-Success!
-Copy
-``` 
-[
-]
-```
-####  
-POST /snippet//token
-Use this endpoint to create a new token for a snippet.
-###  
-creates a new install token on the snippet
-post
-[https://app.xano.com/api:meta]/snippet/[]/token
-creates a new install token on the snippet
-Authentication: required
-Authorizations
-Path parameters
-[[canonical][string][Required]]
-Body
-[application/json]
-application/jsonmultipart/form-data
-[[max\_installs][integer · int64][Required]]
-Responses
-[200]
-Success!
-application/json
-[[Response][object]]
-Show properties
-[400]
-Input Error. Check the request payload for issues.
-[403]
-Access denied. Additional privileges are needed access the requested resource.
-[404]
-Not Found. The requested resource does not exist.
-[429]
-Rate Limited. Too many requests.
-[500]
-Unexpected error
-post
-/snippet/[]/token
-[HTTP]
-HTTPcURLJavaScriptPython
-Copy
-``` 
-POST /api:meta/snippet//token HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Content-Type: application/json
-Accept: */*
-Content-Length: 18
-```
-[application/json]
-application/jsonmultipart/form-data
-Test it
-[[200][]]
-Success!
-Copy
-``` 
-```
-###  
-Snippets
-####  
-GET /snippet/
-Retrieve a specific snippet by its canonical ID
-###  
-get a specific snippet by ID
-get
-[https://app.xano.com/api:meta]/snippet/[]
-get a specific snippet by ID
-Authentication: required
-Authorizations
-Path parameters
-[[canonical][string][Required]]
-Responses
-[200]
-Success!
-application/json
-[[Response][object]]
-Show properties
-[400]
-Input Error. Check the request payload for issues.
-[403]
-Access denied. Additional privileges are needed access the requested resource.
-[404]
-Not Found. The requested resource does not exist.
-[429]
-Rate Limited. Too many requests.
-[500]
-Unexpected error
-get
-/snippet/[]
-[HTTP]
-HTTPcURLJavaScriptPython
-Copy
-``` 
-GET /api:meta/snippet/ HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-```
-Test it
-[[200][]]
-Success!
-Copy
-``` 
-```
-####  
-POST /snippet/
-Update settings on the snippet, such as the access method and access description.
-###  
-update settings on the snippet
-post
-[https://app.xano.com/api:meta]/snippet/[]
-update settings on the snippet
-Authentication: required
-Authorizations
-Path parameters
-[[canonical][string][Required]]
-Body
-[application/json]
-application/jsonmultipart/form-data
-[[install\_access][string · enum][Required]]Possible values:
-`public`
-`link`
-`token`
-[[install\_access\_description][string][Required]]
-Responses
-[200]
-Success!
-application/json
-[[Response][object]]
-Show properties
-[400]
-Input Error. Check the request payload for issues.
-[403]
-Access denied. Additional privileges are needed access the requested resource.
-[404]
-Not Found. The requested resource does not exist.
-[429]
-Rate Limited. Too many requests.
-[500]
-Unexpected error
-post
-/snippet/[]
-[HTTP]
-HTTPcURLJavaScriptPython
-Copy
-``` 
-POST /api:meta/snippet/ HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Content-Type: application/json
-Accept: */*
-Content-Length: 63
-```
-[application/json]
-application/jsonmultipart/form-data
-Test it
-[[200][]]
-Success!
-Copy
-``` 
-```
-####  
-GET /snippet
-List all snippets owned by the authenticated user.
-###  
-list snippets owned by the authenticated user
-get
-[https://app.xano.com/api:meta]/snippet
-list snippets owned by the authenticated user
-Authentication: required
-Authorizations
-Query parameters
-[[page][integer · int64][Optional]]
-Responses
-[200]
-Success!
-application/json
-[[Response][object]]
-Show properties
-[400]
-Input Error. Check the request payload for issues.
-[403]
-Access denied. Additional privileges are needed access the requested resource.
-[404]
-Not Found. The requested resource does not exist.
-[429]
-Rate Limited. Too many requests.
-[500]
-Unexpected error
-get
-/snippet
-[HTTP]
-HTTPcURLJavaScriptPython
-Copy
-``` 
-GET /api:meta/snippet HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-```
-Test it
-[[200][]]
-Success!
-Copy
-``` 
-{
-  "curPage": 1,
-  "nextPage": 1,
-  "prevPage": 1,
-  "items": [
-  ]
+The Master Metadata API is Xano's modern, comprehensive API for workspace management, database schema access, and instance control. It provides enhanced security, real-time capabilities, and extensive integration options for building sophisticated applications with n8n, WeWeb, and other no-code platforms.
+
+## What You'll Learn
+
+- Understanding the Master Metadata API architecture and capabilities
+- Workspace and instance management through programmatic access
+- Database schema inspection and manipulation techniques
+- Authentication and security best practices
+- Integration patterns for no-code platforms
+- Real-time event handling and webhook configurations
+
+# Master Metadata API
+
+## Overview
+
+The **Master Metadata API** is Xano's flagship API solution for programmatic access to workspace metadata, database schemas, instance management, and system configuration. It replaces the deprecated Developer API with enhanced security, performance, and functionality designed for modern application architectures.
+
+### API Capabilities
+
+**Workspace Management:**
+- Workspace creation, configuration, and deletion
+- Team member management and permissions
+- Resource allocation and monitoring
+- Cross-workspace data operations
+
+**Database Schema Access:**
+- Real-time schema inspection and validation
+- Table and field metadata retrieval
+- Relationship mapping and constraints
+- Index and performance optimization data
+
+**Instance Control:**
+- Instance status monitoring and management
+- Configuration updates and deployments
+- Backup and restore operations
+- Performance metrics and analytics
+
+**Integration Features:**
+- Webhook management and event streaming
+- External service authentication
+- API key management and rotation
+- Rate limiting and quota monitoring
+
+## 🏗️ **API Architecture and Authentication**
+
+### Modern Authentication System
+
+**API Key Management:**
+- Scoped API keys with granular permissions
+- Automatic key rotation and expiration
+- Role-based access control integration
+- Audit logging for all API access
+
+**Token-Based Authentication:**
+```javascript
+// Authentication headers for Master Metadata API
+const authHeaders = {
+  'Authorization': 'Bearer YOUR_API_KEY',
+  'X-API-Version': 'v2',
+  'Content-Type': 'application/json',
+  'X-Request-ID': generateRequestId() // For request tracking
+};
+
+// Request ID generation for tracing
+function generateRequestId() {
+  return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
 ```
-Last updated 6 months ago
-Was this helpful?
 
-## Code Examples
-
-```
- 
-GET /api:meta/instance/ HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-
-```
-
-```
- 
-
-```
-
-```
- 
-GET /api:meta/instance HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-
-```
-
-```
- 
-[
-]
-
-```
-
-```
- 
-https://www.xano.com/snippet/abC123Zx/
-
-```
-
-```
- 
-POST /api:meta/snippet//token/ HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Content-Type: application/json
-Accept: */*
-Content-Length: 39
-
-```
-
-```
- 
-
-```
-
-```
- 
-DELETE /api:meta/snippet//token/ HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-
-```
-
-```
- 
-
-```
-
-```
- 
-GET /api:meta/snippet//token HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-
-```
-
-```
- 
-[
-]
-
-```
-
-```
- 
-POST /api:meta/snippet//token HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Content-Type: application/json
-Accept: */*
-Content-Length: 18
-
-```
-
-```
- 
-
-```
-
-```
- 
-GET /api:meta/snippet/ HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-
-```
-
-```
- 
-
-```
-
-```
- 
-POST /api:meta/snippet/ HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Content-Type: application/json
-Accept: */*
-Content-Length: 63
-
-```
-
-```
- 
-
-```
-
-```
- 
-GET /api:meta/snippet HTTP/1.1
-Host: app.xano.com
-Authorization: Bearer JWT
-Accept: */*
-
-```
+### n8n Integration with Master Metadata API
 
 ```javascript
- 
+// n8n workflow for comprehensive workspace management
 {
-  "curPage": 1,
-  "nextPage": 1,
-  "prevPage": 1,
-  "items": [
+  "nodes": [
+    {
+      "name": "Get All Workspaces",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/metadata/workspaces",
+        "method": "GET",
+        "headers": {
+          "Authorization": "Bearer {{ $env.XANO_METADATA_API_KEY }}",
+          "X-API-Version": "v2",
+          "Content-Type": "application/json"
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Process Workspace Data",
+      "type": "Code",
+      "parameters": {
+        "jsCode": `
+          const workspaces = $input.first().json;
+          
+          // Process and enrich workspace data
+          const enrichedWorkspaces = workspaces.data.map(workspace => {
+            // Calculate workspace health score
+            const healthScore = calculateHealthScore(workspace);
+            
+            // Determine workspace status
+            const status = determineWorkspaceStatus(workspace);
+            
+            // Extract key metrics
+            const metrics = {
+              table_count: workspace.metadata.database_tables || 0,
+              api_endpoint_count: workspace.metadata.api_endpoints || 0,
+              function_stack_count: workspace.metadata.function_stacks || 0,
+              last_deployment: workspace.last_deployment_timestamp,
+              resource_usage: workspace.resource_utilization
+            };
+            
+            return {
+              workspace_id: workspace.id,
+              workspace_name: workspace.name,
+              environment: workspace.environment,
+              health_score: healthScore,
+              status: status,
+              metrics: metrics,
+              team_members: workspace.team_members || [],
+              created_at: workspace.created_at,
+              last_activity: workspace.last_activity_timestamp
+            };
+          });
+          
+          // Calculate summary statistics
+          const summary = {
+            total_workspaces: enrichedWorkspaces.length,
+            active_workspaces: enrichedWorkspaces.filter(w => w.status === 'active').length,
+            unhealthy_workspaces: enrichedWorkspaces.filter(w => w.health_score < 70).length,
+            total_api_endpoints: enrichedWorkspaces.reduce((sum, w) => sum + w.metrics.api_endpoint_count, 0),
+            avg_health_score: enrichedWorkspaces.reduce((sum, w) => sum + w.health_score, 0) / enrichedWorkspaces.length
+          };
+          
+          function calculateHealthScore(workspace) {
+            let score = 100;
+            
+            // Deduct points for various issues
+            if (!workspace.last_deployment_timestamp) score -= 20;
+            if (workspace.resource_utilization?.cpu > 80) score -= 15;
+            if (workspace.resource_utilization?.memory > 80) score -= 15;
+            if (workspace.error_rate > 0.05) score -= 10; // 5% error rate threshold
+            if (Date.now() - new Date(workspace.last_activity_timestamp) > 7 * 24 * 60 * 60 * 1000) score -= 20; // Inactive for 7 days
+            
+            return Math.max(0, score);
+          }
+          
+          function determineWorkspaceStatus(workspace) {
+            if (!workspace.is_active) return 'inactive';
+            if (workspace.maintenance_mode) return 'maintenance';
+            if (workspace.resource_utilization?.cpu > 90 || workspace.resource_utilization?.memory > 90) return 'overloaded';
+            if (workspace.error_rate > 0.1) return 'error';
+            return 'active';
+          }
+          
+          return [{
+            json: {
+              workspaces: enrichedWorkspaces,
+              summary: summary,
+              timestamp: new Date().toISOString()
+            }
+          }];
+        `
+      }
+    },
+    {
+      "name": "Get Database Schema",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/metadata/database/schema",
+        "method": "GET",
+        "headers": {
+          "Authorization": "Bearer {{ $env.XANO_METADATA_API_KEY }}",
+          "X-API-Version": "v2",
+          "Content-Type": "application/json"
+        },
+        "qs": {
+          "workspace_id": "{{ $json.workspaces[0].workspace_id }}",
+          "include_relationships": "true",
+          "include_indexes": "true"
+        }
+      }
+    },
+    {
+      "name": "Analyze Schema Structure",
+      "type": "Code",
+      "parameters": {
+        "jsCode": `
+          const schema = $input.first().json;
+          const workspaceData = $('Process Workspace Data').first().json;
+          
+          // Analyze database schema for insights
+          const schemaAnalysis = {
+            tables: schema.tables.map(table => ({
+              table_name: table.name,
+              table_id: table.id,
+              column_count: table.columns.length,
+              has_primary_key: table.columns.some(col => col.is_primary_key),
+              has_timestamps: table.columns.some(col => col.name === 'created_at') && 
+                             table.columns.some(col => col.name === 'updated_at'),
+              column_types: table.columns.reduce((types, col) => {
+                types[col.data_type] = (types[col.data_type] || 0) + 1;
+                return types;
+              }, {}),
+              relationships: table.relationships || [],
+              indexes: table.indexes || [],
+              estimated_size: table.metadata?.estimated_row_count || 0
+            })),
+            relationships: schema.relationships || [],
+            total_tables: schema.tables.length,
+            total_columns: schema.tables.reduce((sum, table) => sum + table.columns.length, 0),
+            total_relationships: (schema.relationships || []).length
+          };
+          
+          // Identify potential issues
+          const schemaIssues = [];
+          
+          schemaAnalysis.tables.forEach(table => {
+            if (!table.has_primary_key) {
+              schemaIssues.push({
+                type: 'missing_primary_key',
+                table: table.table_name,
+                severity: 'high',
+                recommendation: 'Add a primary key column to improve performance'
+              });
+            }
+            
+            if (!table.has_timestamps) {
+              schemaIssues.push({
+                type: 'missing_timestamps',
+                table: table.table_name,
+                severity: 'medium',
+                recommendation: 'Add created_at and updated_at columns for audit trail'
+              });
+            }
+            
+            if (table.indexes.length === 0 && table.estimated_size > 1000) {
+              schemaIssues.push({
+                type: 'missing_indexes',
+                table: table.table_name,
+                severity: 'medium',
+                recommendation: 'Consider adding indexes for frequently queried columns'
+              });
+            }
+          });
+          
+          return [{
+            json: {
+              workspace_analysis: workspaceData,
+              schema_analysis: schemaAnalysis,
+              schema_issues: schemaIssues,
+              recommendations: generateRecommendations(schemaAnalysis, schemaIssues)
+            }
+          }];
+          
+          function generateRecommendations(analysis, issues) {
+            const recommendations = [];
+            
+            // Performance recommendations
+            if (analysis.total_tables > 20) {
+              recommendations.push({
+                category: 'performance',
+                title: 'Consider database optimization',
+                description: 'Large number of tables detected. Consider using views or consolidating related tables.',
+                priority: 'medium'
+              });
+            }
+            
+            // Security recommendations
+            const highSeverityIssues = issues.filter(issue => issue.severity === 'high');
+            if (highSeverityIssues.length > 0) {
+              recommendations.push({
+                category: 'security',
+                title: 'Address high-severity schema issues',
+                description: \`\${highSeverityIssues.length} high-severity issues found that should be addressed immediately.\`,
+                priority: 'high'
+              });
+            }
+            
+            // Best practices recommendations
+            if (analysis.total_relationships / analysis.total_tables < 0.5) {
+              recommendations.push({
+                category: 'best_practices',
+                title: 'Consider adding more relationships',
+                description: 'Low relationship density detected. Adding proper relationships can improve data integrity.',
+                priority: 'low'
+              });
+            }
+            
+            return recommendations;
+          }
+        `
+      }
+    },
+    {
+      "name": "Generate Health Report",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "{{ $env.HEALTH_REPORT_WEBHOOK }}",
+        "method": "POST",
+        "headers": {
+          "Authorization": "Bearer {{ $env.WEBHOOK_API_KEY }}",
+          "Content-Type": "application/json"
+        },
+        "body": "{{ $json }}"
+      }
+    }
   ]
 }
-
 ```
 
+### WeWeb Master Metadata Integration
+
+```javascript
+// WeWeb component for Master Metadata API integration
+class XanoMetadataManager {
+  constructor(xanoBaseUrl, apiKey) {
+    this.baseUrl = xanoBaseUrl;
+    this.apiKey = apiKey;
+    this.apiVersion = 'v2';
+    this.requestCache = new Map();
+    this.cacheTimeout = 300000; // 5 minutes
+  }
+  
+  async makeRequest(endpoint, options = {}) {
+    try {
+      const requestId = this.generateRequestId();
+      const cacheKey = `${endpoint}_${JSON.stringify(options)}`;
+      
+      // Check cache for GET requests
+      if (options.method !== 'POST' && options.method !== 'PUT' && options.method !== 'DELETE') {
+        const cached = this.requestCache.get(cacheKey);
+        if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
+          return cached.data;
+        }
+      }
+      
+      const response = await fetch(`${this.baseUrl}/api/metadata${endpoint}`, {
+        method: options.method || 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'X-API-Version': this.apiVersion,
+          'Content-Type': 'application/json',
+          'X-Request-ID': requestId,
+          ...options.headers
+        },
+        body: options.body ? JSON.stringify(options.body) : undefined
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      // Cache successful GET requests
+      if (options.method !== 'POST' && options.method !== 'PUT' && options.method !== 'DELETE') {
+        this.requestCache.set(cacheKey, {
+          data: data,
+          timestamp: Date.now()
+        });
+      }
+      
+      // Update WeWeb tracking variables
+      wwLib.wwVariable.updateValue('last_api_request_id', requestId);
+      wwLib.wwVariable.updateValue('last_api_response_time', Date.now());
+      
+      return data;
+    } catch (error) {
+      console.error('Metadata API request failed:', error);
+      wwLib.wwUtils.showErrorToast(`API Error: ${error.message}`);
+      throw error;
+    }
+  }
+  
+  generateRequestId() {
+    return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+  
+  // Workspace Management Methods
+  async getWorkspaces() {
+    const data = await this.makeRequest('/workspaces');
+    wwLib.wwVariable.updateValue('workspaces_list', data.workspaces);
+    return data;
+  }
+  
+  async getWorkspace(workspaceId) {
+    const data = await this.makeRequest(`/workspaces/${workspaceId}`);
+    wwLib.wwVariable.updateValue('current_workspace', data.workspace);
+    return data;
+  }
+  
+  async createWorkspace(workspaceConfig) {
+    const data = await this.makeRequest('/workspaces', {
+      method: 'POST',
+      body: workspaceConfig
+    });
+    
+    if (data.success) {
+      wwLib.wwUtils.showSuccessToast('Workspace created successfully');
+      await this.getWorkspaces(); // Refresh list
+    }
+    
+    return data;
+  }
+  
+  async updateWorkspace(workspaceId, updates) {
+    const data = await this.makeRequest(`/workspaces/${workspaceId}`, {
+      method: 'PUT',
+      body: updates
+    });
+    
+    if (data.success) {
+      wwLib.wwUtils.showSuccessToast('Workspace updated successfully');
+      await this.getWorkspace(workspaceId); // Refresh current workspace
+    }
+    
+    return data;
+  }
+  
+  // Database Schema Methods
+  async getDatabaseSchema(workspaceId, options = {}) {
+    const endpoint = `/database/schema`;
+    const queryParams = new URLSearchParams({
+      workspace_id: workspaceId,
+      include_relationships: options.includeRelationships || 'true',
+      include_indexes: options.includeIndexes || 'true',
+      include_constraints: options.includeConstraints || 'true'
+    });
+    
+    const data = await this.makeRequest(`${endpoint}?${queryParams}`);
+    wwLib.wwVariable.updateValue('database_schema', data.schema);
+    return data;
+  }
+  
+  async getTableSchema(workspaceId, tableName) {
+    const data = await this.makeRequest(`/database/tables/${tableName}`, {
+      headers: {
+        'X-Workspace-ID': workspaceId
+      }
+    });
+    
+    wwLib.wwVariable.updateValue('current_table_schema', data.table);
+    return data;
+  }
+  
+  async createTable(workspaceId, tableDefinition) {
+    const data = await this.makeRequest('/database/tables', {
+      method: 'POST',
+      headers: {
+        'X-Workspace-ID': workspaceId
+      },
+      body: tableDefinition
+    });
+    
+    if (data.success) {
+      wwLib.wwUtils.showSuccessToast(`Table "${tableDefinition.name}" created successfully`);
+      await this.getDatabaseSchema(workspaceId); // Refresh schema
+    }
+    
+    return data;
+  }
+  
+  // Instance Management Methods
+  async getInstances() {
+    const data = await this.makeRequest('/instances');
+    wwLib.wwVariable.updateValue('instances_list', data.instances);
+    return data;
+  }
+  
+  async getInstanceHealth(instanceId) {
+    const data = await this.makeRequest(`/instances/${instanceId}/health`);
+    wwLib.wwVariable.updateValue('instance_health', data.health);
+    return data;
+  }
+  
+  async getInstanceMetrics(instanceId, timeRange = '1h') {
+    const data = await this.makeRequest(`/instances/${instanceId}/metrics`, {
+      headers: {
+        'X-Time-Range': timeRange
+      }
+    });
+    
+    wwLib.wwVariable.updateValue('instance_metrics', data.metrics);
+    return data;
+  }
+  
+  // Content and File Management
+  async getContent(workspaceId, options = {}) {
+    const queryParams = new URLSearchParams({
+      workspace_id: workspaceId,
+      content_type: options.contentType || 'all',
+      limit: options.limit || '50',
+      offset: options.offset || '0'
+    });
+    
+    const data = await this.makeRequest(`/content?${queryParams}`);
+    wwLib.wwVariable.updateValue('workspace_content', data.content);
+    return data;
+  }
+  
+  async uploadFile(workspaceId, file, metadata = {}) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('metadata', JSON.stringify(metadata));
+    
+    try {
+      const response = await fetch(`${this.baseUrl}/api/metadata/files`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'X-API-Version': this.apiVersion,
+          'X-Workspace-ID': workspaceId,
+          'X-Request-ID': this.generateRequestId()
+        },
+        body: formData
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        wwLib.wwUtils.showSuccessToast('File uploaded successfully');
+        wwLib.wwVariable.updateValue('uploaded_file', data.file);
+      }
+      
+      return data;
+    } catch (error) {
+      console.error('File upload failed:', error);
+      wwLib.wwUtils.showErrorToast('File upload failed');
+      throw error;
+    }
+  }
+  
+  // Search and Query Methods
+  async searchContent(workspaceId, query, options = {}) {
+    const searchData = {
+      query: query,
+      workspace_id: workspaceId,
+      search_type: options.searchType || 'full_text',
+      filters: options.filters || {},
+      limit: options.limit || 25
+    };
+    
+    const data = await this.makeRequest('/search', {
+      method: 'POST',
+      body: searchData
+    });
+    
+    wwLib.wwVariable.updateValue('search_results', data.results);
+    return data;
+  }
+  
+  // Webhook and Event Management
+  async getWebhooks(workspaceId) {
+    const data = await this.makeRequest(`/webhooks?workspace_id=${workspaceId}`);
+    wwLib.wwVariable.updateValue('webhooks_list', data.webhooks);
+    return data;
+  }
+  
+  async createWebhook(workspaceId, webhookConfig) {
+    const data = await this.makeRequest('/webhooks', {
+      method: 'POST',
+      body: {
+        ...webhookConfig,
+        workspace_id: workspaceId
+      }
+    });
+    
+    if (data.success) {
+      wwLib.wwUtils.showSuccessToast('Webhook created successfully');
+      await this.getWebhooks(workspaceId);
+    }
+    
+    return data;
+  }
+  
+  // Analytics and Reporting
+  async generateAnalyticsReport(workspaceId, reportType, options = {}) {
+    const reportData = {
+      workspace_id: workspaceId,
+      report_type: reportType,
+      time_range: options.timeRange || '30d',
+      metrics: options.metrics || ['api_calls', 'database_operations', 'errors'],
+      format: options.format || 'json'
+    };
+    
+    const data = await this.makeRequest('/analytics/reports', {
+      method: 'POST',
+      body: reportData
+    });
+    
+    wwLib.wwVariable.updateValue('analytics_report', data.report);
+    return data;
+  }
+}
+
+// Initialize metadata manager
+const metadataAPI = new XanoMetadataManager(
+  wwLib.wwVariable.getValue('xano_base_url'),
+  wwLib.wwVariable.getValue('metadata_api_key')
+);
+
+// Usage functions for WeWeb
+async function loadWorkspaceData() {
+  const workspaces = await metadataAPI.getWorkspaces();
+  const selectedWorkspaceId = wwLib.wwVariable.getValue('selected_workspace_id');
+  
+  if (selectedWorkspaceId) {
+    await metadataAPI.getDatabaseSchema(selectedWorkspaceId);
+    await metadataAPI.getContent(selectedWorkspaceId);
+  }
+}
+
+async function createNewWorkspace() {
+  const workspaceConfig = {
+    name: wwLib.wwVariable.getValue('new_workspace_name'),
+    description: wwLib.wwVariable.getValue('new_workspace_description'),
+    environment: wwLib.wwVariable.getValue('new_workspace_environment'),
+    template: wwLib.wwVariable.getValue('workspace_template')
+  };
+  
+  await metadataAPI.createWorkspace(workspaceConfig);
+}
+
+async function performContentSearch() {
+  const workspaceId = wwLib.wwVariable.getValue('selected_workspace_id');
+  const searchQuery = wwLib.wwVariable.getValue('search_query');
+  const searchOptions = {
+    searchType: wwLib.wwVariable.getValue('search_type'),
+    limit: wwLib.wwVariable.getValue('search_limit')
+  };
+  
+  await metadataAPI.searchContent(workspaceId, searchQuery, searchOptions);
+}
+
+async function uploadWorkspaceFile() {
+  const workspaceId = wwLib.wwVariable.getValue('selected_workspace_id');
+  const fileInput = document.getElementById('file-upload');
+  const file = fileInput.files[0];
+  
+  if (file && workspaceId) {
+    const metadata = {
+      category: wwLib.wwVariable.getValue('file_category'),
+      tags: wwLib.wwVariable.getValue('file_tags')
+    };
+    
+    await metadataAPI.uploadFile(workspaceId, file, metadata);
+  }
+}
+```
+
+## 🔗 **Real-Time Features and Webhooks**
+
+### Event Streaming Architecture
+
+**Supported Events:**
+- Workspace creation, modification, and deletion
+- Database schema changes and updates
+- API endpoint deployments and modifications
+- User authentication and authorization events
+- System performance and health status changes
+
+**Webhook Configuration:**
+```javascript
+// Webhook configuration for real-time updates
+const webhookConfig = {
+  url: 'https://your-webhook-endpoint.com/xano-events',
+  events: [
+    'workspace.created',
+    'workspace.updated',
+    'database.schema_changed',
+    'api.endpoint_deployed',
+    'system.health_alert'
+  ],
+  authentication: {
+    type: 'bearer_token',
+    token: 'your-webhook-secret'
+  },
+  retry_policy: {
+    max_retries: 3,
+    retry_delay: 5000,
+    exponential_backoff: true
+  },
+  filters: {
+    workspace_ids: ['workspace_1', 'workspace_2'],
+    severity_levels: ['high', 'critical']
+  }
+};
+```
+
+## 💡 **Pro Tips**
+
+- **Use Request IDs**: Always include request IDs for tracing and debugging
+- **Implement Caching**: Cache metadata responses to reduce API calls
+- **Handle Rate Limits**: Implement proper retry logic with exponential backoff
+- **Version Management**: Always specify API version headers for consistency
+- **Monitor Usage**: Track API usage and performance metrics
+- **Security First**: Use scoped API keys and rotate them regularly
+
+## 🔧 **Troubleshooting**
+
+### Common API Issues
+
+**Problem**: Authentication failures with valid API keys  
+**Solution**: Verify API key scopes and ensure proper headers are included
+
+**Problem**: Rate limit exceeded errors  
+**Solution**: Implement proper rate limiting and retry logic in your applications
+
+**Problem**: Schema operations failing  
+**Solution**: Check workspace permissions and validate schema definitions
+
+**Problem**: Webhook events not being received  
+**Solution**: Verify webhook URL accessibility and authentication configuration
+
+---
+
+**Next Steps**: Ready to leverage modern API capabilities? Explore [Advanced Backend Features](advanced_back_end_features.md) for comprehensive integration or check [Allow Direct Query](allow_direct_query.md) for database management

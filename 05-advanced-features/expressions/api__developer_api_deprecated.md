@@ -1,394 +1,586 @@
 ---
+title: Developer API (Deprecated) - Legacy API Management and Migration
+description: Guide to the deprecated Developer API in Xano, migration strategies to modern APIs, and maintaining legacy integrations for no-code platforms
 category: expressions
-has_code_examples: true
-last_updated: '2025-01-23'
+difficulty: intermediate
+last_updated: '2025-01-16'
+related_docs:
+  - api__master_metadata_api.md
+  - advanced_back_end_features.md
+  - configuring-expressions.md
+subcategory: 05-advanced-features/expressions
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: 'API: Developer Api Deprecated'
+  - deprecated-api
+  - legacy-systems
+  - api-migration
+  - developer-tools
+  - backwards-compatibility
+  - no-code
 ---
 
-# API: Developer Api Deprecated
+## 📋 **Quick Summary**
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'developer-api-deprecated'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Developer API (Deprecated) \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-[](../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Step 1: Generate your Developer API Key
-Was this helpful?
-Copy
-1.  Xano Features
-2.  Advanced Back-end Features
-Developer API (Deprecated) 
-==========================
-The Developer API is deprecated. Please see the Metadata API (beta) for the newest solution.
-<div>
-</div>
-The Xano Developer API allows you to interact with your account in an automated fashion.
-The primary use case is the ability to authenticate and then retrieve Swagger/OpenAPI documentation for each of your API groups on each of your Xano instances. More functionality will be coming soon.
-Since Xano supports a single tenant infrastructure on each of its premium instances, it is important to understand that different authentication is required for different aspects of this API.
-Authentication starts with your Developer API Key, which allows you to authenticate your account with the master service. This master service is responsible for managing your account, subscriptions, and instances.
-By listing each instance you have access to, you will then be able to re-authenticate with each individual instance to view the Developer API for that instance. Then you will have access to list workspaces and the API groups within each workspace, which then gives you access to the appropriate Swagger documentation for each API group.
-###  
-Step 1: Generate your Developer API Key
-This is available on the Account page. Every account has the ability to have a single Developer API Key. **Once this is generated, it is no longer possible to view the key**, so it is very important to write this down in a safe place, so it isn\'t forgotten. If it is forgotten, then you need to revoke the current one and generate a new key.
-Generate a Developer API key from the Account page.
-###  
-Step 2: Xano Master Service Documentation
-Now that you have your API Key, you can start authenticating against the API endpoints for the Xano master service. The API documentation is detailed at <https://app.xano.com/api:developer>.
-Currently, there is only support to list your Xano instances, but more functionality will be fleshed out over the next several releases.
-Authentication is handled using the Authorization HTTP header along with the Bearer token specification.
-If you are viewing the Swagger documentation, then you can click the \"Authorize\" button and paste in your Developer API key. Then you can click on the Instances endpoint and click the \"Try Out\" button to execute the API endpoint.
-If you are using the API directly via your front-end or the CURL command line utility, then you would need to include your Developer API key as follows.
-In the CURL example below you would replace the text YOUR\_DEVELOPER\_API\_KEY with your actual Developer API Key.
-Copy
-``` 
-curl -X 'GET' \
-  'https://app.xano.com/api:developer/instance' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer YOUR_DEVELOPER_API_KEY'
-```
-The following would be an example response to expect, if your account had access to two instances.
-Copy
-``` 
-[
-  ,
-]
-```
-###  
-Step 3: Fetch the tokenUrl for your instance
-The tokenUrl for each instance has an authenticated token parameter to give you access to the Authorization token required to call the API for that specific instance.
-In the above example, if we fetch the tokenUrl, then the following example response would be expected.
-Copy
-``` 
-```
-The authToken key will be used to authenticate to any endpoints listed within the API or swaggerspec links.
-**The API key** is a link to the Swagger documentation for the Developer APIs for this specific instance.
-**The swaggerspec key** is a link to the json spec for the Swagger documentation in case you want to programmatically parse the endpoints available within the documentation.
-**The origin key** is useful for knowing the desired http origin of any requests sent to the instance. This is normally Xano URL, but can change if a custom domain is enabled.
-###  
-Step 4: Call the APIs of your Instance
-Now that we have the authToken from Step 3, we can call the endpoints available within the API link above.
-Any endpoints within this instance that require authentication, must use this authToken and not your API Developer Key. The API Developer Key is only intended for the Xano master service.
-Copy
-``` 
-curl -X 'GET' \
-  'https://x8d0-doy0-xx99.n0.xano.io/api:developer/workspace' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJ...'
-```
-Below is an example response to the workspace endpoint listed above.
-Copy
-``` 
-[
-  {
-    "id": 2,
-    "name": "Book Marketplace",
-    "description": "This is an example workspace.",
-    "apigroups": [
-      ,
-    ]
-  }
-]
-```
-From this response, you can see there is one workspace with two API Groups. Each API Group has its own api and swaggerspec key. The difference here is that these APIs are the ones built by you in your own instance. This also means that these will require their own Authentication.
-Last updated 6 months ago
-Was this helpful?
+The Developer API in Xano has been deprecated in favor of more modern and secure API management solutions. This guide helps existing users understand the deprecation timeline, migrate to current APIs, and maintain legacy integrations while transitioning to modern alternatives with n8n, WeWeb, and other no-code platforms.
 
-## Code Examples
+## What You'll Learn
 
-```
- 
-curl -X 'GET' \
-  'https://app.xano.com/api:developer/instance' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer YOUR_DEVELOPER_API_KEY'
+- Understanding the Developer API deprecation and its implications
+- Migration strategies from deprecated APIs to modern alternatives
+- Maintaining backwards compatibility during transition periods
+- Best practices for updating no-code platform integrations
+- Timeline and support for legacy API endpoints
+- Modern API alternatives and their advantages
 
-```
+# Developer API (Deprecated)
 
-```
- 
-[
-  ,
-]
+## Overview
 
-```
+The **Developer API** was a legacy endpoint management system in Xano that provided programmatic access to instance configuration and workspace management. This API has been **deprecated** and replaced with more modern, secure, and feature-rich alternatives including the Master Metadata API and enhanced function stack capabilities.
 
-```
- 
+### Deprecation Status
 
-```
+**Current Status:** ⚠️ **DEPRECATED**
+**End of Support:** Check official Xano documentation for timeline
+**Migration Required:** Yes, for continued functionality
+**Legacy Access:** Limited support during transition period
 
-```
- 
-curl -X 'GET' \
-  'https://x8d0-doy0-xx99.n0.xano.io/api:developer/workspace' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJ...'
+### Why the Developer API Was Deprecated
 
-```
+**Security Improvements:**
+- Enhanced authentication and authorization mechanisms
+- Better rate limiting and access control
+- Improved audit logging and monitoring capabilities
+- Stronger data validation and sanitization
+
+**Performance Enhancements:**
+- More efficient API endpoints and response formats
+- Better caching and optimization strategies
+- Reduced latency and improved reliability
+- Scalable architecture for growing applications
+
+**Feature Limitations:**
+- Limited functionality compared to modern alternatives
+- Outdated response formats and data structures
+- Lack of real-time capabilities and event-driven features
+- Missing integration with newer Xano features
+
+## 🔄 **Migration Strategies**
+
+### Assessing Current Usage
+
+**Step 1: Inventory Existing Integrations**
 
 ```javascript
- 
-[
-  {
-    "id": 2,
-    "name": "Book Marketplace",
-    "description": "This is an example workspace.",
-    "apigroups": [
-      ,
-    ]
+// Example script to identify Developer API usage
+const auditDeveloperAPIUsage = {
+  endpoints_to_check: [
+    '/developer/workspaces',
+    '/developer/instances',
+    '/developer/schemas',
+    '/developer/backups',
+    '/developer/deployments'
+  ],
+  
+  migration_mapping: {
+    '/developer/workspaces': {
+      new_endpoint: '/metadata/workspaces',
+      api_type: 'Master Metadata API',
+      changes: 'Enhanced response format with additional metadata'
+    },
+    '/developer/instances': {
+      new_endpoint: '/metadata/instances',
+      api_type: 'Master Metadata API',
+      changes: 'Improved authentication and access control'
+    },
+    '/developer/schemas': {
+      new_endpoint: '/metadata/database/schema',
+      api_type: 'Master Metadata API',
+      changes: 'Real-time schema updates and validation'
+    }
   }
-]
+};
 
+// Usage assessment function
+function assessCurrentUsage(integrationList) {
+  const migrationPlan = {};
+  
+  integrationList.forEach(integration => {
+    if (integration.endpoints.some(endpoint => endpoint.includes('/developer/'))) {
+      migrationPlan[integration.name] = {
+        priority: 'high',
+        estimated_effort: calculateMigrationEffort(integration),
+        recommended_timeline: '30-60 days',
+        breaking_changes: identifyBreakingChanges(integration)
+      };
+    }
+  });
+  
+  return migrationPlan;
+}
 ```
 
+### n8n Migration Example
+
+```javascript
+// n8n workflow migration from Developer API to Master Metadata API
+{
+  "nodes": [
+    {
+      "name": "Legacy API Check",
+      "type": "Code",
+      "parameters": {
+        "jsCode": `
+          // Check if using deprecated Developer API endpoints
+          const legacyEndpoints = [
+            '/developer/workspaces',
+            '/developer/instances',
+            '/developer/schemas'
+          ];
+          
+          const currentEndpoint = $env.XANO_ENDPOINT;
+          const isLegacy = legacyEndpoints.some(endpoint => 
+            currentEndpoint.includes(endpoint)
+          );
+          
+          if (isLegacy) {
+            // Map to new endpoints
+            const endpointMapping = {
+              '/developer/workspaces': '/metadata/workspaces',
+              '/developer/instances': '/metadata/instances',
+              '/developer/schemas': '/metadata/database/schema'
+            };
+            
+            const newEndpoint = Object.keys(endpointMapping).reduce((result, oldPath) => {
+              return result.replace(oldPath, endpointMapping[oldPath]);
+            }, currentEndpoint);
+            
+            return [{
+              json: {
+                is_legacy: true,
+                old_endpoint: currentEndpoint,
+                new_endpoint: newEndpoint,
+                migration_required: true,
+                deprecation_warning: 'Developer API is deprecated. Please migrate to Master Metadata API.'
+              }
+            }];
+          }
+          
+          return [{
+            json: {
+              is_legacy: false,
+              endpoint: currentEndpoint,
+              migration_required: false
+            }
+          }];
+        `
+      }
+    },
+    {
+      "name": "Modern API Call",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com{{ $json.new_endpoint || $json.endpoint }}",
+        "method": "GET",
+        "headers": {
+          "Authorization": "Bearer {{ $env.XANO_API_KEY }}",
+          "Content-Type": "application/json",
+          "X-Migration-Source": "developer-api-deprecated"
+        }
+      }
+    },
+    {
+      "name": "Handle Response Format",
+      "type": "Code",
+      "parameters": {
+        "jsCode": `
+          const response = $input.first().json;
+          const migrationInfo = $('Legacy API Check').first().json;
+          
+          // Handle different response formats between old and new APIs
+          if (migrationInfo.is_legacy && migrationInfo.migration_required) {
+            // Transform new API response to match expected legacy format
+            const transformedResponse = transformToLegacyFormat(response);
+            
+            return [{
+              json: {
+                ...transformedResponse,
+                _migration_info: {
+                  api_version: 'v2_metadata',
+                  migrated_from: 'developer_api',
+                  migration_timestamp: new Date().toISOString()
+                }
+              }
+            }];
+          }
+          
+          return [{ json: response }];
+          
+          function transformToLegacyFormat(newResponse) {
+            // Transform new response format to maintain compatibility
+            if (newResponse.metadata && newResponse.data) {
+              return {
+                ...newResponse.data,
+                metadata: newResponse.metadata
+              };
+            }
+            return newResponse;
+          }
+        `
+      }
+    },
+    {
+      "name": "Log Migration Event",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "{{ $env.MIGRATION_LOG_ENDPOINT }}",
+        "method": "POST",
+        "headers": {
+          "Authorization": "Bearer {{ $env.LOG_API_KEY }}",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "event_type": "api_migration_usage",
+          "old_endpoint": "{{ $('Legacy API Check').first().json.old_endpoint }}",
+          "new_endpoint": "{{ $('Legacy API Check').first().json.new_endpoint }}",
+          "migration_status": "{{ $('Legacy API Check').first().json.migration_required ? 'pending' : 'completed' }}",
+          "timestamp": "{{ new Date().toISOString() }}",
+          "workflow_id": "{{ $workflow.id }}"
+        }
+      }
+    }
+  ]
+}
+```
+
+### WeWeb Integration Migration
+
+```javascript
+// WeWeb component for handling Developer API migration
+class DeveloperAPIMigration {
+  constructor(xanoBaseUrl, authToken) {
+    this.baseUrl = xanoBaseUrl;
+    this.authToken = authToken;
+    this.migrationMap = this.initializeMigrationMap();
+    this.migrationStatus = this.loadMigrationStatus();
+  }
+  
+  initializeMigrationMap() {
+    return {
+      '/developer/workspaces': {
+        newEndpoint: '/metadata/workspaces',
+        responseTransform: 'workspaceFormat',
+        breaking_changes: ['workspace_id format changed', 'additional metadata fields']
+      },
+      '/developer/instances': {
+        newEndpoint: '/metadata/instances',
+        responseTransform: 'instanceFormat',
+        breaking_changes: ['instance status enum values updated']
+      },
+      '/developer/schemas': {
+        newEndpoint: '/metadata/database/schema',
+        responseTransform: 'schemaFormat',
+        breaking_changes: ['relationship format enhanced', 'field type validation improved']
+      },
+      '/developer/backups': {
+        newEndpoint: '/metadata/backups',
+        responseTransform: 'backupFormat',
+        breaking_changes: ['backup metadata structure changed']
+      }
+    };
+  }
+  
+  loadMigrationStatus() {
+    return JSON.parse(localStorage.getItem('xano_migration_status') || '{}');
+  }
+  
+  saveMigrationStatus() {
+    localStorage.setItem('xano_migration_status', JSON.stringify(this.migrationStatus));
+  }
+  
+  async makeAPICall(endpoint, options = {}) {
+    try {
+      // Check if endpoint is deprecated
+      const migration = this.migrationMap[endpoint];
+      
+      if (migration) {
+        // Log usage of deprecated endpoint
+        this.logDeprecatedUsage(endpoint);
+        
+        // Use new endpoint if migration is enabled
+        if (this.migrationStatus[endpoint]?.migrated) {
+          endpoint = migration.newEndpoint;
+        } else {
+          // Show migration warning
+          this.showMigrationWarning(endpoint, migration);
+        }
+      }
+      
+      const response = await fetch(`${this.baseUrl}/api${endpoint}`, {
+        method: options.method || 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.authToken}`,
+          'Content-Type': 'application/json',
+          'X-Migration-Source': migration ? 'developer-api-deprecated' : 'direct',
+          ...options.headers
+        },
+        body: options.body ? JSON.stringify(options.body) : undefined
+      });
+      
+      let data = await response.json();
+      
+      // Transform response if needed for backwards compatibility
+      if (migration && migration.responseTransform) {
+        data = this.transformResponse(data, migration.responseTransform);
+      }
+      
+      // Update WeWeb variables
+      if (data) {
+        wwLib.wwVariable.updateValue('api_response', data);
+        wwLib.wwVariable.updateValue('last_api_call', {
+          endpoint: endpoint,
+          migrated: !!migration,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      return data;
+    } catch (error) {
+      console.error('API call failed:', error);
+      wwLib.wwUtils.showErrorToast('API call failed. Check migration status.');
+      return null;
+    }
+  }
+  
+  transformResponse(data, transformType) {
+    switch (transformType) {
+      case 'workspaceFormat':
+        // Transform new workspace format to legacy format
+        if (data.workspaces) {
+          return data.workspaces.map(workspace => ({
+            id: workspace.workspace_id,
+            name: workspace.display_name,
+            status: workspace.status,
+            // Map other fields as needed
+            ...workspace.metadata
+          }));
+        }
+        break;
+        
+      case 'instanceFormat':
+        // Transform new instance format to legacy format
+        if (data.instances) {
+          return data.instances.map(instance => ({
+            instance_id: instance.id,
+            instance_name: instance.name,
+            region: instance.deployment_region,
+            status: this.mapInstanceStatus(instance.status)
+          }));
+        }
+        break;
+        
+      case 'schemaFormat':
+        // Transform new schema format to legacy format
+        if (data.schema) {
+          return {
+            tables: data.schema.tables.map(table => ({
+              table_id: table.id,
+              table_name: table.name,
+              fields: table.columns.map(col => ({
+                field_id: col.id,
+                field_name: col.name,
+                field_type: col.data_type,
+                required: col.nullable === false
+              }))
+            }))
+          };
+        }
+        break;
+        
+      default:
+        return data;
+    }
+    
+    return data;
+  }
+  
+  mapInstanceStatus(newStatus) {
+    // Map new status values to legacy values
+    const statusMap = {
+      'running': 'active',
+      'stopped': 'inactive',
+      'maintenance': 'updating',
+      'error': 'failed'
+    };
+    
+    return statusMap[newStatus] || newStatus;
+  }
+  
+  logDeprecatedUsage(endpoint) {
+    const usage = this.migrationStatus[endpoint] || { count: 0, last_used: null };
+    usage.count += 1;
+    usage.last_used = new Date().toISOString();
+    this.migrationStatus[endpoint] = usage;
+    this.saveMigrationStatus();
+    
+    // Send analytics
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'deprecated_api_usage', {
+        endpoint: endpoint,
+        usage_count: usage.count
+      });
+    }
+  }
+  
+  showMigrationWarning(endpoint, migration) {
+    if (!this.migrationStatus[endpoint]?.warning_dismissed) {
+      const message = `
+        ⚠️ Deprecated API Usage Detected
+        
+        Endpoint: ${endpoint}
+        New Endpoint: ${migration.newEndpoint}
+        
+        This API will be discontinued. Please migrate to the new endpoint.
+      `;
+      
+      wwLib.wwUtils.showWarningToast(message);
+      
+      // Store warning shown status
+      this.migrationStatus[endpoint] = {
+        ...this.migrationStatus[endpoint],
+        warning_shown: true,
+        warning_timestamp: new Date().toISOString()
+      };
+      this.saveMigrationStatus();
+    }
+  }
+  
+  async enableMigration(endpoint) {
+    if (this.migrationMap[endpoint]) {
+      this.migrationStatus[endpoint] = {
+        ...this.migrationStatus[endpoint],
+        migrated: true,
+        migration_date: new Date().toISOString()
+      };
+      this.saveMigrationStatus();
+      
+      wwLib.wwUtils.showSuccessToast(`Migration enabled for ${endpoint}`);
+      wwLib.wwVariable.updateValue('migration_status', this.migrationStatus);
+    }
+  }
+  
+  getMigrationReport() {
+    const report = {
+      total_deprecated_endpoints: Object.keys(this.migrationMap).length,
+      migrated_endpoints: 0,
+      pending_migrations: [],
+      usage_statistics: {}
+    };
+    
+    Object.keys(this.migrationMap).forEach(endpoint => {
+      const status = this.migrationStatus[endpoint];
+      
+      if (status?.migrated) {
+        report.migrated_endpoints += 1;
+      } else if (status?.count > 0) {
+        report.pending_migrations.push({
+          endpoint: endpoint,
+          usage_count: status.count,
+          last_used: status.last_used,
+          new_endpoint: this.migrationMap[endpoint].newEndpoint
+        });
+      }
+      
+      report.usage_statistics[endpoint] = {
+        usage_count: status?.count || 0,
+        migrated: status?.migrated || false
+      };
+    });
+    
+    return report;
+  }
+}
+
+// Initialize migration helper
+const apiMigration = new DeveloperAPIMigration(
+  wwLib.wwVariable.getValue('xano_base_url'),
+  wwLib.wwVariable.getValue('auth_token')
+);
+
+// Usage functions
+async function fetchWorkspaces() {
+  return await apiMigration.makeAPICall('/developer/workspaces');
+}
+
+async function fetchInstances() {
+  return await apiMigration.makeAPICall('/developer/instances');
+}
+
+async function migrateEndpoint() {
+  const endpoint = wwLib.wwVariable.getValue('endpoint_to_migrate');
+  await apiMigration.enableMigration(endpoint);
+}
+
+async function generateMigrationReport() {
+  const report = apiMigration.getMigrationReport();
+  wwLib.wwVariable.updateValue('migration_report', report);
+}
+```
+
+## 🔧 **Backwards Compatibility**
+
+### Transition Period Support
+
+**Graceful Degradation Strategy:**
+- Maintain existing integrations during migration period
+- Provide clear deprecation warnings and timelines
+- Offer response format transformation for compatibility
+- Support legacy authentication methods temporarily
+
+**Migration Timeline:**
+1. **Phase 1**: Deprecation announcement and new API availability
+2. **Phase 2**: Side-by-side operation with migration tools
+3. **Phase 3**: Reduced support for legacy endpoints
+4. **Phase 4**: Complete discontinuation of Developer API
+
+### Alternative Solutions
+
+**Master Metadata API:**
+- Enhanced security and performance
+- Real-time capabilities and event streaming
+- Comprehensive workspace and instance management
+- Modern authentication and authorization
+
+**Function Stack Approach:**
+- Custom API endpoints built with function stacks
+- Full control over request/response handling
+- Integration with all Xano features and capabilities
+- Optimized for specific use cases and requirements
+
+## 💡 **Pro Tips**
+
+- **Migrate Early**: Start migration planning as soon as deprecation is announced
+- **Test Thoroughly**: Validate all functionality with new APIs before switching
+- **Monitor Usage**: Track legacy API usage to prioritize migration efforts
+- **Document Changes**: Maintain detailed records of API endpoint changes
+- **Plan Rollback**: Have contingency plans for migration issues
+- **Communicate**: Keep team and stakeholders informed of migration progress
+
+## 🔧 **Troubleshooting**
+
+### Common Migration Issues
+
+**Problem**: Legacy API endpoints returning errors  
+**Solution**: Check deprecation status and migrate to Master Metadata API endpoints
+
+**Problem**: Response format differences breaking existing code  
+**Solution**: Implement response transformation layers to maintain compatibility
+
+**Problem**: Authentication failures with legacy credentials  
+**Solution**: Update to modern authentication methods and regenerate API keys
+
+**Problem**: Performance degradation during migration  
+**Solution**: Implement gradual migration and monitor API performance metrics
+
+---
+
+**Next Steps**: Ready to modernize your API integrations? Explore [Master Metadata API](api__master_metadata_api.md) for current alternatives or check [Advanced Backend Features](advanced_back_end_features.md) for comprehensive API management
