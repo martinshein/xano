@@ -1,426 +1,611 @@
 ---
+title: AI Lambda Assistant - Smart Function Development with AI
+description: Use AI to build, optimize, and debug Xano lambda functions with intelligent code generation and natural language assistance
 category: ai-services
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
+difficulty: intermediate
+last_updated: '2025-01-16'
+related_docs:
+  - agents.md
+  - ai-tools.md
+  - ai-sql-assistant.md
 subcategory: 04-integrations/ai-services
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - lambda-functions
+  - ai-assistant
+  - code-generation
+  - function-optimization
+  - debugging
+  - no-code
 ---
 
+## 📋 **Quick Summary**
+
+The AI Lambda Assistant helps you build, optimize, and debug Xano lambda functions using natural language. It can generate function logic, suggest optimizations, debug issues, and integrate with your existing workflows. Perfect for accelerating development in n8n, WeWeb, and other no-code platforms that rely on Xano's powerful function capabilities.
+
+## What You'll Learn
+
+- How to use AI assistance for lambda function development
+- Generating function logic from natural language descriptions
+- Optimizing existing functions for better performance
+- Debugging complex function stack issues with AI help
+- Best practices for AI-assisted function development
+- Integration patterns with no-code automation platforms
+
+# AI Lambda Assistant
+
+## Overview
+
+The AI Lambda Assistant is your intelligent companion for developing Xano lambda functions. It understands natural language descriptions and can:
+
+- **Generate Function Logic**: Create complete function stacks from descriptions
+- **Optimize Performance**: Suggest improvements for existing functions
+- **Debug Issues**: Identify and fix problems in your function stacks
+- **Code Review**: Analyze functions for best practices and security
+- **Documentation**: Generate clear documentation for complex functions
+
+### Key Capabilities
+
+| Feature | Description | Use Case |
+|---------|-------------|----------|
+| **Code Generation** | Generate functions from natural language | "Create a function that sends welcome emails to new users" |
+| **Performance Analysis** | Identify bottlenecks and optimization opportunities | Analyze slow-running functions |
+| **Error Debugging** | Diagnose and fix function errors | Troubleshoot failed API calls |
+| **Security Review** | Check for security vulnerabilities | Validate input sanitization |
+| **Documentation** | Auto-generate function documentation | Create clear usage guides |
+
+## Getting Started
+
+### Accessing the AI Lambda Assistant
+
+1. **Navigate to Function Stack**
+   - Open any function stack in your Xano workspace
+   - Look for the AI Assistant icon in the toolbar
+
+2. **Activate AI Mode**
+   - Click the AI Assistant button
+   - Select "Lambda Assistant" from the options
+
+3. **Start Conversing**
+   - Describe what you want to build in natural language
+   - The assistant will generate code and explanations
+
+### Basic Usage Patterns
+
+#### 1. Function Generation
+
+**Prompt Example:**
+```
+Create a function that:
+- Accepts user registration data
+- Validates email format and password strength
+- Checks if email already exists in database
+- Creates new user record if valid
+- Sends welcome email
+- Returns success/error response
+```
+
+**Generated Function Stack:**
+```javascript
+[
+  // Step 1: Validate input data
+  {
+    "function": "conditional",
+    "condition": "{{ !request.body.email || !request.body.password }}",
+    "true_branch": [
+      {
+        "function": "return_response",
+        "status": 400,
+        "body": {
+          "error": "Email and password are required"
+        }
+      }
+    ]
+  },
+  
+  // Step 2: Validate email format
+  {
+    "function": "conditional", 
+    "condition": "{{ !request.body.email|test('/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/') }}",
+    "true_branch": [
+      {
+        "function": "return_response",
+        "status": 400,
+        "body": {
+          "error": "Invalid email format"
+        }
+      }
+    ]
+  },
+  
+  // Step 3: Check password strength
+  {
+    "function": "conditional",
+    "condition": "{{ request.body.password|length < 8 }}",
+    "true_branch": [
+      {
+        "function": "return_response", 
+        "status": 400,
+        "body": {
+          "error": "Password must be at least 8 characters"
+        }
+      }
+    ]
+  },
+  
+  // Step 4: Check if email exists
+  {
+    "function": "get_record",
+    "table": "users",
+    "filter": {
+      "email": "{{ request.body.email }}"
+    }
+  },
+  
+  // Step 5: Return error if user exists
+  {
+    "function": "conditional",
+    "condition": "{{ existing_user }}",
+    "true_branch": [
+      {
+        "function": "return_response",
+        "status": 409,
+        "body": {
+          "error": "Email already registered"
+        }
+      }
+    ]
+  },
+  
+  // Step 6: Create new user
+  {
+    "function": "add_record",
+    "table": "users",
+    "data": {
+      "email": "{{ request.body.email }}",
+      "password": "{{ request.body.password|hash }}",
+      "name": "{{ request.body.name }}",
+      "created_at": "{{ now }}"
+    }
+  },
+  
+  // Step 7: Send welcome email
+  {
+    "function": "external_api_request",
+    "url": "https://api.sendgrid.com/v3/mail/send",
+    "method": "POST",
+    "headers": {
+      "Authorization": "Bearer {{ env.SENDGRID_API_KEY }}",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "personalizations": [{
+        "to": [{"email": "{{ new_user.email }}"}],
+        "subject": "Welcome to our platform!"
+      }],
+      "from": {"email": "noreply@yourapp.com"},
+      "content": [{
+        "type": "text/html",
+        "value": "<h1>Welcome {{ new_user.name }}!</h1><p>Thanks for joining us.</p>"
+      }]
+    }
+  },
+  
+  // Step 8: Return success response
+  {
+    "function": "return_response",
+    "status": 201,
+    "body": {
+      "success": true,
+      "user": {
+        "id": "{{ new_user.id }}",
+        "email": "{{ new_user.email }}",
+        "name": "{{ new_user.name }}"
+      }
+    }
+  }
+]
+```
+
+#### 2. Function Optimization
+
+**Optimization Prompt:**
+```
+Analyze this function for performance issues and suggest improvements:
+[paste your existing function stack]
+```
+
+**AI Analysis Response:**
+```
+Performance Analysis:
+
+ISSUES FOUND:
+1. Missing database indexes on email field
+2. Synchronous email sending blocks response
+3. No input validation caching
+4. Password hashing could be moved to background
+
+RECOMMENDATIONS:
+1. Add database index: CREATE INDEX idx_users_email ON users(email)
+2. Use background task for email sending
+3. Implement request validation middleware
+4. Consider async password hashing for better UX
+
+OPTIMIZED VERSION:
+[AI provides improved function stack with explanations]
+```
+
+#### 3. Error Debugging
+
+**Debug Prompt:**
+```
+This function is failing with "undefined variable" error:
+[paste error details and function]
+```
+
+**AI Debug Response:**
+```
+ERROR ANALYSIS:
+
+ISSUE: Variable 'user_data' is undefined in step 5
+
+CAUSE: The get_record function in step 3 returns null when no user is found,
+but step 5 tries to access user_data.email without checking if user exists.
+
+FIX: Add conditional check before accessing user_data:
+
+{
+  "function": "conditional",
+  "condition": "{{ user_data }}",
+  "true_branch": [
+    // Your existing logic here
+  ],
+  "false_branch": [
+    {
+      "function": "return_response",
+      "status": 404,
+      "body": {"error": "User not found"}
+    }
+  ]
+}
+```
+
+## 🔗 **No-Code Platform Integration**
+
+### n8n Integration with AI-Generated Functions
+
+**n8n Workflow for AI Function Development:**
+
+```javascript
+// n8n workflow configuration
+{
+  "nodes": [
+    {
+      "name": "Function Request Trigger",
+      "type": "Webhook",
+      "parameters": {
+        "path": "ai-function-generator"
+      }
+    },
+    {
+      "name": "Generate Function with AI",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/ai-lambda-assistant",
+        "method": "POST",
+        "body": {
+          "prompt": "{{ $json.function_description }}",
+          "context": "{{ $json.existing_functions }}",
+          "optimization_level": "production"
+        }
+      }
+    },
+    {
+      "name": "Deploy Function",
+      "type": "HTTP Request", 
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/deploy-function",
+        "method": "POST",
+        "body": {
+          "function_stack": "{{ $json.generated_function }}",
+          "endpoint_path": "{{ $json.endpoint_name }}"
+        }
+      }
+    },
+    {
+      "name": "Test Function",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/{{ $json.endpoint_name }}",
+        "method": "POST",
+        "body": "{{ $json.test_data }}"
+      }
+    }
+  ]
+}
+```
+
+### WeWeb Integration
+
+**Frontend Component for AI Function Management:**
+
+```javascript
+// WeWeb component for AI-assisted function development
+async function generateFunction(description, context = {}) {
+  try {
+    const response = await fetch(`${wwLib.wwVariable.getValue('xano_base_url')}/api/ai-lambda-assistant`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${wwLib.wwVariable.getValue('auth_token')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        description: description,
+        context: context,
+        optimization_preferences: {
+          performance: 'high',
+          readability: 'medium',
+          security: 'high'
+        }
+      })
+    });
+    
+    const result = await response.json();
+    
+    // Update UI with generated function
+    wwLib.wwVariable.updateValue('generated_function', result.function_stack);
+    wwLib.wwVariable.updateValue('function_explanation', result.explanation);
+    wwLib.wwVariable.updateValue('usage_examples', result.examples);
+    
+    return result;
+  } catch (error) {
+    console.error('AI function generation failed:', error);
+    return { error: 'Function generation unavailable' };
+  }
+}
+
+// Usage in WeWeb
+const handleGenerateFunction = async () => {
+  const description = wwLib.wwVariable.getValue('function_description');
+  const context = {
+    existing_endpoints: wwLib.wwVariable.getValue('current_endpoints'),
+    database_schema: wwLib.wwVariable.getValue('db_schema')
+  };
+  
+  const result = await generateFunction(description, context);
+  
+  if (result.function_stack) {
+    // Show preview and allow user to approve/modify
+    wwLib.wwModal.open('function-preview-modal');
+  }
+};
+```
+
+## 🛠️ **Advanced Features**
+
+### 1. Function Templates and Patterns
+
+**Common Function Patterns:**
+
+```javascript
+// AI Assistant can generate these patterns automatically
+
+// Authentication Middleware
+const authMiddleware = {
+  "function": "conditional",
+  "condition": "{{ !request.headers.authorization }}",
+  "true_branch": [
+    {
+      "function": "return_response",
+      "status": 401,
+      "body": {"error": "Authentication required"}
+    }
+  ],
+  "false_branch": [
+    {
+      "function": "validate_jwt_token",
+      "token": "{{ request.headers.authorization|replace('Bearer ', '') }}"
+    }
+  ]
+};
+
+// Rate Limiting Pattern
+const rateLimitPattern = {
+  "function": "get_record",
+  "table": "rate_limits",
+  "filter": {
+    "user_id": "{{ user.id }}",
+    "endpoint": "{{ request.path }}",
+    "created_at": ">{{ now - 3600 }}"
+  }
+};
+
+// Data Validation Pattern
+const validateInput = {
+  "function": "conditional",
+  "condition": "{{ !request.body|validate_schema(user_schema) }}",
+  "true_branch": [
+    {
+      "function": "return_response",
+      "status": 400,
+      "body": {"error": "Invalid input data"}
+    }
+  ]
+};
+```
+
+### 2. Performance Optimization
+
+**AI-Suggested Optimizations:**
+
+```javascript
+// Before: Multiple database calls
+[
+  {"function": "get_record", "table": "users", "id": "{{ user_id }}"},
+  {"function": "get_record", "table": "profiles", "user_id": "{{ user_id }}"},
+  {"function": "get_record", "table": "settings", "user_id": "{{ user_id }}"}
+]
+
+// After: Single optimized query with joins
+[
+  {
+    "function": "query_all_records",
+    "table": "users", 
+    "joins": [
+      {"table": "profiles", "on": "users.id = profiles.user_id"},
+      {"table": "settings", "on": "users.id = settings.user_id"}
+    ],
+    "filter": {"users.id": "{{ user_id }}"}
+  }
+]
+```
+
+### 3. Error Handling Patterns
+
+**Comprehensive Error Handling:**
+
+```javascript
+// AI-generated error handling wrapper
+const errorHandler = {
+  "function": "try_catch",
+  "try_block": [
+    // Your main function logic here
+  ],
+  "catch_block": [
+    {
+      "function": "conditional",
+      "condition": "{{ error.type == 'database_error' }}",
+      "true_branch": [
+        {
+          "function": "log_error",
+          "level": "error",
+          "message": "Database operation failed: {{ error.message }}"
+        },
+        {
+          "function": "return_response",
+          "status": 500,
+          "body": {"error": "Internal server error"}
+        }
+      ]
+    },
+    {
+      "function": "conditional", 
+      "condition": "{{ error.type == 'validation_error' }}",
+      "true_branch": [
+        {
+          "function": "return_response",
+          "status": 400,
+          "body": {"error": "{{ error.message }}"}
+        }
+      ]
+    }
+  ]
+};
+```
+
+## 🔧 **Best Practices**
+
+### 1. AI Prompt Engineering
+
+**Effective Prompts:**
+
+```
+✅ GOOD PROMPT:
+"Create a function that processes webhook data from Stripe, validates the signature, 
+updates the user's subscription status in the database, and sends a confirmation email. 
+Include error handling for invalid signatures and database failures."
+
+❌ POOR PROMPT:
+"Make a payment function"
+```
+
+**Prompt Structure:**
+- **Context**: What the function should do
+- **Inputs**: What data it receives
+- **Processing**: Key business logic steps
+- **Outputs**: Expected return values
+- **Error Cases**: What could go wrong
+
+### 2. Code Review Checklist
+
+**AI-Generated Function Review:**
+
+- [ ] Input validation implemented
+- [ ] Error handling covers all scenarios
+- [ ] Database operations are optimized
+- [ ] Security measures in place
+- [ ] Performance considerations addressed
+- [ ] Logging and monitoring included
+- [ ] Documentation is clear
+
+### 3. Testing AI-Generated Functions
+
+```javascript
+// Test framework for AI-generated functions
+const testFunction = async (functionStack, testCases) => {
+  for (const testCase of testCases) {
+    try {
+      const result = await executeFunction(functionStack, testCase.input);
+      
+      // Validate expected output
+      if (JSON.stringify(result) !== JSON.stringify(testCase.expected)) {
+        console.error(`Test failed for input: ${JSON.stringify(testCase.input)}`);
+        console.error(`Expected: ${JSON.stringify(testCase.expected)}`);
+        console.error(`Got: ${JSON.stringify(result)}`);
+      } else {
+        console.log(`✅ Test passed: ${testCase.description}`);
+      }
+    } catch (error) {
+      console.error(`❌ Test error: ${testCase.description}`, error);
+    }
+  }
+};
+```
+
+## 🎯 **Common Use Cases**
+
+### 1. API Endpoint Generation
+
+**Prompt**: "Create a REST API for managing blog posts with CRUD operations"
+
+**Generated Endpoints**:
+- `GET /posts` - List all posts with pagination
+- `GET /posts/{id}` - Get single post
+- `POST /posts` - Create new post
+- `PUT /posts/{id}` - Update existing post
+- `DELETE /posts/{id}` - Delete post
+
+### 2. Data Processing Pipelines
+
+**Prompt**: "Create a function that processes CSV uploads, validates data, and imports to database"
+
+**Generated Pipeline**:
+- File upload validation
+- CSV parsing and validation
+- Data transformation
+- Batch database insertion
+- Progress reporting
+- Error logging
+
+### 3. Integration Functions
+
+**Prompt**: "Create a function that syncs user data between Xano and external CRM"
+
+**Generated Integration**:
+- CRM API authentication
+- Data mapping and transformation
+- Conflict resolution logic
+- Sync status tracking
+- Error handling and retry logic
+
+## 💡 **Pro Tips**
+
+- **Be Specific**: Include exact field names and business rules in prompts
+- **Provide Context**: Share existing function patterns for consistency
+- **Test Thoroughly**: Always test AI-generated functions with real data
+- **Iterate**: Refine prompts based on generated results
+- **Document**: Keep track of successful prompts for reuse
+- **Security First**: Always review security implications of generated code
+
 ---
-apple-mobile-web-app-status-bar-style: black
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'ai-lambda-assistant'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../the-function-stack/filters/manipulation.html)
-        -   [Math](../the-function-stack/filters/math.html)
-        -   [Timestamp](../the-function-stack/filters/timestamp.html)
-        -   [Text](../the-function-stack/filters/text.html)
-        -   [Array](../the-function-stack/filters/array.html)
-        -   [Transform](../the-function-stack/filters/transform.html)
-        -   [Conversion](../the-function-stack/filters/conversion.html)
-        -   [Comparison](../the-function-stack/filters/comparison.html)
-        -   [Security](../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../the-function-stack/data-types/text.html)
-        -   [Expression](../the-function-stack/data-types/expression.html)
-        -   [Array](../the-function-stack/data-types/array.html)
-        -   [Object](../the-function-stack/data-types/object.html)
-        -   [Integer](../the-function-stack/data-types/integer.html)
-        -   [Decimal](../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../the-function-stack/data-types/timestamp.html)
-        -   [Null](../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
-Was this helpful?
-
-Copy
-
-1.  [Build With AI](using-ai-builders-with-xano.html)
-
-AI Lambda Assistant 
-===================
-
- 
-
-What can I build with the AI Lambda Assistant?
-
-The Lambda Assistant can be used to write complete Lambda functions to run right alongside the rest of your function stack.
-
-Lambda functions and the AI Assistant can take full advantage of NPM packages, including even finding the ones you might need to write your desired function. Just plug in your idea and go.
-
-<div>
-
-1
-
-###  
-
-Give the assistant context by running your function stack first.
-
-If you don\'t do this, you can still use the AI assistant, but it will make certain inferences that may not be correct.
-
-2
-
-###  
-
-Look for the [![](../_gitbook/image9913.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F3A8Nrwer2IbTCTrRExe0%252FCleanShot%25202025-02-24%2520at%252010.43.11.png%3Falt%3Dmedia%26token%3De15eb6f0-d3be-4fe1-821c-7019198ea0a5&width=300&dpr=4&quality=100&sign=79004e2c&sv=2)] button and click it to enable the assistant.
-
-3
-
-###  
-
-Ask the assistant for help as needed.
-
-In this example, we\'re asking the assistant to write a function that imports the Decamelize library and applies it to our \'test\' input.
-
-![](../_gitbook/image16ed.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F5n6Ova55hjKAtMx4MIRs%252FCleanShot%25202025-02-24%2520at%252010.45.23.png%3Falt%3Dmedia%26token%3Dea46c9d1-d114-4f91-aa4c-f4115b928de4&width=768&dpr=4&quality=100&sign=6eddd1f6&sv=2)
-
-4
-
-###  
-
-Choose how to proceed with the assistant\'s suggestions.
-
-You can click [![](../_gitbook/image2f61.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252Fpo252whDIYwwhJkStZSp%252FCleanShot%25202025-02-24%2520at%252010.46.22.png%3Falt%3Dmedia%26token%3Dee2d23bc-c146-4d86-b3f6-210c0770593f&width=300&dpr=4&quality=100&sign=1613754a&sv=2)] to add the suggestions to the Lambda function code, or you can copy it manually and place it as needed.
-
-Be sure to **rate the assistant\'s suggestion(s)** using the [👍] and [👎] buttons. We\'ll use this information to improve the behavior of the assistant in future iterations.
-
-</div>
-
-Last updated 4 months ago
-
-Was this helpful?
+**Next Steps**: Ready to build smarter functions? Try the [AI SQL Assistant](ai-sql-assistant.md) for database query optimization or explore [AI Tools](ai-tools.md) for the complete AI toolkit

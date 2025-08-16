@@ -1,693 +1,707 @@
 ---
+title: Xano MCP Server - Direct Instance Management with AI
+description: Access and manage your Xano instance directly through MCP clients like Claude Desktop, Cursor, and other AI tools using the built-in MCP server
 category: ai-services
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
+difficulty: intermediate
+last_updated: '2025-01-16'
+related_docs:
+  - mcp-builder.md
+  - connecting-clients.md
+  - mcp-functions.md
 subcategory: 04-integrations/ai-services
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - xano-mcp-server
+  - metadata-api
+  - instance-management
+  - ai-native
+  - direct-access
+  - no-code
 ---
 
+## 📋 **Quick Summary**
+
+The Xano MCP Server allows you to manage your Xano instance directly through any MCP client. Powered by the Metadata API, it enables AI tools to create tables, manage data, analyze request history, and perform administrative tasks without leaving your AI environment. Perfect for AI-assisted development workflows in Claude Desktop, Cursor, and other MCP-compatible tools.
+
+## What You'll Learn
+
+- How to connect to Xano's built-in MCP server
+- Available tools for instance and workspace management
+- Best practices for AI-assisted Xano development
+- Security considerations for MCP access
+- Integration patterns with popular AI clients
+- Advanced automation workflows
+
+# Xano MCP Server
+
+## Overview
+
+The **Xano MCP Server** is a built-in service that exposes your Xano instance capabilities through the Model Context Protocol. Unlike custom MCP servers you build with MCP Builder, this server provides direct access to Xano's administrative and development functions, enabling AI tools to help you manage your entire Xano instance.
+
+### Key Capabilities
+
+- **Instance Management**: Create and configure workspaces and branches
+- **Database Administration**: Design tables, manage schemas, and manipulate data
+- **API Development**: Access and analyze your API groups and endpoints
+- **Request Analysis**: Search and analyze API request history
+- **Security Management**: Configure access controls and permissions
+- **Real-time Monitoring**: Access workspace and instance health information
+
+### Powered by Metadata API
+
+The Xano MCP Server leverages the [Metadata API](../xano-features/metadata-api/master-metadata-api.md) to provide comprehensive access to your Xano instance. This ensures that all operations are secure, audited, and consistent with Xano's built-in capabilities.
+
+## 🚀 **Getting Started**
+
+### Step 1: Access the MCP Server Settings
+
+1. **Navigate to Instance Settings**: From your Xano dashboard, click the ⚙️ icon next to your instance
+2. **Select MCP Server**: Choose **Metadata API & MCP Server**
+3. **Review Capabilities**: Familiarize yourself with available tools and permissions
+
+### Step 2: Generate Access Token
+
+1. **Create Token**: Click **Generate Access Token**
+2. **Set Permissions**: Configure appropriate scope for your use case:
+
+| Permission Level | Capabilities | Best For |
+|------------------|--------------|----------|
+| **Read Only** | View data, schemas, and request history | Analysis and monitoring |
+| **Read/Write** | Full data manipulation and table management | Development and maintenance |
+| **Full Access** | Complete instance administration | Advanced automation |
+
+3. **Save Token**: Store your token securely for client configuration
+
+### Step 3: Choose Connection Method
+
+**Server-Sent Events (SSE)** - Recommended for most clients
+```
+https://your-instance.xano.io/api/mcp/sse?token=your_access_token
+```
+
+**Streaming Connection** - For advanced clients
+```
+wss://your-instance.xano.io/api/mcp/stream?token=your_access_token
+```
+
+## 🔗 **No-Code Platform Integration**
+
+### n8n Workflow with Xano MCP Server
+
+**Automated Database Management:**
+
+```javascript
+// n8n HTTP Request node for Xano MCP Server
+{
+  "method": "POST",
+  "url": "https://your-instance.xano.io/api/mcp/sse",
+  "headers": {
+    "Authorization": "Bearer {{ $json.access_token }}",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "tool": "addTable",
+    "args": {
+      "workspace_id": "{{ $json.workspace_id }}",
+      "table_name": "{{ $json.new_table_name }}",
+      "schema": {
+        "name": {"type": "text", "required": true},
+        "email": {"type": "text", "unique": true},
+        "created_at": {"type": "datetime", "default": "now"}
+      }
+    }
+  }
+}
+```
+
+### WeWeb Integration
+
+**AI-Powered Admin Dashboard:**
+
+```javascript
+// WeWeb component for Xano instance management
+class XanoMCPManager {
+  constructor(accessToken) {
+    this.token = accessToken;
+    this.baseUrl = 'https://your-instance.xano.io/api/mcp/sse';
+  }
+  
+  async callMCPTool(toolName, args) {
+    try {
+      const response = await fetch(this.baseUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          tool: toolName,
+          args: args
+        })
+      });
+      
+      return await response.json();
+    } catch (error) {
+      console.error('MCP tool call failed:', error);
+      throw new Error('Failed to execute Xano operation');
+    }
+  }
+  
+  // Workspace management
+  async getWorkspaces() {
+    return this.callMCPTool('listWorkspaces', {});
+  }
+  
+  async analyzeRequestHistory(workspaceId, filters = {}) {
+    return this.callMCPTool('searchRequestHistory', {
+      workspace_id: workspaceId,
+      ...filters
+    });
+  }
+  
+  // Table management
+  async createTable(workspaceId, tableConfig) {
+    return this.callMCPTool('addTable', {
+      workspace_id: workspaceId,
+      ...tableConfig
+    });
+  }
+  
+  async updateTableData(workspaceId, tableId, updates) {
+    return this.callMCPTool('patchTableContentBulk', {
+      workspace_id: workspaceId,
+      table_id: tableId,
+      updates: updates
+    });
+  }
+}
+
+// Usage in WeWeb
+const xanoManager = new XanoMCPManager(wwLib.wwVariable.getValue('xano_mcp_token'));
+
+async function setupNewCustomerWorkspace() {
+  const workspaces = await xanoManager.getWorkspaces();
+  const customerWorkspace = workspaces.find(w => w.name === 'customer-data');
+  
+  if (!customerWorkspace) {
+    throw new Error('Customer workspace not found');
+  }
+  
+  // Create tables with AI assistance
+  await xanoManager.createTable(customerWorkspace.id, {
+    name: 'customer_profiles',
+    fields: {
+      id: { type: 'integer', primary: true, auto_increment: true },
+      name: { type: 'text', required: true },
+      email: { type: 'text', unique: true, required: true },
+      subscription_tier: { type: 'enum', options: ['free', 'pro', 'enterprise'] },
+      created_at: { type: 'datetime', default: 'now' }
+    }
+  });
+  
+  wwLib.wwVariable.updateValue('workspace_setup_complete', true);
+}
+```
+
+## 🛠️ **Available Tools Reference**
+
+### Authentication Tools
+
+#### `getLoggedInUser`
+Validates access token and returns account details.
+
+**Usage:**
+```javascript
+{
+  "tool": "getLoggedInUser",
+  "args": {}
+}
+```
+
+**Response:**
+```json
+{
+  "user_id": 12345,
+  "email": "developer@company.com",
+  "name": "John Developer",
+  "permissions": ["read", "write", "admin"],
+  "instance_access": ["production", "staging"]
+}
+```
+
+### Workspace Management Tools
+
+#### `listWorkspaces`
+Lists all accessible workspaces.
+
+```javascript
+{
+  "tool": "listWorkspaces",
+  "args": {}
+}
+```
+
+#### `getWorkspace`
+Retrieves detailed workspace information.
+
+```javascript
+{
+  "tool": "getWorkspace",
+  "args": {
+    "workspace_id": "ws_12345"
+  }
+}
+```
+
+#### `getWorkspaceBranches`
+Lists all branches within a workspace.
+
+```javascript
+{
+  "tool": "getWorkspaceBranches",
+  "args": {
+    "workspace_id": "ws_12345"
+  }
+}
+```
+
+### Table Management Tools
+
+#### `addTable`
+Creates a new table with specified schema.
+
+```javascript
+{
+  "tool": "addTable",
+  "args": {
+    "workspace_id": "ws_12345",
+    "name": "customer_analytics",
+    "description": "Customer behavior and analytics data",
+    "fields": {
+      "id": {"type": "integer", "primary": true, "auto_increment": true},
+      "customer_id": {"type": "integer", "required": true, "foreign_key": "customers.id"},
+      "event_type": {"type": "enum", "options": ["login", "purchase", "view", "click"]},
+      "event_data": {"type": "json"},
+      "timestamp": {"type": "datetime", "default": "now"},
+      "ip_address": {"type": "text"},
+      "user_agent": {"type": "text"}
+    }
+  }
+}
+```
+
+#### `getTables`
+Lists all tables in a workspace.
+
+```javascript
+{
+  "tool": "getTables",
+  "args": {
+    "workspace_id": "ws_12345"
+  }
+}
+```
+
+#### `updateTableMeta`
+Modifies table schema and metadata.
+
+```javascript
+{
+  "tool": "updateTableMeta",
+  "args": {
+    "workspace_id": "ws_12345",
+    "table_id": "tbl_67890",
+    "schema_updates": {
+      "add_fields": {
+        "last_updated": {"type": "datetime", "default": "now"}
+      },
+      "modify_fields": {
+        "email": {"unique": true, "required": true}
+      }
+    }
+  }
+}
+```
+
+### Data Management Tools
+
+#### `getTableContent`
+Retrieves records with filtering and pagination.
+
+```javascript
+{
+  "tool": "getTableContent",
+  "args": {
+    "workspace_id": "ws_12345",
+    "table_id": "tbl_67890",
+    "limit": 100,
+    "offset": 0,
+    "filters": {
+      "status": "active",
+      "created_at": ">2024-01-01"
+    },
+    "sort": [{"field": "created_at", "direction": "desc"}]
+  }
+}
+```
+
+#### `searchTableContent`
+Advanced search with complex criteria.
+
+```javascript
+{
+  "tool": "searchTableContent",
+  "args": {
+    "workspace_id": "ws_12345",
+    "table_id": "tbl_67890",
+    "query": {
+      "and": [
+        {"field": "subscription_tier", "operator": "in", "value": ["pro", "enterprise"]},
+        {"field": "last_login", "operator": ">", "value": "2024-01-01"},
+        {
+          "or": [
+            {"field": "region", "operator": "=", "value": "US"},
+            {"field": "priority", "operator": "=", "value": "high"}
+          ]
+        }
+      ]
+    },
+    "limit": 50
+  }
+}
+```
+
+#### `addTableContentBulk`
+Bulk insert records for efficient data loading.
+
+```javascript
+{
+  "tool": "addTableContentBulk",
+  "args": {
+    "workspace_id": "ws_12345",
+    "table_id": "tbl_67890",
+    "records": [
+      {
+        "name": "John Doe",
+        "email": "john@example.com",
+        "subscription_tier": "pro"
+      },
+      {
+        "name": "Jane Smith", 
+        "email": "jane@example.com",
+        "subscription_tier": "enterprise"
+      }
+    ]
+  }
+}
+```
+
+### API Management Tools
+
+#### `listAPIGroups`
+Lists all API groups in workspace.
+
+```javascript
+{
+  "tool": "listAPIGroups",
+  "args": {
+    "workspace_id": "ws_12345"
+  }
+}
+```
+
+#### `getApiGroupSwagger`
+Returns OpenAPI/Swagger documentation.
+
+```javascript
+{
+  "tool": "getApiGroupSwagger",
+  "args": {
+    "workspace_id": "ws_12345",
+    "api_group_id": "ag_11111"
+  }
+}
+```
+
+### Request History Tools
+
+#### `getRequestHistory`
+Retrieves API request logs.
+
+```javascript
+{
+  "tool": "getRequestHistory",
+  "args": {
+    "workspace_id": "ws_12345",
+    "limit": 100,
+    "start_date": "2024-01-01",
+    "end_date": "2024-01-31"
+  }
+}
+```
+
+#### `searchRequestHistory`
+Advanced request history analysis.
+
+```javascript
+{
+  "tool": "searchRequestHistory",
+  "args": {
+    "workspace_id": "ws_12345",
+    "filters": {
+      "status_code": ">= 400",
+      "endpoint": "contains /api/users",
+      "response_time": "> 1000"
+    },
+    "sort": [{"field": "timestamp", "direction": "desc"}]
+  }
+}
+```
+
+## 🎯 **Practical Use Cases**
+
+### Use Case 1: AI-Assisted Database Design
+
+**Prompt to AI Client:**
+"Analyze my customer data needs and create an optimized database schema for an e-commerce platform. Include proper relationships and indexing."
+
+**AI Response with MCP Tools:**
+```javascript
+// AI will use these tools automatically
+[
+  {
+    "tool": "listWorkspaces",
+    "args": {}
+  },
+  {
+    "tool": "addTable",
+    "args": {
+      "workspace_id": "ws_12345",
+      "name": "customers",
+      "fields": {
+        "id": {"type": "integer", "primary": true, "auto_increment": true},
+        "email": {"type": "text", "unique": true, "required": true},
+        "first_name": {"type": "text", "required": true},
+        "last_name": {"type": "text", "required": true},
+        "created_at": {"type": "datetime", "default": "now"},
+        "updated_at": {"type": "datetime", "default": "now", "on_update": "now"}
+      }
+    }
+  }
+  // AI continues creating related tables
+]
+```
+
+### Use Case 2: Performance Monitoring and Analysis
+
+**Prompt to AI Client:**
+"Analyze my API performance from the last week and identify slow endpoints."
+
+**AI Analysis:**
+```javascript
+// AI executes analysis automatically
+{
+  "tool": "searchRequestHistory",
+  "args": {
+    "workspace_id": "ws_12345",
+    "filters": {
+      "timestamp": ">= 2024-01-15",
+      "response_time": "> 1000"
+    },
+    "sort": [{"field": "response_time", "direction": "desc"}],
+    "limit": 100
+  }
+}
+```
+
+### Use Case 3: Data Migration and Cleanup
+
+**Prompt to AI Client:**
+"Clean up duplicate customer records and migrate old data format to the new schema."
+
+**AI Migration Process:**
+```javascript
+[
+  {
+    "tool": "searchTableContent",
+    "args": {
+      "workspace_id": "ws_12345",
+      "table_id": "customers",
+      "query": {
+        "group_by": "email",
+        "having": "count(*) > 1"
+      }
+    }
+  },
+  {
+    "tool": "patchTableContentBulk",
+    "args": {
+      "workspace_id": "ws_12345", 
+      "table_id": "customers",
+      "updates": [
+        // AI-generated cleanup operations
+      ]
+    }
+  }
+]
+```
+
+## 🔐 **Security and Best Practices**
+
+### Access Token Management
+
+**Token Scoping:**
+```javascript
+// Recommended token configuration
+{
+  "permissions": {
+    "read": ["workspaces", "tables", "content", "requests"],
+    "write": ["content"],
+    "admin": []  // Restrict admin access
+  },
+  "workspace_access": ["production"],  // Limit to specific workspaces
+  "expiration": "30d"  // Set appropriate expiration
+}
+```
+
+### Rate Limiting and Monitoring
+
+```javascript
+// Implement rate limiting for MCP operations
+{
+  "tool": "searchRequestHistory",
+  "args": {
+    "filters": {
+      "user_agent": "contains MCP",
+      "timestamp": ">= today"
+    }
+  }
+}
+```
+
+### Audit Logging
+
+All MCP server operations are logged through Xano's audit system:
+
+- Tool execution logs
+- Data modification tracking
+- Access pattern monitoring
+- Security event alerting
+
+## 🔧 **Client Configuration Examples**
+
+### Claude Desktop Configuration
+
+```json
+{
+  "mcpServers": {
+    "xano-instance": {
+      "command": "curl",
+      "args": [
+        "-N",
+        "-H", "Authorization: Bearer YOUR_ACCESS_TOKEN",
+        "-H", "Accept: text/event-stream",
+        "https://your-instance.xano.io/api/mcp/sse"
+      ]
+    }
+  }
+}
+```
+
+### Cursor IDE Configuration
+
+```json
+{
+  "mcp.servers": {
+    "xano": {
+      "url": "https://your-instance.xano.io/api/mcp/sse",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      }
+    }
+  }
+}
+```
+
+### Custom Client Integration
+
+```javascript
+// JavaScript MCP client for Xano
+class XanoMCPClient {
+  constructor(instanceUrl, accessToken) {
+    this.instanceUrl = instanceUrl;
+    this.accessToken = accessToken;
+    this.connected = false;
+  }
+  
+  async connect() {
+    this.eventSource = new EventSource(
+      `${this.instanceUrl}/api/mcp/sse?token=${this.accessToken}`
+    );
+    
+    this.eventSource.onopen = () => {
+      this.connected = true;
+      console.log('Connected to Xano MCP Server');
+    };
+    
+    this.eventSource.onmessage = (event) => {
+      this.handleResponse(JSON.parse(event.data));
+    };
+  }
+  
+  async executeTool(toolName, args) {
+    if (!this.connected) {
+      await this.connect();
+    }
+    
+    const response = await fetch(`${this.instanceUrl}/api/mcp/sse`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tool: toolName,
+        args: args
+      })
+    });
+    
+    return await response.json();
+  }
+}
+```
+
+## 💡 **Pro Tips**
+
+- **Use Workspace Filtering**: Limit MCP access to specific workspaces for security
+- **Monitor Token Usage**: Track MCP operations through request history
+- **Implement Caching**: Cache frequently accessed data to reduce API calls
+- **Batch Operations**: Use bulk tools for efficient data management
+- **Error Handling**: Implement robust error handling for MCP operations
+- **Documentation**: Keep MCP tool usage documented for team collaboration
+
+## 🔍 **Troubleshooting**
+
+### Common Issues
+
+**Problem**: MCP client cannot connect to server  
+**Solution**: Verify access token validity and network connectivity
+
+**Problem**: Tool execution fails with permission error  
+**Solution**: Check token permissions and workspace access rights
+
+**Problem**: Large data operations timeout  
+**Solution**: Use bulk operations and implement proper pagination
+
+**Problem**: Request history search is slow  
+**Solution**: Add specific date ranges and filters to narrow results
+
+### Performance Optimization
+
+1. **Use Specific Filters**: Always include date ranges and relevant filters
+2. **Limit Result Sets**: Implement appropriate pagination limits
+3. **Cache Results**: Store frequently accessed data locally
+4. **Batch Operations**: Group multiple changes into single bulk operations
+
 ---
-apple-mobile-web-app-status-bar-style: black
 
-color-scheme: dark light
-description: Manage your Xano data using your favorite MCP client
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'xano-mcp-server'
-twitter:card: summary\_large\_image
-twitter:description: Manage your Xano data using your favorite MCP client
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../the-function-stack/filters/manipulation.html)
-        -   [Math](../the-function-stack/filters/math.html)
-        -   [Timestamp](../the-function-stack/filters/timestamp.html)
-        -   [Text](../the-function-stack/filters/text.html)
-        -   [Array](../the-function-stack/filters/array.html)
-        -   [Transform](../the-function-stack/filters/transform.html)
-        -   [Conversion](../the-function-stack/filters/conversion.html)
-        -   [Comparison](../the-function-stack/filters/comparison.html)
-        -   [Security](../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../the-function-stack/data-types/text.html)
-        -   [Expression](../the-function-stack/data-types/expression.html)
-        -   [Array](../the-function-stack/data-types/array.html)
-        -   [Object](../the-function-stack/data-types/object.html)
-        -   [Integer](../the-function-stack/data-types/integer.html)
-        -   [Decimal](../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../the-function-stack/data-types/timestamp.html)
-        -   [Null](../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](mcp-builder/connecting-clients.html)
-        -   [MCP Functions](mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [What is the Xano MCP Server?](#what-is-the-xano-mcp-server)
-
--   [Connecting to the Xano MCP Server](#connecting-to-the-xano-mcp-server)
-
--   [From the Instance selection screen, click the icon next to your instance, and choose Metadata API & MCP Server ](#from-the-instance-selection-screen-click-the-icon-next-to-your-instance-and-choose-metadata-api-and)
-
--   [Generate an Access Token](#generate-an-access-token)
-
--   [Choose your connection method](#choose-your-connection-method)
-
--   [Connect using your client of choice](#connect-using-your-client-of-choice)
-
--   [Available Tools](#available-tools)
-
--   [User Authentication](#user-authentication)
-
--   [Workspace Management](#workspace-management)
-
--   [Table Management](#table-management)
-
--   [Table Content Management](#table-content-management)
-
--   [API Management](#api-management)
-
--   [Request Management](#request-management)
-
-Was this helpful?
-
-Copy
-
-1.  [Build For AI](agents.html)
-
-Xano MCP Server 
-===============
-
-Manage your Xano data using your favorite MCP client
-
-Need a primer on MCP? Read this first: [Introduction to building MCP Servers in Xano](mcp-builder.html#intro)
-
- 
-
-Quick Summary
-
-The Xano MCP Server allows you to interact with your Xano instance and workspaces using MCP. This enables you to do things like\...
-
--   
-    
-        
-    
-    Create database tables and update table schema
-    
--   
-    
-        
-    
-    Generate sample data
-    
--   
-    
-        
-    
-    Parse and search your request history
-    
-\...all from your favorite MCP client, such as Claude, Cursor, or Windsurf.
-
-The Xano MCP Server is powered by our [Metadata API](../xano-features/metadata-api.html), and we expect to eventually allow for all of the methods present there to be used as tools within the Xano MCP Server.
-
-Connect to the Xano MCP Server from your instance settings -\> **Metadata API & MCP Server**
-
- 
-
-What is the Xano MCP Server?
-
-The Xano MCP Server, powered by our [Metadata API](../xano-features/metadata-api.html), enables you to interact with your Xano instance and workspaces without leaving your favorite MCP client.
-
- 
-
-Connecting to the Xano MCP Server
-
-<div>
-
-1
-
-###  
-
-From the Instance selection screen, click the [⚙️] icon next to your instance, and choose [ Metadata API & MCP Server ]
-
-2
-
-###  
-
-Generate an Access Token
-
-Access Tokens are used for authentication when connecting to the Xano MCP server. For more information on generating access tokens, see this reference: [Generate an Access Token](../xano-features/metadata-api.html#generate-an-access-token)
-
-3
-
-###  
-
-Choose your connection method
-
-For most clients, at this time, SSE is likely the method that you\'ll want to choose. However, we have made a streaming connection available as well. Click the URL to copy it to your clipboard.
-
-4
-
-###  
-
-Connect using your client of choice
-
-For more information on connecting your clients to an MCP server, refer to [Connecting Clients](mcp-builder/connecting-clients.html) or to your client\'s documentation for the most up to date information.
-
-The instructions linked above are for connecting an MCP server built using Xano\'s MCP builder, but are fundamentally the same for the Xano MCP Server --- just replace the URL with what you copied in step 3.
-
-</div>
-
- 
-
-Available Tools
-
-###  
-
-User Authentication
-
--   
-    
-        
-    
-    **getLoggedInUser** - Validates the provided Access Token and returns the associated account details.
-    
-###  
-
-Workspace Management
-
--   
-    
-        
-    
-    **listWorkspaces** - Lists all workspaces accessible by the authenticated user.
-    
--   
-    
-        
-    
-    **getWorkspace** - Retrieves detailed information about a specific workspace.
-    
--   
-    
-        
-    
-    **getWorkspaceBranches** - Lists all branches (e.g., development, production) within the specified workspace.
-    
--   
-    
-        
-    
-    **workspaceGetDataSources** - Lists all external data sources connected to the specified workspace.
-    
--   
-    
-        
-    
-    **workspaceRealtimeDetails** - Retrieves [Realtime](../realtime/realtime-in-xano.html) information for the specified workspace.
-    
-###  
-
-Table Management
-
--   
-    
-        
-    
-    **addTable** - Creates a new table within the specified workspace.
-    
--   
-    
-        
-    
-    **getTables** - Lists all tables within a specific workspace.
-    
--   
-    
-        
-    
-    **getTable** - Retrieves the details of a specific table within the workspace.
-    
--   
-    
-        
-    
-    **deleteTable** - Deletes a specific table and all data it contains from the workspace.
-    
--   
-    
-        
-    
-    **updateTableMeta** - Modifies the metadata (e.g., schema, field definitions, descriptions) of the specified table.
-    
--   
-    
-        
-    
-    **updateTableSecurity** - Updates the security rules for the specified table.
-    
-###  
-
-Table Content Management
-
--   
-    
-        
-    
-    **getTableContent** - Retrieves a list of records from the specified table.
-    
--   
-    
-        
-    
-    **getTableContentItem** - Retrieves a single, specific record from the table using its ID.
-    
--   
-    
-        
-    
-    **updateTableContentItem** - Updates an existing record in the table using its ID.
-    
--   
-    
-        
-    
-    **deleteTableContentItem** - Deletes a single, specific record from the table using its ID.
-    
--   
-    
-        
-    
-    **searchTableContent** - Searches for records within the table using complex filter criteria and sorting options.
-    
--   
-    
-        
-    
-    **patchTableContentBySearch** - Updates fields of all records in the table that match the specified search criteria.
-    
--   
-    
-        
-    
-    **deleteTableContentBySearch** - Deletes all records from the table that match the specified search criteria.
-    
--   
-    
-        
-    
-    **addTableContentBulk** - Adds multiple new records to the table in a single operation.
-    
--   
-    
-        
-    
-    **patchTableContentBulk** - Updates multiple existing records in the table in a single bulk operation.
-    
--   
-    
-        
-    
-    **deleteTableContentBulk** - Deletes multiple records from the table in bulk, based on a list of record IDs.
-    
-###  
-
-API Management
-
--   
-    
-        
-    
-    **listAPIGroups** - Lists all API groups within the specified workspace.
-    
--   
-    
-        
-    
-    **getApiGroup** - Retrieves details for a specific API group within the workspace.
-    
--   
-    
-        
-    
-    **listAPIs** - Lists all individual API endpoints defined within a specific API group.
-    
--   
-    
-        
-    
-    **getApiGroupSwagger** - Returns the JSON version of the [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html) for a specific API group
-    
--   
-    
-        
-    
-    **getApiSwagger** - Returns the JSON version of the [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html) for a specific API
-    
-###  
-
-Request Management
-
--   
-    
-        
-    
-    **getRequestHistory** - Lists the history of API requests made to the specified workspace.
-    
--   
-    
-        
-    
-    **searchRequestHistory** - Performs an advanced search of the workspace\'s API request history using filters and sorting.
-    
-
-Last updated 2 months ago
-
-Was this helpful?
+**Next Steps**: Ready to connect your AI client? Check out [Connecting Clients](connecting-clients.md) or explore [MCP Builder](mcp-builder.md) for creating custom tools
