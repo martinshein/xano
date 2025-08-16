@@ -1,288 +1,91 @@
 ---
+title: "Xano Metadata API: Search and Browse"
+description: "Master Xano's powerful Metadata API search capabilities for filtering, sorting, and retrieving database content with advanced query patterns"
 category: expressions
 has_code_examples: true
-last_updated: '2025-01-23'
+last_updated: '2025-01-16'
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Search where ID = 10
+  - metadata-api
+  - search
+  - filtering
+  - database-queries
+  - api-integration
 ---
 
-# Search where ID = 10
+# Xano Metadata API: Search and Browse
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: search
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Search \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-[](../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Browse Content
-Was this helpful?
-Copy
-1.  Xano Features
-2.  Metadata API
-Search 
-======
-This section is broken down into Browse Content and Search. Browse Content is a simple method of getting or reading the content of a database table. It can be optionally combined with paging.
-Search is an advanced method of filtering, sorting, and paging database content. It is flexible and powerful and enables you to return content based on the parameters you define.
-Please note that the Metadata APIs for browsing content do not react to API Access settings. All fields will be returned regardless of this setting.
-Browse Content
-Browse table content is a simple method of getting content (database records) in a database table. It requires a workspace ID and table ID, while paging is optional.
-Example response body:
-Copy
-``` 
+## 📋 **Quick Summary**
+
+Xano's Metadata API provides powerful search and browse capabilities for querying database content programmatically. Unlike regular APIs, the Metadata API bypasses access settings and enables complex filtering, sorting, and pagination operations essential for admin interfaces and data management tools.
+
+## What You'll Learn
+
+- Difference between Browse and Search operations
+- Complex filtering with multiple conditions
+- Search patterns using operators (equals, greater than, IN, NOT IN)
+- Sorting strategies for single and multiple fields
+- Pagination implementation and best practices
+- Integration patterns for admin dashboards and reporting tools
+
+## Understanding Browse vs Search
+
+### Browse Content (Simple)
+
+Browse is the straightforward method for retrieving table content with basic pagination:
+
+**Use Cases:**
+- Simple data listing
+- Basic pagination needs
+- Quick content retrieval
+- Admin dashboard overviews
+
+**Limitations:**
+- No filtering capabilities
+- No sorting options
+- Basic pagination only
+
+### Search (Advanced)
+
+Search provides powerful filtering, sorting, and pagination with complex query capabilities:
+
+**Use Cases:**
+- Complex data filtering
+- Multi-condition searches
+- Sorted result sets
+- Advanced admin interfaces
+- Reporting and analytics
+
+**Capabilities:**
+- Multiple search conditions
+- Various comparison operators
+- Multi-field sorting
+- Advanced pagination control
+
+## Browse Content API
+
+### Basic Browse Request
+
+```javascript
+// Simple browse request
+const response = await fetch('/api:meta/content/{workspace_id}/{table_id}', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+});
+
+const data = await response.json();
+```
+
+### Browse Response Structure
+
+```javascript
 {
   "items": [
-    ,
-    ,
-    ,
+    {/* record 1 */},
+    {/* record 2 */},
+    {/* record 3 */},
+    {/* record 4 */}
   ],
   "itemsReceived": 4,
   "curPage": 1,
@@ -293,53 +96,87 @@ Copy
   "pageTotal": 1
 }
 ```
-Search
-Search via the Metadata API is powerful and flexible to return the exact database content you are searching for.
-####  
-Search where ID = 10
-In this example, we will search the Items table where ID = 10
-Search can be done as a single object or array if there is only one search parameter. If there are multiple parameters then it must be an array.
-You can pass just what you want in the request body. For example, if all we want to do is search then we just need to pass search to the body.
-With paging, sort, and search as an array.
-Copy
-``` 
+
+**Response Fields:**
+- `items`: Array of database records
+- `itemsReceived`: Number of items in current response
+- `curPage`: Current page number
+- `nextPage`/`prevPage`: Navigation information
+- `itemsTotal`: Total records matching query
+- `pageTotal`: Total number of pages
+
+## Search API Fundamentals
+
+### Search Endpoint
+
+```http
+POST /api:meta/content/{workspace_id}/{table_id}/search
+```
+
+### Request Structure Flexibility
+
+Search accepts multiple request formats for different scenarios:
+
+**Full Request with All Options:**
+```javascript
 {
   "page": 1,
   "per_page": 50,
-  "sort": ,
-  "search": []
+  "sort": [/* sorting criteria */],
+  "search": [/* search conditions */]
 }
 ```
-With paging, sort, and search as a single object.
-Copy
-``` 
+
+**Search-Only Request:**
+```javascript
 {
-  "page": 1,
-  "per_page": 50,
-  "sort": ,
-  "search": 
+  "search": {/* single condition */}
 }
 ```
-With just search, as an array.
-Copy
-``` 
-{
-  "search": []
-}
+
+**Array vs Object Search:**
+- **Single Condition**: Use object format
+- **Multiple Conditions**: Use array format
+
+## Simple Search Patterns
+
+### Search Where ID = 10
+
+Find a specific record by ID:
+
+```javascript
+// Single condition as object
+const searchRequest = {
+  "search": {
+    "field": "id",
+    "operator": "=",
+    "value": 10
+  }
+};
+
+// Alternative array format
+const searchRequestArray = {
+  "search": [
+    {
+      "field": "id", 
+      "operator": "=",
+      "value": 10
+    }
+  ]
+};
 ```
-With just search, as a single object.
-Copy
-``` 
-{
-  "search": 
-}
-```
-For this example, all of the above are acceptable for the request body.
-Example response body:
-Copy
-``` 
+
+### Response for Single Record
+
+```javascript
 {
   "items": [
+    {
+      "id": 10,
+      "name": "Product Name",
+      "price": 45.99,
+      "category": "Electronics"
+    }
   ],
   "itemsReceived": 1,
   "curPage": 1,
@@ -350,436 +187,445 @@ Copy
   "pageTotal": 1
 }
 ```
-####  
-Search where Price \> 30 and Price \< 70
-In this example, we are searching for content where price is \> 30 and price is \< 70.
-Example request body:
-Copy
-``` 
-{
-  "search": [,
-]
-}
-```
-Example response body:
-Copy
-``` 
-{
-  "items": [
-    ,
-    ,
-  ],
-  "itemsReceived": 3,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 3,
-  "pageTotal": 1
-}
-```
-####  
-Search where Price \< 30 or Price \> 70
-In this example, we will search for where the price is \< 30 or the price is \> 70
-Example request body:
-Copy
-``` 
-{
+
+## Complex Search Patterns
+
+### Range Queries (AND Logic)
+
+Search for records where price is between 30 and 70:
+
+```javascript
+const rangeSearch = {
   "search": [
-,
-]
-}
+    {
+      "field": "price",
+      "operator": ">",
+      "value": 30
+    },
+    {
+      "field": "price", 
+      "operator": "<",
+      "value": 70
+    }
+  ]
+};
 ```
-Notice how the or is formatted after the Price is \> 70 expression.
-Example response body:
-Copy
-``` 
-{
-  "items": [
-    ,
-    ,
-    ,
-    ,
-    ,
-  ],
-  "itemsReceived": 6,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 6,
-  "pageTotal": 1
-}
-```
-####  
-In and Not In
-The IN and NOT IN operators are great for working with lists and can also be thought of as another version of \"or\" operators. In the first example, we will search where the ID is IN \[2,3,7\].
-Example request body:
-Copy
-``` 
-{
-  "search": 
-}
-```
-Example response body:
-Copy
-``` 
-{
-  "items": [
-    ,
-    ,
-  ],
-  "itemsReceived": 3,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 3,
-  "pageTotal": 1
-}
-```
-In the second example, we will search where ID is NOT IN \[1,2,3,4,6,7,8,9\]
-Example request body:
-Copy
-``` 
-{
-  "search": 
-}
-```
-Example response body:
-Copy
-``` 
-{
-  "items": [
-    ,
-  ],
-  "itemsReceived": 2,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 2,
-  "pageTotal": 1
-}
-```
-###  
-Sort
-Sort is flexible, like search, in the sense that it accepts a single object or an array for a single sort parameter. It also supports multiple sorts, which require an array format.
-####  
-Single Sort
-In this example, we will sort the category table by the name in ascending order.
-Example request body:
-Copy
-``` 
-{
-  "sort": 
-}
-```
-Also acceptable:
-Copy
-``` 
-{
-  "sort": []
-}
-```
-Example response body:
-Copy
-``` 
-{
-  "items": [
-    ,
-    ,
-    ,
-    ,
-  ],
-  "itemsReceived": 5,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 5,
-  "pageTotal": 1
-}
-```
-####  
-Multi-Sort
-In this example, we will first sort the content by rating in descending order, then the name in ascending order.
-Example request body:
-Copy
-``` 
-{
-  "sort": [,
-]
-}
-```
-Example response body:
-Copy
-``` 
-{
-  "items": [
-    ,
-    ,
-    ,
-    ,
-  ],
-  "itemsReceived": 5,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 5,
-  "pageTotal": 1
-}
-```
-Last updated 6 months ago
-Was this helpful?
 
-## Code Examples
+**Result:** Returns records where price > 30 AND price < 70
+
+### OR Logic Queries
+
+Search for records where price < 30 OR price > 70:
 
 ```javascript
- 
-{
-  "items": [
-    ,
-    ,
-    ,
-  ],
-  "itemsReceived": 4,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 4,
-  "pageTotal": 1
-}
-
-```
-
-```javascript
- 
-{
-  "page": 1,
-  "per_page": 50,
-  "sort": ,
-  "search": []
-}
-
-```
-
-```javascript
- 
-{
-  "page": 1,
-  "per_page": 50,
-  "sort": ,
-  "search": 
-}
-
-```
-
-```javascript
- 
-{
-  "search": []
-}
-
-```
-
-```javascript
- 
-{
-  "search": 
-}
-
-```
-
-```javascript
- 
-{
-  "items": [
-  ],
-  "itemsReceived": 1,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 1,
-  "pageTotal": 1
-}
-
-```
-
-```javascript
- 
-{
-  "search": [,
-]
-}
-
-```
-
-```javascript
- 
-{
-  "items": [
-    ,
-    ,
-  ],
-  "itemsReceived": 3,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 3,
-  "pageTotal": 1
-}
-
-```
-
-```javascript
- 
-{
+const orSearch = {
   "search": [
-,
-]
-}
-
+    {
+      "field": "price",
+      "operator": "<", 
+      "value": 30
+    },
+    {
+      "field": "price",
+      "operator": ">",
+      "value": 70,
+      "or": true  // This makes it an OR condition
+    }
+  ]
+};
 ```
 
+**Important:** The `"or": true` is applied to the condition where it appears, creating OR logic with the previous condition.
+
+## Advanced Operators
+
+### IN and NOT IN Operators
+
+**IN Operator** - Match any value in a list:
+
 ```javascript
- 
+const inSearch = {
+  "search": {
+    "field": "id",
+    "operator": "IN",
+    "value": [2, 3, 7]
+  }
+};
+```
+
+**NOT IN Operator** - Exclude values in a list:
+
+```javascript
+const notInSearch = {
+  "search": {
+    "field": "id", 
+    "operator": "NOT IN",
+    "value": [1, 2, 3, 4, 6, 7, 8, 9]
+  }
+};
+```
+
+### Text Search Operators
+
+```javascript
+// Exact match
 {
-  "items": [
-    ,
-    ,
-    ,
-    ,
-    ,
+  "field": "name",
+  "operator": "=",
+  "value": "Exact Product Name"
+}
+
+// Contains (case-insensitive)
+{
+  "field": "description",
+  "operator": "LIKE",
+  "value": "%keyword%"
+}
+
+// Starts with
+{
+  "field": "name",
+  "operator": "LIKE", 
+  "value": "Product%"
+}
+
+// Ends with
+{
+  "field": "name",
+  "operator": "LIKE",
+  "value": "%Name"
+}
+```
+
+## Sorting Implementation
+
+### Single Field Sorting
+
+Sort by one field in ascending order:
+
+```javascript
+const singleSort = {
+  "sort": {
+    "field": "name",
+    "direction": "asc"
+  }
+};
+
+// Alternative array format (also valid)
+const singleSortArray = {
+  "sort": [
+    {
+      "field": "name",
+      "direction": "asc"
+    }
+  ]
+};
+```
+
+### Multi-Field Sorting
+
+Sort by multiple fields with priority order:
+
+```javascript
+const multiSort = {
+  "sort": [
+    {
+      "field": "rating",
+      "direction": "desc"  // Primary sort: highest rating first
+    },
+    {
+      "field": "name", 
+      "direction": "asc"   // Secondary sort: alphabetical by name
+    }
+  ]
+};
+```
+
+**Sort Priority:** First sort condition has highest priority, subsequent sorts break ties.
+
+## Pagination Strategies
+
+### Basic Pagination
+
+```javascript
+const paginatedSearch = {
+  "page": 1,
+  "per_page": 25,
+  "search": {/* your search conditions */}
+};
+```
+
+### Pagination Best Practices
+
+```javascript
+// Efficient pagination for large datasets
+const efficientPagination = {
+  "page": 1,
+  "per_page": 100,  // Larger page size for fewer requests
+  "sort": [
+    {
+      "field": "id",
+      "direction": "asc"  // Consistent sorting for stable pagination
+    }
   ],
-  "itemsReceived": 6,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 6,
-  "pageTotal": 1
-}
-
+  "search": {/* filtering conditions */}
+};
 ```
 
+## Try This: Admin Dashboard Search
+
+Build a comprehensive product search for an admin dashboard:
+
 ```javascript
- 
-{
-  "search": 
+async function searchProducts(filters) {
+  const searchConditions = [];
+  
+  // Name filter (if provided)
+  if (filters.name) {
+    searchConditions.push({
+      "field": "name",
+      "operator": "LIKE",
+      "value": `%${filters.name}%`
+    });
+  }
+  
+  // Price range filter
+  if (filters.minPrice) {
+    searchConditions.push({
+      "field": "price", 
+      "operator": ">=",
+      "value": filters.minPrice
+    });
+  }
+  
+  if (filters.maxPrice) {
+    searchConditions.push({
+      "field": "price",
+      "operator": "<=", 
+      "value": filters.maxPrice
+    });
+  }
+  
+  // Category filter
+  if (filters.categories && filters.categories.length > 0) {
+    searchConditions.push({
+      "field": "category",
+      "operator": "IN",
+      "value": filters.categories
+    });
+  }
+  
+  const request = {
+    "page": filters.page || 1,
+    "per_page": filters.pageSize || 50,
+    "sort": [
+      {
+        "field": filters.sortField || "created_at",
+        "direction": filters.sortDirection || "desc"
+      }
+    ],
+    "search": searchConditions
+  };
+  
+  const response = await fetch('/api:meta/content/workspace/table/search', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + jwtToken,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(request)
+  });
+  
+  return await response.json();
 }
 
+// Usage example
+const results = await searchProducts({
+  name: "laptop",
+  minPrice: 500,
+  maxPrice: 2000,
+  categories: ["Electronics", "Computers"],
+  page: 1,
+  pageSize: 20,
+  sortField: "price",
+  sortDirection: "asc"
+});
 ```
 
+## Integration with No-Code Platforms
+
+### WeWeb Integration
+
+Use search API to power WeWeb data tables:
+
 ```javascript
- 
+// WeWeb custom function for dynamic search
+async function fetchTableData(searchParams) {
+  const searchRequest = {
+    "page": searchParams.page || 1,
+    "per_page": 50,
+    "search": searchParams.filters || [],
+    "sort": searchParams.sort || []
+  };
+  
+  const response = await wwLib.executeWebflow({
+    url: '/api:meta/content/workspace/table/search',
+    method: 'POST',
+    body: searchRequest
+  });
+  
+  return response.data;
+}
+```
+
+### Make.com Scenarios
+
+Create automation scenarios using search data:
+
+```javascript
+// Make.com HTTP module configuration
 {
-  "items": [
-    ,
-    ,
+  "url": "{{xano_base_url}}/api:meta/content/{{workspace_id}}/{{table_id}}/search",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer {{xano_jwt}}",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "search": [
+      {
+        "field": "status",
+        "operator": "=", 
+        "value": "pending"
+      },
+      {
+        "field": "created_at",
+        "operator": ">",
+        "value": "{{yesterday_date}}"
+      }
+    ]
+  }
+}
+```
+
+### n8n Workflow Integration
+
+Build monitoring workflows with search data:
+
+```javascript
+// n8n HTTP Request node for monitoring
+{
+  "method": "POST",
+  "url": "=/api:meta/content/{{$json.workspace}}/{{$json.table}}/search",
+  "authentication": "predefinedCredentialType",
+  "credentialType": "xanoApi",
+  "body": {
+    "search": [
+      {
+        "field": "error_count",
+        "operator": ">",
+        "value": 10
+      },
+      {
+        "field": "last_check",
+        "operator": "<",
+        "value": "={{DateTime.now().minus({hours: 1}).toISO()}}"
+      }
+    ]
+  }
+}
+```
+
+## Performance Optimization
+
+### Indexing Considerations
+
+**Fields to Index:**
+- Frequently searched fields
+- Sort fields
+- Foreign key relationships
+- Date/timestamp fields for range queries
+
+### Efficient Query Patterns
+
+```javascript
+// Good: Specific conditions first
+const efficientSearch = {
+  "search": [
+    {
+      "field": "status",        // Indexed enum field
+      "operator": "=",
+      "value": "active"
+    },
+    {
+      "field": "created_at",    // Indexed date field  
+      "operator": ">",
+      "value": "2024-01-01"
+    },
+    {
+      "field": "description",   // Text search last
+      "operator": "LIKE",
+      "value": "%keyword%"
+    }
+  ]
+};
+```
+
+### Large Dataset Strategies
+
+```javascript
+// For large datasets, use consistent sorting and smaller pages
+const largeDatasetSearch = {
+  "page": 1,
+  "per_page": 25,           // Smaller page size
+  "sort": [
+    {
+      "field": "id",          // Indexed unique field
+      "direction": "asc"      // Consistent direction
+    }
   ],
-  "itemsReceived": 3,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 3,
-  "pageTotal": 1
-}
-
+  "search": [/* specific filters */]
+};
 ```
+
+## Common Mistakes to Avoid
+
+1. **OR Logic Confusion**: Remember `"or": true` applies to the condition where it's placed
+2. **Over-Pagination**: Avoid very large page sizes that impact performance
+3. **Missing Indexes**: Not indexing frequently searched fields
+4. **Inconsistent Sorting**: Changing sort order between pagination requests
+5. **Complex Text Searches**: Using LIKE patterns on non-indexed text fields for large datasets
+
+## Pro Tips
+
+1. **Field Selection**: Only request fields you actually need
+2. **Consistent Sorting**: Always include a unique field in sort for stable pagination
+3. **Filter Ordering**: Put most selective filters first for better performance
+4. **Caching Strategy**: Cache search results for frequently accessed data
+5. **Batch Processing**: Use larger page sizes for data export scenarios
+6. **Error Handling**: Implement proper error handling for malformed queries
+
+## API Scope Requirements
+
+**Required Scope**: Workspace Database: Read
+
+**Security Note**: The Metadata API bypasses normal API access settings and returns all fields regardless of field-level access configurations. Ensure proper authentication and authorization in your applications.
+
+## Response Format Consistency
+
+All search operations return the same response structure for consistent handling:
 
 ```javascript
- 
 {
-  "search": 
+  "items": [/* array of matching records */],
+  "itemsReceived": Number,    // Items in current page
+  "curPage": Number,          // Current page number  
+  "nextPage": Number|null,    // Next page (null if last)
+  "prevPage": Number|null,    // Previous page (null if first)
+  "offset": Number,           // Record offset
+  "itemsTotal": Number,       // Total matching records
+  "pageTotal": Number         // Total pages available
 }
-
 ```
 
-```javascript
- 
-{
-  "items": [
-    ,
-  ],
-  "itemsReceived": 2,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 2,
-  "pageTotal": 1
-}
-
-```
-
-```javascript
- 
-{
-  "sort": 
-}
-
-```
-
-```javascript
- 
-{
-  "sort": []
-}
-
-```
-
-```javascript
- 
-{
-  "items": [
-    ,
-    ,
-    ,
-    ,
-  ],
-  "itemsReceived": 5,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 5,
-  "pageTotal": 1
-}
-
-```
-
-```javascript
- 
-{
-  "sort": [,
-]
-}
-
-```
-
-```javascript
- 
-{
-  "items": [
-    ,
-    ,
-    ,
-    ,
-  ],
-  "itemsReceived": 5,
-  "curPage": 1,
-  "nextPage": null,
-  "prevPage": null,
-  "offset": 0,
-  "itemsTotal": 5,
-  "pageTotal": 1
-}
-
-```
-
+The Xano Metadata API Search functionality provides enterprise-grade querying capabilities essential for building sophisticated admin interfaces, reporting tools, and data management systems. By mastering these search patterns and optimization techniques, you can create efficient, scalable applications that handle complex data requirements with ease.

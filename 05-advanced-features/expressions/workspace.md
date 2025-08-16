@@ -1,1032 +1,604 @@
 ---
+title: "Xano Audit Logs: Complete Activity Tracking"
+description: "Learn how to use Xano's audit logs for comprehensive workspace activity monitoring, compliance, and troubleshooting across all development operations"
 category: expressions
 has_code_examples: true
-last_updated: '2025-01-23'
+last_updated: '2025-01-16'
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Workspace
+  - audit-logs
+  - monitoring
+  - compliance
+  - workspace-activity
+  - troubleshooting
 ---
 
-# Workspace
+# Xano Audit Logs: Complete Activity Tracking
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-description: Audit Logs provide clear and searchable logging of all workspace changes
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'audit-logs'
-twitter:card: summary\_large\_image
-twitter:description: Audit Logs provide clear and searchable logging of all workspace changes
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Audit Logs \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-[](../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    What\'s included in Audit Logs?
-Was this helpful?
-Copy
-1.  Xano Features
-2.  Workspace Settings
-Audit Logs 
-==========
-Audit Logs provide clear and searchable logging of all workspace changes
-Quick Summary
-Audit Logs provide detailed and searchable information about any changes or activity inside of a Xano workspace.
-What\'s included in Audit Logs?
-Workspace
-Environment Variables
-Tenants
-Database
-Function Stacks
-###  
-Workspace
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Workspace** - Create new workspaces
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Workspace** - Modify workspace settings
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Reset Workspace** - Reset workspace to default state
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Read Workspace** - View workspace information
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete Workspace** - Remove workspaces
-    :::
-###  
-Data Sources
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Data Source** - Set up new data connections
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Data Source** - Modify data source settings
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete Data Source** - Remove data sources
-    :::
-###  
-Branch Management
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Branch** - Set up new development branches
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Branch** - Modify branch settings
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete Branch** - Remove branches
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Merge Branch** - Combine branches
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Set Live Branch** - Designate the active production branch
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Read Environment Variable** - View environment variable details
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Environment Variable** - Create new environment variable
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Environment Variable** - Modify environment variable
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete Environment Variable** - Remove environment variabl
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Read Tenant Environment Variable** - View tenant environment variables
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Tenant Environment Variable** - Create tenant environment variable
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Tenant Environment Variable** - Modify tenant environment variable
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete Tenant Environment Variable** - Remove tenant environment variable
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Tenant** - Set up new tenants
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Tenant** - Modify tenant settings
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete Tenant** - Remove tenants
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Read Tenant License** - View tenant licensing information
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Tenant License** - Modify tenant licenses
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Impersonate Tenant** - Act on behalf of a tenant
-    :::
-###  
-Backup & Restore
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Tenant Backup** - Generate tenant backups
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Restore Tenant Backup** - Restore from tenant backups
-    :::
-###  
-Release Management
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Release** - Generate new releases
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Release** - Modify release information
-    :::
-###  
-Table Activity
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Table** - Set up new database tables
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Table** - Modify table structure and settings
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete Table** - Remove tables
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Restore Table** - Recover deleted tables
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Truncate Table** - Clear all data from tables
-    :::
-###  
-API Groups
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create API Group** - Set up new API endpoint groups
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update API Group** - Modify API group settings
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete API Group** - Remove API groups
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Restore API Group** - Recover deleted API groups
-    :::
-###  
-APIs
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Query** - Build new API
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Query** - Modify existing API
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete Query** - Remove API
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Restore Query** - Restored a previous version
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Run Query** - Execute database queries
-    :::
-###  
-Functions
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Function** - Build new custom functions
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Function** - Modify existing functions
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete Function** - Remove functions
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Restore Function** - Restored a previous version
-    :::
-###  
-Add-ons
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Add-on** - Install new add-ons
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Add-on** - Modify add-on settings
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete Add-on** - Remove add-ons
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Restore Add-on** - Restored a previous version
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Run Add-on** - Execute add-on functionality
-    :::
-###  
-Tasks
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Create Task** - Set up new automated tasks
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Update Task** - Modify task settings
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Delete Task** - Remove tasks
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Restore Task** - Restored a previous version
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Run Task** - Execute tasks
-    :::
-Audit Log Retention
-Depending on your plan, you\'ll be able to retain different amounts of audit logs.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Free/Build: `24h`
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Launch, Starter, Starter+ : `7 days`
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Scale, Pro, Pro +: `28 days`
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Enterprise/Custom: `Unlimited`
-    :::
-Accessing and Using Audit Logs
-You can also view Audit Logs for an entire instance at once by accessing the settings from the Workspace selection screen.
-Please note that if your instance has RBAC (Role-based Access Control) enabled, any users that you want to be able to view the logs need to have the **Workspace Logs** permission applied.
-<div>
-1
-###  
-From the workspace dashboard, click the three dots in the top-right corner, and choose Audit Logs
-2
-###  
-Viewing Audit Logs
-From the main view, you\'ll be presented with a list of all available logs.
-Click on a log to view more details about that event.
-On some event types, you\'ll have a [ Go To ] button to quickly navigate to where the change took place. The JSON playload can be useful for your own external data collection.
-3
-###  
-Searching and Filtering Audit Logs
-You can search your Audit Logs from the search panel above the list.
-Please note that the search only looks at the summary title of each event currently.
-You can also use the filters to quickly narrow down specific event types, users, and labels.
-4
-###  
-Exporting Audit Logs
-####  
-Exporting to CSV
-From the top-right corner of your screen, click the three dots and choose [ Export CSV ] to export the current batch of logs as a CSV.
-####  
-Using the Metadata API
-There are four new endpoints available via the Metadata API to retrieve Audit Logs.
-</div>
-###  
-browse audit logs across all workspaces
-get
-[https://xcya-9xyg-koq9.dev.xano.io/api:meta]/audit\_log
-browse audit logs across all workspaces
-Authentication: required
-Authorizations
-Query parameters
-[[page][integer · int64][Optional]]
-[[per\_page][integer · int64][Optional]]
-[[include\_data][boolean][Optional]]
-Responses
-[200]
-Success!
-application/json
-[[Response][object]]
-Show properties
-[400]
-Input Error. Check the request payload for issues.
-[401]
-Unauthorized
-[403]
-Access denied. Additional privileges are needed access the requested resource.
-[404]
-Not Found. The requested resource does not exist.
-[429]
-Rate Limited. Too many requests.
-[500]
-Unexpected error
-get
-/audit\_log
-[HTTP]
-HTTPcURLJavaScriptPython
-Copy
-``` 
-GET /api:meta/audit_log HTTP/1.1
-Host: xcya-9xyg-koq9.dev.xano.io
-Authorization: Bearer JWT
-Accept: */*
+## 📋 **Quick Summary**
+
+Xano Audit Logs provide comprehensive tracking and searchable logging of all workspace changes and activities. Essential for compliance, debugging, and team collaboration, audit logs capture everything from database modifications to API deployments with detailed timestamps and user attribution.
+
+## What You'll Learn
+
+- Complete overview of audit log capabilities and coverage
+- How to access and navigate audit logs interface
+- Advanced searching and filtering techniques
+- Export options for compliance and analysis
+- API access for automated monitoring
+- Retention policies and data management
+- Integration patterns for compliance workflows
+
+## Understanding Audit Logs
+
+Audit logs provide a complete record of workspace activity with detailed tracking of:
+
+**User Actions**: Who performed each action with full user attribution
+**Timestamps**: Precise timing of all changes and operations
+**Change Details**: Comprehensive before/after state information
+**Context Information**: Branch, environment, and dependency information
+**System Events**: Automated processes and system-triggered changes
+
+**Key Benefits:**
+- **Compliance**: Meet regulatory requirements for change tracking
+- **Debugging**: Trace issues back to specific changes
+- **Team Coordination**: Understand team member activities
+- **Security**: Monitor for unauthorized or suspicious activities
+- **Performance**: Identify performance-impacting changes
+
+## What's Included in Audit Logs
+
+### Workspace Management
+- **Create Workspace**: New workspace creation
+- **Update Workspace**: Workspace setting modifications
+- **Reset Workspace**: Workspace reset operations
+- **Read Workspace**: Workspace access and viewing
+- **Delete Workspace**: Workspace removal operations
+
+### Data Source Operations
+- **Create Data Source**: New data connection setup
+- **Update Data Source**: Data source configuration changes
+- **Delete Data Source**: Data source removal
+
+### Branch Management
+- **Create Branch**: Development branch creation
+- **Update Branch**: Branch configuration changes
+- **Delete Branch**: Branch removal
+- **Merge Branch**: Branch merge operations
+- **Set Live Branch**: Production branch designation
+
+### Environment Variables
+- **Read/Create/Update/Delete Environment Variable**: Standard variable management
+- **Read/Create/Update/Delete Tenant Environment Variable**: Tenant-specific variables
+
+### Tenant Management
+- **Create/Update/Delete Tenant**: Tenant lifecycle management
+- **Read/Update Tenant License**: Licensing operations
+- **Impersonate Tenant**: Administrative access operations
+
+### Backup and Restore
+- **Create Tenant Backup**: Backup generation
+- **Restore Tenant Backup**: Restore operations
+
+### Release Management
+- **Create/Update Release**: Release lifecycle tracking
+
+### Database Operations
+- **Create/Update/Delete/Restore Table**: Table lifecycle management
+- **Truncate Table**: Data clearing operations
+
+### API Management
+- **Create/Update/Delete/Restore API Group**: API group lifecycle
+- **Create/Update/Delete/Restore Query**: Individual API operations
+- **Run Query**: API execution tracking
+
+### Function Operations
+- **Create/Update/Delete/Restore Function**: Custom function management
+
+### Add-on Management
+- **Create/Update/Delete/Restore Add-on**: Add-on lifecycle
+- **Run Add-on**: Add-on execution tracking
+
+### Task Operations
+- **Create/Update/Delete/Restore Task**: Background task management
+- **Run Task**: Task execution tracking
+
+## Accessing Audit Logs
+
+### From Workspace Dashboard
+
+1. **Open Workspace Menu**
+   - Navigate to your target workspace
+   - Click the three dots (⋮) in the top-right corner
+
+2. **Select Audit Logs**
+   - Choose "Audit Logs" from the dropdown menu
+   - Access the comprehensive logging interface
+
+### From Instance Settings
+
+For instance-wide audit logs across all workspaces:
+
+1. **Go to Instance Selection**
+   - Navigate to your instance selection screen
+   - Access settings from the main instance panel
+
+2. **Instance-Level Logging**
+   - View consolidated logs across all workspaces
+   - Useful for administrators managing multiple workspaces
+
+### Permission Requirements
+
+**RBAC Consideration**: Users need **Workspace Logs** permission when RBAC is enabled
+- Configure permissions through workspace settings
+- Ensure team members have appropriate access levels
+- Consider read-only access for most team members
+
+## Advanced Search and Filtering
+
+### Search Functionality
+
+**Current Limitation**: Search functionality targets event summary titles only
+- Search terms match against event descriptions
+- Use specific keywords related to actions (create, update, delete)
+- Include resource names for more targeted results
+
+**Search Examples:**
+```markdown
+# Effective Search Terms
+- "Create Table users"
+- "Update API login"
+- "Delete Function validate"
+- "Merge Branch feature"
+- "Set Live Branch"
 ```
-Test it
-[[200][]]
-Success!
-Copy
-``` 
-{
-  "items": [
-    {
-      "id": 1,
-      "created_at": "text",
-      "updated_at": "text",
-      "type": "text",
-      "msg": "text",
-      "label": [
-        "text"
-      ],
-      "data": ,
-      "obj": ,
-      "user": ,
-      "workspace": ,
-      "branch": 
-    }
-  ],
-  "itemsReceived": 1,
-  "curPage": 1,
-  "nextPage": 1,
-  "prevPage": 1,
-  "offset": 1,
-  "perPage": 1,
-  "itemsTotal": 1,
-  "pageTotal": 1
-}
+
+### Filtering Options
+
+**Event Types**: Filter by specific operation categories
+- Database operations
+- API changes
+- Function modifications
+- Branch operations
+- User management
+
+**Users**: Filter by team member who performed actions
+- Individual user tracking
+- Team activity analysis
+- Accountability and attribution
+
+**Labels**: Use category-based filtering
+- System events vs. user actions
+- Production vs. development changes
+- Automated vs. manual operations
+
+**Time Ranges**: Focus on specific periods
+- Recent changes for debugging
+- Historical analysis for compliance
+- Incident investigation timeframes
+
+## Try This: Debugging Workflow
+
+Use audit logs to trace a production issue:
+
+```markdown
+# Debugging with Audit Logs
+
+## Step 1: Identify Issue Timeline
+1. Note when issue was first reported
+2. Search logs for events around that time
+3. Filter by production branch activities
+
+## Step 2: Trace Recent Changes
+1. Filter by event types: API, Function, Database
+2. Look for changes in the hours before issue
+3. Identify potential culprit modifications
+
+## Step 3: Analyze Change Details
+1. Click on suspicious events for details
+2. Review before/after state information
+3. Use "Go To" buttons to examine current state
+
+## Step 4: Correlate with Performance
+1. Cross-reference with monitoring data
+2. Check request history for performance impact
+3. Identify specific changes causing issues
+
+## Step 5: Plan Resolution
+1. Document findings from audit trail
+2. Plan rollback or fix strategy
+3. Communicate timeline to stakeholders
 ```
-###  
-search audit logs across all workspaces with support for complex filtering and sorting
-post
-[https://xcya-9xyg-koq9.dev.xano.io/api:meta]/audit\_log/search
-search audit logs across all workspaces with support for complex filtering and sorting
-Authentication: required
-Authorizations
-Body
-[application/json]
-application/jsonmultipart/form-data
-[[page][integer · int64][Optional]][Default: `1`]
-[[per\_page][integer · int64][Optional]][Default: `50`]
-[[include\_data][boolean][Optional]]
-[[sort][object][Optional]]
-[[search][object][Optional]]
-Responses
-[200]
-Success!
-application/json
-[[Response][object]]
-Show properties
-[400]
-Input Error. Check the request payload for issues.
-[401]
-Unauthorized
-[403]
-Access denied. Additional privileges are needed access the requested resource.
-[404]
-Not Found. The requested resource does not exist.
-[429]
-Rate Limited. Too many requests.
-[500]
-Unexpected error
-post
-/audit\_log/search
-[HTTP]
-HTTPcURLJavaScriptPython
-Copy
-``` 
-POST /api:meta/audit_log/search HTTP/1.1
-Host: xcya-9xyg-koq9.dev.xano.io
-Authorization: Bearer JWT
-Content-Type: application/json
-Accept: */*
-Content-Length: 57
+
+## Audit Log Retention Policies
+
+Retention varies by plan level to balance storage costs with compliance needs:
+
+### Free and Build Plans
+**Retention**: 24 hours
+- Basic change tracking for immediate debugging
+- Suitable for development and learning environments
+- Upgrade recommended for production use
+
+### Launch, Starter, Starter+ Plans
+**Retention**: 7 days
+- Short-term change tracking and debugging
+- Basic compliance requirements
+- Good for small team environments
+
+### Scale, Pro, Pro+ Plans
+**Retention**: 28 days
+- Extended debugging and analysis capabilities
+- Monthly compliance reporting
+- Suitable for production environments
+
+### Enterprise and Custom Plans
+**Retention**: Unlimited
+- Complete historical record maintenance
+- Full compliance and regulatory requirements
+- Enterprise-grade audit capabilities
+
+## Exporting Audit Logs
+
+### CSV Export
+
+For spreadsheet analysis and reporting:
+
+1. **Access Export Options**
+   - Click three dots (⋮) in top-right of audit log interface
+   - Choose "Export CSV" option
+
+2. **Export Scope**
+   - Exports current batch of filtered logs
+   - Apply filters before export for targeted data
+   - Include time range selections for specific periods
+
+3. **Use Cases**
+   - Compliance reporting to stakeholders
+   - Detailed analysis in spreadsheet applications
+   - Integration with business intelligence tools
+   - Historical record keeping
+
+### Metadata API Access
+
+For automated monitoring and integration:
+
+#### Browse All Audit Logs
+
+```http
+GET /api:meta/audit_log
+```
+
+**Query Parameters:**
+- `page`: Page number for pagination
+- `per_page`: Items per page (default: 50)
+- `include_data`: Include detailed change data
+
+**Example Request:**
+```javascript
+const response = await fetch('/api:meta/audit_log?page=1&per_page=100&include_data=true', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN',
+    'Accept': 'application/json'
+  }
+});
+
+const auditData = await response.json();
+```
+
+#### Advanced Search API
+
+```http
+POST /api:meta/audit_log/search
+```
+
+**Request Body:**
+```javascript
 {
   "page": 1,
   "per_page": 50,
-  "sort": ,
-  "search": []
+  "include_data": true,
+  "sort": {
+    "field": "created_at",
+    "direction": "desc"
+  },
+  "search": [
+    {
+      "field": "type",
+      "operator": "=",
+      "value": "Create Table"
+    },
+    {
+      "field": "created_at",
+      "operator": ">",
+      "value": "2024-01-01T00:00:00Z"
+    }
+  ]
 }
 ```
-[application/json]
-application/jsonmultipart/form-data
-Test it
-[[200][]]
-Success!
-Copy
-``` 
+
+#### Response Structure
+
+```javascript
 {
   "items": [
     {
       "id": 1,
-      "created_at": "text",
-      "updated_at": "text",
-      "type": "text",
-      "msg": "text",
-      "label": [
-        "text"
-      ],
-      "data": ,
-      "obj": ,
-      "user": ,
-      "workspace": ,
-      "branch": 
+      "created_at": "2024-01-15T10:30:00Z",
+      "updated_at": "2024-01-15T10:30:00Z",
+      "type": "Create Table",
+      "msg": "Table 'users' created in workspace 'Production'",
+      "label": ["database", "table", "creation"],
+      "data": {
+        /* Detailed change information */
+        "table_name": "users",
+        "fields": [/* field definitions */],
+        "relationships": [/* relationship info */]
+      },
+      "obj": {
+        /* Related object information */
+        "table_id": "123",
+        "workspace_id": "456"
+      },
+      "user": {
+        /* User who performed action */
+        "id": "789",
+        "name": "John Developer",
+        "email": "john@company.com"
+      },
+      "workspace": {
+        /* Workspace context */
+        "id": "456",
+        "name": "Production Environment"
+      },
+      "branch": {
+        /* Branch information */
+        "id": "branch-123",
+        "name": "main",
+        "is_live": true
+      }
     }
   ],
   "itemsReceived": 1,
   "curPage": 1,
-  "nextPage": 1,
-  "prevPage": 1,
-  "offset": 1,
-  "perPage": 1,
+  "nextPage": null,
+  "prevPage": null,
+  "offset": 0,
+  "perPage": 50,
   "itemsTotal": 1,
   "pageTotal": 1
 }
 ```
-Last updated 4 days ago
-Was this helpful?
 
-## Code Examples
+## Integration Patterns
 
-```
- 
-GET /api:meta/audit_log HTTP/1.1
-Host: xcya-9xyg-koq9.dev.xano.io
-Authorization: Bearer JWT
-Accept: */*
+### Compliance Monitoring
 
-```
+Build automated compliance workflows:
 
 ```javascript
- 
-{
-  "items": [
-    {
-      "id": 1,
-      "created_at": "text",
-      "updated_at": "text",
-      "type": "text",
-      "msg": "text",
-      "label": [
-        "text"
-      ],
-      "data": ,
-      "obj": ,
-      "user": ,
-      "workspace": ,
-      "branch": 
+// Daily compliance report generator
+async function generateComplianceReport(startDate, endDate) {
+  const searchParams = {
+    "page": 1,
+    "per_page": 1000,
+    "include_data": true,
+    "search": [
+      {
+        "field": "created_at",
+        "operator": ">=",
+        "value": startDate
+      },
+      {
+        "field": "created_at",
+        "operator": "<=",
+        "value": endDate
+      }
+    ]
+  };
+  
+  const response = await fetch('/api:meta/audit_log/search', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + complianceToken,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(searchParams)
+  });
+  
+  const data = await response.json();
+  
+  // Process for compliance reporting
+  const report = {
+    period: { start: startDate, end: endDate },
+    totalEvents: data.itemsTotal,
+    eventsByType: {},
+    userActivity: {},
+    criticalChanges: []
+  };
+  
+  data.items.forEach(event => {
+    // Categorize events
+    report.eventsByType[event.type] = (report.eventsByType[event.type] || 0) + 1;
+    
+    // Track user activity
+    const userName = event.user.name;
+    report.userActivity[userName] = (report.userActivity[userName] || 0) + 1;
+    
+    // Flag critical changes
+    if (event.type.includes('Delete') || event.type.includes('Live Branch')) {
+      report.criticalChanges.push({
+        type: event.type,
+        user: userName,
+        time: event.created_at,
+        description: event.msg
+      });
     }
-  ],
-  "itemsReceived": 1,
-  "curPage": 1,
-  "nextPage": 1,
-  "prevPage": 1,
-  "offset": 1,
-  "perPage": 1,
-  "itemsTotal": 1,
-  "pageTotal": 1
+  });
+  
+  return report;
 }
-
 ```
+
+### Security Monitoring
+
+Implement security alerting:
 
 ```javascript
- 
-POST /api:meta/audit_log/search HTTP/1.1
-Host: xcya-9xyg-koq9.dev.xano.io
-Authorization: Bearer JWT
-Content-Type: application/json
-Accept: */*
-Content-Length: 57
-{
-  "page": 1,
-  "per_page": 50,
-  "sort": ,
-  "search": []
+// Security monitoring for unusual activity
+async function monitorSecurityEvents() {
+  const securityEvents = [
+    'Delete Workspace',
+    'Delete Table', 
+    'Impersonate Tenant',
+    'Update Tenant License',
+    'Set Live Branch'
+  ];
+  
+  const searches = securityEvents.map(eventType => ({
+    "field": "type",
+    "operator": "=",
+    "value": eventType
+  }));
+  
+  const response = await fetch('/api:meta/audit_log/search', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + securityToken,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "page": 1,
+      "per_page": 100,
+      "search": [
+        {
+          "field": "created_at",
+          "operator": ">",
+          "value": new Date(Date.now() - 24*60*60*1000).toISOString() // Last 24 hours
+        }
+      ]
+    })
+  });
+  
+  const data = await response.json();
+  const securityAlerts = data.items.filter(event => 
+    securityEvents.includes(event.type)
+  );
+  
+  if (securityAlerts.length > 0) {
+    // Send alerts to security team
+    await sendSecurityAlert(securityAlerts);
+  }
+  
+  return securityAlerts;
 }
-
 ```
+
+### Team Activity Dashboard
+
+Create team activity monitoring:
 
 ```javascript
- 
-{
-  "items": [
-    {
-      "id": 1,
-      "created_at": "text",
-      "updated_at": "text",
-      "type": "text",
-      "msg": "text",
-      "label": [
-        "text"
-      ],
-      "data": ,
-      "obj": ,
-      "user": ,
-      "workspace": ,
-      "branch": 
-    }
-  ],
-  "itemsReceived": 1,
-  "curPage": 1,
-  "nextPage": 1,
-  "prevPage": 1,
-  "offset": 1,
-  "perPage": 1,
-  "itemsTotal": 1,
-  "pageTotal": 1
+// Team activity dashboard data
+async function getTeamActivity(timeRange = '7d') {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - parseInt(timeRange));
+  
+  const response = await fetch('/api:meta/audit_log/search', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + dashboardToken,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "page": 1,
+      "per_page": 1000,
+      "search": [
+        {
+          "field": "created_at",
+          "operator": ">",
+          "value": startDate.toISOString()
+        }
+      ]
+    })
+  });
+  
+  const data = await response.json();
+  
+  // Aggregate team activity
+  const teamMetrics = {
+    totalActivity: data.itemsTotal,
+    activeUsers: new Set(),
+    activityByDay: {},
+    topActions: {},
+    recentActivity: data.items.slice(0, 10)
+  };
+  
+  data.items.forEach(event => {
+    teamMetrics.activeUsers.add(event.user.name);
+    
+    const day = event.created_at.split('T')[0];
+    teamMetrics.activityByDay[day] = (teamMetrics.activityByDay[day] || 0) + 1;
+    
+    teamMetrics.topActions[event.type] = (teamMetrics.topActions[event.type] || 0) + 1;
+  });
+  
+  teamMetrics.activeUsers = teamMetrics.activeUsers.size;
+  
+  return teamMetrics;
 }
-
 ```
 
+## Best Practices
+
+### Monitoring and Alerting
+
+1. **Regular Review**: Establish periodic audit log review schedules
+2. **Automated Monitoring**: Set up automated alerts for critical changes
+3. **Compliance Reporting**: Generate regular compliance reports
+4. **Performance Correlation**: Cross-reference logs with performance metrics
+5. **Security Monitoring**: Monitor for suspicious or unauthorized activities
+
+### Data Management
+
+1. **Export Strategy**: Regular exports for long-term retention
+2. **Storage Planning**: Consider storage costs for high-activity workspaces
+3. **Access Control**: Limit audit log access to appropriate team members
+4. **Retention Awareness**: Understand retention limits for your plan
+5. **Backup Integration**: Include audit logs in disaster recovery planning
+
+### Team Collaboration
+
+1. **Change Communication**: Use audit logs to communicate team changes
+2. **Training**: Train team members on audit log interpretation
+3. **Documentation**: Document critical changes with audit log references
+4. **Incident Response**: Establish audit log procedures for incident response
+5. **Accountability**: Use logs to maintain development accountability
+
+## Common Use Cases
+
+### Compliance Reporting
+
+Generate monthly compliance reports showing all workspace changes, user activities, and critical operations for regulatory requirements.
+
+### Incident Investigation
+
+Trace production issues back to specific changes using timestamp correlation and detailed change information.
+
+### Performance Analysis
+
+Identify performance-impacting changes by correlating audit log timestamps with performance metrics.
+
+### Security Auditing
+
+Monitor for unauthorized access, suspicious activities, and security-relevant changes across all workspaces.
+
+### Team Coordination
+
+Track team member activities, understand change patterns, and coordinate development efforts.
+
+### Change Management
+
+Maintain detailed records of all changes for change management processes and approval workflows.
+
+Xano Audit Logs provide the foundation for enterprise-grade change management, compliance, and operational excellence. By leveraging both the interface and API capabilities, you can build comprehensive monitoring, reporting, and alerting systems that ensure transparency, accountability, and security across your entire Xano environment.

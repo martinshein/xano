@@ -1,561 +1,387 @@
 ---
+title: "Workspace Settings and Configuration"
+description: "Master Xano workspace settings including request history, middleware, branching, table formats, and inheritance patterns for optimal development workflows"
 category: expressions
 has_code_examples: true
-last_updated: '2025-01-23'
+last_updated: '2025-01-16'
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Inheriting Settings
+  - workspace-settings
+  - request-history
+  - middleware
+  - table-formats
+  - inheritance
+  - configuration
 ---
 
-# Inheriting Settings
+# Workspace Settings and Configuration
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-description: An explanation of all available workspace settings
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'workspace-settings'
-twitter:card: summary\_large\_image
-twitter:description: An explanation of all available workspace settings
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Workspace Settings \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-[](../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    General Settings
-Was this helpful?
-Copy
-1.  Xano Features
-Workspace Settings 
-==================
-An explanation of all available workspace settings
-Before you begin
-Please note that this page provides only a general overview of some settings. When relevant, each section will contain a link to that feature specific documentation, which is recommended reading before adjusting anything
-General Settings
-> This panel is accessible by heading to your workspace dashboard and clicking the ⋮ icon \> Settings
-Setting
-Purpose
-Name[\*]
-^text^
-Give your workspace a unique name
-Description
-^text^
-A description of your workspace
-Use Internal Documentation Tool ^checkbox^
-Enables the Internal Documentation Tool for your function stacks\--a plain text input typically used to house information such as example inputs
-Show Start
-Enables the Start Page, which offers beginner guidance on working in Xano
-Show Marketplace
-Enables the Marketplace, which contains snippets and extensions available for import into your Xano workspace
-AI Preferences
-Accept AI specific license terms to use certain AI-powered features, such as our AI Database Assistant
-Data Sources
-> Data Sources allow you to maintain separate databases with the same schema. Useful for maintaining things like separate production and testing data sets.
-Setting
-Purpose
-Manage
-Quick access to managing your data sources, such as browsing or adding new ones
-Migrate
-Allows you to migrate data from one data source to another
-Branch Defaults
-> These are default settings related to what is logged in your Request History
-In your workspace settings, you can manage the request history for your entire workspace in the Branch Defaults panel.
-From this panel, we can define the request history defaults for each object type (query, function, task, middleware, trigger) that maintains history.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Enable / Disable** - Performs the selected action on the object type
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Function Statement Limit** - The number of statements to record for each object type. You can choose between:
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        No statements
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        100 statements
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        1,000 statements
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        10,000 statements
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Store all statements
-        :::
-    :::
-Please note that request history utilizes your Database (SSD) storage. It is important to consider this when determining how many statements can be stored, or if they need to be stored at all.
-####  
-Inheriting Settings
-In each individual API, function, task, middleware, or trigger\'s settings, you can also control the request history for that object specifically.
-By default, these will be set to **inherit**, which means it will obey the branch defaults. Otherwise, you can adjust this for specific objects as necessary.
-Middleware
-> Provides quick access to Middleware settings
-Clone Workspace
-> Creates a clone of your workspace
-Cloning a workspace will copy all database table schema, API groups, APIs, functions, addons, and tasks into another workspace. It will **not** copy the database table records.
-Export Workspace
-> Exports a copy of your workspace
-Exporting your data is done in the background and may take a significant amount of time to process depending on the amount of data in your workspace.
-You may also include media attachments, but this may increase the export size and time significantly depending on the number of files.
-**Once the export is complete, you will receive an email notification as well as a notification in Xano that your data is ready to be downloaded. This export will be available for 12 hours.**
-Xano Link
-> Xano Link is a premium addon for syncing branches and database schema from one workspace to others.
-Triggers
-> Triggers allow you to build workflows that run based on when certain events happen, such as when a database record is added or when certain branch actions take place.
-Statement Explorer
-> The Statement Explorer allows you to search for instances of specific statements across your workspace, such as finding all Query All Records functions. This is useful for things like security audits and making sweeping changes or improvements across multiple workflows.
-Realtime Settings
-> Access your Realtime in Xano settings from here
-Reset Drafts
-> Resets all drafts in the current workspace
-Sometimes, you may want to clear out all drafts and revert fully back to published versions of your function stacks. This option allows you to quickly do so. It can also be useful in the rare circumstance that you have functions that are in draft state or have been recently published and are not behaving correctly.
-This action is **not reversible**, so if you have questions, reach out to our support chat before proceeding.
-Compliance Center
-> Offers quick access to the Compliance Center, which is a premium feature that enables advanced auditing of the state of your workspace and actions of your team members
-Table Format
-Table Formats - Only relevant for direct database connections
-As of our **1.68 release (5/27/25)**, all new workspaces will default to the standard SQL column format for tables. For all workspaces created prior to that, read below.
-Your tables can be created using one of two formats:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **JSONB format**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        This creates your tables with two columns:
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            `id` - the ID of the record
-            :::
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            `jsonb` - contains a JSON representation of the entire record
-            :::
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Standard SQL format**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        This creates a more standard table layout. Instead of a jsonb column, each column is written separately.
-        :::
-    :::
-If you are using the Direct Database Connector, Standard SQL format is usually recommended.
-###  
-**When to Convert to Standard SQL Format:**
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    You need direct database connections with third-party tools that aren\'t friendly to JSONB format, such as Tableau or PowerBI
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    You want faster performance for non-indexed queries
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    You\'re frequently adding new fields (faster column additions)
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    You plan to use SQL analytics tools or run complex reports directly against your database
-    :::
-###  
-**When to Keep JSONB Format:**
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    You\'re satisfied with current performance
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    You don\'t need direct database connections
-    :::
-###  
-Converting Tables from JSONB to standard SQL
-This change is **permanent**. Most users will not need to adjust these settings, and they only impact your experience if you are connecting to your database directly via third-party tools.
-Using standard SQL does not mean you can\'t use JSONB --- you have the ability to mix and match table types, if you prefer. You can also still use JSON fields on any table type for more complex, dynamic field structure.
-<div>
-1
-###  
-From your workspace dashboard, click the settings icon in the upper-right corner, and click Settings.
-2
-###  
-Scroll down to the Database Preferences section, and check the option to \'Use standard SQL columns for new tables\'
-This setting must be enabled before you can convert existing tables to the new format.
-3
-###  
-Convert your table(s) from your workspace settings, or the settings of any table.
-From the migration panel, select any of the tables you\'d like to convert, and confirm your choices. The migration will begin immediately.
-</div>
-Custom SQL Table Names
-From your Workspace settings, you can enable **Custom SQL Table Names**.
-By default, Xano assigns each table a SQL name in the format mvpw\_ (e.g., mvpw1\_3). This identifier works for direct access, but can be difficult to read or use with direct queries and database tools.
-You can replace this with a custom SQL name to make queries more intuitive and improve compatibility with external connectors.
-If you change a table\'s SQL name, be sure to update any queries that reference the old name to avoid breaking functionality.
-Once you\'ve enabled **Custom SQL Table Names**, head to any database table\'s settings, and click Manage next to SQL Table Name.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Leave the SQL Table Name field blank to use Xano's default SQL table name, which follows the format mvpw\<workspaceID\>\_\<tableID\> (e.g., mvpw1\_3).
-    :::
-```
-<!-- -->
-```
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    SQL table names must be globally unique across all workspaces.
-    **Hint**: Use the Custom Prefix to ensure uniqueness across workspaces.
-    :::
-```
-<!-- -->
-```
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Datasources automatically add a suffix based on their environment. For example, **users** becomes **users\_test** in the test datasource.
-    :::
-```
-<!-- -->
-```
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    To reuse the same base name across workspaces, use a workspace-specific prefix (e.g., projA\_users, projB\_users).
-    :::
-Last updated 2 months ago
-Was this helpful?
+## 📋 **Quick Summary**
 
-## Code Examples
+Xano workspace settings provide comprehensive control over your development environment, including request history logging, middleware configuration, table formats, and inheritance patterns. Proper configuration optimizes performance, debugging capabilities, and team collaboration workflows.
 
+## What You'll Learn
+
+- Complete workspace settings configuration
+- Request history management and inheritance
+- Database table format selection (JSONB vs SQL)
+- Custom SQL table naming strategies
+- Middleware and branch default configurations
+- Best practices for team environments
+
+## Accessing Workspace Settings
+
+Navigate to workspace settings through the main interface:
+
+1. **Open Workspace Dashboard**
+   - Go to your target workspace
+   - Click the three dots (⋮) icon in the top-right corner
+
+2. **Select Settings**
+   - Choose "Settings" from the dropdown menu
+   - Access comprehensive configuration options
+
+## General Settings Configuration
+
+### Basic Workspace Information
+
+**Workspace Name** *(Required)*
+- Give your workspace a unique, descriptive name
+- Use naming conventions for team organization
+- Example: "ProductionAPI-v2" or "DevEnvironment-TeamA"
+
+**Description**
+- Document workspace purpose and usage
+- Include team contact information
+- Note any special configurations or restrictions
+
+**Feature Toggles**
+- **Internal Documentation Tool**: Enable plain text documentation for function stacks
+- **Start Page**: Show beginner guidance (recommended for new team members)
+- **Marketplace**: Enable access to Xano snippet marketplace
+- **AI Preferences**: Accept terms to use AI-powered features like Database Assistant
+
+## Request History Configuration
+
+Request history provides crucial debugging and monitoring capabilities by logging API calls, function executions, and database operations.
+
+### Understanding Request History Impact
+
+**Storage Consideration**: Request history uses your Database (SSD) storage allocation
+**Performance Impact**: Extensive logging can affect performance
+**Debugging Value**: Essential for troubleshooting and optimization
+
+### Branch Default Settings
+
+Configure default request history behavior for all workspace objects:
+
+**Available Object Types:**
+- Query (API endpoints)
+- Function (Custom functions)
+- Task (Background tasks)
+- Middleware (Request/response processing)
+- Trigger (Event-driven workflows)
+
+**Configuration Options for Each Type:**
+
+1. **Enable/Disable**: Turn logging on or off completely
+2. **Function Statement Limit**: Choose logging detail level
+   - No statements (minimal logging)
+   - 100 statements (light logging)
+   - 1,000 statements (moderate logging)
+   - 10,000 statements (detailed logging)
+   - Store all statements (complete logging)
+
+### Try This: Optimal Request History Configuration
+
+```markdown
+# Production Environment Settings
+
+## High-Priority APIs (User-facing)
+- Enable: Yes
+- Statement Limit: 1,000 statements
+- Use Case: Balance debugging capability with performance
+
+## Background Tasks
+- Enable: Yes  
+- Statement Limit: 10,000 statements
+- Use Case: Detailed logging for complex operations
+
+## Development Functions
+- Enable: Yes
+- Statement Limit: Store all statements
+- Use Case: Complete debugging information
+
+## Middleware
+- Enable: Yes
+- Statement Limit: 100 statements
+- Use Case: Light logging to avoid overhead
 ```
 
-<!-- -->
+### Inheriting Settings
 
+Individual objects can override workspace defaults through inheritance settings:
+
+**Inheritance Options:**
+- **Inherit**: Use workspace branch defaults (recommended)
+- **Custom**: Override with object-specific settings
+
+**Best Practices:**
+- Keep most objects on "inherit" for consistency
+- Override only when specific objects need different logging
+- Document any custom inheritance decisions
+
+## Database Table Formats
+
+Xano supports two table storage formats with different advantages:
+
+### JSONB Format (Legacy Default)
+
+**Structure:**
+- Two columns per table: `id` and `jsonb`
+- JSON representation of entire record in `jsonb` column
+- Backward compatible with existing workspaces
+
+**Advantages:**
+- Flexible schema changes
+- Complex data structure support
+- Existing workspace compatibility
+
+**Disadvantages:**
+- Less efficient for direct database queries
+- Limited third-party tool compatibility
+- Slower non-indexed queries
+
+### Standard SQL Format (Recommended)
+
+**Structure:**
+- Individual column for each field
+- Traditional relational database layout
+- Better third-party tool integration
+
+**Advantages:**
+- Faster performance for non-indexed queries
+- Better compatibility with analytics tools
+- Faster column additions
+- Standard SQL query support
+
+**When to Use Standard SQL:**
+- Direct database connections with tools like Tableau or PowerBI
+- Frequent addition of new fields
+- Complex reporting requirements
+- SQL analytics tool integration
+- Performance optimization needs
+
+### Converting Table Formats
+
+**⚠️ WARNING**: Table format conversion is permanent and irreversible.
+
+**Conversion Process:**
+
+1. **Enable Standard SQL Setting**
+   - Go to workspace settings
+   - Scroll to "Database Preferences"
+   - Check "Use standard SQL columns for new tables"
+
+2. **Convert Existing Tables**
+   - Access migration panel from workspace settings
+   - Select tables for conversion
+   - Confirm conversion choices
+   - Monitor migration progress
+
+3. **Update External Connections**
+   - Modify any direct database queries
+   - Update third-party tool connections
+   - Test all external integrations
+
+## Custom SQL Table Names
+
+### Default Naming Convention
+
+Xano assigns default SQL names in format: `mvpw<workspaceID>_<tableID>`
+- Example: `mvpw1_3` for workspace 1, table 3
+- Functional but not intuitive for direct queries
+
+### Custom Naming Benefits
+
+**Improved Readability**: `users` instead of `mvpw1_3`
+**Better Tool Integration**: More intuitive for database tools
+**Query Simplification**: Easier to write and maintain direct SQL
+
+### Configuration Process
+
+1. **Enable Custom SQL Names**
+   - Go to workspace settings
+   - Enable "Custom SQL Table Names"
+
+2. **Configure Individual Tables**
+   - Navigate to table settings
+   - Click "Manage" next to "SQL Table Name"
+   - Set custom name or leave blank for default
+
+### Naming Best Practices
+
+```markdown
+# SQL Table Naming Strategy
+
+## Workspace Prefixes
+- Use workspace-specific prefixes: `projA_users`, `projB_users`
+- Ensures uniqueness across workspaces
+- Maintains organization clarity
+
+## Environment Suffixes  
+- Development: `users_dev`
+- Testing: `users_test`  
+- Production: `users` (clean)
+
+## Naming Conventions
+- Use lowercase with underscores
+- Be descriptive but concise
+- Include version numbers if needed: `users_v2`
 ```
 
+## Data Sources and Migration
+
+### Data Source Management
+
+**Purpose**: Maintain separate databases with same schema
+**Use Cases**: 
+- Production vs. testing data separation
+- Environment-specific configurations
+- Data isolation for different clients
+
+**Management Options:**
+- **Manage**: Browse and add new data sources
+- **Migrate**: Transfer data between sources
+
+### Migration Strategies
+
+```markdown
+# Data Source Migration Workflow
+
+## Development to Staging
+1. Create staging data source
+2. Migrate schema structure
+3. Populate with test data
+4. Validate functionality
+
+## Staging to Production  
+1. Create production data source
+2. Migrate validated schema
+3. Import production data
+4. Switch live environment
 ```
 
-<!-- -->
+## Team Collaboration Features
 
+### Workspace Cloning
+
+**Purpose**: Create workspace copies for testing or branching
+**Includes**: Database schema, APIs, functions, addons, tasks
+**Excludes**: Actual database records
+
+**Process:**
+1. Access workspace settings
+2. Choose "Clone Workspace"
+3. Configure new workspace settings
+4. Wait for cloning completion
+
+### Workspace Export/Import
+
+**Export Process:**
+- Background processing for large workspaces
+- Optional media attachment inclusion
+- Email notification when ready
+- 12-hour download availability
+
+**Import Considerations:**
+- Completely replaces destination workspace
+- Test in development environment first
+- Create backups before importing
+
+## Integration with No-Code Platforms
+
+### WeWeb Project Configuration
+
+Align WeWeb projects with workspace settings:
+
+1. **API Configuration**: Match WeWeb datasource settings with workspace APIs
+2. **Authentication**: Coordinate auth patterns with workspace middleware
+3. **Error Handling**: Align error responses with request history settings
+4. **Performance**: Configure WeWeb caching based on workspace performance
+
+### Make.com Automation
+
+Leverage workspace settings in automation:
+
+1. **Request Monitoring**: Use request history data for automation triggers
+2. **Error Handling**: Create scenarios based on workspace error patterns
+3. **Performance Optimization**: Adjust scenarios based on workspace metrics
+4. **Data Validation**: Use workspace validation rules in scenarios
+
+### n8n Workflow Integration
+
+Coordinate n8n workflows with workspace configuration:
+
+1. **Logging Integration**: Export request history to n8n for analysis
+2. **Performance Monitoring**: Create workflows to monitor workspace health
+3. **Backup Automation**: Automate workspace exports through n8n
+4. **Team Notifications**: Alert teams of workspace configuration changes
+
+## Common Mistakes to Avoid
+
+1. **Over-Logging**: Excessive request history can impact performance and storage
+2. **Format Confusion**: Not understanding JSONB vs SQL format implications
+3. **Inheritance Chaos**: Too many custom inheritance settings create complexity
+4. **Migration Rush**: Converting table formats without proper testing
+5. **Documentation Neglect**: Not documenting custom settings and decisions
+
+## Pro Tips
+
+1. **Storage Monitoring**: Regularly review request history storage usage
+2. **Performance Testing**: Test different logging levels for optimal performance
+3. **Documentation Standards**: Maintain clear documentation of custom configurations
+4. **Team Communication**: Notify team members of workspace setting changes
+5. **Backup Strategy**: Create backups before major setting changes
+6. **Environment Consistency**: Keep similar settings across development environments
+
+## Advanced Configuration Patterns
+
+### Environment-Specific Settings
+
+```markdown
+# Multi-Environment Configuration
+
+## Development Workspace
+- Request History: Store all statements
+- Table Format: Standard SQL  
+- Custom Names: Enabled with _dev suffix
+- AI Features: Enabled for experimentation
+
+## Production Workspace  
+- Request History: 1,000 statements
+- Table Format: Standard SQL
+- Custom Names: Clean production names
+- AI Features: Controlled enablement
 ```
 
+### Team-Based Inheritance
+
+```markdown
+# Team Inheritance Strategy
+
+## Backend Team Functions
+- Inherit: No (custom detailed logging)
+- Statement Limit: Store all statements
+- Reason: Complex debugging requirements
+
+## Frontend Team APIs
+- Inherit: Yes (use workspace defaults)
+- Reason: Standard logging sufficient
+
+## DevOps Monitoring
+- Inherit: No (minimal logging)
+- Statement Limit: 100 statements  
+- Reason: Performance optimization
 ```
 
-<!-- -->
-
-```
-
+Proper workspace configuration creates a foundation for efficient development, effective debugging, and seamless team collaboration. By understanding and implementing these settings strategically, you can optimize your Xano environment for both current needs and future scalability.

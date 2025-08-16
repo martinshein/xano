@@ -1,334 +1,268 @@
 ---
+title: "Backup and Restore in Xano"
+description: "Learn how to create, restore, and manage backups of your Xano instance data for disaster recovery and development workflows"
 category: expressions
 has_code_examples: false
-last_updated: '2025-01-23'
+last_updated: '2025-01-16'
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: From your instance selection screen
+  - backup
+  - restore
+  - instance-management
+  - data-protection
+  - disaster-recovery
 ---
 
-# From your instance selection screen
+# Backup and Restore in Xano
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'backup-and-restore'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Backup and Restore \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-[](../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    How do backups work in Xano?
-Was this helpful?
-Copy
-1.  Xano Features
-2.  Instance Settings
-Backup and Restore 
-==================
-How do backups work in Xano?
-On all of our paid plans, Xano keeps a rolling 3-day backup of your entire instance automatically, should the need arise to restore to an earlier point.
-You also have the ability to take and restore backups manually.
-If you are on a free plan, please note that **no backups are available**.
-Creating a Backup
-<div>
-1
-###  
-From your instance selection screen
-, click [] next to the instance you want to create a backup of.
-2
-###  
-In the panel that opens, choose Database Backup.
-3
-###  
-Click Manual Backup
-4
-###  
-Check the option to include media storage if you\'d like that to be included in your backup.
-Please note that media storage should only be backed up if absolutely necessary, as it can greatly increase the size of and duration to backup / restore the instance.
-5
-###  
-Click [] to start the process.
-</div>
-Restoring a Backup
-WARNING
-It is **strongly advised** that you first create a backup before restoring another, just in case you need to roll back.
-<div>
-1
-###  
-From your instance selection screen
-, click [] next to the instance you want to restore a backup of.
-2
-###  
-In the panel that opens, choose Database Backup.
-3
-###  
-Click Download and Restore
-4
-###  
-Choose the backup you\'d like to restore and click []
-</div>
-Custom Backup Policy
-You can define your own custom schedule for when automatic backups take place.
-<div>
-1
-###  
-From your instance selection screen
-, click [] next to the instance you want to adjust backup policy for.
-2
-###  
-In the panel that opens, choose Database Backup.
-3
-###  
-Click Policy
-4
-###  
-Choose the time window you\'d like your backups to run in.
-Typically, backups will happen early morning PST hours. However, you can select your own time window to more closely align with your needs from here.
-</div>
-Last updated 3 months ago
-Was this helpful?
+## 📋 **Quick Summary**
+
+Xano provides automated and manual backup capabilities for paid plans, allowing you to protect your data and restore to earlier points in time. This is essential for disaster recovery, testing scenarios, and maintaining multiple environment states.
+
+## What You'll Learn
+
+- How Xano's automatic backup system works
+- Step-by-step manual backup creation process
+- Restore procedures and best practices
+- Backup policy customization options
+- When to include media storage in backups
+- Integration strategies for development workflows
+
+## Understanding Xano Backups
+
+Xano maintains different backup capabilities based on your plan:
+
+**Free Plans:**
+- No backup functionality available
+- Recommend upgrading for production use
+
+**Paid Plans:**
+- Automatic rolling 3-day backups
+- Manual backup creation
+- Custom backup scheduling
+- Media storage inclusion options
+
+**What's Included in Backups:**
+- Complete database schema and data
+- API configurations and endpoints
+- Custom functions and workflows
+- Workspace settings and permissions
+- Optional: Media files and attachments
+
+## Creating Manual Backups
+
+Manual backups give you control over when to preserve your instance state, perfect for before major changes or deployments.
+
+### Step-by-Step Process
+
+1. **Access Instance Settings**
+   - Navigate to your instance selection screen
+   - Click the settings icon (⚙️) next to your target instance
+
+2. **Open Database Backup Panel**
+   - In the settings panel, choose "Database Backup"
+
+3. **Start Manual Backup**
+   - Click "Manual Backup" button
+
+4. **Configure Media Storage (Optional)**
+   - Check the option to include media storage if needed
+   - **Warning**: Media backups significantly increase backup size and time
+
+5. **Execute Backup**
+   - Click the backup button to start the process
+   - Wait for completion confirmation
+
+## Try This: Pre-Deployment Backup
+
+Create a backup before making significant changes:
+
+```markdown
+# Pre-Deployment Checklist
+
+1. Navigate to instance settings
+2. Access Database Backup panel
+3. Create manual backup with timestamp naming
+4. Document what changes you're about to make
+5. Proceed with deployment
+6. Test thoroughly
+7. Keep backup available for 24 hours post-deployment
+```
+
+## Restoring from Backups
+
+Restoration allows you to revert your instance to a previous state, useful for recovering from issues or testing scenarios.
+
+### Before You Restore
+
+**⚠️ CRITICAL WARNING**: Always create a current backup before restoring another backup. This creates a safety net if you need to revert the restoration.
+
+### Restoration Process
+
+1. **Create Safety Backup**
+   - Follow manual backup steps above
+   - Wait for completion before proceeding
+
+2. **Access Restore Interface**
+   - Go to instance settings (⚙️ icon)
+   - Choose "Database Backup" panel
+
+3. **Select Restore Option**
+   - Click "Download and Restore"
+
+4. **Choose Backup**
+   - Select the backup you want to restore from the list
+   - Click the restore button to proceed
+
+5. **Confirm and Wait**
+   - Confirm the restoration action
+   - Monitor progress until completion
+
+## Custom Backup Policies
+
+Customize when automatic backups occur to align with your workflow and minimize performance impact.
+
+### Setting Custom Schedule
+
+1. **Access Backup Policy**
+   - Navigate to instance settings
+   - Open "Database Backup" panel
+
+2. **Configure Policy**
+   - Click "Policy" option
+
+3. **Set Time Window**
+   - Choose your preferred backup time window
+   - Default: Early morning PST hours
+   - Customize to match your low-traffic periods
+
+### Best Practice Timing
+
+- **Low Traffic Hours**: Schedule during minimal user activity
+- **Pre-Change Windows**: Before regular development cycles
+- **Geographic Considerations**: Account for your user base timezone
+- **Frequency Balance**: More frequent for active development, less for stable production
+
+## Integration with Development Workflows
+
+### Staging Environment Strategy
+
+Use backups to maintain consistent staging environments:
+
+1. **Production Backup**: Create backup of production data
+2. **Staging Restore**: Restore backup to staging instance
+3. **Testing Phase**: Run tests against production-like data
+4. **Development**: Make changes in safe environment
+
+### Version Control Integration
+
+Coordinate backups with code deployments:
+
+```markdown
+# Deployment Workflow with Backups
+
+## Pre-Deployment
+1. Create manual backup with version tag
+2. Document current feature state
+3. Prepare rollback plan
+
+## Deployment
+1. Deploy code changes
+2. Test functionality
+3. Monitor for issues
+
+## Post-Deployment
+1. Create post-deployment backup if successful
+2. Keep pre-deployment backup for 48 hours
+3. Document any issues or rollback needs
+```
+
+### Team Collaboration
+
+Establish backup protocols for team environments:
+
+- **Daily Backups**: For active development phases
+- **Feature Backups**: Before starting major features
+- **Release Backups**: Before and after each release
+- **Emergency Backups**: When debugging production issues
+
+## Integration with No-Code Platforms
+
+### n8n Backup Automation
+
+Create automated backup workflows:
+
+1. **Schedule Node**: Daily/weekly backup triggers
+2. **Webhook Node**: Manual backup endpoints
+3. **Notification Node**: Backup completion alerts
+4. **File Storage**: Archive backups to cloud storage
+
+### Make.com Scenarios
+
+Build backup monitoring scenarios:
+
+1. **Time Trigger**: Scheduled backup checks
+2. **HTTP Module**: Verify backup completion
+3. **Slack Module**: Team notifications
+4. **Google Drive**: Backup status tracking
+
+### WeWeb Backup Dashboard
+
+Create backup management interfaces:
+
+1. **Backup Status**: Show last backup time
+2. **Manual Triggers**: Buttons for immediate backups
+3. **Restore Interface**: Guided restoration process
+4. **Schedule Management**: Backup policy configuration
+
+## Common Mistakes to Avoid
+
+1. **Forgetting Safety Backups**: Always backup current state before restoring
+2. **Media Storage Oversights**: Consider backup size and time implications
+3. **Schedule Conflicts**: Avoid backup times during high traffic
+4. **Documentation Gaps**: Keep records of what each backup contains
+5. **Testing Neglect**: Regularly test your restore process
+
+## Pro Tips
+
+1. **Naming Conventions**: Use descriptive names with timestamps and version info
+2. **Regular Testing**: Practice restore procedures in development
+3. **Storage Planning**: Monitor backup storage usage and retention
+4. **Team Communication**: Notify team members of backup/restore activities
+5. **Automation Balance**: Mix automatic and manual backups for optimal coverage
+6. **Performance Monitoring**: Track backup completion times and optimize schedules
+
+## Backup Size Considerations
+
+### Database-Only Backups
+- Fastest backup and restore times
+- Smallest file sizes
+- Recommended for frequent backups
+- Ideal for development workflows
+
+### Media-Inclusive Backups
+- Significantly larger file sizes
+- Longer backup and restore times
+- Essential for complete disaster recovery
+- Use sparingly and strategically
+
+## Troubleshooting Common Issues
+
+### Backup Failures
+- Check instance storage limits
+- Verify backup permissions
+- Monitor during low-activity periods
+- Contact support for large workspaces
+
+### Restore Problems
+- Ensure sufficient storage space
+- Verify backup file integrity
+- Check restoration permissions
+- Allow adequate time for completion
+
+### Performance Impact
+- Schedule during off-peak hours
+- Monitor server performance during backups
+- Consider splitting large backups
+- Optimize media storage inclusion
+
+Xano's backup and restore system provides robust data protection capabilities essential for production applications. By implementing proper backup strategies and procedures, you can maintain data integrity while supporting agile development and deployment workflows.
