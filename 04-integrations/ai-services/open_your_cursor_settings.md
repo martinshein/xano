@@ -1,696 +1,540 @@
 ---
+title: Cursor IDE Settings for Xano MCP Integration - Complete Setup Guide
+description: Detailed walkthrough for configuring Cursor IDE to connect with Xano MCP servers, including global and per-project setups, authentication, and troubleshooting for AI-powered development workflows
 category: ai-services
-has_code_examples: true
-last_updated: '2025-01-23'
+difficulty: beginner
+last_updated: '2025-01-16'
+related_docs:
+  - connecting-clients.md
+  - xano-mcp-server.md
+  - mcp-builder.md
+subcategory: 04-integrations/ai-services
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Open your Cursor settings
+  - cursor-ide
+  - settings
+  - configuration
+  - mcp-setup
+  - authentication
+  - development-tools
+  - no-code
 ---
 
-# Open your Cursor settings
+## 📋 **Quick Summary**
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'connecting-clients'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Connecting Clients \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
+Configure Cursor IDE to connect with your Xano MCP servers for seamless AI-powered development. This guide covers both global and per-project setup methods, authentication options, and troubleshooting steps. Perfect for developers building applications with n8n, WeWeb, and other no-code platforms that need AI assistance for database operations and API management.
+
+## What You'll Learn
+
+- How to access and configure Cursor IDE settings for MCP
+- Global vs per-project MCP server setup methods
+- Authentication configuration for secure connections
+- Best practices for multi-environment development
+- Troubleshooting common connection issues
+- Advanced configuration patterns for teams
+
+# Cursor IDE MCP Configuration
+
+## Overview
+
+**Cursor IDE** offers excellent integration with Xano MCP servers, enabling AI-powered development directly within your code editor. You can configure MCP connections either globally (available across all projects) or per-project (with project-specific settings and authentication).
+
+### Configuration Methods Comparison
+
+| Method | Best For | Authentication | Scope |
+|--------|----------|----------------|-------|
+| **Global Setup** | General development, testing | No authentication | All projects |
+| **Per-Project Setup** | Production, team collaboration | Full authentication support | Single project |
+
+## 🚀 **Global Configuration (Recommended for Getting Started)**
+
+### When to Use Global Setup
+
+**✅ Best for:**
+- Testing and development
+- Personal projects
+- Quick MCP server evaluation
+- Non-sensitive operations
+
+**❌ Avoid for:**
+- Production environments
+- Authenticated MCP servers
+- Team collaboration with different permissions
+
+### Step-by-Step Global Setup
+
+#### Step 1: Open Cursor Settings
+
+1. **Access Settings Menu**:
+   - **macOS**: `Cursor → Settings`
+   - **Windows/Linux**: `File → Settings`
+   - **Keyboard Shortcut**: `Cmd/Ctrl + ,`
+
+2. **Navigate to Features**: In the left sidebar, click on **Features**
+
+#### Step 2: Configure MCP Servers
+
+1. **Find MCP Section**: Scroll down to the **MCP Servers** section
+2. **Add New Server**: Click **+ Add new MCP Server**
+3. **Configure Server Details**:
+
+| Field | Value | Description |
+|-------|-------|-------------|
+| **Server Name** | `Xano Customer DB` | Descriptive name for your server |
+| **Type** | `sse` | Server-Sent Events (recommended) |
+| **Server URL** | Your Xano MCP URL | Copy from Xano server settings |
+
+4. **Save Configuration**: Click **Save** to add the server
+
+#### Step 3: Verify Connection
+
+1. **Check Server Status**: Your MCP server should appear as **"Ready"** in the list
+2. **Open Chat Window**: Start a new conversation in Cursor
+3. **Set Conversation Type**: Ensure conversation type is set to **Agent**
+4. **Test Connection**: Try asking questions that would use your MCP tools
+
+## 🔗 **No-Code Platform Integration**
+
+### n8n Workflow for Cursor AI Development
+
+**Automated Code Generation with MCP:**
+
+```javascript
+// n8n HTTP Request node for AI-assisted code generation
+{
+  "method": "POST",
+  "url": "https://your-xano-instance.com/api/mcp/code-generation",
+  "headers": {
+    "Authorization": "Bearer {{ $json.mcp_token }}",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "project_context": "{{ $json.cursor_project_path }}",
+    "code_request": "{{ $json.ai_prompt }}",
+    "language": "{{ $json.target_language }}",
+    "framework": "{{ $json.framework_type }}"
+  }
+}
+```
+
+### WeWeb Integration with Cursor Development
+
+**AI-Powered Component Generation:**
+
+```javascript
+// WeWeb workflow for generating code with Cursor MCP
+class CursorMCPIntegration {
+  constructor(xanoBaseUrl, mcpToken) {
+    this.baseUrl = xanoBaseUrl;
+    this.mcpToken = mcpToken;
+  }
+  
+  async generateComponent(componentSpec) {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/mcp/generate-component`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.mcpToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          component_type: componentSpec.type,
+          functionality: componentSpec.requirements,
+          style_preferences: componentSpec.styling,
+          data_integration: componentSpec.xanoEndpoints
+        })
+      });
+      
+      const generatedCode = await response.json();
+      
+      // Update WeWeb project with generated component
+      wwLib.wwVariable.updateValue('generated_component_code', generatedCode.code);
+      wwLib.wwVariable.updateValue('component_documentation', generatedCode.documentation);
+      
+      return generatedCode;
+    } catch (error) {
+      console.error('Component generation failed:', error);
+      return { error: 'Code generation unavailable' };
+    }
+  }
+  
+  async analyzeExistingCode(codeSnippet) {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/mcp/analyze-code`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.mcpToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          code: codeSnippet,
+          analysis_type: 'optimization_suggestions',
+          context: 'weweb_component'
+        })
+      });
+      
+      const analysis = await response.json();
+      
+      // Display analysis in WeWeb interface
+      wwLib.wwVariable.updateValue('code_analysis', analysis);
+      wwLib.wwModal.open('code-analysis-modal');
+      
+      return analysis;
+    } catch (error) {
+      console.error('Code analysis failed:', error);
+      return { error: 'Analysis unavailable' };
+    }
+  }
+}
+
+// Usage in WeWeb
+const cursorIntegration = new CursorMCPIntegration(
+  wwLib.wwVariable.getValue('xano_base_url'),
+  wwLib.wwVariable.getValue('mcp_token')
+);
+
+async function generateWeWebComponent() {
+  const spec = {
+    type: wwLib.wwVariable.getValue('component_type'),
+    requirements: wwLib.wwVariable.getValue('functionality_requirements'),
+    styling: wwLib.wwVariable.getValue('style_preferences'),
+    xanoEndpoints: wwLib.wwVariable.getValue('selected_endpoints')
+  };
+  
+  const result = await cursorIntegration.generateComponent(spec);
+  
+  if (!result.error) {
+    wwLib.wwVariable.updateValue('generation_success', true);
+  }
+}
+```
+
+## 🛠️ **Per-Project Configuration (Recommended for Production)**
+
+### When to Use Per-Project Setup
+
+**✅ Best for:**
+- Production environments
+- Team collaboration
+- Projects requiring authentication
+- Multiple environment management (dev, staging, prod)
+
+### Step-by-Step Per-Project Setup
+
+#### Step 1: Create Project Configuration Directory
+
+1. **Navigate to Project Root**: Open terminal in your project directory
+2. **Create Configuration Folder**:
+   ```bash
+   mkdir .cursor
+   cd .cursor
+   ```
+
+#### Step 2: Create MCP Configuration File
+
+1. **Create Configuration File**:
+   ```bash
+   touch mcp.json
+   ```
+
+2. **Basic Configuration Structure**:
+   ```json
+   {
+     "mcpServers": {
+       "xano_production": {
+         "command": "npx",
+         "args": [
+           "mcp-remote",
+           "https://your-xano-instance.com/x2/mcp/SERVER_ID/sse",
+           "--header",
+           "Authorization: Bearer ${AUTH_TOKEN}"
+         ],
+         "env": {
+           "AUTH_TOKEN": "your_production_token_here"
+         }
+       }
+     }
+   }
+   ```
+
+#### Step 3: Multi-Environment Configuration
+
+**Complete Multi-Environment Setup:**
+
+```json
+{
+  "mcpServers": {
+    "xano_development": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://dev-instance.xano.com/x2/mcp/DEV_SERVER_ID/sse"
+      ]
+    },
+    "xano_staging": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://staging-instance.xano.com/x2/mcp/STAGING_SERVER_ID/sse",
+        "--header",
+        "Authorization: Bearer ${STAGING_TOKEN}"
+      ],
+      "env": {
+        "STAGING_TOKEN": "staging_auth_token_here"
+      }
+    },
+    "xano_production": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://prod-instance.xano.com/x2/mcp/PROD_SERVER_ID/sse",
+        "--header",
+        "Authorization: Bearer ${PROD_TOKEN}"
+      ],
+      "env": {
+        "PROD_TOKEN": "production_auth_token_here"
+      }
+    }
+  }
+}
+```
+
+#### Step 4: Environment-Specific Configuration
+
+**Development Environment:**
+```json
+{
+  "mcpServers": {
+    "xano_dev": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://dev-instance.xano.com/x2/mcp/SERVER_ID/sse",
+        "--timeout", "30000",
+        "--debug"
+      ],
+      "env": {
+        "NODE_ENV": "development",
+        "DEBUG": "true"
+      }
+    }
+  }
+}
+```
+
+**Production Environment:**
+```json
+{
+  "mcpServers": {
+    "xano_prod": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://prod-instance.xano.com/x2/mcp/SERVER_ID/sse",
+        "--header",
+        "Authorization: Bearer ${PROD_TOKEN}",
+        "--retry", "3"
+      ],
+      "env": {
+        "PROD_TOKEN": "secure_production_token",
+        "NODE_ENV": "production",
+        "TIMEOUT": "10000"
+      }
+    }
+  }
+}
+```
+
+#### Step 5: Restart and Test
+
+1. **Restart Cursor**: Close and reopen Cursor IDE
+2. **Verify Configuration**: Check that MCP servers appear in the chat interface
+3. **Set Conversation Type**: Ensure conversation type is set to **Agent**
+4. **Test Connection**: Try using MCP tools in your conversation
+
+## 🔐 **Authentication and Security**
+
+### Token Management Best Practices
+
+**Environment Variables Approach:**
+```json
+{
+  "mcpServers": {
+    "xano_secure": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://instance.xano.com/x2/mcp/SERVER_ID/sse",
+        "--header",
+        "Authorization: Bearer ${XANO_AUTH_TOKEN}"
+      ],
+      "env": {
+        "XANO_AUTH_TOKEN": "${XANO_TOKEN_FROM_ENV}"
+      }
+    }
+  }
+}
+```
+
+**Create Environment File:**
+```bash
+# .env file in project root
+XANO_TOKEN_FROM_ENV=your_actual_token_here
+```
+
+### Team Configuration Management
+
+**Shared Team Configuration:**
+```json
+{
+  "mcpServers": {
+    "xano_team": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://team-instance.xano.com/x2/mcp/SERVER_ID/sse",
+        "--header",
+        "Authorization: Bearer ${TEAM_TOKEN}"
+      ],
+      "env": {
+        "TEAM_TOKEN": "${USER_SPECIFIC_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+## 🎯 **Advanced Configuration Patterns**
+
+### Custom Tool-Specific Servers
+
+```json
+{
+  "mcpServers": {
+    "xano_customer_tools": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://instance.xano.com/x2/mcp/CUSTOMER_SERVER_ID/sse",
+        "--header",
+        "Authorization: Bearer ${CUSTOMER_TOKEN}"
+      ],
+      "env": {
+        "CUSTOMER_TOKEN": "customer_management_token"
+      }
+    },
+    "xano_analytics_tools": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://instance.xano.com/x2/mcp/ANALYTICS_SERVER_ID/sse",
+        "--header",
+        "Authorization: Bearer ${ANALYTICS_TOKEN}"
+      ],
+      "env": {
+        "ANALYTICS_TOKEN": "analytics_readonly_token"
+      }
+    }
+  }
+}
+```
+
+### Performance Optimization Configuration
+
+```json
+{
+  "mcpServers": {
+    "xano_optimized": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://instance.xano.com/x2/mcp/SERVER_ID/sse",
+        "--header",
+        "Authorization: Bearer ${AUTH_TOKEN}",
+        "--timeout", "15000",
+        "--retry", "2",
+        "--cache-ttl", "300"
+      ],
+      "env": {
+        "AUTH_TOKEN": "your_token",
+        "MCP_CACHE_ENABLED": "true",
+        "MCP_LOG_LEVEL": "warn"
+      }
+    }
+  }
+}
+```
+
+## 🔧 **Troubleshooting**
+
+### Common Configuration Issues
+
+**Problem**: MCP server appears but tools don't work  
+**Solution**: 
+- Verify conversation type is set to **Agent**
+- Check authentication token validity
+- Ensure MCP server is enabled in Xano
+
+**Problem**: Configuration file not recognized  
+**Solution**:
+- Verify `.cursor/mcp.json` file location
+- Check JSON syntax for errors
+- Restart Cursor after configuration changes
+
+**Problem**: Authentication failures  
+**Solution**:
+- Verify token format and permissions
+- Check environment variable configuration
+- Ensure token hasn't expired
+
+### Debug Configuration
+
+**Enable Detailed Logging:**
+```json
+{
+  "mcpServers": {
+    "xano_debug": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://instance.xano.com/x2/mcp/SERVER_ID/sse",
+        "--verbose",
+        "--debug"
+      ],
+      "env": {
+        "DEBUG": "*",
+        "NODE_ENV": "development"
+      }
+    }
+  }
+}
+```
+
+### Connection Diagnostics
+
+**Test Connection Script:**
+```bash
+# Test MCP connection manually
+npx mcp-remote https://your-instance.xano.com/x2/mcp/SERVER_ID/sse --test-connection
+```
+
+## 💡 **Pro Tips**
+
+- **Start Simple**: Begin with global configuration before moving to per-project setup
+- **Use Environment Variables**: Keep sensitive tokens out of configuration files
+- **Test Incrementally**: Verify each server connection before adding more
+- **Document Configurations**: Maintain team documentation for MCP setups
+- **Monitor Usage**: Track MCP tool usage for optimization opportunities
+- **Regular Updates**: Keep MCP remote package updated with `npm update mcp-remote`
+
+## 🎯 **Next Steps**
+
+### After Successful Configuration
+
+1. **Explore Available Tools**: Use the 🛠️ icon in Cursor to view available MCP tools
+2. **Test AI Interactions**: Ask questions that exercise your MCP server capabilities
+3. **Integrate with Workflows**: Incorporate MCP tools into your development process
+4. **Optimize Performance**: Monitor response times and adjust configuration as needed
+
 ---
-[](../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-     Cursor
-Was this helpful?
-Copy
-1.  Build For AI
-2.  MCP Builder
-Connecting Clients 
-==================
- Cursor
-The below instructions will allow you to connect your Xano MCP server to Cursor and make them available across any project. The below method does not support authentication. If you need authentication or want to define per-project MCPs, use these instructions instead.
-<div>
-1
-###  
-Open your Cursor settings
-2
-###  
-Under the [ Features ] subsection, scroll down to MCP Servers
-3
-###  
-Click [ + Add new MCP Server ]
-Give your server a name.
-The `type` should be `sse`
-Paste your server URL in the Server URL section. You can retrieve your server URL by navigating to your server in Xano and clicking **Copy Connection URL**.
-4
-###  
-You should now see your MCP Server ready in Cursor
-5
-###  
-In your chat window, you can now interact with the tools included in your MCP server that\'s connected
-Make sure the conversation type is set to Agent
-In our example, we have a tool that checks if a user is marked as an administrator.
-</div>
- Cursor (per-project)
-<div>
-1
-###  
-In your project\'s root directory, create a new folder called `.cursor`
-2
-###  
-Create a new file inside of that folder called `mcp.json`
-3
-###  
-Fill out the required details inside of `mcp.json`
-If the file is blank, start with the basic structure and replace the placeholder values with your own.
-Copy
-``` 
-{
-  "mcpServers": {
-    "xano": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "YOUR CONNECTION URL HERE",
-        "--header",
-        "Authorization:$"
-      ],
-      "env": 
-    }
-  }
-}
-```
-You can add multiple entries if you have multiple MCP servers. See the below example.
-Copy
-``` 
-{
-  "mcpServers": {
-    "xano_development": ,
-    "xano_production": ,
-    "xano_tools": 
-  }
-}
-```
-4
-###  
-Restart Cursor.
-In your chat window, you can now interact with the tools included in your MCP server that\'s connected
-Make sure the conversation type is set to Agent
-In our example, we have a tool that checks if a user is marked as an administrator.
-</div>
-------------------------------------------------------------------------
- Claude Desktop
-<div>
-1
-###  
-Install the prerequisites
-You need Node.js installed on your system.
-Download the latest installer from the Node.js official website for your specific platform.
-2
-###  
-Open Claude Desktop\'s config file in your text / code editor of choice
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Mac OS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-    :::
-3
-###  
-Add an entry in the config file for your Xano MCP server
-Click **Edit Config** and in the window that opens, open `claude_desktop_config.json` in your favorite text or code editor.
-If the file is blank, start with the basic structure and replace the placeholder values with your own.
-Copy
-``` 
-{
-  "mcpServers": {
-    "YOUR SERVER NAME HERE": 
-  }
-}
-```
-If any of your tools require authentication, you can add that to your config file. See the below example.
-Copy
-``` 
-{
-  "mcpServers": {
-    "xano": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "YOUR CONNECTION URL HERE",
-        "--header",
-        "Authorization: Bearer $"
-      ],
-      "env": 
-    }
-  }
-}
-```
-**Windows Users:**
-Claude Desktop currently has a bug related to spaces inside of headers. To mitigate this, change the authentication section of your config file to look like the following:
-Copy
-``` 
-        "Authorization:$"
-      ],
-      "env": {
-        "AUTH_TOKEN": "Bearer YOUR AUTH TOKEN HERE"
-```
-You can add multiple entries if you have multiple MCP servers. See the below example.
-Copy
-``` 
-{
-  "mcpServers": {
-    "xano_development": ,
-    "xano_production": ,
-    "xano_tools": 
-  }
-}
-```
-4
-###  
-Relaunch Claude Desktop to interact with your MCP server(s)
-In Claude, you should see a new icon under your chat box with a [🛠️] icon.
-You can click on this to view information about your available tools.
-</div>
-------------------------------------------------------------------------
-Windsurf
-<div>
-1
-###  
-Head to your Windsurf settings
-2
-###  
-Click Cascade, and then Add Server
-3
-###  
-Click \'Add Custom Server\'
-4
-###  
-Fill out the config file with your MCP server details
-If the file is blank, start with the basic structure and replace the placeholder values with your own.
-Copy
-``` 
-{
-  "mcpServers": {
-    "YOUR SERVER NAME HERE": 
-  }
-}
-```
-If any of your tools require authentication, you can add that to your config file. See the below example.
-Copy
-``` 
-{
-  "mcpServers": {
-    "xano": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "YOUR CONNECTION URL HERE",
-        "--header",
-        "Authorization: Bearer $"
-      ],
-      "env": 
-    }
-  }
-}
-```
-You can add multiple entries if you have multiple MCP servers. See the below example.
-Copy
-``` 
-{
-  "mcpServers": {
-    "xano_development": ,
-    "xano_production": ,
-    "xano_tools": 
-  }
-}
-```
-5
-###  
-Click the Refresh button, and you should see your MCP server(s) available
-</div>
-------------------------------------------------------------------------
-Methods
-###  
-Streaming
-Streaming connections allow your MCP server to deliver responses in smaller chunks. Great for emulating the typical chatbot experience, where you can provide the experience of the response being \'typed\'.
-###  
-SSE
-SSE connections may be more compatible with certain systems, but deliver the entire response as a whole once its ready, instead of in smaller pieces.
-Which one should I use?
-It depends on your use case and what you\'re using to connect to the MCP server. Streaming connections allow for a more organic, \"chatbot-like\" experience and means that your users won\'t have to wait as long to start seeing the response. However, whatever is connecting to your MCP server needs to support streaming responses for this to work.
-------------------------------------------------------------------------
-FAQ and Troubleshooting
-####  
-How do I use my MCP server in one of these clients?
-Once you\'re connected following the instructions above, you should be able to converse with the AI like you would any other, asking real-world questions that the tools you built should be able to answer.
-For example, if we have a tool that just returns a true or false, we\'d probably be asking yes or no questions, such as \"Does this user, [\[email protected\]](../../cdn-cgi/l/email-protection.html), have administrator access?\"
-An example of using a Xano MCP server in Claude Desktop
-####  
-I can\'t connect to my server from my client of choice.
-Check the error message you\'re receiving for clues. This could be due to one of the following:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    An incorrectly formatted configuration file
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Your Xano MCP Server is not set to allow connections
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    You\'re not providing an authentication token to a server that requires it
-    :::
-####  
-For MCP servers with tools that require authentication, after a long waiting period, I get a connection error.
-In our current testing, we are finding that running multiple MCP clients causes this issue. Our recommendation is to stick with a single client for the time being.
-Try these steps:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Close any open MCP clients
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Ensure that your authentication token is not expired
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    On Mac, run
-    ::: 
-    ::: 
-    :::
-    Copy
-    ``` 
-    rm -rf ~/.mcp-auth
-    ```
-    :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Restart your MCP client and try connecting again
-    :::
-Last updated 2 months ago
-Was this helpful?
 
-## Code Examples
-
-```javascript
- 
-{
-  "mcpServers": {
-    "xano": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "YOUR CONNECTION URL HERE",
-        "--header",
-        "Authorization:$"
-      ],
-      "env": 
-    }
-  }
-}
-
-```
-
-```javascript
- 
-{
-  "mcpServers": {
-    "xano_development": ,
-    "xano_production": ,
-    "xano_tools": 
-  }
-}
-
-```
-
-```javascript
- 
-{
-  "mcpServers": {
-    "YOUR SERVER NAME HERE": 
-  }
-}
-
-```
-
-```javascript
- 
-{
-  "mcpServers": {
-    "xano": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "YOUR CONNECTION URL HERE",
-        "--header",
-        "Authorization: Bearer $"
-      ],
-      "env": 
-    }
-  }
-}
-
-```
-
-```javascript
- 
-        "Authorization:$"
-      ],
-      "env": {
-        "AUTH_TOKEN": "Bearer YOUR AUTH TOKEN HERE"
-
-```
-
-```javascript
- 
-{
-  "mcpServers": {
-    "xano_development": ,
-    "xano_production": ,
-    "xano_tools": 
-  }
-}
-
-```
-
-```javascript
- 
-{
-  "mcpServers": {
-    "YOUR SERVER NAME HERE": 
-  }
-}
-
-```
-
-```javascript
- 
-{
-  "mcpServers": {
-    "xano": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "YOUR CONNECTION URL HERE",
-        "--header",
-        "Authorization: Bearer $"
-      ],
-      "env": 
-    }
-  }
-}
-
-```
-
-```javascript
- 
-{
-  "mcpServers": {
-    "xano_development": ,
-    "xano_production": ,
-    "xano_tools": 
-  }
-}
-
-```
-
-```
- 
-    rm -rf ~/.mcp-auth
-    
-```
-
+**Next Steps**: Ready to explore more MCP clients? Check out [Connecting Clients](connecting-clients.md) for other AI tools or visit [Xano MCP Server](xano-mcp-server.md) for advanced server configuration

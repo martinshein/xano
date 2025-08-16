@@ -1,541 +1,321 @@
 ---
+title: Accessing Xano MCP Server - Instance Configuration Guide
+description: Step-by-step guide to accessing the Xano MCP Server through your instance settings, configuring access tokens, and choosing the right connection method for your AI client setup
 category: ai-services
-has_code_examples: false
-last_updated: '2025-01-23'
+difficulty: beginner
+last_updated: '2025-01-16'
+related_docs:
+  - xano-mcp-server.md
+  - connecting-clients.md
+  - mcp-builder.md
+subcategory: 04-integrations/ai-services
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: "From the Instance selection screen, click the [\u2699\uFE0F] icon next to\
-  \ your instance, and choose [ Metadata API & MCP Server ]"
+  - instance-settings
+  - metadata-api
+  - mcp-server-access
+  - configuration
+  - setup
+  - no-code
 ---
 
-# From the Instance selection screen, click the [⚙️] icon next to your instance, and choose [ Metadata API & MCP Server ]
+## 📋 **Quick Summary**
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-description: Manage your Xano data using your favorite MCP client
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'xano-mcp-server'
-twitter:card: summary\_large\_image
-twitter:description: Manage your Xano data using your favorite MCP client
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Xano MCP Server \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
+This guide shows you how to access the Xano MCP Server from your instance settings. The MCP Server provides direct AI client access to your Xano instance, enabling automated database management, API exploration, and data operations through AI tools like Claude Desktop, Cursor, and Windsurf. Essential first step for setting up AI-powered workflows.
+
+## What You'll Learn
+
+- How to access MCP Server settings from your instance
+- Understanding the ⚙️ settings icon and navigation
+- Difference between Metadata API and MCP Server options
+- When to use the built-in MCP Server vs custom tools
+- Security considerations for instance-level access
+- Integration with popular AI development tools
+
+# Accessing Xano MCP Server Settings
+
+## Overview
+
+The **Xano MCP Server** is accessed through your instance settings and provides comprehensive access to your entire Xano instance through AI clients. Unlike custom MCP tools you build, this server gives AI direct access to administrative functions, database management, and API exploration capabilities.
+
+### What You Get Access To
+
+**Instance Management:**
+- Workspace creation and configuration
+- Database schema management
+- Table creation and modification
+- API endpoint documentation
+- Request history analysis
+
+**Direct AI Capabilities:**
+- Natural language database queries
+- Automated table creation
+- Data analysis and reporting
+- API testing and documentation
+- Performance monitoring
+
+## 🚀 **Step-by-Step Access Guide**
+
+### Step 1: Navigate to Instance Settings
+
+1. **Open Xano Dashboard**: Log into your Xano account and view your instances
+2. **Locate Your Instance**: Find the instance you want to connect to AI clients
+3. **Click Settings Icon**: Click the **⚙️** icon next to your instance name
+
+### Step 2: Choose Metadata API & MCP Server
+
+1. **Settings Menu Opens**: A dropdown menu will appear with various options
+2. **Select MCP Option**: Choose **"Metadata API & MCP Server"**
+3. **Access Configuration**: You'll be taken to the MCP server configuration screen
+
+### Step 3: Understanding Your Options
+
+**What You'll See:**
+- **Access Token Generation**: Create authentication tokens for AI clients
+- **Connection URLs**: Pre-configured endpoints for different connection types
+- **Available Tools**: List of built-in tools your AI clients can use
+- **Usage Monitoring**: Track how AI clients interact with your instance
+
+## 🔗 **No-Code Platform Integration**
+
+### n8n Workflow for Instance Management
+
+**Automated Instance Monitoring:**
+
+```javascript
+// n8n HTTP Request node for instance health checks
+{
+  "method": "GET",
+  "url": "https://your-xano-instance.com/api/mcp/health",
+  "headers": {
+    "Authorization": "Bearer {{ $json.mcp_token }}",
+    "Content-Type": "application/json"
+  },
+  "schedule": "0 */6 * * *"  // Every 6 hours
+}
+```
+
+### WeWeb Admin Dashboard Integration
+
+**Instance Management Component:**
+
+```javascript
+// WeWeb component for instance administration
+class XanoInstanceManager {
+  constructor(instanceUrl, mcpToken) {
+    this.instanceUrl = instanceUrl;
+    this.mcpToken = mcpToken;
+  }
+  
+  async getInstanceStatus() {
+    try {
+      const response = await fetch(`${this.instanceUrl}/api/mcp/status`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.mcpToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      const status = await response.json();
+      
+      // Update WeWeb variables
+      wwLib.wwVariable.updateValue('instance_status', status);
+      wwLib.wwVariable.updateValue('last_health_check', new Date().toISOString());
+      
+      return status;
+    } catch (error) {
+      console.error('Instance status check failed:', error);
+      return { error: 'Status unavailable' };
+    }
+  }
+  
+  async monitorWorkspaces() {
+    try {
+      const response = await fetch(`${this.instanceUrl}/api/mcp/sse`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.mcpToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          tool: 'listWorkspaces',
+          args: {}
+        })
+      });
+      
+      const workspaces = await response.json();
+      
+      // Update workspace monitoring dashboard
+      wwLib.wwVariable.updateValue('workspace_list', workspaces);
+      
+      return workspaces;
+    } catch (error) {
+      console.error('Workspace monitoring failed:', error);
+      return [];
+    }
+  }
+}
+
+// Usage in WeWeb
+const instanceManager = new XanoInstanceManager(
+  wwLib.wwVariable.getValue('xano_instance_url'),
+  wwLib.wwVariable.getValue('mcp_access_token')
+);
+
+async function performHealthCheck() {
+  const status = await instanceManager.getInstanceStatus();
+  
+  if (status.error) {
+    wwLib.wwModal.open('instance-error-modal');
+  } else {
+    wwLib.wwVariable.updateValue('health_status', 'healthy');
+  }
+}
+```
+
+## 🛠️ **Understanding the Settings Interface**
+
+### Instance Settings Navigation
+
+**Location in Xano Interface:**
+- **Instance List View**: Shows all your instances with settings icons
+- **Settings Icon (⚙️)**: Located to the right of each instance name
+- **Dropdown Menu**: Contains multiple configuration options
+
+### Settings Menu Options
+
+| Option | Purpose | When to Use |
+|--------|---------|-------------|
+| **General Settings** | Basic instance configuration | Changing instance name, description |
+| **Metadata API & MCP Server** | AI client integration | Setting up AI tools and automation |
+| **Security Settings** | Access control and permissions | Managing API keys and user access |
+| **Backup & Restore** | Data protection | Regular maintenance and recovery |
+
+### MCP Server vs Other Options
+
+**Choose MCP Server When:**
+- Building AI-powered applications
+- Need automated database management
+- Want natural language interface to your data
+- Integrating with AI development tools
+
+**Choose Other Options When:**
+- Traditional API development
+- Manual database administration
+- Standard web application integration
+- Non-AI workflow automation
+
+## 🔐 **Security Considerations**
+
+### Access Control Best Practices
+
+1. **Token Management**: Generate tokens with appropriate scopes
+2. **Environment Separation**: Use different tokens for development/production
+3. **Regular Rotation**: Update access tokens periodically
+4. **Audit Monitoring**: Track all MCP server access
+
+### Instance-Level Security
+
+```javascript
+// Example of secure token configuration
+{
+  "token_scope": {
+    "read": ["workspaces", "tables", "content"],
+    "write": ["content"],
+    "admin": []  // Restrict administrative functions
+  },
+  "rate_limits": {
+    "requests_per_minute": 100,
+    "burst_limit": 20
+  },
+  "allowed_clients": [
+    "claude-desktop",
+    "cursor-ide",
+    "custom-client-1"
+  ]
+}
+```
+
+### Common Security Issues
+
+**Problem**: Overly broad token permissions  
+**Solution**: Use principle of least privilege - grant only necessary permissions
+
+**Problem**: Shared tokens across environments  
+**Solution**: Generate separate tokens for development, staging, and production
+
+**Problem**: No audit trail for AI operations  
+**Solution**: Enable request logging and monitor MCP tool usage
+
+## 💡 **Pro Tips**
+
+### Efficient Setup Workflow
+
+1. **Start Simple**: Begin with read-only access to test connectivity
+2. **Test Incremental**: Add permissions gradually as needed
+3. **Document Everything**: Keep track of token purposes and scopes
+4. **Monitor Usage**: Watch for unexpected AI client behavior
+
+### Common Configuration Patterns
+
+**Development Setup:**
+```json
+{
+  "environment": "development",
+  "permissions": ["read", "write"],
+  "rate_limit": "relaxed",
+  "logging": "verbose"
+}
+```
+
+**Production Setup:**
+```json
+{
+  "environment": "production", 
+  "permissions": ["read"],
+  "rate_limit": "strict",
+  "logging": "errors_only",
+  "backup_frequency": "daily"
+}
+```
+
+## 🔧 **Troubleshooting Access Issues**
+
+### Common Problems
+
+**Problem**: Can't find the ⚙️ settings icon  
+**Solution**: Ensure you're viewing the instance list and have appropriate permissions
+
+**Problem**: Settings menu doesn't show MCP Server option  
+**Solution**: Verify your account plan includes MCP features
+
+**Problem**: Access denied when opening settings  
+**Solution**: Check if you're the instance owner or have admin permissions
+
+### Permission Requirements
+
+**Required Roles:**
+- **Instance Owner**: Full access to all settings
+- **Admin**: Can configure MCP settings
+- **Developer**: Can view but not modify MCP configuration
+- **Viewer**: No access to instance settings
+
+## 🎯 **Next Steps After Access**
+
+### Immediate Actions
+
+1. **Generate Access Token**: Create your first MCP authentication token
+2. **Choose Connection Method**: Select SSE or streaming based on your needs
+3. **Test Connection**: Verify connectivity with a simple AI client
+4. **Configure First Tool**: Set up basic database access
+
+### Integration Planning
+
+1. **Identify Use Cases**: Determine which AI operations you need
+2. **Plan Security**: Design token scoping and access controls
+3. **Choose Clients**: Select AI tools that best fit your workflow
+4. **Start Development**: Begin building AI-powered features
+
 ---
-[](../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    What is the Xano MCP Server?
-Was this helpful?
-Copy
-1.  Build For AI
-Xano MCP Server 
-===============
-Manage your Xano data using your favorite MCP client
-Need a primer on MCP? Read this first: Introduction to building MCP Servers in Xano
-Quick Summary
-The Xano MCP Server allows you to interact with your Xano instance and workspaces using MCP. This enables you to do things like\...
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Create database tables and update table schema
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Generate sample data
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Parse and search your request history
-    :::
-\...all from your favorite MCP client, such as Claude, Cursor, or Windsurf.
-The Xano MCP Server is powered by our Metadata API, and we expect to eventually allow for all of the methods present there to be used as tools within the Xano MCP Server.
-Connect to the Xano MCP Server from your instance settings -\> **Metadata API & MCP Server**
-What is the Xano MCP Server?
-The Xano MCP Server, powered by our Metadata API, enables you to interact with your Xano instance and workspaces without leaving your favorite MCP client.
-Connecting to the Xano MCP Server
-<div>
-1
-###  
-From the Instance selection screen, click the [⚙️] icon next to your instance, and choose [ Metadata API & MCP Server ]
-2
-###  
-Generate an Access Token
-Access Tokens are used for authentication when connecting to the Xano MCP server. For more information on generating access tokens, see this reference: Generate an Access Token
-3
-###  
-Choose your connection method
-For most clients, at this time, SSE is likely the method that you\'ll want to choose. However, we have made a streaming connection available as well. Click the URL to copy it to your clipboard.
-4
-###  
-Connect using your client of choice
-For more information on connecting your clients to an MCP server, refer to Connecting Clients or to your client\'s documentation for the most up to date information.
-The instructions linked above are for connecting an MCP server built using Xano\'s MCP builder, but are fundamentally the same for the Xano MCP Server --- just replace the URL with what you copied in step 3.
-</div>
-Available Tools
-###  
-User Authentication
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **getLoggedInUser** - Validates the provided Access Token and returns the associated account details.
-    :::
-###  
-Workspace Management
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **listWorkspaces** - Lists all workspaces accessible by the authenticated user.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **getWorkspace** - Retrieves detailed information about a specific workspace.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **getWorkspaceBranches** - Lists all branches (e.g., development, production) within the specified workspace.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **workspaceGetDataSources** - Lists all external data sources connected to the specified workspace.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **workspaceRealtimeDetails** - Retrieves Realtime information for the specified workspace.
-    :::
-###  
-Table Management
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **addTable** - Creates a new table within the specified workspace.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **getTables** - Lists all tables within a specific workspace.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **getTable** - Retrieves the details of a specific table within the workspace.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **deleteTable** - Deletes a specific table and all data it contains from the workspace.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **updateTableMeta** - Modifies the metadata (e.g., schema, field definitions, descriptions) of the specified table.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **updateTableSecurity** - Updates the security rules for the specified table.
-    :::
-###  
-Table Content Management
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **getTableContent** - Retrieves a list of records from the specified table.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **getTableContentItem** - Retrieves a single, specific record from the table using its ID.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **updateTableContentItem** - Updates an existing record in the table using its ID.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **deleteTableContentItem** - Deletes a single, specific record from the table using its ID.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **searchTableContent** - Searches for records within the table using complex filter criteria and sorting options.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **patchTableContentBySearch** - Updates fields of all records in the table that match the specified search criteria.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **deleteTableContentBySearch** - Deletes all records from the table that match the specified search criteria.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **addTableContentBulk** - Adds multiple new records to the table in a single operation.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **patchTableContentBulk** - Updates multiple existing records in the table in a single bulk operation.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **deleteTableContentBulk** - Deletes multiple records from the table in bulk, based on a list of record IDs.
-    :::
-###  
-API Management
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **listAPIGroups** - Lists all API groups within the specified workspace.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **getApiGroup** - Retrieves details for a specific API group within the workspace.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **listAPIs** - Lists all individual API endpoints defined within a specific API group.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **getApiGroupSwagger** - Returns the JSON version of the Swagger (OpenAPI Documentation) for a specific API group
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **getApiSwagger** - Returns the JSON version of the Swagger (OpenAPI Documentation) for a specific API
-    :::
-###  
-Request Management
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **getRequestHistory** - Lists the history of API requests made to the specified workspace.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **searchRequestHistory** - Performs an advanced search of the workspace\'s API request history using filters and sorting.
-    :::
-Last updated 2 months ago
-Was this helpful?
+
+**Next Steps**: Ready to configure your MCP server? Check out [Xano MCP Server](xano-mcp-server.md) for detailed setup or explore [Connecting Clients](connecting-clients.md) for AI tool integration
