@@ -1,1074 +1,1246 @@
 ---
-category: filters
-has_code_examples: false
-last_updated: '2025-01-23'
+title: Mathematical Filters Reference - Complete Guide for No-Code Development
+description: Master Xano's comprehensive mathematical filter library including arithmetic operations, trigonometric functions, logarithms, statistical calculations, and advanced mathematical operations for data processing in n8n, WeWeb, and Make.com integrations
+category: 08-reference
+subcategory: filters
+difficulty: intermediate
+last_updated: '2025-01-16'
+related_docs:
+  - bitwise-filters.md
+  - array-statistics.md
+  - numeric-operations.md
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Math
+  - mathematical-filters
+  - arithmetic-operations
+  - trigonometric-functions
+  - logarithms
+  - statistical-calculations
+  - numeric-processing
 ---
 
-# Math
+## 📋 **Quick Summary**
 
-[🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    abs
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../building-with-visual-development.html)
-2.  Filters
-Math 
-====
-NOTE
-When a filter below refers to the **parent value**, we\'re talking about the value box that lives immediately above the filter.
-[]
-<div>
-</div>
-abs
-Returns the absolute value
-The abs filter is useful when you need the magnitude of a value regardless of its sign. For example, when calculating distances between two points or finding the difference between two values without caring about direction.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The number to get the absolute value of
-    :::
-Input
-Output
--5
-5
-10
-10
--3.14
-3.14
-acos
-Calculates the arc cosine of the supplied value in radians
-The acos filter is useful when working with trigonometric calculations, such as determining angles in navigation systems, game development for character movement, or calculating positions in geometric applications.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: A number between -1 and 1 representing a cosine value
-    :::
-Input
-Output
-1
-0
-0
-1.5707963267948966
--1
-3.141592653589793
-acosh
-Calculates the inverse hyperbolic cosine of the supplied value in radians
-The acosh filter is useful in advanced mathematical modeling, such as in engineering calculations, physics simulations, or specialized scientific applications where hyperbolic functions are needed.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: A number greater than or equal to 1
-    :::
-Input
-Output
-1
-0
-2
-1.3169578969248166
-10
-2.993222846126381
-add
-Add 2 values together and return the answer
-The add filter is useful for combining numeric values, such as calculating a total price from multiple items, combining measurements, or incrementing counters in your application.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The first number in the addition
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    value: The second number to add to the primary value
-    :::
-Input
-Output
-5, 3
-8
--2, 7
-5
-10.5, 4.2
-14.7
-array\_max
-Returns the max of the values of the array
-The array\_max filter is helpful when you need to find the highest value in a collection of numbers, such as determining the highest score, finding the maximum temperature in a data set, or identifying peak values in any numerical array.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: An array of numbers
-    :::
-Input
-Output
-\[1, 5, 3, 9, 2\]
-9
-\[-10, -5, -20\]
--5
-\[3.14, 2.71, 9.81\]
-9.81
-array\_min
-Returns the min of the values of the array
-The array\_min filter is valuable when you need to find the lowest value in a collection of numbers, such as determining the lowest price, finding the minimum temperature in a data set, or identifying the smallest entry in any numerical array.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: An array of numbers
-    :::
-Input
-Output
-\[1, 5, 3, 9, 2\]
-1
-\[-10, -5, -20\]
--20
-\[3.14, 2.71, 9.81\]
-2.71
-asin
-Calculates the arc sine of the supplied value in radians
-The asin filter is useful in trigonometric applications, such as calculating angles in physics simulations, determining trajectories in navigation, or solving geometric problems that involve angles.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: A number between -1 and 1 representing a sine value
-    :::
-Input
-Output
-0
-0
-1
-1.5707963267948966
--1
--1.5707963267948966
-asinh
-Calculates the inverse hyperbolic sine of the supplied value in radians
-The asinh filter is useful in specialized mathematical applications, such as signal processing, electrical engineering calculations, or advanced scientific computations that require hyperbolic functions.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: Any number
-    :::
-Input
-Output
-0
-0
-1
-0.8813735870195429
--2
--1.4436354751788103
-atan
-Calculates the arc tangent of the supplied value in radians
-The atan filter is useful when determining angles from slopes or ratios, such as in computer graphics for calculating rotation angles, in robotics for sensor interpretation, or in navigation systems for heading calculations.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: Any number representing a tangent value
-    :::
-Input
-Output
-0
-0
-1
-0.7853981633974483
--1
--0.7853981633974483
-atanh
-Calculates the inverse hyperbolic tangent of the supplied value in radians
-The atanh filter is valuable in specialized fields like electrical engineering, signal processing, and certain physics applications where hyperbolic functions are required for modeling or calculations.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: A number between -1 and 1 (exclusive)
-    :::
-Input
-Output
-0
-0
-0.5
-0.5493061443340548
--0.75
--0.9729550745276566
-avg
-Returns the average of the values of the array
-The avg filter is essential when you need to calculate the mean value of a set of numbers, such as finding the average score, determining average temperature over time, or calculating mean values in statistical analysis.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: An array of numbers
-    :::
-Input
-Output
-\[1, 2, 3, 4, 5\]
-3
-\[10, 20, 30, 40\]
-25
-\[2.5, 3.5, 4.5\]
-3.5
-bitwise\_and
-Bitwise AND 2 values together and return the answer
-The bitwise\_and filter is useful in operations that require bit-level manipulation, such as flag checking in permissions systems, hardware control applications, or optimization in low-level programming where individual bits need to be examined.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The first integer for the bitwise operation
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    value: The second integer to AND with the primary value
-    :::
-Input
-Output
-5, 3
-1
-12, 10
-8
-255, 15
-15
-bitwise\_or
-Bitwise OR 2 values together and return the answer
-The bitwise\_or filter is valuable when you need to combine bit flags, such as setting permissions in a security system, enabling features in configuration settings, or manipulating bitmap data where individual bits represent distinct options.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The first integer for the bitwise operation
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    value: The second integer to OR with the primary value
-    :::
-Input
-Output
-5, 3
-7
-12, 10
-14
-240, 15
-255
-bitwise\_xor
-Bitwise XOR 2 values together and return the answer
-The bitwise\_xor filter is useful in cryptographic applications, error detection, toggling states, or finding differences between binary patterns, such as in data validation or simple encryption techniques.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The first integer for the bitwise operation
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    value: The second integer to XOR with the primary value
-    :::
-Input
-Output
-5, 3
-6
-12, 10
-6
-255, 255
-0
-ceil
-Round a decimal up to its integer equivalent
-The ceil filter is helpful when you need to round a number up to the nearest integer, such as calculating the number of containers needed for items, determining the number of pages required for pagination, or rounding up financial values.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The number to round up
-    :::
-Input
-Output
-3.1
-4
-7.9
-8
--2.3
--2
-cos
-Calculates the cosine of the supplied value in radians
-The cos filter is essential in trigonometric calculations, such as determining coordinates in circular motion, calculating projections in physics, or modeling periodic phenomena like waves or oscillations.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: An angle in radians
-    :::
-Input
-Output
-0
-1
-1.5707963267948966
-0
-3.141592653589793
--1
-deg2rad
-Convert degrees to radians
-The deg2rad filter is useful when working with trigonometric functions that require radian inputs, such as converting user-friendly degree inputs to the radians needed for mathematical calculations in graphics, navigation, or physics simulations.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: An angle in degrees
-    :::
-Input
-Output
-0
-0
-90
-1.5707963267948966
-180
-3.141592653589793
-divide
-Divide 2 values together and return the answer
-The divide filter is essential for calculations involving ratios, rates, or proportional values, such as determining per-unit costs, calculating percentages, or finding averages when the total and count are known separately.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The dividend (number being divided)
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    value: The divisor (number to divide by)
-    :::
-Input
-Output
-10, 2
-5
-9, 3
-3
-7, 2
-3.5
-exp
-Returns the exponent of mathematical expression \"e\"
-The exp filter is valuable in calculations involving growth or decay, such as compound interest, population growth models, radioactive decay, or any application where natural exponential growth is needed.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The exponent to which e is raised
-    :::
-Input
-Output
-0
-1
-1
-2.718281828459045
-2
-7.3890560989306495
-floor
-Round a decimal down to its integer equivalent
-The floor filter is useful when you need to round down to the nearest integer, such as truncating decimal places in financial calculations, determining complete units from fractional values, or implementing integer division behavior.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The number to round down
-    :::
-Input
-Output
-3.7
-3
-8.1
-8
--2.3
--3
-ln
-Returns the natural logarithm
-The ln filter is important in calculations involving exponential growth or decay, such as calculating compound interest over time, analyzing population growth, or solving equations where the unknown is in an exponent.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: A positive number
-    :::
-Input
-Output
-1
-0
-2.718
-0.9998141515394643
-10
-2.302585092994046
-log
-Returns the logarithm with a custom base
-The log filter is valuable when working with logarithms in different bases, such as in information theory with base-2 logs, in chemistry with base-10 logs, or in custom scaling applications where a specific logarithmic base is required.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: A positive number
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    base: The base of the logarithm (default is e)
-    :::
-Input
-Output
-100, 10
-2
-8, 2
-3
-81, 3
-4
-log10
-Returns the Base-10 logarithm
-The log10 filter is useful in applications where powers of 10 are significant, such as in the pH scale, decibel measurements, Richter scale for earthquakes, or any calculation where order of magnitude is important.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: A positive number
-    :::
-Input
-Output
-1
-0
-10
-1
-100
-2
-max
-Returns the max both values
-The max filter is helpful when you need to find the larger of two values, such as implementing upper bounds, determining the highest possible value between two options, or finding maximums in pairwise comparisons.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The first number to compare
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    value: The second number to compare
-    :::
-Input
-Output
-5, 10
-10
--3, -7
--3
-8.2, 8.15
-8.2
-min
-Returns the min both values
-The min filter is useful when you need to find the smaller of two values, such as implementing lower bounds, determining the lowest possible value between two options, or finding minimums in pairwise comparisons.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The first number to compare
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    value: The second number to compare
-    :::
-Input
-Output
-5, 10
-5
--3, -7
--7
-8.2, 8.15
-8.15
-modulus
-Modulus 2 values together and return the answer
-The modulus filter is valuable for calculating remainders after division, such as in cycling through arrays, implementing time formats (hours, minutes, seconds), creating patterns that repeat at regular intervals, or determining if a number is even or odd.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The dividend (number being divided)
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    value: The divisor (number to divide by)
-    :::
-Input
-Output
-7, 3
-1
-15, 4
-3
--8, 3
--2
-multiply
-Multiply 2 values together and return the answer
-The multiply filter is essential for scaling values, calculating areas, volumes, or any operation where a value needs to be repeated a certain number of times, such as determining total cost based on quantity and unit price.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The first factor in the multiplication
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    value: The second factor to multiply by the primary value
-    :::
-Input
-Output
-4, 3
-12
-2.5, 6
-15
--7, 2
--14
-number\_format
-Format a number with flexible support over decimal places, thousands separator, and decimal separator.
-The number\_format filter is useful when displaying numerical data in user interfaces, financial reports, or any context where consistent formatting of numbers enhances readability, such as displaying prices, large statistics, or percentages.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The number to format
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    decimal\_places: Number of decimal places to display (default 0)
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    decimal\_separator: Character to use as decimal point (default \".\")
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    thousands\_separator: Character to use as thousands separator (default \",\")
-    :::
-Input
-Output
-1234.56, 2, \".\", \",\"
-1,234.56
-1234.56, 0, \".\", \",\"
-1,235
-1234.56, 2, \",\", \" \"
-1 234,56
-pow
-Returns the value raised to the power of exp.
-The pow filter is valuable for exponential calculations, such as compound interest, geometric growth, area and volume calculations, or any mathematical operation involving powers.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The base number
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    exponent: The power to raise the base to
-    :::
-Input
-Output
-2, 3
-8
-10, 2
-100
-3, 0.5
-1.7320508075
-product
-Returns the product of the values of the array
-The product filter is useful when you need to multiply all values in a collection, such as calculating factorial values, determining compound growth across multiple periods, or finding the total area when given multiple dimensions.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: An array of numbers
-    :::
-Input
-Output
-\[2, 3, 4\]
-24
-\[1.5, 2, 3\]
-9
-\[10, 0.1, 5\]
-5
-rad2deg
-Convert radians to degrees
-The rad2deg filter is helpful when converting from mathematical calculations (which typically use radians) to user-friendly degree displays, such as in navigation applications, angle measurements in user interfaces, or converting results from trigonometric functions.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: An angle in radians
-    :::
-Input
-Output
-0
-0
-1.5707963267948966
-90
-3.141592653589793
-180
-round
-Round a decimal with optional precision
-The round filter is essential for formatting numerical values to a specific precision, such as financial calculations, scientific measurements, or any scenario where a specific number of decimal places is required.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The number to round
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    precision: Number of decimal places (default 0)
-    :::
-Input
-Output
-3.14159, 2
-3.14
-2.5, 0
-3
--3.55, 1
--3.6
-sin
-Calculates the sine of the supplied value in radians
-The sin filter is crucial in trigonometric applications, such as modeling wave patterns, calculating vertical components in physics, determining heights in triangulation, or generating smooth oscillatory motion in animations.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: An angle in radians
-    :::
-Input
-Output
-0
-0
-1.5707963267948966
-1
-3.141592653589793
-0
-sqrt
-Returns the square root of the value
-The sqrt filter is valuable for calculations involving area-to-length conversions, calculating distances using the Pythagorean theorem, or normalizing values in statistical applications.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The non-negative number to calculate the square root of
-    :::
-Input
-Output
-4
-2
-9
-3
-2
-1.4142136
-subtract
-Subtract 2 values together and return the answer
-The subtract filter is useful for calculating differences, such as determining net change, finding remaining amounts after deductions, or calculating time intervals between events.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: The minuend (number being subtracted from)
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    value: The subtrahend (number to subtract)
-    :::
-Input
-Output
-10, 4
-6
-5, 8
--3
-3.5, 1.2
-2.3
-sum
-Returns the sum of the values of the array
-The sum filter is essential when you need to add up all values in a collection, such as calculating total expenses, finding the sum of scores, or determining the total of any set of numerical values.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: An array of numbers
-    :::
-Input
-Output
-\[1, 2, 3, 4, 5\]
-15
-\[-1, 0, 1\]
-0
-\[10.5, 20.3, 5.7\]
-36.5
-tan
-Calculates the tangent of the supplied value in radians
-The tan filter is important in trigonometric applications, such as calculating slopes, determining heights using angles and distances, or any application where the ratio of sine to cosine is needed.
-Inputs:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    primary value: An angle in radians
-    :::
-Input
-Output
-0
-0
-0.7853981633974483
-1
-3.141592653589793
-0
-Last updated 4 months ago
-Was this helpful?
+Master Xano's complete mathematical filter library for sophisticated numeric processing and calculations. This comprehensive reference covers arithmetic operations, trigonometric functions, logarithms, statistical calculations, and advanced mathematical operations essential for building data-driven applications with n8n, WeWeb, and Make.com integrations.
+
+## What You'll Learn
+
+- Complete mathematical filters reference with practical examples
+- Arithmetic operations (add, subtract, multiply, divide)
+- Trigonometric functions (sin, cos, tan, arc functions)
+- Logarithmic and exponential operations
+- Statistical calculations (average, min, max, sum)
+- Number formatting and rounding techniques
+- Performance optimization for mathematical operations
+- Integration patterns for complex calculations
+
+# Mathematical Filters Reference
+
+## ➕ **Basic Arithmetic Operations**
+
+### add
+
+**Purpose**: Add two values together and return the result.
+
+**Parameters:**
+- `parent_value`: The first number in the addition
+- `value`: The second number to add to the primary value
+
+**Examples:**
+
+```javascript
+// Basic addition
+parent_value: 5
+value: 3
+// Output: 8
+
+// Decimal addition
+parent_value: 10.5
+value: 4.2
+// Output: 14.7
+
+// Negative numbers
+parent_value: -2
+value: 7
+// Output: 5
+```
+
+**🔗 Real-World Applications:**
+
+**E-commerce Total Calculation:**
+```javascript
+// n8n: Calculate order totals
+const orderItems = [
+  { name: "Laptop", price: 999.99, quantity: 1 },
+  { name: "Mouse", price: 29.99, quantity: 2 },
+  { name: "Keyboard", price: 79.99, quantity: 1 }
+];
+
+const subtotal = orderItems.reduce((total, item) => 
+  total.add(item.price.multiply(item.quantity)), 0
+);
+
+const tax = subtotal.multiply(0.08);
+const shipping = 15.99;
+const finalTotal = subtotal.add(tax).add(shipping);
+```
+
+**Financial Planning:**
+```javascript
+// WeWeb: Budget calculation
+const monthlyIncomes = [3500, 2800, 4200, 3100];
+const totalIncome = monthlyIncomes.reduce((sum, income) => 
+  sum.add(income), 0
+);
+
+const monthlyExpenses = [2200, 800, 450, 300];
+const totalExpenses = monthlyExpenses.reduce((sum, expense) => 
+  sum.add(expense), 0
+);
+
+const netIncome = totalIncome.subtract(totalExpenses);
+```
+
+### subtract
+
+**Purpose**: Subtract two values and return the result.
+
+**Examples:**
+
+```javascript
+// Basic subtraction
+parent_value: 10
+value: 4
+// Output: 6
+
+// Negative result
+parent_value: 5
+value: 8
+// Output: -3
+
+// Decimal subtraction
+parent_value: 3.5
+value: 1.2
+// Output: 2.3
+```
+
+### multiply
+
+**Purpose**: Multiply two values together and return the result.
+
+**Examples:**
+
+```javascript
+// Basic multiplication
+parent_value: 4
+value: 3
+// Output: 12
+
+// Decimal multiplication
+parent_value: 2.5
+value: 6
+// Output: 15
+
+// Negative multiplication
+parent_value: -7
+value: 2
+// Output: -14
+```
+
+**🔗 Scaling and Unit Conversion:**
+
+```javascript
+// Make.com: Unit conversions and scaling
+const convertUnits = (value, conversionFactor) => {
+  return value.multiply(conversionFactor);
+};
+
+// Examples
+const milesPerHour = 60;
+const kilometersPerHour = milesPerHour.multiply(1.60934);
+
+const fahrenheit = 68;
+const celsius = fahrenheit.subtract(32).multiply(5).divide(9);
+
+const pounds = 150;
+const kilograms = pounds.multiply(0.453592);
+```
+
+### divide
+
+**Purpose**: Divide two values and return the result.
+
+**Examples:**
+
+```javascript
+// Basic division
+parent_value: 10
+value: 2
+// Output: 5
+
+// Decimal result
+parent_value: 7
+value: 2
+// Output: 3.5
+
+// Exact division
+parent_value: 9
+value: 3
+// Output: 3
+```
+
+**🔗 Rate and Ratio Calculations:**
+
+```javascript
+// n8n: Performance metrics calculation
+const calculateMetrics = (data) => {
+  const totalViews = data.views.sum();
+  const totalClicks = data.clicks.sum();
+  const totalConversions = data.conversions.sum();
+  
+  return {
+    click_through_rate: totalClicks.divide(totalViews).multiply(100),
+    conversion_rate: totalConversions.divide(totalClicks).multiply(100),
+    cost_per_conversion: data.total_spend.divide(totalConversions),
+    average_order_value: data.total_revenue.divide(totalConversions)
+  };
+};
+```
+
+## 📊 **Statistical Operations**
+
+### sum
+
+**Purpose**: Returns the sum of all values in an array.
+
+**Examples:**
+
+```javascript
+// Integer array
+parent_value: [1, 2, 3, 4, 5]
+// Output: 15
+
+// Decimal array
+parent_value: [10.5, 20.3, 5.7]
+// Output: 36.5
+
+// Mixed positive/negative
+parent_value: [-1, 0, 1]
+// Output: 0
+```
+
+### avg
+
+**Purpose**: Returns the average (mean) of all values in an array.
+
+**Examples:**
+
+```javascript
+// Simple average
+parent_value: [1, 2, 3, 4, 5]
+// Output: 3
+
+// Decimal average
+parent_value: [10, 20, 30, 40]
+// Output: 25
+
+// Fractional average
+parent_value: [2.5, 3.5, 4.5]
+// Output: 3.5
+```
+
+**🔗 Analytics and Reporting:**
+
+```javascript
+// WeWeb: User engagement analytics
+const calculateEngagementMetrics = (userSessions) => {
+  const sessionDurations = userSessions.map(session => session.duration);
+  const pageViews = userSessions.map(session => session.page_views);
+  const bounceRates = userSessions.map(session => session.bounce_rate);
+  
+  return {
+    average_session_duration: sessionDurations.avg(),
+    total_page_views: pageViews.sum(),
+    average_page_views: pageViews.avg(),
+    overall_bounce_rate: bounceRates.avg(),
+    engagement_score: sessionDurations.avg().multiply(pageViews.avg()).divide(100)
+  };
+};
+```
+
+### array_max / array_min
+
+**Purpose**: Returns the maximum or minimum value from an array.
+
+**Examples:**
+
+```javascript
+// Finding maximum
+parent_value: [1, 5, 3, 9, 2]
+// array_max output: 9
+
+// Finding minimum
+parent_value: [1, 5, 3, 9, 2]
+// array_min output: 1
+
+// Negative numbers
+parent_value: [-10, -5, -20]
+// array_max output: -5
+// array_min output: -20
+```
+
+### max / min
+
+**Purpose**: Returns the maximum or minimum of two values.
+
+**Examples:**
+
+```javascript
+// Two positive numbers
+parent_value: 5
+value: 10
+// max output: 10
+// min output: 5
+
+// Negative numbers
+parent_value: -3
+value: -7
+// max output: -3
+// min output: -7
+
+// Decimals
+parent_value: 8.2
+value: 8.15
+// max output: 8.2
+// min output: 8.15
+```
+
+**🔗 Data Validation and Constraints:**
+
+```javascript
+// Make.com: Implement data constraints
+const applyConstraints = (userInput, constraints) => {
+  return {
+    age: userInput.age.max(constraints.min_age).min(constraints.max_age),
+    salary: userInput.salary.max(constraints.min_salary).min(constraints.max_salary),
+    score: userInput.score.max(0).min(100), // 0-100 range
+    rating: userInput.rating.max(1).min(5)   // 1-5 star rating
+  };
+};
+```
+
+## 🔄 **Rounding and Formatting**
+
+### round
+
+**Purpose**: Round a decimal to a specified precision.
+
+**Parameters:**
+- `parent_value`: The number to round
+- `precision`: Number of decimal places (default: 0)
+
+**Examples:**
+
+```javascript
+// Round to nearest integer
+parent_value: 3.14159
+precision: 0
+// Output: 3
+
+// Round to 2 decimal places
+parent_value: 3.14159
+precision: 2
+// Output: 3.14
+
+// Round negative number
+parent_value: -3.55
+precision: 1
+// Output: -3.6
+```
+
+### ceil
+
+**Purpose**: Round a decimal up to its integer equivalent.
+
+**Examples:**
+
+```javascript
+// Round up positive
+parent_value: 3.1
+// Output: 4
+
+// Round up large decimal
+parent_value: 7.9
+// Output: 8
+
+// Round up negative (towards zero)
+parent_value: -2.3
+// Output: -2
+```
+
+### floor
+
+**Purpose**: Round a decimal down to its integer equivalent.
+
+**Examples:**
+
+```javascript
+// Round down positive
+parent_value: 3.7
+// Output: 3
+
+// Round down large decimal
+parent_value: 8.1
+// Output: 8
+
+// Round down negative (away from zero)
+parent_value: -2.3
+// Output: -3
+```
+
+**🔗 Pagination and Chunking:**
+
+```javascript
+// n8n: Calculate pagination parameters
+const calculatePagination = (totalItems, itemsPerPage, currentPage) => {
+  const totalPages = totalItems.divide(itemsPerPage).ceil();
+  const offset = currentPage.subtract(1).multiply(itemsPerPage);
+  const remainingItems = totalItems.subtract(offset);
+  const itemsOnPage = remainingItems.min(itemsPerPage);
+  
+  return {
+    total_pages: totalPages,
+    current_page: currentPage,
+    items_per_page: itemsPerPage,
+    offset: offset,
+    items_on_page: itemsOnPage,
+    has_next: currentPage < totalPages,
+    has_previous: currentPage > 1
+  };
+};
+```
+
+### number_format
+
+**Purpose**: Format a number with flexible decimal places and separators.
+
+**Parameters:**
+- `parent_value`: The number to format
+- `decimal_places`: Number of decimal places (default: 0)
+- `decimal_separator`: Character for decimal point (default: ".")
+- `thousands_separator`: Character for thousands separator (default: ",")
+
+**Examples:**
+
+```javascript
+// Standard US format
+parent_value: 1234.56
+decimal_places: 2
+decimal_separator: "."
+thousands_separator: ","
+// Output: "1,234.56"
+
+// European format
+parent_value: 1234.56
+decimal_places: 2
+decimal_separator: ","
+thousands_separator: " "
+// Output: "1 234,56"
+
+// Integer display
+parent_value: 1234.56
+decimal_places: 0
+// Output: "1,235"
+```
+
+**🔗 Financial and Currency Display:**
+
+```javascript
+// WeWeb: Multi-currency formatting
+const formatCurrency = (amount, currency, locale) => {
+  const formats = {
+    'USD': { decimal_places: 2, decimal_separator: '.', thousands_separator: ',' },
+    'EUR': { decimal_places: 2, decimal_separator: ',', thousands_separator: ' ' },
+    'JPY': { decimal_places: 0, decimal_separator: '.', thousands_separator: ',' }
+  };
+  
+  const format = formats[currency] || formats['USD'];
+  const formatted = amount.number_format(
+    format.decimal_places,
+    format.decimal_separator,
+    format.thousands_separator
+  );
+  
+  const symbols = { 'USD': '$', 'EUR': '€', 'JPY': '¥' };
+  return `${symbols[currency] || currency} ${formatted}`;
+};
+```
+
+## 🔢 **Advanced Mathematical Functions**
+
+### pow
+
+**Purpose**: Returns the value raised to the power of exponent.
+
+**Examples:**
+
+```javascript
+// Basic exponentiation
+parent_value: 2
+exponent: 3
+// Output: 8
+
+// Square
+parent_value: 10
+exponent: 2
+// Output: 100
+
+// Fractional exponent (square root)
+parent_value: 3
+exponent: 0.5
+// Output: 1.7320508075
+```
+
+### sqrt
+
+**Purpose**: Returns the square root of the value.
+
+**Examples:**
+
+```javascript
+// Perfect square
+parent_value: 4
+// Output: 2
+
+// Another perfect square
+parent_value: 9
+// Output: 3
+
+// Irrational result
+parent_value: 2
+// Output: 1.4142136
+```
+
+**🔗 Distance and Geometry Calculations:**
+
+```javascript
+// Make.com: Calculate distances and areas
+const calculateDistance = (point1, point2) => {
+  const deltaX = point2.x.subtract(point1.x);
+  const deltaY = point2.y.subtract(point1.y);
+  const distanceSquared = deltaX.pow(2).add(deltaY.pow(2));
+  return distanceSquared.sqrt();
+};
+
+const calculateCircleArea = (radius) => {
+  const pi = 3.14159265359;
+  return pi.multiply(radius.pow(2));
+};
+
+const calculateTriangleArea = (base, height) => {
+  return base.multiply(height).divide(2);
+};
+```
+
+### abs
+
+**Purpose**: Returns the absolute value (magnitude) of a number.
+
+**Examples:**
+
+```javascript
+// Negative to positive
+parent_value: -5
+// Output: 5
+
+// Positive unchanged
+parent_value: 10
+// Output: 10
+
+// Decimal
+parent_value: -3.14
+// Output: 3.14
+```
+
+### modulus
+
+**Purpose**: Returns the remainder after division.
+
+**Examples:**
+
+```javascript
+// Basic modulus
+parent_value: 7
+value: 3
+// Output: 1
+
+// Larger example
+parent_value: 15
+value: 4
+// Output: 3
+
+// Negative dividend
+parent_value: -8
+value: 3
+// Output: -2
+```
+
+**🔗 Cyclic Operations and Patterns:**
+
+```javascript
+// n8n: Implement cyclic patterns
+const createCyclicPattern = (items, cycleLength) => {
+  return items.map((item, index) => ({
+    ...item,
+    cycle_position: index.modulus(cycleLength),
+    is_cycle_start: index.modulus(cycleLength) === 0,
+    cycle_number: index.divide(cycleLength).floor().add(1)
+  }));
+};
+
+// Time-based patterns
+const getTimePattern = (timestamp) => {
+  const hours = timestamp.divide(3600).floor().modulus(24);
+  const minutes = timestamp.divide(60).floor().modulus(60);
+  const seconds = timestamp.modulus(60);
+  
+  return {
+    hours: hours,
+    minutes: minutes,
+    seconds: seconds,
+    is_even_hour: hours.modulus(2) === 0,
+    quarter_hour: minutes.divide(15).floor()
+  };
+};
+```
+
+## 📐 **Trigonometric Functions**
+
+### sin / cos / tan
+
+**Purpose**: Calculate trigonometric functions (input in radians).
+
+**Examples:**
+
+```javascript
+// Sine function
+parent_value: 0
+// sin output: 0
+
+parent_value: 1.5707963267948966  // π/2
+// sin output: 1
+
+// Cosine function
+parent_value: 0
+// cos output: 1
+
+parent_value: 3.141592653589793  // π
+// cos output: -1
+
+// Tangent function
+parent_value: 0
+// tan output: 0
+
+parent_value: 0.7853981633974483  // π/4
+// tan output: 1
+```
+
+### asin / acos / atan
+
+**Purpose**: Calculate inverse trigonometric functions (output in radians).
+
+**Examples:**
+
+```javascript
+// Arc sine
+parent_value: 0
+// asin output: 0
+
+parent_value: 1
+// asin output: 1.5707963267948966
+
+// Arc cosine
+parent_value: 1
+// acos output: 0
+
+parent_value: 0
+// acos output: 1.5707963267948966
+
+// Arc tangent
+parent_value: 0
+// atan output: 0
+
+parent_value: 1
+// atan output: 0.7853981633974483
+```
+
+**🔗 Geometric and Physics Applications:**
+
+```javascript
+// WeWeb: Calculate angles and rotations
+const calculateObjectRotation = (startPoint, endPoint) => {
+  const deltaX = endPoint.x.subtract(startPoint.x);
+  const deltaY = endPoint.y.subtract(startPoint.y);
+  
+  const angle = deltaY.divide(deltaX).atan();
+  const distance = deltaX.pow(2).add(deltaY.pow(2)).sqrt();
+  
+  return {
+    angle_radians: angle,
+    angle_degrees: angle.rad2deg(),
+    distance: distance,
+    velocity_x: distance.multiply(angle.cos()),
+    velocity_y: distance.multiply(angle.sin())
+  };
+};
+```
+
+### deg2rad / rad2deg
+
+**Purpose**: Convert between degrees and radians.
+
+**Examples:**
+
+```javascript
+// Degrees to radians
+parent_value: 0
+// deg2rad output: 0
+
+parent_value: 90
+// deg2rad output: 1.5707963267948966
+
+parent_value: 180
+// deg2rad output: 3.141592653589793
+
+// Radians to degrees
+parent_value: 0
+// rad2deg output: 0
+
+parent_value: 1.5707963267948966
+// rad2deg output: 90
+
+parent_value: 3.141592653589793
+// rad2deg output: 180
+```
+
+## 📈 **Logarithmic and Exponential Functions**
+
+### ln / log / log10
+
+**Purpose**: Calculate natural logarithm, custom base logarithm, and base-10 logarithm.
+
+**Examples:**
+
+```javascript
+// Natural logarithm
+parent_value: 1
+// ln output: 0
+
+parent_value: 2.718
+// ln output: 0.9998141515394643
+
+// Custom base logarithm
+parent_value: 100
+base: 10
+// log output: 2
+
+parent_value: 8
+base: 2
+// log output: 3
+
+// Base-10 logarithm
+parent_value: 1
+// log10 output: 0
+
+parent_value: 100
+// log10 output: 2
+```
+
+### exp
+
+**Purpose**: Calculate e raised to the power of the input.
+
+**Examples:**
+
+```javascript
+// e^0
+parent_value: 0
+// Output: 1
+
+// e^1 (approximately)
+parent_value: 1
+// Output: 2.718281828459045
+
+// e^2
+parent_value: 2
+// Output: 7.3890560989306495
+```
+
+**🔗 Growth and Decay Calculations:**
+
+```javascript
+// Make.com: Financial growth modeling
+const calculateCompoundGrowth = (principal, rate, time, compounds) => {
+  // A = P(1 + r/n)^(nt)
+  const ratePerPeriod = rate.divide(compounds);
+  const totalPeriods = time.multiply(compounds);
+  const growthFactor = ratePerPeriod.add(1).pow(totalPeriods);
+  
+  return {
+    initial_amount: principal,
+    final_amount: principal.multiply(growthFactor),
+    total_growth: principal.multiply(growthFactor).subtract(principal),
+    growth_rate: growthFactor.subtract(1).multiply(100)
+  };
+};
+
+// Exponential decay (half-life calculations)
+const calculateDecay = (initialAmount, decayConstant, time) => {
+  const decayFactor = decayConstant.multiply(time).multiply(-1).exp();
+  return {
+    remaining_amount: initialAmount.multiply(decayFactor),
+    decayed_amount: initialAmount.multiply(decayFactor.subtract(1).abs()),
+    half_life: 0.693.divide(decayConstant)
+  };
+};
+```
+
+## 🔧 **Bitwise Operations**
+
+### bitwise_and / bitwise_or / bitwise_xor
+
+**Purpose**: Perform bitwise operations on integers.
+
+**Examples:**
+
+```javascript
+// Bitwise AND
+parent_value: 5  // Binary: 101
+value: 3         // Binary: 011
+// Output: 1       // Binary: 001
+
+// Bitwise OR
+parent_value: 5  // Binary: 101
+value: 3         // Binary: 011
+// Output: 7       // Binary: 111
+
+// Bitwise XOR
+parent_value: 5  // Binary: 101
+value: 3         // Binary: 011
+// Output: 6       // Binary: 110
+```
+
+**🔗 Flag and Permission Systems:**
+
+```javascript
+// n8n: Implement permission system
+const PERMISSIONS = {
+  READ: 1,    // 001
+  WRITE: 2,   // 010
+  EXECUTE: 4  // 100
+};
+
+const checkPermission = (userPermissions, requiredPermission) => {
+  return userPermissions.bitwise_and(requiredPermission) === requiredPermission;
+};
+
+const grantPermission = (userPermissions, newPermission) => {
+  return userPermissions.bitwise_or(newPermission);
+};
+
+const revokePermission = (userPermissions, permissionToRevoke) => {
+  return userPermissions.bitwise_and(permissionToRevoke.bitwise_not());
+};
+
+const togglePermission = (userPermissions, permission) => {
+  return userPermissions.bitwise_xor(permission);
+};
+```
+
+## 📊 **Array Mathematical Operations**
+
+### product
+
+**Purpose**: Returns the product of all values in an array.
+
+**Examples:**
+
+```javascript
+// Simple multiplication
+parent_value: [2, 3, 4]
+// Output: 24
+
+// Decimal multiplication
+parent_value: [1.5, 2, 3]
+// Output: 9
+
+// With zero
+parent_value: [10, 0.1, 5]
+// Output: 5
+```
+
+**🔗 Compound Calculations:**
+
+```javascript
+// WeWeb: Calculate compound metrics
+const calculateCompoundMetrics = (data) => {
+  const conversionRates = data.map(item => item.conversion_rate);
+  const growthFactors = data.map(item => item.growth_factor);
+  const multipliers = data.map(item => item.multiplier);
+  
+  return {
+    compound_conversion: conversionRates.product(),
+    compound_growth: growthFactors.product(),
+    total_multiplier: multipliers.product(),
+    geometric_mean: conversionRates.product().pow(1 / conversionRates.length)
+  };
+};
+```
+
+## 🎯 **Complex Mathematical Workflows**
+
+### Financial Calculations
+
+```javascript
+// Complete financial analysis
+const performFinancialAnalysis = (cashFlows, discountRate, periods) => {
+  // Net Present Value calculation
+  const npv = cashFlows.reduce((total, cashFlow, index) => {
+    const discountFactor = discountRate.add(1).pow(index.add(1));
+    const presentValue = cashFlow.divide(discountFactor);
+    return total.add(presentValue);
+  }, 0);
+  
+  // Internal Rate of Return (iterative approximation)
+  let irr = 0.1; // Initial guess
+  for (let i = 0; i < 100; i++) {
+    const npvAtRate = cashFlows.reduce((total, cashFlow, index) => {
+      const discountFactor = irr.add(1).pow(index.add(1));
+      return total.add(cashFlow.divide(discountFactor));
+    }, 0);
+    
+    if (npvAtRate.abs() < 0.01) break;
+    irr = irr.subtract(npvAtRate.divide(1000)); // Simple adjustment
+  }
+  
+  return {
+    net_present_value: npv,
+    internal_rate_of_return: irr,
+    payback_period: calculatePaybackPeriod(cashFlows),
+    profitability_index: npv.divide(cashFlows[0].abs()).add(1)
+  };
+};
+```
+
+### Statistical Analysis
+
+```javascript
+// Comprehensive statistics calculation
+const calculateStatistics = (dataset) => {
+  const sortedData = dataset.sort((a, b) => a - b);
+  const n = dataset.length;
+  
+  // Basic statistics
+  const mean = dataset.avg();
+  const median = n.modulus(2) === 0 
+    ? sortedData[n.divide(2).subtract(1)].add(sortedData[n.divide(2)]).divide(2)
+    : sortedData[n.divide(2).floor()];
+    
+  // Variance and standard deviation
+  const variance = dataset.reduce((sum, value) => {
+    const deviation = value.subtract(mean);
+    return sum.add(deviation.pow(2));
+  }, 0).divide(n);
+  
+  const standardDeviation = variance.sqrt();
+  
+  // Quartiles
+  const q1Index = n.multiply(0.25).floor();
+  const q3Index = n.multiply(0.75).floor();
+  
+  return {
+    count: n,
+    mean: mean,
+    median: median,
+    mode: calculateMode(dataset),
+    range: dataset.array_max().subtract(dataset.array_min()),
+    variance: variance,
+    standard_deviation: standardDeviation,
+    quartile_1: sortedData[q1Index],
+    quartile_3: sortedData[q3Index],
+    interquartile_range: sortedData[q3Index].subtract(sortedData[q1Index])
+  };
+};
+```
+
+### Geometric Calculations
+
+```javascript
+// Advanced geometry functions
+const calculateGeometry = (shapes) => {
+  const calculations = {
+    // Circle calculations
+    circle: (radius) => ({
+      area: 3.14159.multiply(radius.pow(2)),
+      circumference: 2.multiply(3.14159).multiply(radius),
+      diameter: radius.multiply(2)
+    }),
+    
+    // Rectangle calculations
+    rectangle: (length, width) => ({
+      area: length.multiply(width),
+      perimeter: length.add(width).multiply(2),
+      diagonal: length.pow(2).add(width.pow(2)).sqrt()
+    }),
+    
+    // Triangle calculations
+    triangle: (a, b, c) => {
+      const s = a.add(b).add(c).divide(2); // Semi-perimeter
+      const area = s.multiply(s.subtract(a)).multiply(s.subtract(b)).multiply(s.subtract(c)).sqrt();
+      
+      return {
+        area: area,
+        perimeter: a.add(b).add(c),
+        is_valid: a.add(b) > c && b.add(c) > a && a.add(c) > b
+      };
+    }
+  };
+  
+  return calculations;
+};
+```
+
+## 💡 **Performance Optimization**
+
+### Efficient Mathematical Operations
+
+```javascript
+// Optimize repetitive calculations
+const optimizedCalculations = {
+  // Pre-calculate common constants
+  PI: 3.141592653589793,
+  E: 2.718281828459045,
+  SQRT_2: 1.4142135623730951,
+  
+  // Efficient power calculations
+  fastPower: (base, exponent) => {
+    if (exponent === 0) return 1;
+    if (exponent === 1) return base;
+    if (exponent === 2) return base.multiply(base);
+    return base.pow(exponent);
+  },
+  
+  // Optimized trigonometric calculations
+  fastSin: (angle) => {
+    // Normalize angle to [0, 2π]
+    const normalizedAngle = angle.modulus(2 * optimizedCalculations.PI);
+    return normalizedAngle.sin();
+  },
+  
+  // Efficient statistical operations for large datasets
+  streamingAverage: (values, currentAvg, count) => {
+    return values.reduce((avg, value, index) => {
+      const newCount = count.add(index).add(1);
+      return avg.add(value.subtract(avg).divide(newCount));
+    }, currentAvg);
+  }
+};
+```
+
+## 🔗 **Integration Patterns**
+
+### n8n Mathematical Workflows
+
+```javascript
+// n8n Code node: Advanced data processing
+const processAnalyticsData = (rawData) => {
+  return rawData.map(record => {
+    // Statistical calculations
+    const metrics = {
+      revenue_growth: record.current_revenue
+        .subtract(record.previous_revenue)
+        .divide(record.previous_revenue)
+        .multiply(100),
+        
+      efficiency_score: record.output
+        .divide(record.input)
+        .multiply(100),
+        
+      performance_index: record.actual_value
+        .divide(record.target_value)
+        .multiply(100),
+        
+      trend_indicator: record.recent_values.length > 1
+        ? record.recent_values.slice(-1)[0]
+          .subtract(record.recent_values.slice(-2)[0])
+          .divide(record.recent_values.slice(-2)[0])
+        : 0
+    };
+    
+    return {
+      ...record,
+      calculated_metrics: metrics,
+      performance_grade: getPerformanceGrade(metrics.performance_index)
+    };
+  });
+};
+```
+
+### WeWeb Mathematical Components
+
+```javascript
+// WeWeb: Dynamic calculation components
+const createCalculatorComponent = (formula, inputs) => {
+  const calculate = () => {
+    try {
+      // Parse and execute mathematical formula
+      const result = formula.split(' ').reduce((acc, token, index, tokens) => {
+        if (index === 0) return parseFloat(inputs[token] || token);
+        
+        const operator = tokens[index - 1];
+        const value = parseFloat(inputs[token] || token);
+        
+        switch (operator) {
+          case '+': return acc.add(value);
+          case '-': return acc.subtract(value);
+          case '*': return acc.multiply(value);
+          case '/': return acc.divide(value);
+          case '^': return acc.pow(value);
+          default: return acc;
+        }
+      });
+      
+      return {
+        result: result,
+        formatted: result.round(2).number_format(2, '.', ','),
+        valid: true
+      };
+    } catch (error) {
+      return {
+        result: 0,
+        formatted: 'Error',
+        valid: false,
+        error: error.message
+      };
+    }
+  };
+  
+  return calculate();
+};
+```
+
+### Make.com Mathematical Scenarios
+
+```javascript
+// Make.com: Automated mathematical analysis
+const performAutomatedAnalysis = (datasets) => {
+  return datasets.map(dataset => {
+    const analysis = {
+      // Descriptive statistics
+      descriptive: {
+        count: dataset.values.length,
+        sum: dataset.values.sum(),
+        average: dataset.values.avg(),
+        minimum: dataset.values.array_min(),
+        maximum: dataset.values.array_max(),
+        range: dataset.values.array_max().subtract(dataset.values.array_min())
+      },
+      
+      // Growth analysis
+      growth: calculateGrowthMetrics(dataset.values),
+      
+      // Forecasting
+      forecast: generateForecast(dataset.values, 3), // 3 periods ahead
+      
+      // Anomaly detection
+      anomalies: detectAnomalies(dataset.values),
+      
+      // Quality scores
+      quality: {
+        completeness: calculateCompleteness(dataset.values),
+        consistency: calculateConsistency(dataset.values),
+        accuracy: calculateAccuracy(dataset.values, dataset.expected)
+      }
+    };
+    
+    return {
+      dataset_id: dataset.id,
+      analysis: analysis,
+      recommendations: generateRecommendations(analysis),
+      confidence_score: calculateConfidenceScore(analysis)
+    };
+  });
+};
+```
+
+## 📚 **Best Practices**
+
+### Mathematical Precision
+
+```javascript
+// Handle floating-point precision issues
+const preciseMath = {
+  // Use for financial calculations
+  preciseAdd: (a, b, precision = 2) => {
+    return a.add(b).round(precision);
+  },
+  
+  // Avoid division by zero
+  safeDivide: (dividend, divisor, defaultValue = 0) => {
+    return divisor === 0 ? defaultValue : dividend.divide(divisor);
+  },
+  
+  // Range validation
+  clamp: (value, min, max) => {
+    return value.min(max).max(min);
+  },
+  
+  // Percentage calculations
+  percentage: (part, whole) => {
+    return whole === 0 ? 0 : part.divide(whole).multiply(100);
+  }
+};
+```
+
+### Error Handling
+
+```javascript
+// Robust mathematical operations
+const safeMath = {
+  safeOperation: (operation, fallback = null) => {
+    try {
+      const result = operation();
+      
+      // Check for invalid results
+      if (isNaN(result) || !isFinite(result)) {
+        return fallback;
+      }
+      
+      return result;
+    } catch (error) {
+      console.log('Mathematical operation failed:', error);
+      return fallback;
+    }
+  },
+  
+  validateInput: (value, constraints = {}) => {
+    const validations = {
+      is_number: typeof value === 'number',
+      is_finite: isFinite(value),
+      is_positive: constraints.positive ? value > 0 : true,
+      in_range: constraints.min !== undefined && constraints.max !== undefined
+        ? value >= constraints.min && value <= constraints.max
+        : true
+    };
+    
+    return {
+      valid: Object.values(validations).every(v => v),
+      checks: validations,
+      value: value
+    };
+  }
+};
+```
+
+---
+
+**Next Steps**: With all mathematical filters mastered, explore [Complete Filter Integration Patterns](filter-integration-patterns.md) to combine multiple filter types for complex data processing workflows.
