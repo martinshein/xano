@@ -1,561 +1,805 @@
 ---
+title: Async Functions - Non-Blocking Custom Function Execution
+description: Complete guide to implementing asynchronous custom functions in Xano, including async/await patterns, background processing, performance optimization, and integration with no-code platforms
 category: custom-functions
 difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
+last_updated: '2025-01-16'
+related_docs:
+  - custom-functions.md
+  - background-tasks.md
+  - function-stack-performance.md
 subcategory: 05-advanced-features/custom-functions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv'
+  - async-functions
+  - background-processing
+  - performance
+  - custom-functions
+  - concurrency
+  - no-code
 ---
 
-[![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI
-                Documentation)](../apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](async-functions.html)
-                    -   [Background Tasks](../background-tasks.html)
-        -   [Triggers](../triggers.html)
-        -   [Middleware](../middleware.html)
-        -   [Configuring
-            Expressions](../configuring-expressions.html)
-        -   [Working with
-            Data](../working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../../functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering
-                    Examples](../../functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get
-                Record](../../functions/database-requests/get-record.html)
-            -   [Add
-                Record](../../functions/database-requests/add-record.html)
-            -   [Edit
-                Record](../../functions/database-requests/edit-record.html)
-            -   [Add or Edit
-                Record](../../functions/database-requests/add-or-edit-record.html)
-            -   [Patch
-                Record](../../functions/database-requests/patch-record.html)
-            -   [Delete
-                Record](../../functions/database-requests/delete-record.html)
-            -   [Bulk
-                Operations](../../functions/database-requests/bulk-operations.html)
-            -   [Database
-                Transaction](../../functions/database-requests/database-transaction.html)
-            -   [External Database
-                Query](../../functions/database-requests/external-database-query.html)
-            -   [Direct Database
-                Query](../../functions/database-requests/direct-database-query.html)
-            -   [Get Database
-                Schema](../../functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create
-                Variable](../../functions/data-manipulation/create-variable.html)
-            -   [Update
-                Variable](../../functions/data-manipulation/update-variable.html)
-            -   [Conditional](../../functions/data-manipulation/conditional.html)
-            -   [Switch](../../functions/data-manipulation/switch.html)
-            -   [Loops](../../functions/data-manipulation/loops.html)
-            -   [Math](../../functions/data-manipulation/math.html)
-            -   [Arrays](../../functions/data-manipulation/arrays.html)
-            -   [Objects](../../functions/data-manipulation/objects.html)
-            -   [Text](../../functions/data-manipulation/text.html)
-                    -   [Security](../../functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime
-                Functions](../../functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API
-                Request](../../functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda
-                Functions](../../functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching
-            (Redis)](../../functions/data-caching-redis.html)
-        -   [Custom
-            Functions](../../functions/custom-functions.html)
-        -   [Utility
-            Functions](../../functions/utility-functions.html)
-        -   [File
-            Storage](../../functions/file-storage.html)
-        -   [Cloud
-            Services](../../functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../filters/manipulation.html)
-        -   [Math](../../filters/math.html)
-        -   [Timestamp](../../filters/timestamp.html)
-        -   [Text](../../filters/text.html)
-        -   [Array](../../filters/array.html)
-        -   [Transform](../../filters/transform.html)
-        -   [Conversion](../../filters/conversion.html)
-        -   [Comparison](../../filters/comparison.html)
-        -   [Security](../../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../data-types/text.html)
-        -   [Expression](../../data-types/expression.html)
-        -   [Array](../../data-types/array.html)
-        -   [Object](../../data-types/object.html)
-        -   [Integer](../../data-types/integer.html)
-        -   [Decimal](../../data-types/decimal.html)
-        -   [Boolean](../../data-types/boolean.html)
-        -   [Timestamp](../../data-types/timestamp.html)
-        -   [Null](../../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response
-            Caching](../../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano
-            Database](../../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field
-            Types](../../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../../the-database/database-basics/relationships.html)
-        -   [Database
-            Views](../../../the-database/database-basics/database-views.html)
-        -   [Export and
-            Sharing](../../../the-database/database-basics/export-and-sharing.html)
-        -   [Data
-            Sources](../../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to
-            Xano](../../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to
-            Xano](../../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import &
-            Export](../../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema
-            Versioning](../../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting
-            Clients](../../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP
-            Functions](../../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User
-            Data](../../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access
-            (RBAC)](../../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth
-            (SSO)](../../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track
-            Preferences](../../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP
-            (Outgoing)](../../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server
-            Region](../../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database
-            Connector](../../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and
-            Restore](../../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security
-            Policy](../../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit
-            Logs](../../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano
-            Link](../../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API
-            (Deprecated)](../../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata
-            API](../../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and
-            Schema](../../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../../xano-features/metadata-api/content.html)
-        -   [Search](../../../xano-features/metadata-api/search.html)
-        -   [File](../../../xano-features/metadata-api/file.html)
-        -   [Request
-            History](../../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and
-            Export](../../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes
-            Reference](../../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency
-            Dashboard](../../../agencies/agency-features/agency-dashboard.html)
-        -   [Client
-            Invite](../../../agencies/agency-features/client-invite.html)
-        -   [Transfer
-            Ownership](../../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency
-            Profile](../../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../../agencies/agency-features/commission.html)
-        -   [Private
-            Marketplace](../../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a
-                    Model](../../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant
-            Center](../../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance
-            Center](../../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security
-            Policy](../../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance
-            Activity](../../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access
-            Control)](../../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano
-            Link](../../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource
-            Management](../../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels
-            slow](../../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels
-            slow](../../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM
-            Usage](../../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack
-            Performance](../../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting
-            Access](../../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of
-            Conduct](../../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification
-            Policy](../../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and
-            Issues](../../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [What are async functions?](#what-are-async-functions)
-
--   [When should I use async
-    functions?](#when-should-i-use-async-functions)
-
--   [Enabling Async Execution](#enabling-async-execution)
-
--   [Insert a custom function into your function
-    stack.](#insert-a-custom-function-into-your-function-stack)
-
--   [Click on the function to change the execution
-    mode.](#click-on-the-function-to-change-the-execution-mode)
-
--   [If necessary, retrieve the output of the async
-    function.](#if-necessary-retrieve-the-output-of-the-async-function)
-
-Was this helpful?
-
-Copy
-
-1.  [[🛠️]The Visual
-    Builder](../../building-with-visual-development.html)
-2.  Building with Visual Development
-3.  [Custom
-    Functions](../custom-functions.html)
-
-Async Functions 
-===============
-
-Use async functions to ensure that your custom functions execute exactly
-as you intend
-
- 
-
-What are async functions?
-
-When working with custom functions in Xano, you can choose to have them
-execute asynchronously. An async function works like a [background
-task](../background-tasks.html), allowing your main process to continue without waiting
-for the custom function to finish.
-
- 
-
-When should I use async functions?
-
-Asynchronous execution can be particularly beneficial in scenarios where
-you don\'t want certain tasks to hold up the entire process. For
-instance, if you\'re running a complex data fetch or a time-consuming
-operation, doing it asynchronously means your main application or
-interface remains responsive to user inputs while the background
-operation continues independently. This can enhance user experience by
-reducing wait times.
-
-Here are a few examples of when to use async functions:
-
--   
-    
-        
-    
-    **Loading Data:** When fetching data from a server, such as pulling
-    in user information or loading a list of products, async functions
-    allow the page to display its initial content quickly without
-    waiting for the entire data request to complete.
-    
--   
-    
-        
-    
-    **File Uploads:** Starting a file upload process without freezing
-    the interface lets users continue interacting with the application
-    while the file is being processed.
-    
--   
-    
-        
-    
-    **Notification Systems:** Sending notifications through email or
-    messaging services asynchronously ensures that users continue their
-    tasks without interruption while the messages are sent in the
-    background.
-    
- 
-
-Enabling Async Execution
-
-<div>
-
-1
-
-###  
-
-Insert a custom function into your function stack.
-
-If you haven\'t built any custom functions yet, you can review our
-documentation on them
-[here](../../functions/custom-functions.html).
-
-2
-
-###  
-
-Click
-[![](../../../_gitbook/imaged45f.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FcU9uKnM8DP44r4mxwQ4f%252FCleanShot%25202025-02-13%2520at%252008.00.40.png%3Falt%3Dmedia%26token%3D058820b1-1f58-499c-a762-1405480283d7&width=300&dpr=4&quality=100&sign=11951ac7&sv=2)]on the function to change the execution
-mode.
-
-3
-
-###  
-
-If necessary, retrieve the output of the async function.
-
-If a function is set to async, it will return an ID that represents that
-execution, similar to the value shown below.
-
-Copy
-
-``` 
-6f10cc09-d3e0-4ead-9a98-a0bc66bbe673
+## 📋 **Quick Summary**
+
+Async functions allow custom functions to execute in the background without blocking the main function stack execution. This enables better performance, improved user experience, and efficient handling of long-running operations. Perfect for file processing, email sending, data synchronization, and other time-consuming tasks in n8n, WeWeb, and other no-code platforms.
+
+## What You'll Learn
+
+- How to configure and use async custom functions
+- Async/await patterns and execution tracking
+- Best practices for background processing
+- Performance optimization with asynchronous execution
+- Integration patterns for no-code platforms
+- Error handling and monitoring for async operations
+
+# Async Functions
+
+## Overview
+
+**Async Functions** enable custom functions to execute asynchronously, allowing the main function stack to continue processing without waiting for the async operation to complete. This is similar to background tasks but provides more control and integration within your function stacks.
+
+### Synchronous vs Asynchronous Execution
+
+**Synchronous Execution:**
+- Function stack waits for each function to complete
+- Sequential execution blocks subsequent operations
+- Simple but can cause performance bottlenecks
+- User experiences delays during long operations
+
+**Asynchronous Execution:**
+- Function executes in background
+- Main stack continues immediately
+- Non-blocking operation improves performance
+- Returns execution ID for later retrieval
+
+## 🚀 **When to Use Async Functions**
+
+### Ideal Use Cases
+
+**Data Processing:**
+- Large file uploads and processing
+- Batch data transformations
+- Complex calculations and analytics
+- External API integrations with slow responses
+
+**Communication:**
+- Email sending and delivery
+- SMS notifications
+- Push notifications
+- Webhook dispatching
+
+**Background Operations:**
+- Report generation
+- Data synchronization
+- Backup operations
+- Cache warming
+
+**Long-Running Tasks:**
+- Image/video processing
+- PDF generation
+- Data export operations
+- Third-party service integrations
+
+### Performance Benefits
+
+```javascript
+// Performance comparison example
+{
+  "synchronous_execution": {
+    "total_time": "15 seconds",
+    "user_wait_time": "15 seconds",
+    "operations": [
+      {"task": "send_email", "time": "5s"},
+      {"task": "generate_report", "time": "8s"},
+      {"task": "update_cache", "time": "2s"}
+    ]
+  },
+  "asynchronous_execution": {
+    "total_time": "2 seconds",
+    "user_wait_time": "2 seconds",
+    "background_time": "15 seconds",
+    "operations": [
+      {"task": "send_email", "time": "5s", "async": true},
+      {"task": "generate_report", "time": "8s", "async": true},
+      {"task": "update_cache", "time": "2s", "sync": true}
+    ]
+  }
+}
 ```
 
-You can use the **Async Function Await** function to retrieve the output
-of the function once execution completes. Just provide it with an array
-of the ID(s) returned when the function runs.
+## 🔗 **No-Code Platform Integration**
 
-![](../../../_gitbook/image08c1.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FQVtuABYIeWtQUQ6sbS0S%252FCleanShot%25202025-02-13%2520at%252008.03.59.png%3Falt%3Dmedia%26token%3Da68aa1b2-3b12-478d-b1ba-8eef7a3cb86f&width=768&dpr=4&quality=100&sign=d0e19e64&sv=2)
+### n8n Async Workflow Patterns
 
-</div>
+**Fire-and-Forget Pattern:**
 
-Last updated 6 months ago
+```javascript
+// n8n workflow with async Xano functions
+{
+  "nodes": [
+    {
+      "name": "Trigger Async Processing",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/process-data",
+        "method": "POST",
+        "headers": {
+          "Authorization": "Bearer {{ $json.auth_token }}",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "data": "{{ $json.user_data }}",
+          "process_type": "async",
+          "callback_url": "{{ $json.webhook_url }}"
+        }
+      }
+    },
+    {
+      "name": "Continue Workflow",
+      "type": "Set",
+      "parameters": {
+        "values": {
+          "processing_started": true,
+          "execution_id": "{{ $json.async_execution_id }}",
+          "timestamp": "{{ new Date().toISOString() }}"
+        }
+      }
+    },
+    {
+      "name": "Send Immediate Response",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "{{ $json.user_callback_url }}",
+        "method": "POST",
+        "body": {
+          "status": "processing",
+          "execution_id": "{{ $json.async_execution_id }}",
+          "estimated_completion": "5 minutes"
+        }
+      }
+    }
+  ]
+}
+```
 
-Was this helpful?
+**Poll-and-Wait Pattern:**
+
+```javascript
+// n8n workflow that polls for async completion
+{
+  "nodes": [
+    {
+      "name": "Start Async Function",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/generate-report",
+        "method": "POST",
+        "body": {
+          "user_id": "{{ $json.user_id }}",
+          "report_type": "monthly",
+          "async": true
+        }
+      }
+    },
+    {
+      "name": "Wait Before Check",
+      "type": "Wait",
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      }
+    },
+    {
+      "name": "Check Async Status",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/async-status",
+        "method": "POST",
+        "body": {
+          "execution_ids": ["{{ $json.async_execution_id }}"]
+        }
+      }
+    },
+    {
+      "name": "Is Complete?",
+      "type": "If",
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "{{ $json.status }}",
+              "operation": "equal",
+              "value2": "completed"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Process Results",
+      "type": "Code",
+      "parameters": {
+        "jsCode": `
+          const result = $input.first().json;
+          if (result.status === 'completed') {
+            return [{ json: result.output }];
+          } else if (result.status === 'error') {
+            throw new Error(result.error_message);
+          } else {
+            // Still processing, loop back
+            return [];
+          }
+        `
+      }
+    }
+  ]
+}
+```
+
+### WeWeb Async Function Management
+
+**Async Operation Component:**
+
+```javascript
+// WeWeb component for managing async operations
+class XanoAsyncManager {
+  constructor(xanoBaseUrl, authToken) {
+    this.baseUrl = xanoBaseUrl;
+    this.authToken = authToken;
+    this.pollInterval = null;
+    this.activeOperations = new Map();
+  }
+  
+  async startAsyncOperation(endpoint, data, options = {}) {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.authToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...data,
+          async: true
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok && result.async_execution_id) {
+        const operation = {
+          id: result.async_execution_id,
+          endpoint: endpoint,
+          startTime: new Date(),
+          status: 'running',
+          options: options
+        };
+        
+        this.activeOperations.set(result.async_execution_id, operation);
+        
+        // Update UI state
+        wwLib.wwVariable.updateValue('async_operations', Array.from(this.activeOperations.values()));
+        
+        // Start polling if callback provided
+        if (options.onComplete || options.onError) {
+          this.startPolling(result.async_execution_id, options);
+        }
+        
+        return result.async_execution_id;
+      } else {
+        throw new Error(result.message || 'Failed to start async operation');
+      }
+    } catch (error) {
+      console.error('Async operation failed to start:', error);
+      throw error;
+    }
+  }
+  
+  async checkAsyncStatus(executionIds) {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/async-await`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.authToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          execution_ids: Array.isArray(executionIds) ? executionIds : [executionIds]
+        })
+      });
+      
+      const results = await response.json();
+      
+      // Update operation states
+      results.forEach(result => {
+        if (this.activeOperations.has(result.execution_id)) {
+          const operation = this.activeOperations.get(result.execution_id);
+          operation.status = result.status;
+          operation.output = result.output;
+          operation.error = result.error;
+          operation.completedAt = result.status !== 'running' ? new Date() : null;
+        }
+      });
+      
+      // Update UI
+      wwLib.wwVariable.updateValue('async_operations', Array.from(this.activeOperations.values()));
+      
+      return results;
+    } catch (error) {
+      console.error('Failed to check async status:', error);
+      throw error;
+    }
+  }
+  
+  startPolling(executionId, options = {}) {
+    const pollInterval = options.pollInterval || 5000; // 5 seconds default
+    
+    const poll = async () => {
+      try {
+        const [result] = await this.checkAsyncStatus([executionId]);
+        
+        if (result.status === 'completed') {
+          this.stopPolling(executionId);
+          if (options.onComplete) {
+            options.onComplete(result.output);
+          }
+        } else if (result.status === 'error') {
+          this.stopPolling(executionId);
+          if (options.onError) {
+            options.onError(result.error);
+          }
+        } else {
+          // Still running, continue polling
+          setTimeout(poll, pollInterval);
+        }
+      } catch (error) {
+        this.stopPolling(executionId);
+        if (options.onError) {
+          options.onError(error.message);
+        }
+      }
+    };
+    
+    setTimeout(poll, pollInterval);
+  }
+  
+  stopPolling(executionId) {
+    const operation = this.activeOperations.get(executionId);
+    if (operation && operation.pollTimeout) {
+      clearTimeout(operation.pollTimeout);
+    }
+  }
+  
+  async cancelAsyncOperation(executionId) {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/async-cancel`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.authToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          execution_id: executionId
+        })
+      });
+      
+      if (response.ok) {
+        this.activeOperations.delete(executionId);
+        wwLib.wwVariable.updateValue('async_operations', Array.from(this.activeOperations.values()));
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Failed to cancel async operation:', error);
+      return false;
+    }
+  }
+  
+  getOperationStatus(executionId) {
+    return this.activeOperations.get(executionId);
+  }
+  
+  getAllOperations() {
+    return Array.from(this.activeOperations.values());
+  }
+}
+
+// Initialize async manager
+const asyncManager = new XanoAsyncManager(
+  wwLib.wwVariable.getValue('xano_base_url'),
+  wwLib.wwVariable.getValue('auth_token')
+);
+
+// Usage examples
+async function startReportGeneration() {
+  try {
+    const executionId = await asyncManager.startAsyncOperation(
+      'generate-report',
+      {
+        user_id: wwLib.wwVariable.getValue('current_user_id'),
+        report_type: 'monthly'
+      },
+      {
+        onComplete: (result) => {
+          wwLib.wwVariable.updateValue('generated_report', result);
+          wwLib.wwUtils.showSuccessToast('Report generated successfully!');
+          wwLib.wwModal.open('report-preview-modal');
+        },
+        onError: (error) => {
+          wwLib.wwUtils.showErrorToast(`Report generation failed: ${error}`);
+        },
+        pollInterval: 3000
+      }
+    );
+    
+    wwLib.wwUtils.showInfoToast('Report generation started...');
+    wwLib.wwVariable.updateValue('current_report_execution_id', executionId);
+  } catch (error) {
+    wwLib.wwUtils.showErrorToast(`Failed to start report generation: ${error.message}`);
+  }
+}
+
+async function checkAllOperations() {
+  const operations = asyncManager.getAllOperations();
+  const runningIds = operations
+    .filter(op => op.status === 'running')
+    .map(op => op.id);
+  
+  if (runningIds.length > 0) {
+    await asyncManager.checkAsyncStatus(runningIds);
+  }
+}
+```
+
+## 🛠️ **Implementation Patterns**
+
+### Basic Async Function Configuration
+
+**Custom Function with Async Execution:**
+
+```javascript
+// Async email sending function
+[
+  {
+    "function": "create_variable",
+    "name": "email_data",
+    "value": {
+      "to": "{{ input.recipient_email }}",
+      "subject": "{{ input.subject }}",
+      "template": "{{ input.template_name }}",
+      "variables": "{{ input.template_variables }}"
+    }
+  },
+  {
+    "function": "external_api_request",
+    "url": "{{ env.EMAIL_SERVICE_URL }}",
+    "method": "POST",
+    "headers": {
+      "Authorization": "Bearer {{ env.EMAIL_API_KEY }}",
+      "Content-Type": "application/json"
+    },
+    "body": "{{ email_data }}",
+    "return_as": "email_result"
+  },
+  {
+    "function": "add_record",
+    "table": "email_logs",
+    "data": {
+      "recipient": "{{ email_data.to }}",
+      "subject": "{{ email_data.subject }}",
+      "status": "{{ email_result.status }}",
+      "external_id": "{{ email_result.id }}",
+      "sent_at": "{{ now }}"
+    }
+  },
+  {
+    "function": "return_response",
+    "body": {
+      "success": true,
+      "email_id": "{{ email_result.id }}",
+      "message": "Email sent successfully"
+    }
+  }
+]
+```
+
+### Async Function Execution in API Endpoint
+
+**API Endpoint with Async Custom Function:**
+
+```javascript
+// Main API endpoint function stack
+[
+  {
+    "function": "add_record",
+    "table": "orders",
+    "data": {
+      "customer_id": "{{ request.body.customer_id }}",
+      "total": "{{ request.body.total }}",
+      "status": "confirmed"
+    },
+    "return_as": "new_order"
+  },
+  {
+    "function": "custom_function",
+    "name": "send_order_confirmation_email",
+    "inputs": {
+      "order_id": "{{ new_order.id }}",
+      "customer_email": "{{ new_order.customer.email }}"
+    },
+    "execution_mode": "async",
+    "return_as": "email_execution_id"
+  },
+  {
+    "function": "custom_function",
+    "name": "update_inventory",
+    "inputs": {
+      "order_items": "{{ request.body.items }}"
+    },
+    "execution_mode": "async",
+    "return_as": "inventory_execution_id"
+  },
+  {
+    "function": "return_response",
+    "status": 201,
+    "body": {
+      "order": "{{ new_order }}",
+      "background_tasks": {
+        "email_execution_id": "{{ email_execution_id }}",
+        "inventory_execution_id": "{{ inventory_execution_id }}"
+      },
+      "message": "Order created successfully. Confirmation email and inventory update in progress."
+    }
+  }
+]
+```
+
+### Async Function Await Pattern
+
+**Retrieving Async Function Results:**
+
+```javascript
+// Function stack to check async function completion
+[
+  {
+    "function": "async_function_await",
+    "execution_ids": [
+      "{{ request.body.email_execution_id }}",
+      "{{ request.body.inventory_execution_id }}"
+    ],
+    "return_as": "async_results"
+  },
+  {
+    "function": "create_variable",
+    "name": "completion_status",
+    "value": {
+      "email": "{{ async_results|where('execution_id', request.body.email_execution_id)|first }}",
+      "inventory": "{{ async_results|where('execution_id', request.body.inventory_execution_id)|first }}"
+    }
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ completion_status.email.status == 'completed' && completion_status.inventory.status == 'completed' }}",
+    "true_branch": [
+      {
+        "function": "return_response",
+        "body": {
+          "all_completed": true,
+          "email_result": "{{ completion_status.email.output }}",
+          "inventory_result": "{{ completion_status.inventory.output }}"
+        }
+      }
+    ],
+    "false_branch": [
+      {
+        "function": "return_response",
+        "body": {
+          "all_completed": false,
+          "status": "{{ completion_status }}",
+          "message": "Some operations still in progress"
+        }
+      }
+    ]
+  }
+]
+```
+
+## ⚡ **Performance Optimization**
+
+### Async Function Best Practices
+
+**Execution Patterns:**
+
+```javascript
+// Optimized async execution patterns
+{
+  "parallel_execution": {
+    "description": "Execute multiple async functions simultaneously",
+    "pattern": [
+      {
+        "function": "custom_function",
+        "name": "process_images",
+        "execution_mode": "async",
+        "return_as": "image_processing_id"
+      },
+      {
+        "function": "custom_function", 
+        "name": "generate_thumbnails",
+        "execution_mode": "async",
+        "return_as": "thumbnail_id"
+      },
+      {
+        "function": "custom_function",
+        "name": "extract_metadata",
+        "execution_mode": "async", 
+        "return_as": "metadata_id"
+      }
+    ]
+  },
+  "sequential_with_dependencies": {
+    "description": "Execute async functions with dependencies",
+    "pattern": [
+      {
+        "function": "custom_function",
+        "name": "validate_data",
+        "execution_mode": "sync",
+        "return_as": "validation_result"
+      },
+      {
+        "function": "conditional",
+        "condition": "{{ validation_result.valid }}",
+        "true_branch": [
+          {
+            "function": "custom_function",
+            "name": "process_data",
+            "execution_mode": "async",
+            "return_as": "processing_id"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Resource Management
+
+**Memory and CPU Optimization:**
+
+```javascript
+// Async function with resource limits
+{
+  "async_function_config": {
+    "execution_mode": "async",
+    "resource_limits": {
+      "max_execution_time": 300, // 5 minutes
+      "memory_limit": "512MB",
+      "cpu_limit": "1 core"
+    },
+    "retry_policy": {
+      "max_retries": 3,
+      "backoff_strategy": "exponential",
+      "initial_delay": 1000
+    },
+    "timeout_handling": {
+      "on_timeout": "cancel",
+      "cleanup_resources": true,
+      "notify_callback": true
+    }
+  }
+}
+```
+
+## 🔐 **Error Handling and Monitoring**
+
+### Comprehensive Error Handling
+
+**Async Function Error Management:**
+
+```javascript
+// Error handling for async functions
+[
+  {
+    "function": "try_catch",
+    "try_block": [
+      {
+        "function": "custom_function",
+        "name": "risky_operation",
+        "execution_mode": "async",
+        "return_as": "operation_id"
+      }
+    ],
+    "catch_block": [
+      {
+        "function": "add_record",
+        "table": "error_logs",
+        "data": {
+          "function_name": "risky_operation",
+          "error_message": "{{ error.message }}",
+          "stack_trace": "{{ error.stack }}",
+          "timestamp": "{{ now }}"
+        }
+      },
+      {
+        "function": "return_response",
+        "status": 500,
+        "body": {
+          "error": "Operation failed to start",
+          "execution_id": null
+        }
+      }
+    ]
+  }
+]
+```
+
+### Monitoring and Alerting
+
+**Async Operation Monitoring:**
+
+```javascript
+// Monitoring function stack for async operations
+[
+  {
+    "function": "query_all_records",
+    "table": "async_executions",
+    "filter": {
+      "status": "running",
+      "created_at": {"$lt": "{{ now - 300 }}"}  // 5 minutes ago
+    },
+    "return_as": "stuck_operations"
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ stuck_operations|length > 0 }}",
+    "true_branch": [
+      {
+        "function": "loop",
+        "array": "{{ stuck_operations }}",
+        "operations": [
+          {
+            "function": "add_record",
+            "table": "alerts",
+            "data": {
+              "type": "async_timeout",
+              "execution_id": "{{ item.execution_id }}",
+              "function_name": "{{ item.function_name }}",
+              "stuck_duration": "{{ now - item.created_at }}",
+              "severity": "warning"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
+## 💡 **Pro Tips**
+
+- **Use Async for I/O Operations**: File uploads, external API calls, and email sending benefit most from async execution
+- **Monitor Execution Times**: Track async function performance to optimize resource allocation
+- **Implement Timeouts**: Always set reasonable timeout limits for async operations
+- **Provide User Feedback**: Show progress indicators and status updates for long-running operations
+- **Handle Failures Gracefully**: Implement retry logic and fallback mechanisms
+- **Clean Up Resources**: Ensure async functions properly clean up temporary files and connections
+
+## 🔧 **Troubleshooting**
+
+### Common Async Function Issues
+
+**Problem**: Async function appears to hang indefinitely  
+**Solution**: Check function logs for errors, implement timeout handling, and verify resource limits
+
+**Problem**: Cannot retrieve async function results  
+**Solution**: Verify execution ID is correct and function completed successfully before calling await
+
+**Problem**: Async functions consuming too many resources  
+**Solution**: Implement resource limits, throttling, and queue management for concurrent operations
+
+**Problem**: Lost execution IDs preventing result retrieval  
+**Solution**: Store execution IDs in database with proper indexing and cleanup policies
+
+---
+
+**Next Steps**: Ready to implement async functions? Check out [Custom Functions](custom-functions.md) for function creation basics or explore [Background Tasks](background-tasks.md) for scheduled operations
