@@ -1,350 +1,868 @@
 ---
+title: Using the Testing Suite - Complete Unit Testing Guide for No-Code Development
+description: Master Xano's comprehensive testing suite with unit tests, mock responses, and coverage analysis to ensure reliable applications for n8n, WeWeb, and Make.com integrations
 category: 06-best-practices
-has_code_examples: false
-last_updated: '2025-01-23'
+difficulty: intermediate
+last_updated: '2025-01-16'
+related_docs:
+  - test-expressions.md
+  - function-stack-testing.md
+  - performance-optimization.md
+subcategory: 06-best-practices
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Using the Testing Suite
+  - unit-testing
+  - testing-suite
+  - mock-responses
+  - coverage-analysis
+  - quality-assurance
+  - automation
+  - best-practices
+  - regression-testing
 ---
+
+## 📋 **Quick Summary**
+
+Master Xano's comprehensive testing suite to build reliable, well-tested applications using unit tests, mock responses, and coverage analysis. This guide covers creating unit tests, managing test suites, and implementing testing best practices perfect for no-code developers working with n8n, WeWeb, and Make.com integrations.
+
+## What You'll Learn
+
+- Complete unit testing methodology in Xano
+- Building and managing comprehensive test suites
+- Using mock responses for consistent testing
+- Coverage analysis and gap identification
+- Authentication handling in unit tests
+- Testing automation and CI/CD integration
+- Best practices for maintaining test reliability
 
 # Using the Testing Suite
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'unit-tests'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Unit Tests \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
+## 🧪 **Understanding Unit Tests**
+
+**What are Unit Tests?**
+
+Unit Tests in Xano allow you to store the responses of your function stacks as "tests" and quickly verify that your function stacks continue to operate properly as you make changes. They provide automated regression testing to catch issues before they reach production.
+
+**Key Benefits:**
+```javascript
+// Unit testing advantages
+{
+  "regression_prevention": "Catch breaking changes automatically",
+  "coverage_analysis": "Identify untested code paths",
+  "continuous_validation": "Ensure consistent behavior during development",
+  "documentation": "Serve as living documentation of expected behavior",
+  "confidence": "Deploy changes with confidence"
+}
+```
+
+**Unit Tests vs Workflow Tests:**
+```javascript
+// Comparison of testing approaches
+{
+  "unit_tests": {
+    "scope": "individual function stacks",
+    "purpose": "validate specific function behavior",
+    "use_case": "regression testing, API validation"
+  },
+  "workflow_tests": {
+    "scope": "complete user flows",
+    "purpose": "validate end-to-end processes", 
+    "use_case": "integration testing, user journey validation"
+  }
+}
+```
+
+## 🏗️ **Building Unit Tests**
+
+### Creating Your First Unit Test
+
+**Method 1: From Run & Debug (Recommended)**
+
+The fastest way to create a unit test is using a successful function stack execution:
+
+1. **Run your function stack** with test data using Run & Debug
+2. **Verify the output** matches your expectations
+3. **Click "Create Unit Test"** under the result panel
+4. **Configure test details** (name, description, data source)
+
+**Method 2: Manual Creation**
+
+Create unit tests directly from the API settings:
+
+1. Navigate to your function stack settings
+2. Click on the **Testing** tab
+3. Click **Add Unit Test**
+4. Configure inputs and expectations manually
+
+### Unit Test Configuration
+
+**Basic Test Setup:**
+```javascript
+// Example unit test configuration
+{
+  "test_name": "User Registration Validation",
+  "description": "Tests user registration with valid email and password",
+  "data_source": "testing_database",
+  "input": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "SecurePass123!"
+  },
+  "expects": [
+    {
+      "field": "status",
+      "operator": "equals",
+      "value": 201
+    },
+    {
+      "field": "user.id",
+      "operator": "is_defined",
+      "value": true
+    },
+    {
+      "field": "user.email",
+      "operator": "equals", 
+      "value": "john@example.com"
+    }
+  ]
+}
+```
+
+## ✅ **Expect Statements and Validation**
+
+### Basic Expect Operators
+
+**Equality Operators:**
+```javascript
+// Common equality validations
+{
+  "equals": {
+    "operator": "equals",
+    "example": {"field": "status", "value": 200},
+    "description": "Exact value match"
+  },
+  "not_equals": {
+    "operator": "not_equals", 
+    "example": {"field": "user.password", "value": null},
+    "description": "Value should not match"
+  }
+}
+```
+
+**Existence Operators:**
+```javascript
+// Validation for field presence
+{
+  "is_defined": {
+    "operator": "is_defined",
+    "example": {"field": "user.id"},
+    "description": "Field must exist"
+  },
+  "is_not_defined": {
+    "operator": "is_not_defined",
+    "example": {"field": "user.password"},
+    "description": "Field should not exist in response"
+  }
+}
+```
+
+**Comparison Operators:**
+```javascript
+// Numeric and value comparisons
+{
+  "greater_than": {
+    "operator": "greater_than",
+    "example": {"field": "user.id", "value": 0},
+    "description": "Numeric value comparison"
+  },
+  "less_than": {
+    "operator": "less_than",
+    "example": {"field": "response_time_ms", "value": 500},
+    "description": "Performance validation"
+  },
+  "contains": {
+    "operator": "contains",
+    "example": {"field": "user.roles", "value": "customer"},
+    "description": "Array or string contains value"
+  }
+}
+```
+
+### Advanced Expect Statements
+
+**Complex Validation Examples:**
+```javascript
+// Advanced unit test expectations
+{
+  "test_name": "User Authentication Flow",
+  "expects": [
+    // Status validation
+    {
+      "field": "status",
+      "operator": "equals",
+      "value": 200,
+      "description": "Successful authentication"
+    },
+    // Token validation
+    {
+      "field": "auth_token",
+      "operator": "is_defined",
+      "description": "Auth token must be present"
+    },
+    // Token format validation
+    {
+      "field": "auth_token",
+      "operator": "matches_pattern",
+      "value": "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$",
+      "description": "JWT token format"
+    },
+    // Expiration validation
+    {
+      "field": "expires_in",
+      "operator": "greater_than",
+      "value": 0,
+      "description": "Token should have valid expiration"
+    },
+    // Sensitive data validation
+    {
+      "field": "user.password",
+      "operator": "is_not_defined",
+      "description": "Password should not be exposed"
+    },
+    // User role validation
+    {
+      "field": "user.roles",
+      "operator": "contains",
+      "value": "authenticated",
+      "description": "User should have authenticated role"
+    }
+  ]
+}
+```
+
+### Multiple Expect Statements
+
+**Building Comprehensive Validations:**
+```javascript
+// API endpoint with multiple validations
+{
+  "test_name": "Create Product API",
+  "input": {
+    "name": "Test Product",
+    "price": 29.99,
+    "category": "electronics"
+  },
+  "expects": [
+    // Response structure validation
+    {
+      "field": "status",
+      "operator": "equals",
+      "value": 201
+    },
+    {
+      "field": "product.id",
+      "operator": "is_defined"
+    },
+    {
+      "field": "product.name",
+      "operator": "equals",
+      "value": "Test Product"
+    },
+    // Business logic validation
+    {
+      "field": "product.price",
+      "operator": "equals",
+      "value": 29.99
+    },
+    {
+      "field": "product.category",
+      "operator": "equals",
+      "value": "electronics"
+    },
+    // Auto-generated fields
+    {
+      "field": "product.created_at",
+      "operator": "is_defined"
+    },
+    {
+      "field": "product.slug",
+      "operator": "matches_pattern",
+      "value": "^[a-z0-9-]+$",
+      "description": "URL-friendly slug generation"
+    }
+  ]
+}
+```
+
+## 🔐 **Authentication in Unit Tests**
+
+### Handling Auth Tokens
+
+**Basic Authentication Setup:**
+```javascript
+// Unit test with authentication
+{
+  "test_name": "Protected Resource Access",
+  "auth_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "auth_extras": {
+    "user_id": 123,
+    "role": "admin"
+  },
+  "input": {
+    "resource_id": 456
+  },
+  "expects": [
+    {
+      "field": "status",
+      "operator": "equals",
+      "value": 200
+    },
+    {
+      "field": "resource.owner_id",
+      "operator": "equals",
+      "value": 123
+    }
+  ]
+}
+```
+
+**Ignoring Token Expiration:**
+```javascript
+// Configuration for long-running tests
+{
+  "test_settings": {
+    "ignore_auth_expiration": true,
+    "description": "Prevents tests from failing due to expired tokens",
+    "use_case": "automated test suites, CI/CD pipelines"
+  }
+}
+```
+
+### Authentication Test Patterns
+
+**Testing Different Auth Scenarios:**
+```javascript
+// Comprehensive auth testing
+{
+  "auth_test_scenarios": [
+    {
+      "test_name": "Valid Token Access",
+      "auth_token": "valid_token_here",
+      "expects": [{"field": "status", "operator": "equals", "value": 200}]
+    },
+    {
+      "test_name": "Invalid Token Access",
+      "auth_token": "invalid_token",
+      "expects": [{"field": "status", "operator": "equals", "value": 401}]
+    },
+    {
+      "test_name": "No Token Access",
+      "auth_token": null,
+      "expects": [{"field": "status", "operator": "equals", "value": 401}]
+    },
+    {
+      "test_name": "Insufficient Permissions",
+      "auth_token": "user_token",
+      "expects": [{"field": "status", "operator": "equals", "value": 403}]
+    }
+  ]
+}
+```
+
+## 🎭 **Mock Responses**
+
+### Understanding Mock Responses
+
+**What are Mock Responses?**
+
+Mock responses allow you to simulate the behavior of external services and dependencies, ensuring consistent test results regardless of external factors.
+
+**When to Use Mocks:**
+- Testing external API integrations
+- Simulating error conditions
+- Creating predictable test environments
+- Testing without affecting external systems
+
+### Creating Mock Responses
+
+**Setting Up Mocks:**
+
+1. **Right-click on a function** in your function stack
+2. **Choose "Mock Test Response"**
+3. **Configure mock data** in the right panel
+4. **Specify different mocks** for different unit tests
+
+**Mock Response Configuration:**
+```javascript
+// Example mock for external API call
+{
+  "function_name": "external_payment_api",
+  "mock_responses": {
+    "successful_payment_test": {
+      "status": 200,
+      "body": {
+        "transaction_id": "txn_12345",
+        "status": "completed",
+        "amount": 99.99,
+        "currency": "USD"
+      }
+    },
+    "failed_payment_test": {
+      "status": 400,
+      "body": {
+        "error": "insufficient_funds",
+        "message": "Card declined due to insufficient funds"
+      }
+    },
+    "timeout_test": {
+      "status": 500,
+      "body": {
+        "error": "timeout",
+        "message": "Request timeout after 30 seconds"
+      }
+    }
+  }
+}
+```
+
+### Advanced Mocking Strategies
+
+**Dynamic Mock Responses:**
+```javascript
+// Conditional mocking based on input
+{
+  "function_name": "user_validation_service",
+  "mock_conditions": [
+    {
+      "condition": "input.email === 'blocked@example.com'",
+      "response": {
+        "status": 403,
+        "body": {"error": "user_blocked"}
+      }
+    },
+    {
+      "condition": "input.email.includes('test')",
+      "response": {
+        "status": 200,
+        "body": {"valid": true, "test_user": true}
+      }
+    },
+    {
+      "condition": "default",
+      "response": {
+        "status": 200,
+        "body": {"valid": true, "test_user": false}
+      }
+    }
+  ]
+}
+```
+
+## 📊 **Test Suite Management**
+
+### Accessing the Testing Suite
+
+**Navigation:**
+1. Open the left-hand navigation menu
+2. Go to **Library** > **Unit Tests**
+3. Access the comprehensive testing dashboard
+
+**Testing Suite Overview:**
+```javascript
+// Testing suite dashboard features
+{
+  "coverage_analysis": {
+    "total_functions": 45,
+    "tested_functions": 38,
+    "coverage_percentage": "84%",
+    "untested_functions": [
+      "admin_cleanup_task",
+      "legacy_data_migration",
+      "backup_scheduler"
+    ]
+  },
+  "test_results": {
+    "total_tests": 42,
+    "passed": 39,
+    "failed": 3,
+    "success_rate": "93%"
+  },
+  "performance_metrics": {
+    "average_execution_time": "1.2s",
+    "slowest_test": "bulk_data_processing (4.8s)",
+    "fastest_test": "user_validation (0.1s)"
+  }
+}
+```
+
+### Test Suite Operations
+
+**Running All Tests:**
+```javascript
+// Batch test execution
+{
+  "run_all_tests": {
+    "execution_mode": "parallel",
+    "timeout": "10 minutes",
+    "failure_handling": "continue_on_failure",
+    "reporting": "detailed_results_with_timing"
+  }
+}
+```
+
+**Filtering and Organization:**
+```javascript
+// Test filtering options
+{
+  "filter_options": [
+    {
+      "filter": "tested_only",
+      "description": "Show only functions with tests"
+    },
+    {
+      "filter": "untested_only", 
+      "description": "Show functions missing tests"
+    },
+    {
+      "filter": "failed_only",
+      "description": "Show only failed tests"
+    },
+    {
+      "filter": "by_category",
+      "options": ["APIs", "Functions", "Middleware"]
+    }
+  ]
+}
+```
+
+## 🔗 **Integration Testing with No-Code Platforms**
+
+### n8n Integration Testing
+
+**Testing n8n Webhook Endpoints:**
+```javascript
+// Unit tests for n8n integration
+{
+  "test_name": "n8n Webhook Processing",
+  "description": "Tests webhook endpoint that receives n8n workflow data",
+  "input": {
+    "workflow_id": "n8n-workflow-123",
+    "execution_id": "exec-456",
+    "data": {
+      "customer_email": "customer@example.com",
+      "order_total": 199.99,
+      "items": [
+        {"product_id": 1, "quantity": 2},
+        {"product_id": 3, "quantity": 1}
+      ]
+    }
+  },
+  "expects": [
+    {
+      "field": "status",
+      "operator": "equals",
+      "value": 200
+    },
+    {
+      "field": "processed",
+      "operator": "equals",
+      "value": true
+    },
+    {
+      "field": "order_id",
+      "operator": "is_defined"
+    }
+  ]
+}
+```
+
+### WeWeb Frontend Testing
+
+**Testing WeWeb API Endpoints:**
+```javascript
+// Unit tests for WeWeb integration
+{
+  "test_name": "WeWeb Dashboard Data",
+  "description": "Tests API endpoint used by WeWeb dashboard",
+  "auth_token": "weweb_user_token",
+  "input": {
+    "dashboard_type": "analytics",
+    "date_range": "last_30_days"
+  },
+  "expects": [
+    {
+      "field": "status",
+      "operator": "equals",
+      "value": 200
+    },
+    {
+      "field": "data.metrics",
+      "operator": "is_defined"
+    },
+    {
+      "field": "data.metrics.total_users",
+      "operator": "greater_than",
+      "value": -1
+    },
+    {
+      "field": "data.charts",
+      "operator": "is_defined"
+    }
+  ]
+}
+```
+
+### Make.com Scenario Testing
+
+**Testing Make.com Integration:**
+```javascript
+// Unit tests for Make.com scenarios
+{
+  "test_name": "Make.com Bulk Data Processing",
+  "description": "Tests bulk processing endpoint for Make.com scenarios",
+  "input": {
+    "scenario_id": "make-scenario-789",
+    "batch_data": [
+      {"id": 1, "name": "Item 1", "value": 100},
+      {"id": 2, "name": "Item 2", "value": 200},
+      {"id": 3, "name": "Item 3", "value": 300}
+    ]
+  },
+  "expects": [
+    {
+      "field": "status",
+      "operator": "equals",
+      "value": 200
+    },
+    {
+      "field": "processed_count",
+      "operator": "equals",
+      "value": 3
+    },
+    {
+      "field": "errors",
+      "operator": "equals",
+      "value": []
+    },
+    {
+      "field": "total_value",
+      "operator": "equals",
+      "value": 600
+    }
+  ]
+}
+```
+
+## 📈 **Coverage Analysis and Optimization**
+
+### Understanding Coverage Metrics
+
+**Coverage Types:**
+```javascript
+// Different coverage measurements
+{
+  "function_coverage": {
+    "description": "Percentage of function stacks with unit tests",
+    "calculation": "tested_functions / total_functions * 100",
+    "target": "80%+"
+  },
+  "api_coverage": {
+    "description": "Percentage of API endpoints with tests",
+    "calculation": "tested_apis / total_apis * 100",
+    "target": "90%+"
+  },
+  "middleware_coverage": {
+    "description": "Percentage of middleware functions tested",
+    "calculation": "tested_middleware / total_middleware * 100",
+    "target": "85%+"
+  }
+}
+```
+
+### Improving Test Coverage
+
+**Coverage Improvement Strategy:**
+```javascript
+// Systematic approach to improve coverage
+{
+  "step_1": {
+    "action": "identify_untested_functions",
+    "method": "use testing suite filter for 'untested_only'"
+  },
+  "step_2": {
+    "action": "prioritize_critical_functions",
+    "criteria": ["public APIs", "authentication", "data processing"]
+  },
+  "step_3": {
+    "action": "create_unit_tests",
+    "approach": "start with happy path, add edge cases"
+  },
+  "step_4": {
+    "action": "implement_mocks",
+    "focus": "external dependencies and error scenarios"
+  },
+  "step_5": {
+    "action": "validate_and_maintain",
+    "frequency": "with each deployment"
+  }
+}
+```
+
+## 💡 **Testing Best Practices**
+
+### Test Design Principles
+
+**Comprehensive Test Strategy:**
+```markdown
+□ Test happy path scenarios first
+□ Include edge cases and error conditions
+□ Test authentication and authorization
+□ Validate input sanitization
+□ Test external API integrations
+□ Include performance validations
+□ Test data validation logic
+□ Verify error handling
+```
+
+**Test Naming Conventions:**
+```javascript
+// Clear, descriptive test names
+{
+  "good_examples": [
+    "User Registration - Valid Email Format",
+    "Payment Processing - Stripe Integration Success", 
+    "Data Export - Large Dataset Performance",
+    "Authentication - Invalid Token Handling",
+    "Product Creation - Required Fields Validation"
+  ],
+  "poor_examples": [
+    "Test 1",
+    "API Test",
+    "User Test",
+    "Validation",
+    "Function Test"
+  ]
+}
+```
+
+### Test Maintenance
+
+**Regular Test Maintenance:**
+```javascript
+// Test maintenance checklist
+{
+  "weekly_tasks": [
+    "run complete test suite",
+    "review failed tests",
+    "update test data as needed"
+  ],
+  "monthly_tasks": [
+    "review test coverage",
+    "add tests for new features",
+    "remove obsolete tests",
+    "update mock responses"
+  ],
+  "quarterly_tasks": [
+    "performance test review",
+    "test strategy evaluation",
+    "documentation updates"
+  ]
+}
+```
+
+## 🎯 **Advanced Testing Strategies**
+
+### Continuous Integration
+
+**CI/CD Integration:**
+```javascript
+// Automated testing in CI/CD pipeline
+{
+  "ci_integration": {
+    "trigger": "on_code_commit",
+    "steps": [
+      "run_unit_tests",
+      "check_coverage_threshold", 
+      "validate_performance",
+      "generate_test_report"
+    ],
+    "success_criteria": {
+      "coverage_minimum": "80%",
+      "test_pass_rate": "95%",
+      "performance_threshold": "2s average"
+    }
+  }
+}
+```
+
+### Performance Testing
+
+**Performance Unit Tests:**
+```javascript
+// Performance validation in unit tests
+{
+  "test_name": "API Response Time Validation",
+  "input": {"user_id": 123},
+  "expects": [
+    {
+      "field": "status",
+      "operator": "equals",
+      "value": 200
+    },
+    {
+      "field": "_execution_time_ms",
+      "operator": "less_than",
+      "value": 500,
+      "description": "Response time under 500ms"
+    }
+  ]
+}
+```
+
+## 🔧 **Troubleshooting Test Issues**
+
+### Common Test Problems
+
+**Test Failures and Solutions:**
+```javascript
+// Common issues and resolutions
+{
+  "flaky_tests": {
+    "problem": "tests pass/fail inconsistently",
+    "solutions": [
+      "use proper mocks for external dependencies",
+      "ensure test data isolation",
+      "add appropriate wait times for async operations"
+    ]
+  },
+  "data_dependency_issues": {
+    "problem": "tests depend on specific database state",
+    "solutions": [
+      "use dedicated test data sources",
+      "create test fixtures",
+      "reset data between test runs"
+    ]
+  },
+  "authentication_failures": {
+    "problem": "auth tokens expire during test runs",
+    "solutions": [
+      "enable 'ignore auth expiration' setting",
+      "use long-lived test tokens",
+      "implement token refresh logic"
+    ]
+  }
+}
+```
+
+### Test Debugging
+
+**Debug Failed Tests:**
+1. **Review test execution logs** for error details
+2. **Check input data** matches expected format
+3. **Verify mock responses** are configured correctly
+4. **Test function stack manually** with same inputs
+5. **Check database state** if test involves data operations
+6. **Review expect statements** for accuracy
+
 ---
-[](../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Building a Unit Test
-Was this helpful?
-Copy
-1.  Testing and Debugging
-Unit Tests 
-==========
-Quick Summary
-Unit Tests allow you to store the responses of your function stacks as a \'test\' and quickly use them to ensure that your function stacks continue to operate properly as you make changes.
-Building a Unit Test
-The fastest way to create a unit test is by using Run & Debug. Once you are achieving the desired result by running your function stack, you can click **Create Unit Test** under the result.
-[]
-You can also create a test manually at any time from the API settings menu.
-[]
-Give your unit test a name, a description, and the data source that it should use to run the test if different from your live data source.
-[]
-Unit tests are defined by your **input** and **expects**.
-[]
-In this example, we are providing an input of 2 and expect a response of 2.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Inputs** align with the inputs that your function stack expects. You can fill out any desired values here that you would like to use to run the test. If you used the **Create Unit Test** option in Run & Debug, this should already be populated for you.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Expects** are the statements that are used to validate your test. These could be anything from a simple equals statement, or use more complex operators based on your needs.
-    :::
-Your unit test can have multiple expect statements, which can be added by clicking the **+ Add an expect statement** option.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Use the ✏️ button to delete expect statements.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Use the ⏩ button to check all expect statements, or you can run them selectively with the ▶️ button.
-    :::
-**Unit Tests and Authentication**
-When creating a unit test on a function stack that requires authentication, you can provide an auth token and extras just like you would during Run & Debug.
-To avoid having to recycle the auth token upon expiration, we have added the ability to ignore auth token expiration when running your unit tests.
-####  
-Using the Testing Suite
-Once you have your unit tests built, you can always run them individually from that API\'s testing panel. If you want to run all of your tests at once, you can use the testing suite.
-[]
-In the left-hand navigation menu, find your Library and click Unit Tests.
-[]
-Once inside the testing suite, you can perform the following actions:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Review where your application has and is missing coverage.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Run all tests at once.
-    :::
-For complex applications with a significant number of objects, you have the ability to dial down further into checking coverage and tests for functions, APIs, and middleware separately. You can also filter your tests by tested / untested only, or failed only, to quickly understand where your attention should be to ensure 100% coverage and success.
-Mocking Responses
-For each of the functions in your function stack, you can add *mock responses* to assist in the consistency of your unit tests.
-<div>
-1
-###  
-Right-click on a function and choose Mock Test Response
-2
-###  
-In the panel that opens on the right, you can add mock data for this function that will be used during your unit test.
-You can specify different pieces of data for each individual unit test you\'ve built for this function stack.
-</div>
-Last updated 1 month ago
-Was this helpful?
+
+**Next Steps**: Ready to implement comprehensive testing? Continue with [Performance Optimization](performance-optimization.md) or explore [Advanced Integration Patterns](advanced-integration-patterns.md)
