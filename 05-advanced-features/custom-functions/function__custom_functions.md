@@ -1,385 +1,460 @@
 ---
+title: Custom Functions Function Reference
+description: Quick reference for using custom functions in Xano function stacks, including function calls, input mapping, and return handling
 category: custom-functions
-has_code_examples: false
-last_updated: '2025-01-23'
+difficulty: beginner
+last_updated: '2025-01-16'
+related_docs:
+  - custom-functions.md
+  - building-with-visual-development.md
+  - async-functions.md
+subcategory: 05-advanced-features/custom-functions
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: 'Function: Custom Functions'
+  - custom-functions
+  - function-reference
+  - reusable-logic
+  - function-calls
+  - no-code
 ---
 
-# Function: Custom Functions
+## 📋 **Quick Summary**
 
-[🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    What is a custom function?
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../building-with-visual-development.html)
-2.  Building with Visual Development
-Custom Functions 
-================
-Build business logic once and reuse it in multiple places
-**Quick Summary**
-Custom functions are very similar to your APIs --- they have inputs, a function stack, and a response. However, they can not be called externally. Instead, custom functions allow you to build something and use it in other places, while maintaining it in a centralized location.
-What is a custom function?
-Custom functions can be thought of as a building block for the rest of your backend. You can build a custom function just like an API endpoint, and insert that custom function into other function stacks, giving you easily reusable logic while only having to maintain it in one place. When you make a change inside of a custom function, that change is automatically in effect everywhere you have chosen to use the custom function.
-------------------------------------------------------------------------
-Building and Using Custom Functions
-<div>
-1
-###  
-Access your custom functions from the left-hand menu.
-2
-###  
-Click [ + Add Function ] to create a new custom function.
-Give your custom function a **name**, **description**, **tags**, and choose your Request History settings.
-You can also choose to store your custom functions inside of a folder. If the folder already exists, just start typing the name and select it from the auto-complete. If the folder doesn\'t exist, you can create a new one from here.
-[]
-When you\'re done, click [ Save ].
-3
-###  
-Build your custom function
-A custom function has three sections --- the same as an API endpoint.
-###  
-⬇️ Inputs
-The inputs are anything that a function stack needs to run. For example, a function stack that logs in a user probably needs a username or email and a password; these would be the inputs.
-###  
-🔄 Function stack
-This is where all of the magic happens. All of the business logic that is performed lives here.
-As you add functions to your function stack, it will suggest next steps based on most popular user activity.
-###  
-⬆️ Response
-Once the function stack has done its job, it needs to know what to return. This lives in the Response section.
-4
-###  
-Insert your new custom function into other function stacks.
-When you\'re ready to use your new custom function in other function stacks, click [], choose **Custom Functions** from the panel that opens, and select your custom function.
-You\'ll be able to supply data for any inputs the custom function is expecting here.
-</div>
-------------------------------------------------------------------------
-###  
-Creating Custom Functions from Existing Function Stacks
-If you have a function stack that you\'d like to convert into a custom function, you can do so in one of the following ways.
-<div>
-1
-###  
-Convert the entire stack
-Click the three dots in the upper-right corner and choose Convert To Function
-2
-###  
-Select individual steps to convert to a function
-You can select a group of steps and click []to convert those steps into a custom function.
-</div>
-------------------------------------------------------------------------
-Custom Function Settings
-###  
-From the Settings panel
-Name
-Purpose
-Name
-The name of the custom function.
-Description
-An internal description, just for you.
-Tags
-Use tags to organize objects throughout your Xano workspace and find them later
-Request History
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Inherit Settings
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Use whatever is set in your workspace branch defaults
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Other
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Set specific request history settings for this function
-        :::
-    :::
-[📖] **Learn more about request history**
-Response caching
-Cache the response and redeliver it during future runs
-[📖] **Learn more about response caching**
-------------------------------------------------------------------------
-Custom Function Folders
-You can organize your custom functions into folders for better organization.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Folders are not required if you prefer not to use them. You can store all of your functions in folders, or use a combination of folders and no folders.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    A folder requires having at least one function inside of it --- empty folders are not supported.
-    :::
-<div>
-1
-###  
-Creating New Functions
-When creating a new function, you\'ll be given the option to store it in a folder.
-Just start typing the name of the folder. If it exists, select it from the auto-complete dropdown. If it doesn\'t exist, it will be created for you.
-2
-###  
-Creating New Folders with Existing Functions
-Click the [ Add Folder ] button to create a new folder for your existing functions.
-Give your new folder a name, and use the autocomplete to select at least one function to add to it.
-3
-###  
-Moving Existing Functions into Folders
-Select the functions to move by using the checkboxes on the left-hand side, and click [ Move ]
-Type a new folder name, or add them to an existing folder. When you\'re ready, click [ Save ]
-</div>
-Last updated 2 months ago
-Was this helpful?
+The Custom Functions function allows you to call reusable custom functions within your function stacks. Custom functions encapsulate business logic that can be used across multiple endpoints, background tasks, and triggers while maintaining centralized code in one location.
+
+## What You'll Learn
+
+- How to call custom functions in function stacks
+- Input mapping and parameter passing
+- Return value handling and variable assignment
+- Synchronous vs asynchronous execution modes
+- Best practices for custom function integration
+
+# Custom Functions Function Reference
+
+## Overview
+
+The **Custom Functions** function enables you to execute your reusable custom functions within any function stack. This promotes code reusability, maintainability, and consistency across your application by centralizing business logic in modular components.
+
+### Key Benefits
+
+**Code Reusability:**
+- Write once, use everywhere
+- Centralized maintenance
+- Consistent business logic
+- Reduced code duplication
+
+**Modularity:**
+- Encapsulated functionality
+- Clear input/output interfaces
+- Easy testing and debugging
+- Improved organization
+
+## 🚀 **Basic Function Call**
+
+### Simple Custom Function Usage
+
+**Calling a User Validation Function:**
+```javascript
+{
+  "function": "custom_function",
+  "name": "validate_user_data",
+  "inputs": {
+    "email": "{{ request.body.email }}",
+    "password": "{{ request.body.password }}",
+    "validation_level": "strict"
+  },
+  "return_as": "validation_result"
+}
+```
+
+### Using Function Results
+
+**Processing Validation Response:**
+```javascript
+[
+  {
+    "function": "custom_function",
+    "name": "validate_user_data",
+    "inputs": {
+      "email": "{{ request.body.email }}",
+      "password": "{{ request.body.password }}"
+    },
+    "return_as": "validation"
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ validation.is_valid }}",
+    "true_branch": [
+      {
+        "function": "add_record",
+        "table": "users",
+        "data": {
+          "email": "{{ validation.cleaned_email }}",
+          "password": "{{ validation.hashed_password }}"
+        }
+      }
+    ],
+    "false_branch": [
+      {
+        "function": "return_response",
+        "status": 400,
+        "body": {
+          "error": "Validation failed",
+          "details": "{{ validation.errors }}"
+        }
+      }
+    ]
+  }
+]
+```
+
+## 🛠️ **Common Usage Patterns**
+
+### Sequential Function Calls
+
+**Multi-Step Data Processing:**
+```javascript
+[
+  {
+    "function": "custom_function",
+    "name": "fetch_user_data",
+    "inputs": {
+      "user_id": "{{ auth.user.id }}"
+    },
+    "return_as": "user_data"
+  },
+  {
+    "function": "custom_function",
+    "name": "calculate_user_metrics",
+    "inputs": {
+      "user": "{{ user_data }}",
+      "date_range": "last_30_days"
+    },
+    "return_as": "metrics"
+  },
+  {
+    "function": "custom_function",
+    "name": "generate_user_report",
+    "inputs": {
+      "user": "{{ user_data }}",
+      "metrics": "{{ metrics }}",
+      "format": "pdf"
+    },
+    "return_as": "report"
+  }
+]
+```
+
+### Parallel Function Execution
+
+**Independent Operations:**
+```javascript
+[
+  {
+    "function": "custom_function",
+    "name": "send_welcome_email",
+    "inputs": {
+      "user_id": "{{ new_user.id }}",
+      "email": "{{ new_user.email }}"
+    },
+    "execution_mode": "async",
+    "return_as": "email_job_id"
+  },
+  {
+    "function": "custom_function",
+    "name": "create_user_profile",
+    "inputs": {
+      "user_id": "{{ new_user.id }}",
+      "profile_data": "{{ request.body.profile }}"
+    },
+    "return_as": "profile"
+  },
+  {
+    "function": "custom_function",
+    "name": "setup_user_preferences",
+    "inputs": {
+      "user_id": "{{ new_user.id }}",
+      "defaults": true
+    },
+    "execution_mode": "async"
+  }
+]
+```
+
+### Conditional Function Calls
+
+**Dynamic Logic Execution:**
+```javascript
+[
+  {
+    "function": "conditional",
+    "condition": "{{ request.body.payment_method == 'credit_card' }}",
+    "true_branch": [
+      {
+        "function": "custom_function",
+        "name": "process_credit_card_payment",
+        "inputs": {
+          "amount": "{{ order_total }}",
+          "card_data": "{{ request.body.card_info }}"
+        },
+        "return_as": "payment_result"
+      }
+    ],
+    "false_branch": [
+      {
+        "function": "custom_function",
+        "name": "process_paypal_payment",
+        "inputs": {
+          "amount": "{{ order_total }}",
+          "paypal_token": "{{ request.body.paypal_token }}"
+        },
+        "return_as": "payment_result"
+      }
+    ]
+  }
+]
+```
+
+### Loop-Based Function Calls
+
+**Batch Processing:**
+```javascript
+[
+  {
+    "function": "loop",
+    "array": "{{ order_items }}",
+    "operations": [
+      {
+        "function": "custom_function",
+        "name": "update_inventory",
+        "inputs": {
+          "product_id": "{{ item.product_id }}",
+          "quantity_sold": "{{ item.quantity }}",
+          "warehouse_location": "{{ item.warehouse }}"
+        },
+        "return_as": "inventory_update"
+      },
+      {
+        "function": "custom_function",
+        "name": "log_inventory_change",
+        "inputs": {
+          "product_id": "{{ item.product_id }}",
+          "change_type": "sale",
+          "quantity": "{{ item.quantity }}",
+          "order_id": "{{ order.id }}"
+        },
+        "execution_mode": "async"
+      }
+    ]
+  }
+]
+```
+
+## ⚡ **Execution Modes**
+
+### Synchronous Execution (Default)
+
+**Blocking Execution:**
+```javascript
+{
+  "function": "custom_function",
+  "name": "validate_and_process_data",
+  "inputs": {
+    "data": "{{ input_data }}"
+  },
+  "execution_mode": "sync",  // Optional - this is default
+  "return_as": "processed_data"
+}
+// Next function waits for completion
+```
+
+### Asynchronous Execution
+
+**Non-Blocking Execution:**
+```javascript
+{
+  "function": "custom_function",
+  "name": "send_notification_email",
+  "inputs": {
+    "user_id": "{{ user.id }}",
+    "template": "order_confirmation"
+  },
+  "execution_mode": "async",
+  "return_as": "email_execution_id"
+}
+// Function stack continues immediately
+```
+
+## 🔄 **Input Mapping Patterns**
+
+### Static Input Values
+
+**Hard-coded Parameters:**
+```javascript
+{
+  "function": "custom_function",
+  "name": "generate_api_key",
+  "inputs": {
+    "key_type": "access_token",
+    "expires_in": 3600,
+    "permissions": ["read", "write"]
+  }
+}
+```
+
+### Dynamic Input Mapping
+
+**Request and Context Data:**
+```javascript
+{
+  "function": "custom_function",
+  "name": "create_audit_entry",
+  "inputs": {
+    "user_id": "{{ auth.user.id }}",
+    "action": "{{ request.method }} {{ request.path }}",
+    "ip_address": "{{ request.ip }}",
+    "timestamp": "{{ now }}",
+    "request_data": "{{ request.body }}",
+    "user_agent": "{{ request.headers['user-agent'] }}"
+  }
+}
+```
+
+### Computed Input Values
+
+**Derived Parameters:**
+```javascript
+{
+  "function": "custom_function",
+  "name": "calculate_shipping_cost",
+  "inputs": {
+    "total_weight": "{{ cart_items|sum(attribute='weight') }}",
+    "destination_zip": "{{ shipping_address.zip_code }}",
+    "shipping_method": "{{ request.body.shipping_option }}",
+    "order_value": "{{ cart_items|sum(attribute='price') }}",
+    "is_expedited": "{{ request.body.shipping_option == 'express' }}"
+  }
+}
+```
+
+## 💡 **Best Practices**
+
+### Input Validation
+
+**Validate Before Function Call:**
+```javascript
+[
+  {
+    "function": "conditional",
+    "condition": "{{ !request.body.email || !request.body.password }}",
+    "true_branch": [
+      {
+        "function": "return_response",
+        "status": 400,
+        "body": {"error": "Email and password required"}
+      }
+    ]
+  },
+  {
+    "function": "custom_function",
+    "name": "authenticate_user",
+    "inputs": {
+      "email": "{{ request.body.email }}",
+      "password": "{{ request.body.password }}"
+    },
+    "return_as": "auth_result"
+  }
+]
+```
+
+### Error Handling
+
+**Graceful Function Failure Management:**
+```javascript
+[
+  {
+    "function": "try_catch",
+    "try_block": [
+      {
+        "function": "custom_function",
+        "name": "external_api_integration",
+        "inputs": {
+          "api_endpoint": "{{ third_party_url }}",
+          "data": "{{ request.body }}"
+        },
+        "return_as": "api_response"
+      }
+    ],
+    "catch_block": [
+      {
+        "function": "create_variable",
+        "name": "api_response",
+        "value": {
+          "success": false,
+          "error": "External service unavailable",
+          "fallback_used": true
+        }
+      }
+    ]
+  }
+]
+```
+
+### Performance Optimization
+
+**Efficient Function Usage:**
+```javascript
+// Cache results to avoid repeated calls
+[
+  {
+    "function": "cache_get",
+    "key": "user_permissions_{{ auth.user.id }}",
+    "return_as": "cached_permissions"
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ !cached_permissions }}",
+    "true_branch": [
+      {
+        "function": "custom_function",
+        "name": "calculate_user_permissions",
+        "inputs": {
+          "user_id": "{{ auth.user.id }}"
+        },
+        "return_as": "permissions"
+      },
+      {
+        "function": "cache_set",
+        "key": "user_permissions_{{ auth.user.id }}",
+        "value": "{{ permissions }}",
+        "ttl": 300
+      }
+    ],
+    "false_branch": [
+      {
+        "function": "create_variable",
+        "name": "permissions",
+        "value": "{{ cached_permissions }}"
+      }
+    ]
+  }
+]
+```
+
+## 🔧 **Common Issues**
+
+**Problem**: Custom function not found  
+**Solution**: Verify function name spelling and ensure function is published
+
+**Problem**: Input mapping errors  
+**Solution**: Check input parameter names match function definition exactly
+
+**Problem**: Async function results not available  
+**Solution**: Use `async_function_await` to retrieve results from async executions
+
+**Problem**: Function timeout errors  
+**Solution**: Optimize function logic or increase timeout settings
+
+---
+
+**Next Steps**: For comprehensive custom function creation and management, see [Custom Functions](custom-functions.md). For async patterns, check [Async Functions](async-functions.md).

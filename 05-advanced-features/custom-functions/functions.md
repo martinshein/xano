@@ -1,482 +1,710 @@
 ---
+title: Functions Overview - Complete Guide to Xano Function Categories
+description: Comprehensive overview of all function types in Xano including database requests, data manipulation, security, APIs & lambdas, and integration with no-code platforms
 category: custom-functions
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
+difficulty: beginner
+last_updated: '2025-01-16'
+related_docs:
+  - custom-functions.md
+  - building-with-visual-development.md
+  - working-with-data.md
 subcategory: 05-advanced-features/custom-functions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%'
+  - functions
+  - database-requests
+  - data-manipulation
+  - security
+  - apis-lambdas
+  - no-code
 ---
 
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
+## 📋 **Quick Summary**
 
+Functions are the building blocks of Xano's visual development environment. They enable you to create powerful backend logic without writing code, covering everything from database operations to API integrations. Perfect for building complex applications with n8n, WeWeb, and other no-code platforms.
 
+## What You'll Learn
 
+- Overview of all function categories available in Xano
+- When to use different types of functions
+- Best practices for function composition and architecture
+- Integration patterns for no-code platforms
+- Performance optimization strategies for function stacks
 
+# Functions Overview
 
+## Introduction
 
+**Functions** in Xano are pre-built components that perform specific operations within your backend logic. They are organized into categories based on their functionality, from basic database operations to advanced AI integrations. Functions can be combined into **Function Stacks** to create complex workflows and business logic.
 
+### Function Stack Architecture
 
+**Function Stacks:**
+- Sequential execution of multiple functions
+- Variable passing between functions
+- Conditional logic and branching
+- Error handling and retry mechanisms
+- Integration with external systems
 
+**Function Categories:**
+- Database Requests (CRUD operations)
+- Data Manipulation (variables, conditionals, loops)
+- Security (authentication, authorization)
+- APIs & Lambdas (external integrations)
+- Custom Functions (reusable logic)
+- Utility Functions (helper operations)
 
+## 🗄️ **Database Requests**
 
+### Core Database Operations
 
+**Query Operations:**
+- **Query All Records**: Retrieve multiple records with filtering and sorting
+- **Get Record**: Fetch a single record by ID or criteria
+- **Query Single Record**: Find one record matching specific conditions
 
+**Modification Operations:**
+- **Add Record**: Insert new data into tables
+- **Edit Record**: Update existing records completely
+- **Patch Record**: Update specific fields of existing records
+- **Add or Edit Record**: Upsert operation (insert or update)
+- **Delete Record**: Remove records from tables
 
+**Advanced Operations:**
+- **Bulk Operations**: Process multiple records efficiently
+- **Database Transaction**: Ensure data consistency across operations
+- **External Database Query**: Connect to external databases
+- **Direct Database Query**: Execute raw SQL queries
 
--   
+### n8n Integration Example
 
+```javascript
+// n8n workflow for database operations
+{
+  "nodes": [
+    {
+      "name": "Xano Query Records",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/users",
+        "method": "GET",
+        "headers": {
+          "Authorization": "Bearer {{ $env.XANO_API_KEY }}"
+        },
+        "qs": {
+          "filter": JSON.stringify({
+            "status": "active",
+            "created_at": {"$gte": "{{ $now.minus({days: 7}).toISO() }}"}
+          }),
+          "sort": "created_at desc",
+          "limit": 100
+        }
+      }
+    },
+    {
+      "name": "Process User Data",
+      "type": "Code",
+      "parameters": {
+        "jsCode": `
+          const users = $input.first().json;
+          
+          // Transform data for external system
+          const processedUsers = users.map(user => ({
+            id: user.id,
+            email: user.email,
+            fullName: \`\${user.first_name} \${user.last_name}\`,
+            signupDate: user.created_at,
+            isActive: user.status === 'active'
+          }));
+          
+          return processedUsers.map(user => ({json: user}));
+        `
+      }
+    }
+  ]
+}
+```
+
+## 🔧 **Data Manipulation**
+
+### Variable Management
+
+**Variable Operations:**
+- **Create Variable**: Initialize variables for data storage
+- **Update Variable**: Modify existing variable values
+- **Variable Scoping**: Manage variable accessibility across functions
+
+**Control Flow:**
+- **Conditional**: Execute functions based on logical conditions
+- **Switch**: Multi-branch decision making
+- **Loops**: Iterate over arrays and perform repeated operations
+
+**Data Processing:**
+- **Math**: Perform calculations and number operations
+- **Arrays**: Manipulate lists and collections
+- **Objects**: Work with structured data
+- **Text**: String manipulation and formatting
+
+### WeWeb Integration Example
+
+```javascript
+// WeWeb component for data manipulation
+class XanoDataProcessor {
+  constructor(xanoBaseUrl, authToken) {
+    this.baseUrl = xanoBaseUrl;
+    this.authToken = authToken;
+  }
+  
+  async processOrderData(orderData) {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/process-order`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.authToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          order_items: orderData.items,
+          customer_id: orderData.customerId,
+          processing_options: {
+            calculate_tax: true,
+            apply_discounts: true,
+            validate_inventory: true
+          }
+        })
+      });
+      
+      const processedOrder = await response.json();
+      
+      // Update WeWeb variables with processed data
+      wwLib.wwVariable.updateValue('processed_order', processedOrder);
+      wwLib.wwVariable.updateValue('order_total', processedOrder.calculated_total);
+      wwLib.wwVariable.updateValue('tax_amount', processedOrder.tax_amount);
+      
+      return processedOrder;
+    } catch (error) {
+      console.error('Order processing failed:', error);
+      wwLib.wwUtils.showErrorToast('Failed to process order');
+      return null;
+    }
+  }
+  
+  async calculateDynamicPricing(productId, quantity, customerTier) {
+    // Function stack processes pricing logic with multiple data manipulation functions
+    const pricingData = {
+      product_id: productId,
+      quantity: quantity,
+      customer_tier: customerTier,
+      calculation_date: new Date().toISOString()
+    };
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
+    const response = await fetch(`${this.baseUrl}/api/calculate-pricing`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.authToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(pricingData)
+    });
     
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI
-                Documentation)](building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async
-                Functions](building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background
-            Tasks](building-with-visual-development/background-tasks.html)
-        -   [Triggers](building-with-visual-development/triggers.html)
-        -   [Middleware](building-with-visual-development/middleware.html)
-        -   [Configuring
-            Expressions](building-with-visual-development/configuring-expressions.html)
-        -   [Working with
-            Data](building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering
-                    Examples](functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get
-                Record](functions/database-requests/get-record.html)
-            -   [Add
-                Record](functions/database-requests/add-record.html)
-            -   [Edit
-                Record](functions/database-requests/edit-record.html)
-            -   [Add or Edit
-                Record](functions/database-requests/add-or-edit-record.html)
-            -   [Patch
-                Record](functions/database-requests/patch-record.html)
-            -   [Delete
-                Record](functions/database-requests/delete-record.html)
-            -   [Bulk
-                Operations](functions/database-requests/bulk-operations.html)
-            -   [Database
-                Transaction](functions/database-requests/database-transaction.html)
-            -   [External Database
-                Query](functions/database-requests/external-database-query.html)
-            -   [Direct Database
-                Query](functions/database-requests/direct-database-query.html)
-            -   [Get Database
-                Schema](functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create
-                Variable](functions/data-manipulation/create-variable.html)
-            -   [Update
-                Variable](functions/data-manipulation/update-variable.html)
-            -   [Conditional](functions/data-manipulation/conditional.html)
-            -   [Switch](functions/data-manipulation/switch.html)
-            -   [Loops](functions/data-manipulation/loops.html)
-            -   [Math](functions/data-manipulation/math.html)
-            -   [Arrays](functions/data-manipulation/arrays.html)
-            -   [Objects](functions/data-manipulation/objects.html)
-            -   [Text](functions/data-manipulation/text.html)
-                    -   [Security](functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime
-                Functions](functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API
-                Request](functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda
-                Functions](functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching
-            (Redis)](functions/data-caching-redis.html)
-        -   [Custom
-            Functions](functions/custom-functions.html)
-        -   [Utility
-            Functions](functions/utility-functions.html)
-        -   [File Storage](functions/file-storage.html)
-        -   [Cloud
-            Services](functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](filters/manipulation.html)
-        -   [Math](filters/math.html)
-        -   [Timestamp](filters/timestamp.html)
-        -   [Text](filters/text.html)
-        -   [Array](filters/array.html)
-        -   [Transform](filters/transform.html)
-        -   [Conversion](filters/conversion.html)
-        -   [Comparison](filters/comparison.html)
-        -   [Security](filters/security.html)
-            -   Data Types
-        
-        -   [Text](data-types/text.html)
-        -   [Expression](data-types/expression.html)
-        -   [Array](data-types/array.html)
-        -   [Object](data-types/object.html)
-        -   [Integer](data-types/integer.html)
-        -   [Decimal](data-types/decimal.html)
-        -   [Boolean](data-types/boolean.html)
-        -   [Timestamp](data-types/timestamp.html)
-        -   [Null](data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response
-            Caching](additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
+    const pricing = await response.json();
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
+    // Update pricing display in WeWeb
+    wwLib.wwVariable.updateValue('dynamic_price', pricing.final_price);
+    wwLib.wwVariable.updateValue('discount_applied', pricing.discount_percentage);
+    wwLib.wwVariable.updateValue('price_breakdown', pricing.breakdown);
     
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano
-            Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field
-            Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database
-            Views](../the-database/database-basics/database-views.html)
-        -   [Export and
-            Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data
-            Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to
-            Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to
-            Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import &
-            Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema
-            Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+    return pricing;
+  }
+}
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting
-            Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP
-            Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+// Initialize data processor
+const dataProcessor = new XanoDataProcessor(
+  wwLib.wwVariable.getValue('xano_base_url'),
+  wwLib.wwVariable.getValue('auth_token')
+);
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+// Usage functions
+async function processCurrentOrder() {
+  const orderData = wwLib.wwVariable.getValue('current_order');
+  await dataProcessor.processOrderData(orderData);
+}
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+async function updateProductPricing() {
+  const productId = wwLib.wwVariable.getValue('selected_product_id');
+  const quantity = wwLib.wwVariable.getValue('order_quantity');
+  const customerTier = wwLib.wwVariable.getValue('customer_tier');
+  
+  await dataProcessor.calculateDynamicPricing(productId, quantity, customerTier);
+}
+```
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+## 🔐 **Security Functions**
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User
-            Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access
-            (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth
-            (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+### Authentication & Authorization
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track
-            Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP
-            (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server
-            Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database
-            Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and
-            Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security
-            Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit
-            Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano
-            Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API
-            (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata
-            API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and
-            Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request
-            History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and
-            Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes
-            Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+**Authentication Functions:**
+- User registration and login
+- Password hashing and validation
+- JWT token generation and verification
+- Session management
+- Multi-factor authentication
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+**Authorization Functions:**
+- Role-based access control (RBAC)
+- Permission checking
+- Resource-level security
+- API key validation
+- OAuth integration
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+### Security Implementation Example
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency
-            Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client
-            Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer
-            Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency
-            Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private
-            Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a
-                    Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant
-            Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance
-            Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security
-            Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance
-            Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access
-            Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano
-            Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource
-            Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+```javascript
+// Comprehensive security function stack
+[
+  {
+    "function": "validate_jwt_token",
+    "token": "{{ request.headers.authorization|replace('Bearer ', '') }}",
+    "return_as": "auth_result"
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ !auth_result.valid }}",
+    "true_branch": [
+      {
+        "function": "return_response",
+        "status": 401,
+        "body": {
+          "error": "Invalid or expired token",
+          "code": "UNAUTHORIZED"
+        }
+      }
+    ]
+  },
+  {
+    "function": "query_single_record",
+    "table": "users",
+    "filter": {"id": "{{ auth_result.user_id }}"},
+    "return_as": "current_user"
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ current_user.status != 'active' }}",
+    "true_branch": [
+      {
+        "function": "return_response",
+        "status": 403,
+        "body": {
+          "error": "User account is not active",
+          "code": "ACCOUNT_INACTIVE"
+        }
+      }
+    ]
+  },
+  {
+    "function": "check_user_permissions",
+    "user_id": "{{ current_user.id }}",
+    "required_permissions": ["{{ request.body.action }}"],
+    "resource_type": "{{ request.body.resource_type }}",
+    "resource_id": "{{ request.body.resource_id }}",
+    "return_as": "permission_check"
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ !permission_check.authorized }}",
+    "true_branch": [
+      {
+        "function": "return_response",
+        "status": 403,
+        "body": {
+          "error": "Insufficient permissions",
+          "required_permissions": "{{ permission_check.required }}",
+          "code": "FORBIDDEN"
+        }
+      }
+    ]
+  }
+]
+```
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels
-            slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels
-            slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM
-            Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack
-            Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting
-            Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of
-            Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification
-            Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and
-            Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+## 🌐 **APIs & Lambdas**
 
--   
-    Security
-    
-    -   Best Practices
+### External Integrations
 
-[Powered by GitBook]
+**API Functions:**
+- **External API Request**: Call external services and APIs
+- **Webhook Handling**: Process incoming webhook data
+- **Rate Limiting**: Control API request frequency
+- **Response Transformation**: Convert API responses
 
-On this page
+**Lambda Functions:**
+- **Serverless Computing**: Execute custom code logic
+- **Event Processing**: Handle asynchronous events
+- **Data Transformation**: Complex data processing
+- **Integration Logic**: Connect multiple systems
 
-Was this helpful?
+### Multi-Platform Integration Example
 
-Copy
+```javascript
+// Cross-platform integration function stack
+[
+  {
+    "function": "external_api_request",
+    "url": "{{ env.STRIPE_API_URL }}/charges",
+    "method": "POST",
+    "headers": {
+      "Authorization": "Bearer {{ env.STRIPE_SECRET_KEY }}",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "amount": "{{ request.body.amount * 100 }}",
+      "currency": "usd",
+      "customer": "{{ request.body.customer_id }}",
+      "description": "{{ request.body.description }}"
+    },
+    "return_as": "stripe_charge"
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ stripe_charge.status == 'succeeded' }}",
+    "true_branch": [
+      {
+        "function": "add_record",
+        "table": "payments",
+        "data": {
+          "stripe_charge_id": "{{ stripe_charge.id }}",
+          "amount": "{{ stripe_charge.amount / 100 }}",
+          "customer_id": "{{ request.body.customer_id }}",
+          "status": "completed",
+          "created_at": "{{ now }}"
+        },
+        "return_as": "payment_record"
+      },
+      {
+        "function": "external_api_request",
+        "url": "{{ env.MAILCHIMP_API_URL }}/lists/{{ env.MAILCHIMP_LIST_ID }}/members",
+        "method": "PUT",
+        "headers": {
+          "Authorization": "Bearer {{ env.MAILCHIMP_API_KEY }}",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "email_address": "{{ request.body.customer_email }}",
+          "status": "subscribed",
+          "merge_fields": {
+            "FNAME": "{{ request.body.customer_name }}",
+            "LTYPE": "paid_customer",
+            "AMOUNT": "{{ stripe_charge.amount / 100 }}"
+          }
+        },
+        "execution_mode": "async"
+      },
+      {
+        "function": "external_api_request",
+        "url": "{{ env.N8N_WEBHOOK_URL }}/payment-success",
+        "method": "POST",
+        "body": {
+          "payment_id": "{{ payment_record.id }}",
+          "stripe_charge": "{{ stripe_charge }}",
+          "customer_data": "{{ request.body }}",
+          "timestamp": "{{ now }}"
+        },
+        "execution_mode": "async"
+      }
+    ]
+  }
+]
+```
 
-1.  [[🛠️]The Visual
-    Builder](building-with-visual-development.html)
+## 🔧 **Custom Functions**
 
-Functions 
-=========
+### Reusable Business Logic
 
-[](functions/database-requests.html)
+**Custom Function Benefits:**
+- **Code Reusability**: Write once, use everywhere
+- **Maintainability**: Centralized logic updates
+- **Consistency**: Standardized business rules
+- **Testing**: Isolated function testing
 
-![Cover](../_gitbook/imagef8d9.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FvoI8g0N5Fdwrs8hrz0gx%252Fbkgnd%25205%2520%284%29.png%3Falt%3Dmedia%26token%3D03b3d1ab-baa8-4247-b87f-5b9714f4acde&width=376&dpr=4&quality=100&sign=a133b213&sv=2)
+**Custom Function Types:**
+- Business rule enforcement
+- Data validation and sanitization
+- Complex calculations
+- External service integrations
+- Report generation
+- Notification systems
 
-[](functions/data-manipulation.html)
+### Custom Function Architecture Example
 
-![Cover](../_gitbook/image3019.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FjTPRc3sOvZuNY4DtSKn0%252Fbkgnd%25205%2520%285%29.png%3Falt%3Dmedia%26token%3D7b64a77b-db38-4fd8-a141-8a48b0fd9890&width=376&dpr=4&quality=100&sign=d118ae6b&sv=2)
+```javascript
+// Reusable user validation custom function
+{
+  "function_name": "validate_user_registration",
+  "description": "Comprehensive user registration validation with business rules",
+  "inputs": [
+    {
+      "name": "email",
+      "type": "text",
+      "required": true,
+      "description": "User email address"
+    },
+    {
+      "name": "password",
+      "type": "text",
+      "required": true,
+      "description": "User password"
+    },
+    {
+      "name": "profile_data",
+      "type": "object",
+      "required": false,
+      "description": "Additional profile information"
+    }
+  ],
+  "function_stack": [
+    {
+      "function": "create_variable",
+      "name": "validation_errors",
+      "value": []
+    },
+    {
+      "function": "conditional",
+      "condition": "{{ !email|regex_match('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$') }}",
+      "true_branch": [
+        {
+          "function": "update_variable",
+          "name": "validation_errors",
+          "operation": "append",
+          "value": "Invalid email format"
+        }
+      ]
+    },
+    {
+      "function": "conditional",
+      "condition": "{{ password|length < 8 }}",
+      "true_branch": [
+        {
+          "function": "update_variable",
+          "name": "validation_errors",
+          "operation": "append",
+          "value": "Password must be at least 8 characters"
+        }
+      ]
+    },
+    {
+      "function": "query_single_record",
+      "table": "users",
+      "filter": {"email": "{{ email }}"},
+      "return_as": "existing_user"
+    },
+    {
+      "function": "conditional",
+      "condition": "{{ existing_user }}",
+      "true_branch": [
+        {
+          "function": "update_variable",
+          "name": "validation_errors",
+          "operation": "append",
+          "value": "Email address already registered"
+        }
+      ]
+    },
+    {
+      "function": "conditional",
+      "condition": "{{ validation_errors|length > 0 }}",
+      "true_branch": [
+        {
+          "function": "return_value",
+          "value": {
+            "valid": false,
+            "errors": "{{ validation_errors }}"
+          }
+        }
+      ]
+    },
+    {
+      "function": "hash_password",
+      "password": "{{ password }}",
+      "return_as": "hashed_password"
+    },
+    {
+      "function": "return_value",
+      "value": {
+        "valid": true,
+        "processed_data": {
+          "email": "{{ email|lower }}",
+          "password_hash": "{{ hashed_password }}",
+          "profile": "{{ profile_data || {} }}",
+          "validated_at": "{{ now }}"
+        }
+      }
+    }
+  ]
+}
+```
 
-[](functions/security.html)
+## 🛠️ **Utility Functions**
 
-![Cover](../_gitbook/image7a48.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F8I0IxQkVuXZ9AgxfuhTh%252Fbkgnd%25205%2520%286%29.png%3Falt%3Dmedia%26token%3D856b5ba0-f53e-4547-88cc-52061986e28b&width=376&dpr=4&quality=100&sign=eafdf7a0&sv=2)
+### Helper Operations
 
-[](functions/apis-and-lambdas.html)
+**Common Utilities:**
+- **Date & Time**: Timestamp manipulation and formatting
+- **File Operations**: File upload, download, and processing
+- **Caching**: Redis-based data caching
+- **Logging**: Request and error logging
+- **Notifications**: Email, SMS, and push notifications
 
-![Cover](../_gitbook/image2d36.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FXSkY54XXqgyGVtHQb1ws%252Fbkgnd%25205%2520%287%29.png%3Falt%3Dmedia%26token%3D321e0372-af56-48c3-bec2-7c48efb9493c&width=376&dpr=4&quality=100&sign=18e19da4&sv=2)
+**Cloud Services:**
+- **AWS Integration**: S3, Lambda, SES services
+- **Google Cloud**: Storage, AI/ML services
+- **Azure Services**: Various cloud integrations
+- **Third-party APIs**: Payment, analytics, communication
 
-[](functions/data-caching-redis.html)
+### Utility Function Integration
 
-![Cover](../_gitbook/image7078.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FLgchOA14BPcwFHT3t7gt%252Fbkgnd%25205%2520%288%29.png%3Falt%3Dmedia%26token%3Da58336c3-ef80-41d3-aa89-0ac096fe475b&width=376&dpr=4&quality=100&sign=55c19857&sv=2)
+```javascript
+// Comprehensive utility function usage
+[
+  {
+    "function": "upload_file",
+    "file": "{{ request.files.document }}",
+    "storage": "s3",
+    "folder": "user-documents/{{ auth.user.id }}",
+    "allowed_types": ["pdf", "doc", "docx"],
+    "max_size": 10485760,
+    "return_as": "uploaded_file"
+  },
+  {
+    "function": "cache_set",
+    "key": "user_document_{{ auth.user.id }}_{{ uploaded_file.id }}",
+    "value": {
+      "file_url": "{{ uploaded_file.url }}",
+      "filename": "{{ uploaded_file.filename }}",
+      "size": "{{ uploaded_file.size }}",
+      "uploaded_at": "{{ now }}"
+    },
+    "ttl": 3600
+  },
+  {
+    "function": "send_email",
+    "template": "document_uploaded",
+    "recipient": "{{ auth.user.email }}",
+    "data": {
+      "user_name": "{{ auth.user.first_name }}",
+      "file_name": "{{ uploaded_file.filename }}",
+      "file_size": "{{ uploaded_file.size|filesize }}",
+      "download_url": "{{ uploaded_file.url }}"
+    },
+    "execution_mode": "async"
+  },
+  {
+    "function": "log_event",
+    "event_type": "file_upload",
+    "data": {
+      "user_id": "{{ auth.user.id }}",
+      "file_id": "{{ uploaded_file.id }}",
+      "file_type": "{{ uploaded_file.type }}",
+      "timestamp": "{{ now }}"
+    }
+  }
+]
+```
 
-[](functions/custom-functions.html)
+## ⚡ **Performance Best Practices**
 
-![Cover](../_gitbook/imagea75f.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FVTxq8buFWKzC0NXvZRG1%252Fbkgnd%25205%2520%289%29.png%3Falt%3Dmedia%26token%3D98a6feaa-70d8-457b-a9e5-3ca394da9e83&width=376&dpr=4&quality=100&sign=21374c8a&sv=2)
+### Function Stack Optimization
 
-[](functions/utility-functions.html)
+**Efficient Design Patterns:**
+- **Minimize Database Queries**: Batch operations and use joins
+- **Implement Caching**: Cache frequently accessed data
+- **Use Async Operations**: Non-blocking external API calls
+- **Optimize Loops**: Avoid nested loops with large datasets
+- **Conditional Logic**: Early returns to avoid unnecessary processing
 
-![Cover](../_gitbook/image52f3.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FMfgLXqYnI3PYXljlYS9l%252Fbkgnd%25205%2520%2810%29.png%3Falt%3Dmedia%26token%3D4559d9e1-7126-4d4a-bea4-11cdca3cc46d&width=376&dpr=4&quality=100&sign=4a571f81&sv=2)
+**Resource Management:**
+- **Memory Usage**: Monitor variable storage and cleanup
+- **Execution Time**: Optimize slow function stacks
+- **API Rate Limits**: Implement proper rate limiting
+- **Error Handling**: Graceful failure management
 
-[](functions/file-storage.html)
+### Performance Monitoring Example
 
-![Cover](../_gitbook/image64e3.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FnKCpA4HZQmhyAw0xmyVW%252Fbkgnd%25205%2520%2811%29.png%3Falt%3Dmedia%26token%3Dcff7dea4-b745-439b-897b-ba5aad36b177&width=376&dpr=4&quality=100&sign=2c57b4e&sv=2)
+```javascript
+// Performance monitoring function stack
+[
+  {
+    "function": "create_variable",
+    "name": "performance_start",
+    "value": "{{ now }}"
+  },
+  {
+    "function": "create_variable",
+    "name": "operation_metrics",
+    "value": {
+      "function_calls": 0,
+      "database_queries": 0,
+      "external_api_calls": 0,
+      "cache_hits": 0,
+      "errors": 0
+    }
+  },
+  // Main business logic with performance tracking
+  {
+    "function": "increment_metric",
+    "metric": "database_queries",
+    "count": 1
+  },
+  {
+    "function": "query_all_records",
+    "table": "products",
+    "filter": {"status": "active"},
+    "return_as": "products"
+  },
+  // Performance logging
+  {
+    "function": "create_variable",
+    "name": "execution_time",
+    "value": "{{ now - performance_start }}"
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ execution_time > 5000 }}",
+    "true_branch": [
+      {
+        "function": "log_performance_warning",
+        "execution_time": "{{ execution_time }}",
+        "metrics": "{{ operation_metrics }}",
+        "endpoint": "{{ request.path }}"
+      }
+    ]
+  }
+]
+```
 
-[](functions/cloud-services.html)
+## 💡 **Pro Tips**
 
-![Cover](../_gitbook/imageca77.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FDEC9CGqTktM6LqWs3yLv%252Fbkgnd%25205%2520%2812%29.png%3Falt%3Dmedia%26token%3De235dbb9-b411-48b1-adbd-7b435c6c337d&width=376&dpr=4&quality=100&sign=32e8fb53&sv=2)
+- **Start Simple**: Begin with basic functions and gradually add complexity
+- **Reuse Logic**: Create custom functions for repeated operations
+- **Handle Errors**: Implement comprehensive error handling in function stacks
+- **Monitor Performance**: Track execution times and optimize slow operations
+- **Document Functions**: Maintain clear descriptions and examples
+- **Test Thoroughly**: Use Xano's testing tools to validate function behavior
 
-[](functions/connected.html)
+## 🔧 **Troubleshooting**
 
-![Cover](../_gitbook/imageb706.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FrA7nhCbgw34avUOlq1lv%252Fbkgnd%25205%2520%2813%29.png%3Falt%3Dmedia%26token%3Da0f69969-5e8f-4276-8c9a-c38885227dc3&width=376&dpr=4&quality=100&sign=7fd9d252&sv=2)
+### Common Function Issues
 
-Last updated 6 months ago
+**Problem**: Function stack execution timeout  
+**Solution**: Optimize database queries, implement pagination, and use async operations for external calls
 
-Was this helpful?
+**Problem**: Variables not passing between functions  
+**Solution**: Check variable naming consistency and ensure proper return_as assignments
+
+**Problem**: External API calls failing  
+**Solution**: Verify API credentials, check rate limits, and implement retry logic
+
+**Problem**: Database operations slow performance  
+**Solution**: Add database indexes, optimize queries, and implement caching strategies
+
+---
+
+**Next Steps**: Ready to dive deeper? Explore [Custom Functions](custom-functions.md) for reusable logic or check [Working with Data](working-with-data.md) for advanced data manipulation techniques

@@ -1,764 +1,895 @@
 ---
+title: Custom Functions - Reusable Business Logic Components
+description: Complete guide to creating, managing, and using custom functions in Xano for building modular, maintainable backend systems with reusable business logic components
 category: custom-functions
 difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
+last_updated: '2025-01-16'
+related_docs:
+  - async-functions.md
+  - building-with-visual-development.md
+  - function-stack-performance.md
 subcategory: 05-advanced-features/custom-functions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- cache
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2'
+  - custom-functions
+  - reusable-logic
+  - modular-design
+  - function-stacks
+  - business-logic
+  - no-code
 ---
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+## 📋 **Quick Summary**
 
+Custom functions are reusable building blocks that allow you to create business logic once and use it throughout your application. They have inputs, function stacks, and responses like API endpoints but cannot be called externally. Perfect for creating modular, maintainable code that integrates seamlessly with n8n, WeWeb, and other no-code platforms.
 
+## What You'll Learn
 
+- How to create and configure custom functions effectively
+- Best practices for modular function design
+- Advanced patterns for reusable business logic
+- Organization strategies with folders and tagging
+- Performance optimization and caching techniques
+- Integration patterns for no-code platforms
 
+# Custom Functions
 
+## Overview
 
+**Custom Functions** are internal building blocks that encapsulate business logic for reuse across multiple function stacks. Unlike API endpoints, they cannot be called externally but serve as centralized components that promote code reusability, maintainability, and consistency throughout your application.
 
+### Custom Functions vs API Endpoints
 
+**Custom Functions:**
+- Internal use only (not externally accessible)
+- Reusable across multiple function stacks
+- Centralized logic maintenance
+- No direct HTTP access
+- Performance optimized for internal calls
 
+**API Endpoints:**
+- Externally accessible via HTTP
+- Individual function stacks
+- Direct external integration
+- HTTP methods and authentication
+- Public or private access control
 
+## 🚀 **Creating Custom Functions**
 
+### Basic Custom Function Structure
 
+**Function Components:**
 
+```javascript
+// Custom function structure
+{
+  "name": "calculate_order_total",
+  "description": "Calculates order total with tax and discounts",
+  "inputs": [
+    {
+      "name": "items",
+      "type": "array",
+      "required": true,
+      "description": "Array of order items"
+    },
+    {
+      "name": "tax_rate",
+      "type": "decimal", 
+      "required": false,
+      "default": 0.08,
+      "description": "Tax rate as decimal (0.08 = 8%)"
+    },
+    {
+      "name": "discount_code",
+      "type": "text",
+      "required": false,
+      "description": "Optional discount code"
+    }
+  ],
+  "function_stack": [
+    // Business logic implementation
+  ],
+  "response": {
+    "subtotal": "{{ calculated_subtotal }}",
+    "tax_amount": "{{ calculated_tax }}",
+    "discount_amount": "{{ calculated_discount }}",
+    "total": "{{ final_total }}"
+  }
+}
+```
 
+### Step-by-Step Function Creation
 
--   
+**1. Define Function Inputs:**
 
+```javascript
+// Input configuration for user validation function
+{
+  "inputs": [
+    {
+      "name": "email",
+      "type": "email",
+      "required": true,
+      "description": "Email address to validate"
+    },
+    {
+      "name": "validation_level",
+      "type": "text",
+      "required": false,
+      "default": "standard",
+      "description": "Validation level: basic, standard, strict"
+    },
+    {
+      "name": "check_domain",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Whether to verify domain existence"
+    }
+  ]
+}
+```
+
+**2. Implement Function Stack:**
+
+```javascript
+// Email validation function stack
+[
+  {
+    "function": "create_variable",
+    "name": "validation_result",
+    "value": {
+      "email": "{{ input.email }}",
+      "is_valid": false,
+      "errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ !input.email || input.email|length == 0 }}",
+    "true_branch": [
+      {
+        "function": "update_variable",
+        "name": "validation_result",
+        "operation": "merge",
+        "value": {
+          "errors": ["Email is required"]
+        }
+      }
+    ]
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ input.email && !input.email|is_email }}",
+    "true_branch": [
+      {
+        "function": "update_variable",
+        "name": "validation_result",
+        "operation": "merge",
+        "value": {
+          "errors": "{{ validation_result.errors|append('Invalid email format') }}"
+        }
+      }
+    ]
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ input.validation_level == 'strict' }}",
+    "true_branch": [
+      {
+        "function": "external_api_request",
+        "url": "https://api.emailvalidation.io/v1/info",
+        "method": "GET",
+        "headers": {
+          "Authorization": "Bearer {{ env.EMAIL_VALIDATION_API_KEY }}"
+        },
+        "query": {
+          "email": "{{ input.email }}"
+        },
+        "return_as": "email_check_result"
+      },
+      {
+        "function": "conditional",
+        "condition": "{{ !email_check_result.deliverable }}",
+        "true_branch": [
+          {
+            "function": "update_variable",
+            "name": "validation_result",
+            "operation": "merge",
+            "value": {
+              "warnings": "{{ validation_result.warnings|append('Email may not be deliverable') }}"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "function": "query_single_record",
+    "table": "blocked_domains",
+    "filter": {
+      "domain": "{{ input.email|split('@')|last }}"
+    },
+    "return_as": "blocked_domain"
+  },
+  {
+    "function": "conditional",
+    "condition": "{{ blocked_domain }}",
+    "true_branch": [
+      {
+        "function": "update_variable",
+        "name": "validation_result",
+        "operation": "merge",
+        "value": {
+          "errors": "{{ validation_result.errors|append('Domain is blocked') }}"
+        }
+      }
+    ]
+  },
+  {
+    "function": "update_variable",
+    "name": "validation_result",
+    "operation": "merge",
+    "value": {
+      "is_valid": "{{ validation_result.errors|length == 0 }}",
+      "validation_level": "{{ input.validation_level }}",
+      "checked_at": "{{ now }}"
+    }
+  }
+]
+```
+
+**3. Configure Response:**
+
+```javascript
+// Function response configuration
+{
+  "response": {
+    "is_valid": "{{ validation_result.is_valid }}",
+    "email": "{{ validation_result.email }}",
+    "errors": "{{ validation_result.errors }}",
+    "warnings": "{{ validation_result.warnings }}",
+    "validation_level": "{{ validation_result.validation_level }}",
+    "checked_at": "{{ validation_result.checked_at }}"
+  }
+}
+```
+
+## 🔗 **No-Code Platform Integration**
+
+### n8n Custom Function Utilization
+
+**Workflow Using Custom Functions:**
+
+```javascript
+// n8n workflow leveraging Xano custom functions
+{
+  "nodes": [
+    {
+      "name": "Process User Registration",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/register-user",
+        "method": "POST",
+        "headers": {
+          "Authorization": "Bearer {{ $json.auth_token }}",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "email": "{{ $json.user_email }}",
+          "password": "{{ $json.user_password }}",
+          "profile": {
+            "first_name": "{{ $json.first_name }}",
+            "last_name": "{{ $json.last_name }}"
+          }
+        }
+      }
+    },
+    {
+      "name": "Send Welcome Email",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/send-welcome-email",
+        "method": "POST",
+        "body": {
+          "user_id": "{{ $json.user_id }}",
+          "email": "{{ $json.email }}",
+          "template_variables": {
+            "first_name": "{{ $json.first_name }}"
+          }
+        }
+      }
+    },
+    {
+      "name": "Add to Marketing List",
+      "type": "HTTP Request",
+      "parameters": {
+        "url": "https://your-xano-instance.com/api/add-to-marketing",
+        "method": "POST",
+        "body": {
+          "user_id": "{{ $json.user_id }}",
+          "list_name": "new_users",
+          "tags": ["registered", "{{ $json.source }}"]
+        }
+      }
+    }
+  ]
+}
+```
+
+### WeWeb Custom Function Integration
+
+**Dynamic Business Logic Component:**
+
+```javascript
+// WeWeb component leveraging Xano custom functions
+class XanoBusinessLogic {
+  constructor(xanoBaseUrl, authToken) {
+    this.baseUrl = xanoBaseUrl;
+    this.authToken = authToken;
+  }
+  
+  async validateUserInput(userData) {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/validate-user-data`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.authToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: userData.email,
+          phone: userData.phone,
+          validation_level: 'strict'
+        })
+      });
+      
+      const validation = await response.json();
+      
+      // Update UI validation state
+      wwLib.wwVariable.updateValue('validation_errors', validation.errors || []);
+      wwLib.wwVariable.updateValue('validation_warnings', validation.warnings || []);
+      wwLib.wwVariable.updateValue('is_form_valid', validation.is_valid);
+      
+      return validation;
+    } catch (error) {
+      console.error('Validation failed:', error);
+      return { is_valid: false, errors: ['Validation service unavailable'] };
+    }
+  }
+  
+  async calculateOrderTotal(orderItems, customerData = {}) {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/calculate-order-total`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.authToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          items: orderItems,
+          customer_id: customerData.id,
+          discount_code: customerData.discount_code,
+          shipping_address: customerData.shipping_address
+        })
+      });
+      
+      const totals = await response.json();
+      
+      // Update order summary in UI
+      wwLib.wwVariable.updateValue('order_subtotal', totals.subtotal);
+      wwLib.wwVariable.updateValue('order_tax', totals.tax_amount);
+      wwLib.wwVariable.updateValue('order_shipping', totals.shipping_amount);
+      wwLib.wwVariable.updateValue('order_discount', totals.discount_amount);
+      wwLib.wwVariable.updateValue('order_total', totals.total);
+      
+      return totals;
+    } catch (error) {
+      console.error('Order calculation failed:', error);
+      return { error: 'Unable to calculate order total' };
+    }
+  }
+  
+  async processPayment(paymentData, orderTotal) {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/process-payment`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.authToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          payment_method: paymentData.method,
+          payment_details: paymentData.details,
+          amount: orderTotal,
+          currency: 'USD',
+          metadata: {
+            order_id: wwLib.wwVariable.getValue('current_order_id'),
+            customer_id: wwLib.wwVariable.getValue('current_customer_id')
+          }
+        })
+      });
+      
+      const payment = await response.json();
+      
+      if (payment.success) {
+        wwLib.wwVariable.updateValue('payment_status', 'completed');
+        wwLib.wwVariable.updateValue('transaction_id', payment.transaction_id);
+        wwLib.wwUtils.showSuccessToast('Payment processed successfully!');
+        wwLib.wwUtils.navigateTo('/order-confirmation');
+      } else {
+        wwLib.wwVariable.updateValue('payment_status', 'failed');
+        wwLib.wwVariable.updateValue('payment_error', payment.error);
+        wwLib.wwUtils.showErrorToast(`Payment failed: ${payment.error}`);
+      }
+      
+      return payment;
+    } catch (error) {
+      console.error('Payment processing failed:', error);
+      wwLib.wwUtils.showErrorToast('Payment processing unavailable');
+      return { success: false, error: 'Service unavailable' };
+    }
+  }
+  
+  async generateReport(reportType, parameters = {}) {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/generate-report`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.authToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          report_type: reportType,
+          parameters: parameters,
+          format: 'json',
+          async: true
+        })
+      });
+      
+      const report = await response.json();
+      
+      if (report.async_execution_id) {
+        // Start polling for completion
+        this.pollReportStatus(report.async_execution_id);
+        wwLib.wwUtils.showInfoToast('Report generation started...');
+      }
+      
+      return report;
+    } catch (error) {
+      console.error('Report generation failed:', error);
+      return { error: 'Unable to generate report' };
+    }
+  }
+  
+  async pollReportStatus(executionId) {
+    const checkStatus = async () => {
+      try {
+        const response = await fetch(`${this.baseUrl}/api/async-status`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${this.authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            execution_ids: [executionId]
+          })
+        });
+        
+        const [status] = await response.json();
+        
+        if (status.status === 'completed') {
+          wwLib.wwVariable.updateValue('generated_report', status.output);
+          wwLib.wwUtils.showSuccessToast('Report generated successfully!');
+          wwLib.wwModal.open('report-viewer-modal');
+        } else if (status.status === 'error') {
+          wwLib.wwUtils.showErrorToast(`Report generation failed: ${status.error}`);
+        } else {
+          // Still processing, check again in 3 seconds
+          setTimeout(checkStatus, 3000);
+        }
+      } catch (error) {
+        console.error('Status check failed:', error);
+      }
+    };
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI
-                Documentation)](apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async
-                Functions](custom-functions/async-functions.html)
-                    -   [Background Tasks](background-tasks.html)
-        -   [Triggers](triggers.html)
-        -   [Middleware](middleware.html)
-        -   [Configuring
-            Expressions](configuring-expressions.html)
-        -   [Working with Data](working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering
-                    Examples](../functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get
-                Record](../functions/database-requests/get-record.html)
-            -   [Add
-                Record](../functions/database-requests/add-record.html)
-            -   [Edit
-                Record](../functions/database-requests/edit-record.html)
-            -   [Add or Edit
-                Record](../functions/database-requests/add-or-edit-record.html)
-            -   [Patch
-                Record](../functions/database-requests/patch-record.html)
-            -   [Delete
-                Record](../functions/database-requests/delete-record.html)
-            -   [Bulk
-                Operations](../functions/database-requests/bulk-operations.html)
-            -   [Database
-                Transaction](../functions/database-requests/database-transaction.html)
-            -   [External Database
-                Query](../functions/database-requests/external-database-query.html)
-            -   [Direct Database
-                Query](../functions/database-requests/direct-database-query.html)
-            -   [Get Database
-                Schema](../functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create
-                Variable](../functions/data-manipulation/create-variable.html)
-            -   [Update
-                Variable](../functions/data-manipulation/update-variable.html)
-            -   [Conditional](../functions/data-manipulation/conditional.html)
-            -   [Switch](../functions/data-manipulation/switch.html)
-            -   [Loops](../functions/data-manipulation/loops.html)
-            -   [Math](../functions/data-manipulation/math.html)
-            -   [Arrays](../functions/data-manipulation/arrays.html)
-            -   [Objects](../functions/data-manipulation/objects.html)
-            -   [Text](../functions/data-manipulation/text.html)
-                    -   [Security](../functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime
-                Functions](../functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API
-                Request](../functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda
-                Functions](../functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching
-            (Redis)](../functions/data-caching-redis.html)
-        -   [Custom
-            Functions](../functions/custom-functions.html)
-        -   [Utility
-            Functions](../functions/utility-functions.html)
-        -   [File
-            Storage](../functions/file-storage.html)
-        -   [Cloud
-            Services](../functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../filters/manipulation.html)
-        -   [Math](../filters/math.html)
-        -   [Timestamp](../filters/timestamp.html)
-        -   [Text](../filters/text.html)
-        -   [Array](../filters/array.html)
-        -   [Transform](../filters/transform.html)
-        -   [Conversion](../filters/conversion.html)
-        -   [Comparison](../filters/comparison.html)
-        -   [Security](../filters/security.html)
-            -   Data Types
-        
-        -   [Text](../data-types/text.html)
-        -   [Expression](../data-types/expression.html)
-        -   [Array](../data-types/array.html)
-        -   [Object](../data-types/object.html)
-        -   [Integer](../data-types/integer.html)
-        -   [Decimal](../data-types/decimal.html)
-        -   [Boolean](../data-types/boolean.html)
-        -   [Timestamp](../data-types/timestamp.html)
-        -   [Null](../data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response
-            Caching](../additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano
-            Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field
-            Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database
-            Views](../../the-database/database-basics/database-views.html)
-        -   [Export and
-            Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data
-            Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to
-            Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to
-            Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import &
-            Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema
-            Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting
-            Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP
-            Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User
-            Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access
-            (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth
-            (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track
-            Preferences](../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP
-            (Outgoing)](../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server
-            Region](../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database
-            Connector](../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and
-            Restore](../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security
-            Policy](../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit
-            Logs](../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano
-            Link](../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API
-            (Deprecated)](../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata
-            API](../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and
-            Schema](../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../xano-features/metadata-api/content.html)
-        -   [Search](../../xano-features/metadata-api/search.html)
-        -   [File](../../xano-features/metadata-api/file.html)
-        -   [Request
-            History](../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and
-            Export](../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes
-            Reference](../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency
-            Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client
-            Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer
-            Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency
-            Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private
-            Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a
-                    Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant
-            Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance
-            Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security
-            Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance
-            Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access
-            Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano
-            Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource
-            Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels
-            slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels
-            slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM
-            Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack
-            Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting
-            Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of
-            Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification
-            Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and
-            Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [What is a custom function?](#what-is-a-custom-function)
-
--   [Building and Using Custom
-    Functions](#building-and-using-custom-functions)
-
--   [Access your custom functions from the left-hand
-    menu.](#access-your-custom-functions-from-the-left-hand-menu)
-
--   [Click + Add Function to create a new custom
-    function.](#click--add-function-to-create-a-new-custom-function)
-
--   [Build your custom function](#build-your-custom-function)
-
--   [Insert your new custom function into other function
-    stacks.](#insert-your-new-custom-function-into-other-function-stacks)
-
--   [Creating Custom Functions from Existing Function
-    Stacks](#creating-custom-functions-from-existing-function-stacks)
-
--   [Convert the entire stack](#convert-the-entire-stack)
-
--   [Select individual steps to convert to a
-    function](#select-individual-steps-to-convert-to-a-function)
-
--   [Custom Function Settings](#custom-function-settings)
-
--   [From the Settings panel](#from-the-settings-panel)
-
--   [Custom Function Folders](#folders)
-
--   [Creating New Functions](#creating-new-functions)
-
--   [Creating New Folders with Existing
-    Functions](#creating-new-folders-with-existing-functions)
-
--   [Moving Existing Functions into
-    Folders](#moving-existing-functions-into-folders)
-
-Was this helpful?
-
-Copy
-
-1.  [[🛠️]The Visual
-    Builder](../building-with-visual-development.html)
-2.  Building with Visual Development
-
-Custom Functions 
-================
-
-Build business logic once and reuse it in multiple places
-
-**Quick Summary**
-
-Custom functions are very similar to your APIs --- they have inputs, a
-function stack, and a response. However, they can not be called
-externally. Instead, custom functions allow you to build something and
-use it in other places, while maintaining it in a centralized location.
-
- 
-
-What is a custom function?
-
-Custom functions can be thought of as a building block for the rest of
-your backend. You can build a custom function just like an API endpoint,
-and insert that custom function into other function stacks, giving you
-easily reusable logic while only having to maintain it in one place.
-When you make a change inside of a custom function, that change is
-automatically in effect everywhere you have chosen to use the custom
-function.
-
-------------------------------------------------------------------------
-
- 
-
-Building and Using Custom Functions
-
-<div>
-
-1
-
-###  
-
-Access your custom functions from the left-hand menu.
-
-![](../../_gitbook/image1807.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FgEcfLvgcqWPU227qJiz5%252FCleanShot%25202024-12-27%2520at%252014.31.52.png%3Falt%3Dmedia%26token%3D0f1be08c-18fd-4379-8651-5ef3a30fd2e2&width=768&dpr=4&quality=100&sign=ba41be63&sv=2)
-
-2
-
-###  
-
-Click [ + Add Function ] to create a new custom function.
-
-Give your custom function a **name**, **description**, **tags**, and
-choose your [Request
-History](../../maintenance-monitoring-and-logging/request-history.html) settings.
-
-You can also choose to store your custom functions inside of a folder.
-If the folder already exists, just start typing the name and select it
-from the auto-complete. If the folder doesn\'t exist, you can create a
-new one from here.
-
-[![](../../_gitbook/imagea283.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FVy86sQ4iLQRDhYi8h12c%252FCleanShot%25202025-05-19%2520at%252010.34.21.png%3Falt%3Dmedia%26token%3Df5bef25a-4ead-4416-bca0-459a812cb3b0&width=300&dpr=4&quality=100&sign=901fa413&sv=2)] When you\'re done, click [ Save
-].
-
-3
-
-###  
-
-Build your custom function
-
-A custom function has three sections --- the same as an API endpoint.
-
-###  
-
-⬇️ Inputs
-
-The inputs are anything that a function stack needs to run. For example,
-a function stack that logs in a user probably needs a username or email
-and a password; these would be the inputs.
-
-###  
-
-🔄 Function stack
-
-This is where all of the magic happens. All of the business logic that
-is performed lives here.
-
-As you add functions to your function stack, it will suggest next steps
-based on most popular user activity.
-
-###  
-
-⬆️ Response
-
-Once the function stack has done its job, it needs to know what to
-return. This lives in the Response section.
-
-4
-
-###  
-
-Insert your new custom function into other function stacks.
-
-When you\'re ready to use your new custom function in other function
-stacks, click
-[![](../../_gitbook/image1483.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F8mhRxVQgPC8ALivf1ukI%252FCleanShot%25202024-12-27%2520at%252014.40.23.png%3Falt%3Dmedia%26token%3Da1da8b0f-6a9c-4570-ba2c-0e31af42dba0&width=300&dpr=4&quality=100&sign=ea5d3e13&sv=2)], choose **Custom Functions** from the
-panel that opens, and select your custom function.
-
-You\'ll be able to supply data for any inputs the custom function is
-expecting here.
-
-![](../../_gitbook/imagec2c0.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252Fv2BRzVhLgbbouzh1GfdH%252FCleanShot%25202024-12-27%2520at%252014.41.28.png%3Falt%3Dmedia%26token%3D4834c0d7-5740-49e5-8aaf-405ce46929b2&width=768&dpr=4&quality=100&sign=9e5e953e&sv=2)
-
-</div>
-
-------------------------------------------------------------------------
-
-###  
-
-Creating Custom Functions from Existing Function Stacks
-
-If you have a function stack that you\'d like to convert into a custom
-function, you can do so in one of the following ways.
-
-<div>
-
-1
-
-###  
-
-Convert the entire stack
-
-Click the three dots in the upper-right corner and choose Convert To
-Function
-
-![](../../_gitbook/image8fff.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FtP9fFNkK70hkNfxARf6T%252FCleanShot%25202025-02-12%2520at%252012.13.55.png%3Falt%3Dmedia%26token%3Dba6d0b32-02d0-4f3c-8664-923b9f9c8b98&width=768&dpr=4&quality=100&sign=efd53dc5&sv=2)
-
-2
-
-###  
-
-Select individual steps to convert to a function
-
-You can select a group of steps and click
-[![](../../_gitbook/image4556.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FHu4cFGVXWjUhp5NbFpVb%252FCleanShot%25202025-02-12%2520at%252012.16.11.png%3Falt%3Dmedia%26token%3Dadbd7f60-f90f-41f8-9b52-992e797612f1&width=300&dpr=4&quality=100&sign=a1513580&sv=2)]to convert those steps into a custom
-function.
-
-![](../../_gitbook/imageb455.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FGySMJTCFaZH6Z9s5e1pT%252FCleanShot%25202025-02-12%2520at%252012.14.46.gif%3Falt%3Dmedia%26token%3Db0829b2a-4ccb-4434-8b81-45c127e96403&width=768&dpr=4&quality=100&sign=17f02e63&sv=2)
-
-</div>
-
-------------------------------------------------------------------------
-
- 
-
-Custom Function Settings
-
-###  
-
-From the Settings panel
-
-![](../../_gitbook/image522d.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FmjI2kCsucENivoHsthRW%252FCleanShot%25202024-12-23%2520at%252009.56.20.png%3Falt%3Dmedia%26token%3Dc98faeba-9ced-4be2-8397-da89dcd32fc3&width=768&dpr=4&quality=100&sign=88874836&sv=2)
-
-Name
-
-Purpose
-
-Name
-
-The name of the custom function.
-
-Description
-
-An internal description, just for you.
-
-Tags
-
-Use tags to organize objects throughout your Xano workspace and find
-them later
-
-Request History
-
--   
-    
-        
-    
-    Inherit Settings
-
-    -   
-        
-                
-        
-        Use whatever is set in your workspace branch defaults
-            
--   
-    
-        
-    
-    Other
-
-    -   
-        
-                
-        
-        Set specific request history settings for this function
-            
-[📖] [**Learn more about request
-history**](../../maintenance-monitoring-and-logging/request-history.html)
-
-Response caching
-
-Cache the response and redeliver it during future runs [📖]
-[**Learn more about response
-caching**](../additional-features/response-caching.html)
-
-------------------------------------------------------------------------
-
- 
-
-Custom Function Folders
-
-You can organize your custom functions into folders for better
-organization.
-
--   
-    
-        
-    
-    Folders are not required if you prefer not to use them. You can
-    store all of your functions in folders, or use a combination of
-    folders and no folders.
-    
--   
-    
-        
-    
-    A folder requires having at least one function inside of it ---
-    empty folders are not supported.
-    
-<div>
-
-1
-
-###  
-
-Creating New Functions
-
-When creating a new function, you\'ll be given the option to store it in
-a folder.
-
-Just start typing the name of the folder. If it exists, select it from
-the auto-complete dropdown. If it doesn\'t exist, it will be created for
-you.
-
-![](../../_gitbook/image564e.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252Fy1GbYqEQeKGSyR4SKQvD%252FCleanShot%25202025-05-19%2520at%252010.40.00.png%3Falt%3Dmedia%26token%3D5b9b35a9-8779-45d4-9051-60da3b6d2652&width=768&dpr=4&quality=100&sign=1568fc60&sv=2)
-
-2
-
-###  
-
-Creating New Folders with Existing Functions
-
-Click the [ Add Folder ] button to create a new folder
-for your existing functions.
-
-![](../../_gitbook/image8d84.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FpubxQSf14BGracAzLnbH%252FCleanShot%25202025-05-19%2520at%252010.41.03.png%3Falt%3Dmedia%26token%3D86141b18-ed79-44af-a7be-12bb0b3d622b&width=768&dpr=4&quality=100&sign=5d529489&sv=2)
-
-Give your new folder a name, and use the autocomplete to select at least
-one function to add to it.
-
-![](../../_gitbook/imagefba2.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FrohIQGNNH2jLEwzMZvRs%252FCleanShot%25202025-05-19%2520at%252010.42.01.png%3Falt%3Dmedia%26token%3Ddea0f081-7d50-4463-a8fd-2bc47ecb4c25&width=768&dpr=4&quality=100&sign=ee12f939&sv=2)
-
-3
-
-###  
-
-Moving Existing Functions into Folders
-
-Select the functions to move by using the checkboxes on the left-hand
-side, and click [ Move ]
-
-![](../../_gitbook/image19fb.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F5meSDI60XK4p4RxlZfuQ%252FCleanShot%25202025-05-19%2520at%252010.44.42.png%3Falt%3Dmedia%26token%3D79ffd68c-6868-4c35-bad1-4015c3f20a1a&width=768&dpr=4&quality=100&sign=87f346ae&sv=2)
-
-Type a new folder name, or add them to an existing folder. When you\'re
-ready, click [ Save ]
-
-![](../../_gitbook/image5366.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FvVEGTfZqVSLkbI0h7gWp%252FCleanShot%25202025-05-19%2520at%252010.45.29.png%3Falt%3Dmedia%26token%3D073d6d34-d093-4793-8bd2-3825e4737a53&width=768&dpr=4&quality=100&sign=e3919837&sv=2)
-
-</div>
-
-Last updated 2 months ago
-
-Was this helpful?
+    // Initial delay before first check
+    setTimeout(checkStatus, 3000);
+  }
+}
+
+// Initialize business logic helper
+const businessLogic = new XanoBusinessLogic(
+  wwLib.wwVariable.getValue('xano_base_url'),
+  wwLib.wwVariable.getValue('auth_token')
+);
+
+// Usage examples in WeWeb
+async function handleFormSubmission() {
+  const userData = {
+    email: wwLib.wwVariable.getValue('user_email'),
+    phone: wwLib.wwVariable.getValue('user_phone')
+  };
+  
+  const validation = await businessLogic.validateUserInput(userData);
+  
+  if (validation.is_valid) {
+    // Proceed with registration
+    wwLib.wwUtils.navigateTo('/registration-step-2');
+  } else {
+    // Show validation errors
+    wwLib.wwVariable.updateValue('show_validation_errors', true);
+  }
+}
+
+async function calculateCartTotal() {
+  const cartItems = wwLib.wwVariable.getValue('cart_items');
+  const customer = wwLib.wwVariable.getValue('current_customer');
+  
+  const totals = await businessLogic.calculateOrderTotal(cartItems, customer);
+  
+  if (!totals.error) {
+    wwLib.wwVariable.updateValue('cart_updated', true);
+  }
+}
+```
+
+## 🛠️ **Advanced Custom Function Patterns**
+
+### Modular Function Composition
+
+**Composable User Management Functions:**
+
+```javascript
+// Base user validation function
+{
+  "name": "validate_user_data",
+  "inputs": ["user_data", "validation_rules"],
+  "function_stack": [
+    // Email validation logic
+    // Phone validation logic  
+    // Password strength validation
+  ]
+}
+
+// User creation function using validation
+{
+  "name": "create_user_account",
+  "inputs": ["user_data", "send_welcome_email"],
+  "function_stack": [
+    {
+      "function": "custom_function",
+      "name": "validate_user_data",
+      "inputs": {
+        "user_data": "{{ input.user_data }}",
+        "validation_rules": "standard"
+      },
+      "return_as": "validation_result"
+    },
+    {
+      "function": "conditional",
+      "condition": "{{ !validation_result.is_valid }}",
+      "true_branch": [
+        {
+          "function": "return_response",
+          "status": 400,
+          "body": {
+            "error": "Validation failed",
+            "details": "{{ validation_result.errors }}"
+          }
+        }
+      ]
+    },
+    {
+      "function": "hash_password",
+      "password": "{{ input.user_data.password }}",
+      "return_as": "hashed_password"
+    },
+    {
+      "function": "add_record",
+      "table": "users",
+      "data": {
+        "email": "{{ input.user_data.email }}",
+        "password": "{{ hashed_password }}",
+        "status": "active"
+      },
+      "return_as": "new_user"
+    },
+    {
+      "function": "conditional",
+      "condition": "{{ input.send_welcome_email }}",
+      "true_branch": [
+        {
+          "function": "custom_function",
+          "name": "send_welcome_email",
+          "inputs": {
+            "user_id": "{{ new_user.id }}",
+            "email": "{{ new_user.email }}"
+          },
+          "execution_mode": "async"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Error Handling and Logging Functions
+
+**Centralized Error Management:**
+
+```javascript
+// Error logging custom function
+{
+  "name": "log_error",
+  "inputs": ["error_data", "context", "severity"],
+  "function_stack": [
+    {
+      "function": "add_record",
+      "table": "error_logs",
+      "data": {
+        "error_message": "{{ input.error_data.message }}",
+        "error_code": "{{ input.error_data.code }}",
+        "stack_trace": "{{ input.error_data.stack }}",
+        "context": "{{ input.context }}",
+        "severity": "{{ input.severity || 'medium' }}",
+        "user_id": "{{ auth.user.id }}",
+        "ip_address": "{{ request.ip }}",
+        "user_agent": "{{ request.headers['user-agent'] }}",
+        "timestamp": "{{ now }}"
+      }
+    },
+    {
+      "function": "conditional",
+      "condition": "{{ input.severity == 'high' || input.severity == 'critical' }}",
+      "true_branch": [
+        {
+          "function": "external_api_request",
+          "url": "{{ env.ALERT_WEBHOOK_URL }}",
+          "method": "POST",
+          "body": {
+            "alert_type": "error",
+            "severity": "{{ input.severity }}",
+            "message": "{{ input.error_data.message }}",
+            "context": "{{ input.context }}",
+            "timestamp": "{{ now }}"
+          }
+        }
+      ]
+    }
+  ]
+}
+
+// Protected function execution with error handling
+{
+  "name": "safe_execute_function",
+  "inputs": ["function_name", "function_inputs", "fallback_response"],
+  "function_stack": [
+    {
+      "function": "try_catch",
+      "try_block": [
+        {
+          "function": "custom_function",
+          "name": "{{ input.function_name }}",
+          "inputs": "{{ input.function_inputs }}",
+          "return_as": "function_result"
+        }
+      ],
+      "catch_block": [
+        {
+          "function": "custom_function",
+          "name": "log_error",
+          "inputs": {
+            "error_data": "{{ error }}",
+            "context": {
+              "function_name": "{{ input.function_name }}",
+              "inputs": "{{ input.function_inputs }}"
+            },
+            "severity": "medium"
+          }
+        },
+        {
+          "function": "create_variable",
+          "name": "function_result",
+          "value": "{{ input.fallback_response || {'success': false, 'error': 'Function execution failed'} }}"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 📁 **Organization and Management**
+
+### Folder Structure Strategy
+
+**Recommended Organization:**
+
+```javascript
+// Custom function folder structure
+{
+  "folders": {
+    "authentication": [
+      "validate_user_credentials",
+      "create_auth_token", 
+      "refresh_token",
+      "logout_user"
+    ],
+    "user_management": [
+      "create_user_account",
+      "update_user_profile",
+      "deactivate_user",
+      "get_user_preferences"
+    ],
+    "order_processing": [
+      "calculate_order_total",
+      "apply_discount_code",
+      "process_payment",
+      "generate_invoice"
+    ],
+    "notifications": [
+      "send_welcome_email",
+      "send_order_confirmation",
+      "send_password_reset",
+      "send_notification"
+    ],
+    "utilities": [
+      "validate_email",
+      "format_phone_number",
+      "generate_unique_id",
+      "log_error"
+    ],
+    "reporting": [
+      "generate_sales_report",
+      "calculate_metrics",
+      "export_data",
+      "create_dashboard_data"
+    ]
+  }
+}
+```
+
+### Function Naming Conventions
+
+**Best Practices:**
+
+```javascript
+// Naming convention examples
+{
+  "action_patterns": {
+    "create_": "create_user_account, create_order, create_invoice",
+    "update_": "update_user_profile, update_order_status",
+    "delete_": "delete_user_account, delete_order",
+    "get_": "get_user_data, get_order_details",
+    "validate_": "validate_email, validate_payment_data",
+    "calculate_": "calculate_tax, calculate_shipping",
+    "send_": "send_email, send_notification",
+    "process_": "process_payment, process_order"
+  },
+  "domain_grouping": {
+    "user_": "user_create, user_update, user_validate",
+    "order_": "order_create, order_calculate, order_process",
+    "payment_": "payment_validate, payment_process, payment_refund"
+  }
+}
+```
+
+## ⚡ **Performance Optimization**
+
+### Response Caching
+
+**Cache Configuration:**
+
+```javascript
+// Custom function with response caching
+{
+  "name": "get_user_preferences",
+  "caching": {
+    "enabled": true,
+    "ttl": 300, // 5 minutes
+    "key_pattern": "user_prefs_{{ input.user_id }}",
+    "invalidation_triggers": [
+      "user_profile_updated",
+      "preferences_changed"
+    ]
+  },
+  "function_stack": [
+    {
+      "function": "query_single_record",
+      "table": "user_preferences", 
+      "filter": {"user_id": "{{ input.user_id }}"},
+      "return_as": "preferences"
+    },
+    {
+      "function": "conditional",
+      "condition": "{{ !preferences }}",
+      "true_branch": [
+        {
+          "function": "create_variable",
+          "name": "preferences",
+          "value": {
+            "theme": "light",
+            "notifications": true,
+            "language": "en"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Async Function Optimization
+
+**Background Processing:**
+
+```javascript
+// Heavy computation as async function
+{
+  "name": "generate_analytics_report",
+  "execution_mode": "async", // Can be called asynchronously
+  "function_stack": [
+    {
+      "function": "query_all_records",
+      "table": "orders",
+      "filter": {
+        "created_at": {
+          "$gte": "{{ input.start_date }}",
+          "$lte": "{{ input.end_date }}"
+        }
+      },
+      "return_as": "orders"
+    },
+    {
+      "function": "custom_function",
+      "name": "calculate_revenue_metrics",
+      "inputs": {"orders": "{{ orders }}"},
+      "return_as": "revenue_metrics"
+    },
+    {
+      "function": "custom_function",
+      "name": "calculate_customer_metrics", 
+      "inputs": {"orders": "{{ orders }}"},
+      "return_as": "customer_metrics"
+    },
+    {
+      "function": "create_variable",
+      "name": "report_data",
+      "value": {
+        "revenue": "{{ revenue_metrics }}",
+        "customers": "{{ customer_metrics }}",
+        "generated_at": "{{ now }}"
+      }
+    }
+  ]
+}
+```
+
+## 💡 **Pro Tips**
+
+- **Keep Functions Focused**: Each custom function should have a single, well-defined responsibility
+- **Use Descriptive Names**: Function names should clearly indicate their purpose and functionality
+- **Implement Error Handling**: Always include proper error handling and fallback mechanisms
+- **Leverage Async Execution**: Use async mode for time-consuming operations to improve performance
+- **Cache Frequently Used Data**: Implement response caching for functions with stable outputs
+- **Version Your Functions**: Use tags and descriptions to track function versions and changes
+
+## 🔧 **Troubleshooting**
+
+### Common Custom Function Issues
+
+**Problem**: Custom function not appearing in function selection  
+**Solution**: Verify function is published and check folder organization
+
+**Problem**: Input validation errors when calling custom functions  
+**Solution**: Ensure input types match function definitions and required fields are provided
+
+**Problem**: Performance issues with custom functions  
+**Solution**: Enable response caching, use async execution for heavy operations, and optimize database queries
+
+**Problem**: Circular dependencies between custom functions  
+**Solution**: Refactor functions to remove circular calls or create intermediate functions
+
+---
+
+**Next Steps**: Ready to build modular custom functions? Check out [Async Functions](async-functions.md) for background processing or explore [Building with Visual Development](building-with-visual-development.md) for complete application architecture
