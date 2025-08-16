@@ -1,1249 +1,913 @@
 ---
-category: filters
-has_code_examples: true
-last_updated: '2025-01-23'
+title: Array Filters Reference - Complete Guide for No-Code Development
+description: Master Xano's array manipulation filters including append, merge, sort, filter operations, and more for powerful data processing in n8n, WeWeb, and Make.com integrations
+category: 08-reference
+subcategory: filters
+difficulty: intermediate
+last_updated: '2025-01-16'
+related_docs:
+  - filters-overview.md
+  - text-filters.md
+  - object-filters.md
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: append
+  - array-filters
+  - data-manipulation
+  - reference
+  - append
+  - merge
+  - sort
+  - filter
+  - transform
 ---
 
-# append
+## 📋 **Quick Summary**
 
-[🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    append
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual Builder](../building-with-visual-development.html)
-2.  Filters
-Array 
-=====
-NOTE
-When a filter below refers to the **parent value**, we\'re talking about the value box that lives immediately above the filter.
-[]
-Copy
-``` 
-[
-    ,
-]
-```
-###  
-append
-Adds a new element to the end of the array, and return the updated array
-Parameter
-Purpose
-Example
-parent value
-The original array you\'d like to modify
-\[1,2,3,4\]
-value
-The value to add to the end of the array
-5
-Example
-Result
-parent value: `[1, 2, 3, 4]`
+Master Xano's comprehensive array filter library to manipulate, transform, and process arrays efficiently. This reference covers all array operations from basic append/prepend to advanced filtering, sorting, and merging operations perfect for no-code developers using n8n, WeWeb, and Make.com integrations.
+
+## What You'll Learn
+
+- Complete array filter reference with practical examples
+- Array manipulation techniques (append, merge, sort, filter)
+- Data transformation patterns for no-code platforms
+- Performance optimization tips for large datasets
+- Common use cases and best practices
+- Integration patterns with external platforms
+
+# Array Filters Reference
+
+## 🔧 **Basic Array Operations**
+
+### append
+
+**Purpose**: Adds a new element to the end of an array and returns the updated array.
+
+**Parameters:**
+- `parent value`: The original array to modify
+- `value`: The value to add to the end of the array
+
+**Examples:**
+
+**Basic Number Array:**
+```javascript
+// Input
+parent_value: [1, 2, 3, 4]
 value: 5
-`[1, 2, 3, 4, 5]`
-parent value: `["Think Visually", "Build Confidently"]`
-value: \"Deploy Securely\"
-`["Think Visually, Build Confidently, "Deploy Securely"]`
-parent value:
-Copy
-``` 
+
+// Output
+[1, 2, 3, 4, 5]
+```
+
+**String Array:**
+```javascript
+// Input
+parent_value: ["Think Visually", "Build Confidently"]
+value: "Deploy Securely"
+
+// Output
+["Think Visually", "Build Confidently", "Deploy Securely"]
+```
+
+**Object Array:**
+```javascript
+// Input
+parent_value: [
+  {"id": 1, "name": "John"},
+  {"id": 2, "name": "Jane"}
+]
+value: {"id": 3, "name": "Bob"}
+
+// Output
 [
-    ,
+  {"id": 1, "name": "John"},
+  {"id": 2, "name": "Jane"},
+  {"id": 3, "name": "Bob"}
 ]
 ```
-value:
-Copy
-``` 
+
+**💡 Pro Tip for n8n/WeWeb Integration:**
+```javascript
+// Use append to build dynamic arrays in workflows
+// n8n example: Building a list of processed items
+const processedItems = [];
+// In loop: append each processed item
+items.forEach(item => {
+  processedItems.append(processItem(item));
+});
 ```
-Copy
-``` 
-[
-    ,
-    ,
-]
+
+### prepend
+
+**Purpose**: Adds an element to the beginning of an array.
+
+**Examples:**
+```javascript
+// Input
+parent_value: [2, 3, 4]
+value: 1
+
+// Output
+[1, 2, 3, 4]
 ```
-------------------------------------------------------------------------
-###  
-count
-Returns the number of items in an array
-Paremeter
-Purpose
-Example
-parent value
-The array to count
-`[1, 2, 3, 4, 5]`
-Copy
-``` 
-[
-    ,
-]
-```
-Example
-Output
-Copy
-``` 
-[
-    ,
-]
-```
-2
-`[1, 2, 3, 4, 5]`
+
+### push
+
+**Purpose**: Adds an element to the end of an array (alias for append).
+
+### count
+
+**Purpose**: Returns the number of items in an array.
+
+**Examples:**
+```javascript
+// Input
+parent_value: [1, 2, 3, 4, 5]
+
+// Output
 5
-------------------------------------------------------------------------
-###  
-diff / diff\_assoc
-###  
-intsersect / intersect\_assoc
-These filters are used to compare arrays.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **diff** is used to show values from the first array that **are not** in the second array
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **intersect** is used to show values from the first array that **are** in the second array
-    :::
-Use the basic filter for value arrays, and the **\_assoc** version for arrays of objects.
-Parameter
-Purpose
-Example
-parent value
-The first array to compare
-`[1, 2, 3, 4, 5]`
-Copy
-``` 
-[
-    ,
+
+// Complex objects
+parent_value: [
+  {"id": 1, "status": "active"},
+  {"id": 2, "status": "inactive"}
 ]
+
+// Output
+2
 ```
-value
-The second array to compare
-Same as above
-Example
-Output
-Using **diff:**
-parent value: `[1,2,3,4,5]`
-value: `[3,4,5,6,7]`
-`[1, 2]`
-Using **diff\_assoc:**
-parent value:
-Copy
-``` 
-[
-    ,
-    ,
-]
+
+**🔗 Integration Use Case:**
+```javascript
+// WeWeb: Display total items count
+const totalProducts = productArray.count();
+// Use in WeWeb component: "Showing {{totalProducts}} products"
 ```
-value:
-Copy
-``` 
-[
-    ,
-]
-```
-Copy
-``` 
-[
-]
-```
-Using **intersect:**
-parent value: `[1,2,3,4,5]`
-value: `[3,4,5,6,7]`
-`[3, 4, 5]`
-Using **intersect\_assoc:**
-parent value:
-Copy
-``` 
-[
-    ,
-]
-```
-value:
-Copy
-``` 
-[
-    ,
-    ,
-]
-```
-Copy
-``` 
-[
-    ,
-]
-```
-------------------------------------------------------------------------
-###  
-filter\_empty
-Returns a new srray with only entries that are not empty.
-An **empty** value can be `[]`, ``, `0`, `null`, `""`, or `false`.
-Parameter
-Purpose
-Example
-parent value
-The array to filter
-`[1, 0, 2, 0, 3]`
-Copy
-``` 
-[
-    ,
-    ,
-]
-```
-path
-When filtering arrays of objects, you can specify a path to optionally use a specific key to judge emptiness.
-Example
-Output
-Copy
-``` 
-[
-    ,
-    ,
-]
-```
-Copy
-``` 
-[
-    ,
-]
-```
-`[1, 0, 2, 0, 3]`
-`[1, 2, 3]`
-------------------------------------------------------------------------
-###  
-first
-Get the first entry of an Array.
-Parameter
-Purpose
-Example
-parent value
-The array to retrieve the first entry from
-`[1, 2, 3]`
-Copy
-``` 
-[
-    ,
-]
-```
-Example
-Output
-`[1, 2, 3]`
+
+## 🔄 **Array Transformation**
+
+### first
+
+**Purpose**: Gets the first entry of an array.
+
+**Examples:**
+```javascript
+// Input
+parent_value: [1, 2, 3]
+
+// Output
 1
-Copy
-``` 
-[
-    ,
+
+// Object array
+parent_value: [
+  {"name": "Alice", "age": 30},
+  {"name": "Bob", "age": 25}
 ]
+
+// Output
+{"name": "Alice", "age": 30}
 ```
-Copy
-``` 
+
+### last
+
+**Purpose**: Gets the last entry of an array.
+
+**Examples:**
+```javascript
+// Input
+parent_value: [1, 2, 3]
+
+// Output
+3
 ```
-------------------------------------------------------------------------
-###  
-filter\_empty\_array
-###  
-filter\_empty\_object
-###  
-filter\_empty\_text
-###  
-filter\_false
-###  
-filter\_null
-###  
-filter\_zero
-These filters are designed to remove the corresponding values from an object or an array. Useful in scenarios where something is sending data to your APIs that you don\'t have full control over, such as a frontend platform that always sends empty strings or null values.
-Parameter
-Purpose
-parent value
-The array or object to target
-Example
-Output
-Copy
-``` 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
+
+### slice
+
+**Purpose**: Extracts and returns a section of an array.
+
+**Parameters:**
+- `offset`: Starting index (0-based)
+- `length`: Number of items to extract
+
+**Examples:**
+```javascript
+// Input
+parent_value: [1, 2, 3, 4, 5, 6]
+offset: 2
+length: 3
+
+// Output
+[3, 4, 5]
+
+// Pagination example
+parent_value: users_array
+offset: 20  // Skip first 20 users
+length: 10  // Take next 10 users
+
+// Output: Users 21-30 for page 3
 ```
-**filter\_empty\_array**
-Copy
-``` 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "data": ,
-        "info": null
-}
-```
-Copy
-``` 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
-```
-**filter\_empty\_object**
-Copy
-``` 
-```
-Copy
-``` 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
-```
-**filter\_empty\_text**
-Copy
-``` 
-{
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
-```
-Copy
-``` 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
-```
-**filter\_false**
-Copy
-``` 
-{
-        "title": "",
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
-```
-Copy
-``` 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
-```
-**filter\_null**
-Copy
-``` 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": 
-}
-```
-Copy
-``` 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
-```
-**filter\_zero**
-Copy
-``` 
-{
-        "title": "",
-        "name": false,
-        "items": [],
-        "data": ,
-        "info": null
-}
-```
-------------------------------------------------------------------------
-###  
-flatten
-Flattens a multi-level array into a single-level array.
-Parameter
-Purpose
-Example
-parent value
-The array to flatten
-Copy
-``` 
-[
+
+### flatten
+
+**Purpose**: Flattens a multi-level array into a single-level array.
+
+**Examples:**
+```javascript
+// Input
+parent_value: [
   [1, 2, 3],
   [4, 5, 6],
   [7, 8, 9]
 ]
-```
-Example
-Output
-Copy
-``` 
-[
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9]
-]
-```
-Copy
-``` 
+
+// Output
 [1, 2, 3, 4, 5, 6, 7, 8, 9]
-```
-Copy
-``` 
-[
+
+// Nested objects
+parent_value: [
   {
     id: 1,
     name: "John",
     pets: [
-      ,
+      {"type": "dog", "name": "Rex"},
+      {"type": "cat", "name": "Whiskers"}
     ]
   },
   {
     id: 2,
     name: "Sarah",
     pets: [
+      {"type": "bird", "name": "Tweety"}
     ]
   }
-]]
-```
-Copy
-``` 
-[
-  ,
-  ,
-]
-```
-------------------------------------------------------------------------
-###  
-join
-Converts an array into a text string by *joining* each value and using a separator.
-Parameter
-Purpose
-Example
-parent value
-The array to join
-\[\"a\", \"b\", \"c\"\]
-separator ^optional^
-The character or characters to place in between each array item
-Can be any text value, or even a single empty space
-Example
-Output
-parent value: `["a", "b", "c"]`
-separator: \_
-`a_b_c`
-parent value: \[1, 2, 3, 4, 5\]
-separator:
-`12345`
-------------------------------------------------------------------------
-###  
-last
-Get the last entry of an Array.
-Parameter
-Purpose
-Example
-parent value
-The array to get the last entry of
-\[`1, 2, 3]`
-Example
-Output
-`[1, 2, 3]`
-`3`
-------------------------------------------------------------------------
-###  
-merge
-###  
-merge\_recursive
-Merge two arrays or objects together and return the new item.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Use **merge** to merge single level data.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Use **merge\_recursive** to merge multi-level data.
-    :::
-Parameter
-Purpose
-Example
-parent value
-The first array to merge
-\[1, 2, 3\]
-value
-The second array to merge
-\[4, 5, 6\]
-Example
-Output
-using **merge**
-parent value: `["a", "b", "c"]`
-value: `["d", "e", "f"]`
-`["a", "b", "c", "d", "e", "f"]`
-using **merge\_recursive**
-parent value:
-Copy
-``` 
-```
-value:
-Copy
-``` 
-```
-Copy
-``` 
-```
-------------------------------------------------------------------------
-###  
-pop
-Pops the last element of the Array off and returns it.
-Please note that Xano\'s **pop** filter does NOT remove the item from the array.
-------------------------------------------------------------------------
-###  
-prepend
-Push an element on to the beginning of an array
-------------------------------------------------------------------------
-###  
-push
-Push an element on to the end of an array
-------------------------------------------------------------------------
-###  
-range
-Returns array of values between the specified start/stop.
-------------------------------------------------------------------------
-###  
-remove
-Remove any elements from the array that match the supplied value and return the new array
-Use the **path** option to search inside of objects.
-Use the **strict** option to determine how precise the filter is (for example, treating 100 and \"100\" the same)
-------------------------------------------------------------------------
-###  
-safe\_array
-Always returns an array. Uses the existing value if it is an array or creates an array of one element.
-------------------------------------------------------------------------
-###  
-shift
-Shifts the first element off the Array and returns it.
-------------------------------------------------------------------------
-###  
-shuffle
-Returns the array in a randomized order
-------------------------------------------------------------------------
-###  
-slice
-Extracts and returns a section of an array
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **offset** - what index should the slice start, starting at 0
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **length** - how many items to slice
-    :::
-------------------------------------------------------------------------
-###  
-sort
-Sort an Array of elements with an optional path inside the element, sort type, and ascending/descending.
-Sort types include:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **text** - case-sensitive sort for text
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **itext** - case-insensitive sort for text
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **number** - to sort numerically
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **natural** - case-sensitive sort that is alphanumerical and natural to humans
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **inatural** - case-insensitive sort that is alphanumerical and natural to humans
-    :::
-Ascending order is performed with a true boolean. Descending order uses a false boolean.
-The example below shows the difference between case-sensitivity sort with text and itext:
-The example below shows how to use the number sort type:
-The example below shows using the natural sorting option
-------------------------------------------------------------------------
-###  
-unique
-Returns unique values of an Array. You can also use this filter with an array of objects by specifying a path to the key you would like to use to judge uniqueness.
-------------------------------------------------------------------------
-###  
-unshift
-Push an element to the beginning of an Array and return the new Array.
-------------------------------------------------------------------------
-###  
-pick/unpick
-These filters are meant to be used when dealing with Object field types and are particularly useful if you are receiving a large object, from a webhook for example, where only a few of those records are required for your workflows. You can also use them with an array of objects by specifying a path to the key you would like to make changes to.
-**Pick**: Identify values you would like to keep and the filter will return a new object containing only the values you have selected.
-Example Object
-Defining the Keys we want to include in our new object.
-Result
-**Unpick**: Identify values you would like to exclude and the filter will return a new object containing only the fields that weren't omitted.
-Example Object
-Defining the Keys we want to exclude from our new object.
-Result
-Last updated 3 months ago
-Was this helpful?
-
-## Code Examples
-
-```
- 
-[
-    ,
 ]
 
-```
-
-```
- 
+// After flattening pets arrays
 [
-    ,
+  {"type": "dog", "name": "Rex"},
+  {"type": "cat", "name": "Whiskers"},
+  {"type": "bird", "name": "Tweety"}
 ]
-
 ```
 
-```
- 
+## 🔍 **Array Filtering**
 
-```
+### filter_empty
 
-```
- 
-[
-    ,
-    ,
-]
+**Purpose**: Returns a new array with only entries that are not empty.
 
-```
+**Empty values**: `[]`, `""`, `0`, `null`, `false`
 
-```
- 
-[
-    ,
-]
+**Parameters:**
+- `parent value`: The array to filter
+- `path` (optional): For object arrays, specify a key to check for emptiness
 
-```
-
-```
- 
-[
-    ,
-]
-
-```
-
-```
- 
-[
-    ,
-]
-
-```
-
-```
- 
-[
-    ,
-    ,
-]
-
-```
-
-```
- 
-[
-    ,
-]
-
-```
-
-```
- 
-[
-]
-
-```
-
-```
- 
-[
-    ,
-]
-
-```
-
-```
- 
-[
-    ,
-    ,
-]
-
-```
-
-```
- 
-[
-    ,
-]
-
-```
-
-```
- 
-[
-    ,
-    ,
-]
-
-```
-
-```
- 
-[
-    ,
-    ,
-]
-
-```
-
-```
- 
-[
-    ,
-]
-
-```
-
-```
- 
-[
-    ,
-]
-
-```
-
-```
- 
-[
-    ,
-]
-
-```
-
-```
- 
-
-```
-
+**Examples:**
 ```javascript
- 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
+// Basic filtering
+parent_value: [1, 0, 2, "", 3, null, 4]
+
+// Output
+[1, 2, 3, 4]
+
+// Object filtering with path
+parent_value: [
+  {"name": "John", "email": "john@example.com"},
+  {"name": "", "email": "jane@example.com"},
+  {"name": "Bob", "email": ""}
+]
+path: "name"
+
+// Output
+[
+  {"name": "John", "email": "john@example.com"},
+  {"name": "Bob", "email": ""}
+]
+```
+
+### Specialized Filter Functions
+
+**filter_empty_array**: Removes empty arrays `[]`
+**filter_empty_object**: Removes empty objects `{}`
+**filter_empty_text**: Removes empty strings `""`
+**filter_false**: Removes `false` values
+**filter_null**: Removes `null` values
+**filter_zero**: Removes `0` values
+
+**Example - Cleaning API Response:**
+```javascript
+// Input: Data from external API with mixed empty values
+parent_value: {
+  "title": "",
+  "name": false,
+  "width": 0,
+  "items": [],
+  "data": {"valid": true},
+  "info": null
 }
 
-```
-
-```javascript
- 
+// After filter_empty_text
 {
-        "title": "",
-        "name": false,
-        "width": 0,
-        "data": ,
-        "info": null
+  "name": false,
+  "width": 0,
+  "items": [],
+  "data": {"valid": true},
+  "info": null
 }
 
-```
-
-```javascript
- 
+// After filter_null
 {
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
+  "name": false,
+  "width": 0,
+  "items": [],
+  "data": {"valid": true}
 }
-
 ```
 
-```
- 
-
-```
-
+**🔗 Real-World Use Case (WeWeb Form Processing):**
 ```javascript
- 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
-
+// Clean user form data before saving
+const cleanFormData = formData
+  .filter_empty_text()
+  .filter_null()
+  .filter_empty_array();
 ```
 
+### unique
+
+**Purpose**: Returns unique values of an array. For object arrays, specify a path to determine uniqueness.
+
+**Examples:**
 ```javascript
- 
-{
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
+// Simple array
+parent_value: [1, 2, 2, 3, 3, 4]
 
-```
+// Output
+[1, 2, 3, 4]
 
-```javascript
- 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
+// Object array - unique by ID
+parent_value: [
+  {"id": 1, "name": "John"},
+  {"id": 2, "name": "Jane"},
+  {"id": 1, "name": "John Doe"} // Duplicate ID
+]
+path: "id"
 
-```
-
-```javascript
- 
-{
-        "title": "",
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
-
-```
-
-```javascript
- 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
-
-```
-
-```javascript
- 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": 
-}
-
-```
-
-```javascript
- 
-{
-        "title": "",
-        "name": false,
-        "width": 0,
-        "items": [],
-        "data": ,
-        "info": null
-}
-
-```
-
-```javascript
- 
-{
-        "title": "",
-        "name": false,
-        "items": [],
-        "data": ,
-        "info": null
-}
-
-```
-
-```
- 
+// Output
 [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9]
+  {"id": 1, "name": "John"},
+  {"id": 2, "name": "Jane"}
+]
+```
+
+### remove
+
+**Purpose**: Removes elements from array that match the supplied value.
+
+**Parameters:**
+- `value`: Value to remove
+- `path` (optional): For objects, specify which field to check
+- `strict` (optional): Precise matching (treats 100 and "100" differently)
+
+**Examples:**
+```javascript
+// Remove specific value
+parent_value: [1, 2, 3, 2, 4]
+value: 2
+
+// Output
+[1, 3, 4]
+
+// Remove by object property
+parent_value: [
+  {"status": "active", "name": "John"},
+  {"status": "inactive", "name": "Jane"},
+  {"status": "active", "name": "Bob"}
+]
+value: "inactive"
+path: "status"
+
+// Output
+[
+  {"status": "active", "name": "John"},
+  {"status": "active", "name": "Bob"}
+]
+```
+
+## 🔄 **Array Comparison**
+
+### diff / diff_assoc
+
+**Purpose**: Shows values from the first array that are NOT in the second array.
+
+- `diff`: For simple values
+- `diff_assoc`: For arrays of objects
+
+**Examples:**
+```javascript
+// Basic diff
+parent_value: [1, 2, 3, 4, 5]
+value: [3, 4, 5, 6, 7]
+
+// Output
+[1, 2]
+
+// Object diff_assoc
+parent_value: [
+  {"id": 1, "name": "John"},
+  {"id": 2, "name": "Jane"},
+  {"id": 3, "name": "Bob"}
+]
+value: [
+  {"id": 2, "name": "Jane"}
 ]
 
-```
-
-```
- 
+// Output
 [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9]
+  {"id": 1, "name": "John"},
+  {"id": 3, "name": "Bob"}
 ]
-
 ```
 
-```
- 
-[1, 2, 3, 4, 5, 6, 7, 8, 9]
+### intersect / intersect_assoc
 
-```
+**Purpose**: Shows values from the first array that ARE in the second array.
 
+**Examples:**
 ```javascript
- 
-[
-  {
-    id: 1,
-    name: "John",
-    pets: [
-      ,
-    ]
+// Basic intersect
+parent_value: [1, 2, 3, 4, 5]
+value: [3, 4, 5, 6, 7]
+
+// Output
+[3, 4, 5]
+```
+
+**💡 Use Case - Finding Common Elements:**
+```javascript
+// n8n: Find products available in both stores
+const store1Products = [1, 2, 3, 4, 5];
+const store2Products = [3, 4, 5, 6, 7];
+const commonProducts = store1Products.intersect(store2Products);
+// Result: [3, 4, 5]
+```
+
+## 🔗 **Array Merging**
+
+### merge / merge_recursive
+
+**Purpose**: Merge two arrays or objects together.
+
+- `merge`: For single-level data
+- `merge_recursive`: For multi-level data
+
+**Examples:**
+```javascript
+// Basic merge
+parent_value: ["a", "b", "c"]
+value: ["d", "e", "f"]
+
+// Output
+["a", "b", "c", "d", "e", "f"]
+
+// Object merge_recursive
+parent_value: {
+  "user": {
+    "name": "John",
+    "email": "john@example.com"
   },
-  {
-    id: 2,
-    name: "Sarah",
-    pets: [
-    ]
+  "preferences": {
+    "theme": "dark"
   }
-]]
+}
+value: {
+  "user": {
+    "age": 30
+  },
+  "preferences": {
+    "language": "en"
+  }
+}
 
+// Output
+{
+  "user": {
+    "name": "John",
+    "email": "john@example.com",
+    "age": 30
+  },
+  "preferences": {
+    "theme": "dark",
+    "language": "en"
+  }
+}
 ```
 
+**🔗 Integration Example:**
+```javascript
+// WeWeb: Merge user data from multiple sources
+const userData = basicProfile.merge_recursive(preferences);
+const completeProfile = userData.merge_recursive(activityData);
 ```
- 
+
+## 📊 **Array Sorting**
+
+### sort
+
+**Purpose**: Sort an array with optional path, sort type, and direction.
+
+**Sort Types:**
+- `text`: Case-sensitive text sort
+- `itext`: Case-insensitive text sort  
+- `number`: Numeric sort
+- `natural`: Alphanumeric, human-friendly sort
+- `inatural`: Case-insensitive natural sort
+
+**Parameters:**
+- `path`: For objects, field to sort by
+- `type`: Sort type (see above)
+- `ascending`: `true` for ascending, `false` for descending
+
+**Examples:**
+```javascript
+// Simple number sort
+parent_value: [3, 1, 4, 1, 5, 9, 2, 6]
+type: "number"
+ascending: true
+
+// Output
+[1, 1, 2, 3, 4, 5, 6, 9]
+
+// Object sort by name
+parent_value: [
+  {"name": "Charlie", "age": 30},
+  {"name": "Alice", "age": 25},
+  {"name": "Bob", "age": 35}
+]
+path: "name"
+type: "text"
+ascending: true
+
+// Output
 [
-  ,
-  ,
+  {"name": "Alice", "age": 25},
+  {"name": "Bob", "age": 35},
+  {"name": "Charlie", "age": 30}
 ]
 
+// Natural vs regular sorting
+parent_value: ["item1", "item10", "item2", "item20"]
+
+// Regular text sort
+["item1", "item10", "item2", "item20"]
+
+// Natural sort  
+["item1", "item2", "item10", "item20"]
 ```
 
-```
- 
+**🔗 Real-World Examples:**
 
+**E-commerce Product Sorting:**
+```javascript
+// Sort products by price (low to high)
+products.sort("price", "number", true)
+
+// Sort by popularity (high to low)
+products.sort("popularity_score", "number", false)
+
+// Sort by name (A-Z, case-insensitive)
+products.sort("name", "itext", true)
 ```
 
-```
- 
+### shuffle
 
+**Purpose**: Returns the array in randomized order.
+
+**Example:**
+```javascript
+// Input
+parent_value: [1, 2, 3, 4, 5]
+
+// Output (random)
+[3, 1, 5, 2, 4]
 ```
 
-```
- 
+## 🔧 **Array Manipulation**
 
+### join
+
+**Purpose**: Converts an array into a text string using a separator.
+
+**Parameters:**
+- `separator` (optional): Character(s) to place between items
+
+**Examples:**
+```javascript
+// Basic join with underscore
+parent_value: ["a", "b", "c"]
+separator: "_"
+
+// Output
+"a_b_c"
+
+// Join without separator
+parent_value: [1, 2, 3, 4, 5]
+separator: ""
+
+// Output
+"12345"
+
+// Create CSV format
+parent_value: ["John", "25", "Engineer"]
+separator: ","
+
+// Output
+"John,25,Engineer"
 ```
 
+**🔗 Use Cases:**
+```javascript
+// Generate tags for display
+const tagString = tagArray.join(", ");
+// Result: "React, JavaScript, API, Database"
+
+// Create file path
+const pathParts = ["uploads", "2025", "01", "file.jpg"];
+const filePath = pathParts.join("/");
+// Result: "uploads/2025/01/file.jpg"
+```
+
+### range
+
+**Purpose**: Returns array of values between specified start/stop.
+
+**Examples:**
+```javascript
+// Generate number sequence
+start: 1
+stop: 5
+
+// Output
+[1, 2, 3, 4, 5]
+
+// Generate years
+start: 2020
+stop: 2025
+
+// Output
+[2020, 2021, 2022, 2023, 2024, 2025]
+```
+
+### safe_array
+
+**Purpose**: Always returns an array. Uses existing value if array, otherwise creates single-element array.
+
+**Examples:**
+```javascript
+// Already an array
+parent_value: [1, 2, 3]
+
+// Output
+[1, 2, 3]
+
+// Single value
+parent_value: "hello"
+
+// Output
+["hello"]
+
+// Null value
+parent_value: null
+
+// Output
+[null]
+```
+
+## 🎯 **Object Operations**
+
+### pick / unpick
+
+**Purpose**: Select or exclude specific fields from objects.
+
+**pick**: Keep only specified fields
+**unpick**: Remove specified fields
+
+**Examples:**
+
+**Pick Example:**
+```javascript
+// Input object
+parent_value: {
+  "id": 123,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "secret123",
+  "internal_notes": "VIP customer",
+  "created_at": "2025-01-16"
+}
+
+// Pick only public fields
+fields: ["id", "name", "email", "created_at"]
+
+// Output
+{
+  "id": 123,
+  "name": "John Doe", 
+  "email": "john@example.com",
+  "created_at": "2025-01-16"
+}
+```
+
+**Unpick Example:**
+```javascript
+// Remove sensitive fields
+fields: ["password", "internal_notes"]
+
+// Output
+{
+  "id": 123,
+  "name": "John Doe",
+  "email": "john@example.com", 
+  "created_at": "2025-01-16"
+}
+```
+
+**🔗 API Security Pattern:**
+```javascript
+// Clean user data before sending to frontend
+const publicUserData = fullUserData.unpick([
+  "password_hash",
+  "reset_token", 
+  "internal_notes",
+  "admin_flags"
+]);
+```
+
+## 🚀 **Advanced Array Operations**
+
+### pop
+
+**Purpose**: Returns the last element of an array.
+
+**Note**: Xano's pop filter does NOT remove the item from the array.
+
+### shift
+
+**Purpose**: Returns the first element of an array and removes it.
+
+### unshift
+
+**Purpose**: Adds an element to the beginning of an array and returns the new array.
+
+## 🔗 **Integration Patterns**
+
+### n8n Workflow Examples
+
+**Building Dynamic Arrays:**
+```javascript
+// n8n Code node: Process webhook data
+const processedItems = [];
+for (const item of items) {
+  if (item.status === 'active') {
+    processedItems.append({
+      id: item.id,
+      processed_at: new Date().toISOString(),
+      data: item.data
+    });
+  }
+}
+return processedItems;
+```
+
+**Data Transformation Pipeline:**
+```javascript
+// Clean and transform data
+const cleanData = rawData
+  .filter_empty()           // Remove empty values
+  .unique("id")             // Remove duplicates by ID
+  .sort("created_at", "text", false) // Sort newest first
+  .slice(0, 10);           // Take first 10 items
+```
+
+### WeWeb Component Integration
+
+**Dynamic List Rendering:**
+```javascript
+// WeWeb computed property
+const displayProducts = products
+  .filter_empty()
+  .sort("price", "number", true)
+  .slice((currentPage - 1) * itemsPerPage, itemsPerPage);
+```
+
+**Search and Filter:**
+```javascript
+// WeWeb search functionality
+const searchResults = allProducts
+  .filter(product => product.name.includes(searchTerm))
+  .sort("relevance_score", "number", false);
+```
+
+### Make.com Scenario Patterns
+
+**Batch Processing:**
+```javascript
+// Process items in chunks
+const batchSize = 10;
+const totalBatches = Math.ceil(items.count() / batchSize);
+
+for (let i = 0; i < totalBatches; i++) {
+  const batch = items.slice(i * batchSize, batchSize);
+  // Process batch
+}
+```
+
+## 💡 **Performance Best Practices**
+
+### Optimize Large Arrays
+
+**Chain Operations Efficiently:**
+```javascript
+// Good: Chain operations to minimize iterations
+const result = largeArray
+  .filter_empty()
+  .unique("id")
+  .sort("priority", "number", false)
+  .slice(0, 100);
+
+// Avoid: Multiple separate operations
+// const filtered = largeArray.filter_empty();
+// const unique = filtered.unique("id");
+// const sorted = unique.sort("priority", "number", false);
+// const limited = sorted.slice(0, 100);
+```
+
+**Use Appropriate Filters:**
+```javascript
+// Specific filters are more efficient than generic ones
+data.filter_null()        // Better than filter_empty for nulls
+data.filter_empty_text()  // Better than filter_empty for strings
+```
+
+### Memory Management
+
+**Process Large Datasets in Chunks:**
+```javascript
+// For very large arrays, process in smaller chunks
+const chunkSize = 1000;
+const chunks = [];
+
+for (let i = 0; i < largeArray.count(); i += chunkSize) {
+  chunks.append(largeArray.slice(i, chunkSize));
+}
+
+// Process each chunk separately
+```
+
+## 🔧 **Common Patterns**
+
+### Data Validation Pipeline
+
+```javascript
+// Complete data cleaning and validation
+const cleanData = rawData
+  .filter_empty()                    // Remove empty entries
+  .unique("id")                     // Remove duplicates
+  .filter(item => item.status !== "deleted") // Remove deleted items
+  .sort("updated_at", "text", false) // Sort by most recent
+  .pick(["id", "name", "status", "data"]); // Keep only needed fields
+```
+
+### Pagination Implementation
+
+```javascript
+// Server-side pagination
+const page = parseInt(request.page) || 1;
+const limit = parseInt(request.limit) || 20;
+const offset = (page - 1) * limit;
+
+const paginatedData = {
+  data: allRecords.slice(offset, limit),
+  pagination: {
+    page: page,
+    limit: limit,
+    total: allRecords.count(),
+    pages: Math.ceil(allRecords.count() / limit)
+  }
+};
+```
+
+### Search Implementation
+
+```javascript
+// Multi-field search with scoring
+const searchResults = products
+  .filter(product => 
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.description.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+  .sort("relevance_score", "number", false)
+  .slice(0, 50);
+```
+
+---
+
+**Next Steps**: Explore more filter types in [Text Filters](text-filters.md) and [Object Filters](object-filters.md) to complete your data manipulation toolkit.
