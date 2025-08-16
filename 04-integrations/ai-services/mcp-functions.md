@@ -1,475 +1,531 @@
 ---
+title: MCP Functions in Xano - Model Context Protocol Integration
+description: Connect Xano to external AI services and tools using MCP (Model Context Protocol) functions for seamless AI integrations
 category: ai-services
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
+difficulty: intermediate
+last_updated: '2025-01-16'
+related_docs:
+  - ai-tools.md
+  - agents.md
+  - mcp-builder.md
 subcategory: 04-integrations/ai-services
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - mcp
+  - model-context-protocol
+  - external-ai
+  - integrations
+  - functions
+  - no-code
 ---
 
+## 📋 **Quick Summary**
+
+MCP (Model Context Protocol) Functions enable Xano to connect with external AI services and tools. These functions allow your agents and workflows to access remote AI capabilities, databases, and services through standardized protocols. Perfect for integrating with external AI platforms in n8n, WeWeb, and other no-code applications.
+
+## What You'll Learn
+
+- Understanding MCP (Model Context Protocol) and its benefits
+- Setting up MCP server connections in Xano
+- Using MCP List Tools and MCP Call Tool functions
+- Integrating MCP functions with AI agents and workflows
+- Best practices for MCP security and performance
+- Troubleshooting common MCP connection issues
+
+# MCP Functions in Xano
+
+## Overview
+
+Model Context Protocol (MCP) Functions in Xano provide a standardized way to connect your backend to external AI services, tools, and data sources. MCP enables seamless communication between Xano and various AI platforms, allowing your agents and workflows to access external capabilities without complex API integrations.
+
+### What is MCP?
+
+MCP (Model Context Protocol) is an open standard that enables AI applications to connect to external data sources and tools in a consistent way. Think of it as a universal adapter that allows different AI systems to communicate with each other and with external services.
+
+**Key Benefits:**
+- ✅ **Standardized Connections**: Consistent interface for all external AI services
+- ✅ **Scalable Integration**: Easy to add new AI services without custom code
+- ✅ **Security**: Built-in authentication and permission management
+- ✅ **Performance**: Optimized for real-time AI operations
+- ✅ **Flexibility**: Works with any MCP-compatible service
+
+## Core MCP Functions
+
+Xano provides two primary MCP functions for external integrations:
+
+### 1. MCP List Tools
+
+**Purpose**: Retrieves a list of available tools and their configurations from an MCP server
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| **url** | String | Yes | The URL to access the MCP server |
+| **bearer_token** | String | No | Authentication token for the server (if required) |
+
+**Example Usage:**
+
+```javascript
+// Function stack configuration
+{
+  "function": "mcp_list_tools",
+  "parameters": {
+    "url": "https://api.external-ai-service.com/mcp",
+    "bearer_token": "{{ env.EXTERNAL_AI_TOKEN }}"
+  }
+}
+```
+
+**Response Format:**
+```json
+{
+  "tools": [
+    {
+      "name": "analyze_sentiment",
+      "description": "Analyzes sentiment of text input",
+      "parameters": {
+        "text": "string",
+        "language": "string (optional)"
+      }
+    },
+    {
+      "name": "translate_text", 
+      "description": "Translates text between languages",
+      "parameters": {
+        "text": "string",
+        "from_lang": "string",
+        "to_lang": "string"
+      }
+    }
+  ]
+}
+```
+
+### 2. MCP Call Tool
+
+**Purpose**: Executes a specific tool available on a remote MCP server
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| **url** | String | Yes | The URL to access the MCP server |
+| **bearer_token** | String | No | Authentication token for the server (if required) |
+| **tool_name** | String | Yes | The name of the tool to execute |
+| **args** | Object | No | JSON object containing tool-specific arguments |
+
+**Example Usage:**
+
+```javascript
+// Function stack configuration
+{
+  "function": "mcp_call_tool",
+  "parameters": {
+    "url": "https://api.external-ai-service.com/mcp",
+    "bearer_token": "{{ env.EXTERNAL_AI_TOKEN }}",
+    "tool_name": "analyze_sentiment",
+    "args": {
+      "text": "{{ request.body.feedback }}",
+      "language": "en"
+    }
+  }
+}
+```
+
+**Response Format:**
+```json
+{
+  "result": {
+    "sentiment": "positive",
+    "confidence": 0.95,
+    "score": 0.8,
+    "details": {
+      "positive": 0.8,
+      "negative": 0.1,
+      "neutral": 0.1
+    }
+  },
+  "status": "success",
+  "execution_time": 245
+}
+```
+
+## Setting Up MCP Connections
+
+### Step 1: Configure Environment Variables
+
+Store your API keys and endpoints securely:
+
+1. Navigate to **Instance Settings** in Xano
+2. Go to **Environment Variables**
+3. Add your MCP server credentials:
+
+```env
+ANTHROPIC_MCP_URL=https://api.anthropic.com/mcp
+ANTHROPIC_API_KEY=your_api_key_here
+OPENAI_MCP_URL=https://api.openai.com/mcp
+OPENAI_API_KEY=your_openai_key_here
+```
+
+### Step 2: Test MCP Connection
+
+Create a simple test endpoint to verify connectivity:
+
+```javascript
+// Test function stack
+[
+  {
+    "function": "mcp_list_tools",
+    "parameters": {
+      "url": "{{ env.ANTHROPIC_MCP_URL }}",
+      "bearer_token": "{{ env.ANTHROPIC_API_KEY }}"
+    }
+  }
+]
+```
+
+### Step 3: Integrate with Agents
+
+Add MCP tools to your AI agents for enhanced capabilities:
+
+```javascript
+// Agent configuration with MCP tool
+{
+  "agent_name": "Enhanced Support Agent",
+  "tools": [
+    "get_user_data",           // Local Xano tool
+    "analyze_sentiment",       // MCP tool
+    "translate_message"        // MCP tool
+  ],
+  "system_prompt": "You can analyze customer sentiment and translate messages when needed."
+}
+```
+
+## 🔗 **No-Code Platform Integration**
+
+### n8n Integration
+
+**MCP Function Call in n8n Workflow:**
+
+```javascript
+// HTTP Request node for MCP integration
+{
+  "method": "POST",
+  "url": "https://your-xano-instance.com/api/mcp-processor",
+  "headers": {
+    "Authorization": "Bearer {{ $json.auth_token }}",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "mcp_action": "call_tool",
+    "tool_name": "analyze_sentiment",
+    "input_data": {
+      "text": "{{ $json.customer_feedback }}",
+      "metadata": "{{ $json.request_context }}"
+    }
+  }
+}
+```
+
+**n8n Workflow Pattern:**
+1. **Trigger** → Webhook receives data
+2. **Data Processing** → Prepare data for MCP call
+3. **HTTP Request** → Call Xano MCP endpoint
+4. **Switch** → Route based on MCP response
+5. **Actions** → Execute appropriate follow-up actions
+
+### WeWeb Integration
+
+**Frontend MCP Integration:**
+
+```javascript
+// WeWeb component for MCP-powered features
+async function procesWithAI(inputData) {
+  try {
+    // First, get available tools
+    const toolsResponse = await fetch(`${wwLib.wwVariable.getValue('xano_base_url')}/api/mcp-tools`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${wwLib.wwVariable.getValue('auth_token')}`
+      }
+    });
+    
+    const availableTools = await toolsResponse.json();
+    
+    // Then call specific tool
+    const result = await fetch(`${wwLib.wwVariable.getValue('xano_base_url')}/api/mcp-execute`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${wwLib.wwVariable.getValue('auth_token')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tool_name: 'analyze_content',
+        args: {
+          content: inputData.text,
+          analysis_type: 'comprehensive'
+        }
+      })
+    });
+    
+    const analysis = await result.json();
+    
+    // Update UI with results
+    wwLib.wwVariable.updateValue('ai_analysis', analysis);
+    
+    return analysis;
+  } catch (error) {
+    console.error('MCP call failed:', error);
+    return { error: 'AI analysis unavailable' };
+  }
+}
+```
+
+### Make.com Integration
+
+**Make.com Scenario for MCP:**
+
+1. **Trigger Module**: Gmail, webhook, or scheduler
+2. **HTTP Module**: List available MCP tools
+3. **Router**: Choose appropriate tool based on data type
+4. **HTTP Module**: Execute selected MCP tool
+5. **Action Modules**: Process results (send email, update database, etc.)
+
+## 🛠️ **Practical Examples**
+
+### Example 1: Content Analysis Pipeline
+
+**Use Case**: Analyze user-generated content for sentiment, topics, and moderation
+
+**Function Stack:**
+```javascript
+[
+  // Step 1: Get content analysis tools
+  {
+    "function": "mcp_list_tools",
+    "parameters": {
+      "url": "{{ env.CONTENT_AI_URL }}",
+      "bearer_token": "{{ env.CONTENT_AI_TOKEN }}"
+    }
+  },
+  
+  // Step 2: Analyze sentiment
+  {
+    "function": "mcp_call_tool",
+    "parameters": {
+      "url": "{{ env.CONTENT_AI_URL }}",
+      "bearer_token": "{{ env.CONTENT_AI_TOKEN }}",
+      "tool_name": "analyze_sentiment",
+      "args": {
+        "text": "{{ request.body.content }}",
+        "include_emotions": true
+      }
+    }
+  },
+  
+  // Step 3: Check for inappropriate content
+  {
+    "function": "mcp_call_tool", 
+    "parameters": {
+      "url": "{{ env.MODERATION_AI_URL }}",
+      "bearer_token": "{{ env.MODERATION_AI_TOKEN }}",
+      "tool_name": "moderate_content",
+      "args": {
+        "text": "{{ request.body.content }}",
+        "strict_mode": true
+      }
+    }
+  },
+  
+  // Step 4: Store results
+  {
+    "function": "add_record",
+    "parameters": {
+      "table": "content_analysis",
+      "data": {
+        "content_id": "{{ request.body.content_id }}",
+        "sentiment_score": "{{ sentiment_result.score }}",
+        "moderation_status": "{{ moderation_result.status }}",
+        "processed_at": "{{ now }}"
+      }
+    }
+  }
+]
+```
+
+### Example 2: Multi-Language Customer Support
+
+**Use Case**: Automatically translate and respond to customer inquiries in any language
+
+**Agent Configuration:**
+```javascript
+{
+  "name": "Multilingual Support Agent",
+  "system_prompt": "You help customers in any language. Always detect the language first, then provide support in their preferred language.",
+  "tools": [
+    "detect_language",      // MCP tool
+    "translate_text",       // MCP tool  
+    "get_customer_info",    // Local tool
+    "update_ticket"         // Local tool
+  ],
+  "workflow": [
+    "detect_customer_language",
+    "translate_to_english_if_needed", 
+    "process_support_request",
+    "translate_response_back",
+    "send_response"
+  ]
+}
+```
+
+### Example 3: Document Processing Automation
+
+**Use Case**: Process uploaded documents with AI analysis
+
+**Function Stack:**
+```javascript
+[
+  // Step 1: Extract text from document
+  {
+    "function": "mcp_call_tool",
+    "parameters": {
+      "url": "{{ env.DOCUMENT_AI_URL }}",
+      "tool_name": "extract_text",
+      "args": {
+        "document_url": "{{ uploaded_file.url }}",
+        "format": "structured"
+      }
+    }
+  },
+  
+  // Step 2: Summarize content
+  {
+    "function": "mcp_call_tool",
+    "parameters": {
+      "url": "{{ env.LLM_SERVICE_URL }}",
+      "tool_name": "summarize_text",
+      "args": {
+        "text": "{{ extracted_text }}",
+        "max_length": 500,
+        "style": "business"
+      }
+    }
+  },
+  
+  // Step 3: Extract key entities
+  {
+    "function": "mcp_call_tool",
+    "parameters": {
+      "url": "{{ env.NLP_SERVICE_URL }}",
+      "tool_name": "extract_entities",
+      "args": {
+        "text": "{{ extracted_text }}",
+        "entity_types": ["PERSON", "ORG", "DATE", "MONEY"]
+      }
+    }
+  }
+]
+```
+
+## Security Best Practices
+
+### Authentication Management
+
+1. **Environment Variables**: Always store API keys in environment variables
+2. **Token Rotation**: Regularly rotate API keys and update environment variables
+3. **Scope Limitation**: Use tokens with minimal required permissions
+4. **Request Validation**: Validate all inputs before sending to MCP servers
+
+### Error Handling
+
+```javascript
+// Robust MCP call with error handling
+{
+  "function": "conditional",
+  "condition": "{{ mcp_response.status == 'error' }}",
+  "true_branch": [
+    {
+      "function": "create_variable",
+      "name": "fallback_response",
+      "value": {
+        "status": "fallback",
+        "message": "AI service temporarily unavailable",
+        "timestamp": "{{ now }}"
+      }
+    }
+  ],
+  "false_branch": [
+    {
+      "function": "process_mcp_result",
+      "data": "{{ mcp_response.result }}"
+    }
+  ]
+}
+```
+
+### Rate Limiting
+
+Implement rate limiting to avoid exceeding API quotas:
+
+```javascript
+// Rate limiting pattern
+{
+  "function": "get_record",
+  "table": "api_usage",
+  "filter": {
+    "service": "mcp_service",
+    "date": "{{ today }}"
+  },
+  "conditional_execution": {
+    "condition": "{{ usage_count < daily_limit }}",
+    "true_action": "proceed_with_mcp_call",
+    "false_action": "return_rate_limit_error"
+  }
+}
+```
+
+## 🔧 **Troubleshooting**
+
+### Common Issues
+
+**Problem**: MCP server connection timeout  
+**Solution**: Check network connectivity and server status. Implement retry logic with exponential backoff.
+
+**Problem**: Authentication errors  
+**Solution**: Verify API key is correct and has required permissions. Check token expiration.
+
+**Problem**: Tool not found errors  
+**Solution**: Use MCP List Tools to verify available tools. Check tool name spelling and case sensitivity.
+
+**Problem**: Invalid arguments error  
+**Solution**: Validate argument structure against tool requirements. Use proper data types.
+
+### Debugging Tips
+
+1. **Test Connections**: Always test MCP connections with simple tool listings first
+2. **Log Responses**: Log MCP responses for debugging (remove sensitive data)
+3. **Validate Inputs**: Implement input validation before MCP calls
+4. **Monitor Performance**: Track response times and error rates
+5. **Fallback Strategies**: Always have fallback options when MCP services are unavailable
+
+## 💡 **Pro Tips**
+
+- **Caching**: Cache MCP tool lists to reduce API calls
+- **Batch Operations**: Group multiple tool calls when possible
+- **Async Processing**: Use background tasks for long-running MCP operations
+- **Health Checks**: Implement regular health checks for MCP endpoints
+- **Documentation**: Maintain documentation of available MCP tools and their parameters
+
+## 🎯 **Try This**
+
+**Quick Start Challenge**: Set up a basic MCP integration that analyzes text sentiment.
+
+1. Choose an AI service with MCP support (e.g., Anthropic, OpenAI)
+2. Configure environment variables with API credentials
+3. Create a function stack that lists available tools
+4. Implement a sentiment analysis endpoint
+5. Test with sample text data
+
 ---
-apple-mobile-web-app-status-bar-style: black
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'mcp-functions'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../the-function-stack/filters/manipulation.html)
-        -   [Math](../../the-function-stack/filters/math.html)
-        -   [Timestamp](../../the-function-stack/filters/timestamp.html)
-        -   [Text](../../the-function-stack/filters/text.html)
-        -   [Array](../../the-function-stack/filters/array.html)
-        -   [Transform](../../the-function-stack/filters/transform.html)
-        -   [Conversion](../../the-function-stack/filters/conversion.html)
-        -   [Comparison](../../the-function-stack/filters/comparison.html)
-        -   [Security](../../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../the-function-stack/data-types/text.html)
-        -   [Expression](../../the-function-stack/data-types/expression.html)
-        -   [Array](../../the-function-stack/data-types/array.html)
-        -   [Object](../../the-function-stack/data-types/object.html)
-        -   [Integer](../../the-function-stack/data-types/integer.html)
-        -   [Decimal](../../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../../the-function-stack/data-types/timestamp.html)
-        -   [Null](../../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](connecting-clients.html)
-        -   [MCP Functions](mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../../xano-features/metadata-api/content.html)
-        -   [Search](../../xano-features/metadata-api/search.html)
-        -   [File](../../xano-features/metadata-api/file.html)
-        -   [Request History](../../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [Run API Endpoint](#run-api-endpoint)
-
--   [Run Task](#run-task)
-
-Was this helpful?
-
-Copy
-
-1.  [Build For AI](../agents.html)
-2.  MCP Builder
-
-MCP Functions 
-=============
-
- 
-
-Run API Endpoint
-
-Executes an API endpoint as part of an MCP Server Tool function stack
-
-Parameter
-
-Purpose
-
-API Group
-
-The API group that contains the API you\'d like to run
-
-Endpoint
-
-The API endpoint to run
-
-Return as
-
-The variable to store the output of the API call
-
- 
-
-Note
-
-When using the Run API Endpoint function, authentication tokens are not checked.
-
- 
-
-Run Task
-
-Executes a task as part of an MCP Server Tool function stack
-
-Parameter
-
-Purpose
-
-Task
-
-The task to run
-
-Tasks have no output.
-
- 
-
-MCP List Tools
-
-Provides a list of available tools and their configurations from an MCP server
-
-Parameter
-
-Purpose
-
-url
-
-The URL to access the MCP server
-
-bearer token
-
-If required, an authentication token to access the server
-
- 
-
-MCP Call Tool
-
-Executes a tool available on a remote MCP server
-
-Parameter
-
-Purpose
-
-url
-
-The URL to access the MCP server
-
-bearer token
-
-If required, an authentication token to access the server
-
-tool name
-
-The name of the tool to call
-
-args
-
-The data that the tool requires, if any. This should usually be a JSON object.
-
-Last updated 1 month ago
-
-Was this helpful?
+**Next Steps**: Ready to build more complex AI workflows? Check out [AI Agents](agents.md) for autonomous task execution or explore [MCP Builder](mcp-builder.md) for advanced configurations

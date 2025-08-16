@@ -1,481 +1,579 @@
 ---
+title: Using AI Builders with Xano - Integration Guide for Modern Development Tools
+description: Complete guide to integrating Xano with AI-powered development platforms like Bolt.new, v0, Cursor, and other modern AI builders
 category: ai-services
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
+difficulty: intermediate
+last_updated: '2025-01-16'
+related_docs:
+  - agents.md
+  - ai-tools.md
+  - mcp-functions.md
 subcategory: 04-integrations/ai-services
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - ai-builders
+  - bolt-new
+  - v0-vercel
+  - cursor
+  - claude-dev
+  - development-tools
+  - no-code
+  - integration
 ---
 
+## 📋 **Quick Summary**
+
+AI builders like Bolt.new, v0, Cursor, and Claude Dev are revolutionizing development by generating code from natural language. This guide shows you how to integrate these powerful tools with Xano as your backend, enabling rapid full-stack development with AI assistance while maintaining robust data management and API functionality.
+
+## What You'll Learn
+
+- How to connect AI builders with Xano backend services
+- Best practices for AI-generated frontend + Xano backend integration
+- Specific setup guides for popular AI builders (Bolt.new, v0, Cursor)
+- Authentication and API configuration patterns
+- Common pitfalls and troubleshooting tips
+- Performance optimization for AI-built applications
+
+# Using AI Builders with Xano
+
+## Overview
+
+AI builders are transforming how developers create applications by generating code from natural language descriptions. When combined with Xano's powerful backend-as-a-service, you get the best of both worlds:
+
+- **AI-Generated Frontend**: Rapid UI/UX development with natural language
+- **Robust Backend**: Professional-grade APIs, database, and business logic
+- **Seamless Integration**: AI tools can generate API calls and authentication code
+- **Scalable Architecture**: Production-ready infrastructure from day one
+
+### Popular AI Builders
+
+| Platform | Strengths | Best Use Cases |
+|----------|-----------|----------------|
+| **Bolt.new** | Full-stack applications, rapid prototyping | MVPs, demos, complete web apps |
+| **v0 (Vercel)** | React components, modern UI patterns | Component libraries, design systems |
+| **Cursor** | Code editing with AI assistance | Existing projects, code optimization |
+| **Claude Dev** | Complex logic, architectural decisions | Backend logic, API integrations |
+| **Replit Agent** | Learning-focused, collaborative coding | Educational projects, experiments |
+
+## Integration Architecture
+
+### Recommended Stack
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   AI Builder    │    │      Xano       │    │   External      │
+│                 │    │                 │    │   Services      │
+│ • Bolt.new     │────│ • Database      │────│ • Payment APIs  │
+│ • v0           │    │ • APIs          │    │ • Email Service │
+│ • Cursor       │    │ • Auth          │    │ • File Storage  │
+│                 │    │ • Functions     │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+        │                        │                        │
+        └────────── HTTPS/REST API ──────────────────────┘
+```
+
+### Development Workflow
+
+1. **Design in AI Builder**: Describe your application in natural language
+2. **Generate Frontend**: Let AI create the UI components and logic
+3. **Configure Xano Backend**: Set up database, APIs, and authentication
+4. **Connect & Test**: Integrate frontend with Xano endpoints
+5. **Iterate & Deploy**: Refine with AI assistance and deploy
+
+## Platform-Specific Integration Guides
+
+### 🚀 **Bolt.new Integration**
+
+**Best for**: Complete web applications with complex user interfaces
+
+#### Setup Process
+
+1. **Create Xano Backend**
+   ```bash
+   # Example API endpoints to create in Xano
+   GET  /api/users/profile      # User profile data
+   POST /api/users/update       # Update user information  
+   GET  /api/posts              # List posts/content
+   POST /api/posts              # Create new post
+   ```
+
+2. **Generate App with Bolt.new**
+   ```
+   Prompt: "Create a social media dashboard that connects to my Xano backend. 
+   Include user authentication, post creation, and a feed view. 
+   The backend API is at https://my-xano-instance.com/api"
+   ```
+
+3. **Configure Authentication**
+   ```javascript
+   // Bolt.new will generate something like this
+   const authenticateUser = async (email, password) => {
+     const response = await fetch('https://your-xano-instance.com/api/auth/login', {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({ email, password })
+     });
+     const data = await response.json();
+     localStorage.setItem('authToken', data.authToken);
+     return data;
+   };
+   ```
+
+4. **Update API Calls**
+   ```javascript
+   // Example generated API function
+   const fetchUserPosts = async () => {
+     const token = localStorage.getItem('authToken');
+     const response = await fetch('https://your-xano-instance.com/api/posts', {
+       headers: { 
+         'Authorization': `Bearer ${token}`,
+         'Content-Type': 'application/json'
+       }
+     });
+     return await response.json();
+   };
+   ```
+
+### ⚡ **v0 (Vercel) Integration**
+
+**Best for**: React components that consume Xano APIs
+
+#### Component Generation
+
+1. **Describe Component with Data Needs**
+   ```
+   Prompt: "Create a React component for a user profile card that fetches data 
+   from GET https://my-xano-instance.com/api/users/profile. 
+   Include loading states and error handling."
+   ```
+
+2. **Generated Component Example**
+   ```jsx
+   import { useState, useEffect } from 'react';
+   
+   export function UserProfileCard() {
+     const [user, setUser] = useState(null);
+     const [loading, setLoading] = useState(true);
+     const [error, setError] = useState(null);
+   
+     useEffect(() => {
+       const fetchUser = async () => {
+         try {
+           const token = localStorage.getItem('authToken');
+           const response = await fetch('https://your-xano-instance.com/api/users/profile', {
+             headers: { 'Authorization': `Bearer ${token}` }
+           });
+           
+           if (!response.ok) throw new Error('Failed to fetch user');
+           
+           const userData = await response.json();
+           setUser(userData);
+         } catch (err) {
+           setError(err.message);
+         } finally {
+           setLoading(false);
+         }
+       };
+   
+       fetchUser();
+     }, []);
+   
+     if (loading) return <div className="animate-pulse">Loading...</div>;
+     if (error) return <div className="text-red-500">Error: {error}</div>;
+   
+     return (
+       <div className="bg-white rounded-lg shadow-md p-6">
+         <img src={user.avatar} alt={user.name} className="w-16 h-16 rounded-full mb-4" />
+         <h2 className="text-xl font-bold">{user.name}</h2>
+         <p className="text-gray-600">{user.email}</p>
+       </div>
+     );
+   }
+   ```
+
+### 💻 **Cursor Integration**
+
+**Best for**: Enhancing existing projects with AI assistance
+
+#### Workflow with Cursor
+
+1. **Open Existing Project**
+   ```bash
+   # Open your React/Next.js project in Cursor
+   cursor my-xano-frontend/
+   ```
+
+2. **Use AI to Generate Xano Integration Code**
+   ```
+   Cursor Prompt: "Add a service layer for connecting to Xano backend. 
+   Create functions for authentication, CRUD operations, and error handling. 
+   Base URL: https://my-xano-instance.com/api"
+   ```
+
+3. **Generated Service Layer**
+   ```typescript
+   // services/xanoService.ts - Generated by Cursor
+   class XanoService {
+     private baseURL = 'https://your-xano-instance.com/api';
+     private authToken: string | null = null;
+   
+     constructor() {
+       this.authToken = localStorage.getItem('authToken');
+     }
+   
+     private async request(endpoint: string, options: RequestInit = {}) {
+       const url = `${this.baseURL}${endpoint}`;
+       const config: RequestInit = {
+         headers: {
+           'Content-Type': 'application/json',
+           ...(this.authToken && { Authorization: `Bearer ${this.authToken}` }),
+           ...options.headers,
+         },
+         ...options,
+       };
+   
+       const response = await fetch(url, config);
+       
+       if (!response.ok) {
+         throw new Error(`HTTP error! status: ${response.status}`);
+       }
+       
+       return await response.json();
+     }
+   
+     async login(email: string, password: string) {
+       const data = await this.request('/auth/login', {
+         method: 'POST',
+         body: JSON.stringify({ email, password }),
+       });
+       
+       this.authToken = data.authToken;
+       localStorage.setItem('authToken', data.authToken);
+       return data;
+     }
+   
+     async getUsers() {
+       return this.request('/users');
+     }
+   
+     async createUser(userData: any) {
+       return this.request('/users', {
+         method: 'POST',
+         body: JSON.stringify(userData),
+       });
+     }
+   }
+   
+   export const xanoService = new XanoService();
+   ```
+
+## 🔗 **Integration Best Practices**
+
+### Authentication Setup
+
+#### 1. Xano Authentication Configuration
+
+```javascript
+// Xano function stack for AI builder authentication
+[
+  {
+    "function": "authenticate_user",
+    "parameters": {
+      "email": "{{ request.body.email }}",
+      "password": "{{ request.body.password }}"
+    }
+  },
+  {
+    "function": "generate_jwt_token",
+    "parameters": {
+      "user_id": "{{ user.id }}",
+      "expires_in": "7d"
+    }
+  },
+  {
+    "function": "return_response",
+    "parameters": {
+      "authToken": "{{ jwt_token }}",
+      "user": "{{ user }}",
+      "expiresAt": "{{ expiry_date }}"
+    }
+  }
+]
+```
+
+#### 2. Frontend Authentication Hook (Generated by AI)
+
+```javascript
+// Custom hook for authentication - often generated by AI builders
+import { useState, useEffect, createContext, useContext } from 'react';
+
+const AuthContext = createContext();
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      // Verify token with Xano
+      verifyToken(token).then(setUser).finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  const login = async (email, password) => {
+    const response = await fetch('https://your-xano-instance.com/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    
+    const data = await response.json();
+    localStorage.setItem('authToken', data.authToken);
+    setUser(data.user);
+    return data;
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export const useAuth = () => useContext(AuthContext);
+```
+
+### API Integration Patterns
+
+#### 1. RESTful API Calls
+
+```javascript
+// Pattern that AI builders commonly generate
+const apiClient = {
+  get: (endpoint) => fetch(`${BASE_URL}${endpoint}`, { 
+    headers: { Authorization: `Bearer ${getToken()}` } 
+  }).then(r => r.json()),
+  
+  post: (endpoint, data) => fetch(`${BASE_URL}${endpoint}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getToken()}`
+    },
+    body: JSON.stringify(data)
+  }).then(r => r.json()),
+};
+```
+
+#### 2. Error Handling
+
+```javascript
+// Robust error handling for AI-generated code
+const handleApiError = (error) => {
+  if (error.status === 401) {
+    // Token expired
+    localStorage.removeItem('authToken');
+    window.location.href = '/login';
+  } else if (error.status === 403) {
+    // Insufficient permissions
+    showNotification('Access denied', 'error');
+  } else {
+    // General error
+    showNotification('Something went wrong', 'error');
+  }
+};
+```
+
+### Environment Configuration
+
+#### Development Setup
+
+```bash
+# .env file for AI-generated applications
+REACT_APP_XANO_BASE_URL=https://your-dev-instance.xano.com/api
+REACT_APP_XANO_DATABASE_URL=https://your-dev-instance.xano.com
+REACT_APP_AUTH_REDIRECT_URL=http://localhost:3000/auth/callback
+```
+
+#### Production Setup
+
+```bash
+# Production environment variables
+REACT_APP_XANO_BASE_URL=https://your-prod-instance.xano.com/api
+REACT_APP_XANO_DATABASE_URL=https://your-prod-instance.xano.com
+REACT_APP_AUTH_REDIRECT_URL=https://yourapp.com/auth/callback
+```
+
+## 🛠️ **Common Integration Patterns**
+
+### Real-Time Updates
+
+```javascript
+// WebSocket integration for real-time features
+// Often suggested by AI builders for chat/collaboration features
+const useRealTimeUpdates = (channel) => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const ws = new WebSocket(`wss://your-xano-instance.com/realtime/${channel}`);
+    
+    ws.onmessage = (event) => {
+      const update = JSON.parse(event.data);
+      setData(prev => [...prev, update]);
+    };
+
+    return () => ws.close();
+  }, [channel]);
+
+  return data;
+};
+```
+
+### File Upload Integration
+
+```javascript
+// File upload pattern for AI-generated forms
+const uploadFile = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await fetch('https://your-xano-instance.com/api/upload', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${getToken()}`
+    },
+    body: formData
+  });
+
+  return await response.json();
+};
+```
+
+### Search and Filtering
+
+```javascript
+// Advanced search functionality
+const useSearch = () => {
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const search = async (query, filters = {}) => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({
+        q: query,
+        ...filters
+      });
+      
+      const response = await fetch(`https://your-xano-instance.com/api/search?${params}`, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      
+      const data = await response.json();
+      setResults(data.results);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { results, loading, search };
+};
+```
+
+## 🔧 **Troubleshooting**
+
+### Common Issues
+
+**Problem**: AI generates incorrect API endpoints  
+**Solution**: Provide clear API documentation in your prompts. Include exact endpoint URLs and parameter structures.
+
+**Problem**: Authentication not working  
+**Solution**: Verify token format and expiration. Check CORS settings in Xano instance settings.
+
+**Problem**: Data not updating in real-time  
+**Solution**: Implement proper state management. Consider using React Query or SWR for caching and synchronization.
+
+**Problem**: AI generates inefficient API calls  
+**Solution**: Review generated code for N+1 queries. Implement proper pagination and caching strategies.
+
+### Debugging Tips
+
+1. **API Testing**: Use Postman or similar tools to test Xano endpoints before integrating
+2. **Network Monitoring**: Check browser dev tools Network tab for failed requests
+3. **Error Logging**: Implement comprehensive error logging in both frontend and backend
+4. **State Debugging**: Use React Dev Tools to monitor component state changes
+
+## 💡 **Pro Tips for AI Builder + Xano Success**
+
+### Effective Prompting
+
+**Good Prompt Example:**
+```
+Create a React component for a product listing page that:
+- Fetches products from GET https://my-xano-instance.com/api/products
+- Includes search and filter functionality
+- Handles loading states and errors gracefully
+- Uses Tailwind CSS for styling
+- Implements pagination with 20 items per page
+```
+
+**Include in Your Prompts:**
+- Exact API endpoints and methods
+- Expected data structures
+- Error handling requirements
+- Styling framework preferences
+- Performance considerations
+
+### Code Review Checklist
+
+- [ ] API endpoints match Xano function stack URLs
+- [ ] Authentication headers are included in all protected requests
+- [ ] Error handling covers all HTTP status codes
+- [ ] Loading states provide good UX
+- [ ] Data validation happens on both client and server
+- [ ] Environment variables are used for configuration
+
+### Performance Optimization
+
+1. **Implement Caching**: Use React Query, SWR, or similar libraries
+2. **Optimize Bundle Size**: Code-split AI-generated components
+3. **Database Indexing**: Ensure proper indexes in Xano for search queries
+4. **API Optimization**: Use Xano's built-in pagination and filtering
+
+## 🎯 **Quick Start Template**
+
+Here's a complete prompt you can use with any AI builder to create a Xano-integrated application:
+
+```
+Create a modern web application with the following specifications:
+
+BACKEND: Xano (already configured)
+- Base URL: https://my-xano-instance.com/api
+- Authentication: JWT tokens via /auth/login
+- Main endpoints: /users, /posts, /comments
+
+FRONTEND REQUIREMENTS:
+- React with TypeScript
+- Tailwind CSS for styling
+- Authentication system with login/logout
+- Dashboard with CRUD operations
+- Responsive design for mobile and desktop
+- Error handling and loading states
+- Real-time updates where applicable
+
+FEATURES TO IMPLEMENT:
+1. User authentication and profile management
+2. Post creation, editing, and deletion
+3. Comment system on posts
+4. Search functionality
+5. File upload for images
+6. Pagination for large datasets
+
+Please generate a complete, production-ready application with proper error handling, TypeScript types, and responsive design.
+```
+
 ---
-apple-mobile-web-app-status-bar-style: black
 
-color-scheme: dark light
-description: 'Get the latest on using platforms like Bolt.new, v0, and Cursor with Xano'
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'using-ai-builders-with-xano'
-twitter:card: summary\_large\_image
-twitter:description: 'Get the latest on using platforms like Bolt.new, v0, and Cursor with Xano'
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../the-function-stack/filters/manipulation.html)
-        -   [Math](../the-function-stack/filters/math.html)
-        -   [Timestamp](../the-function-stack/filters/timestamp.html)
-        -   [Text](../the-function-stack/filters/text.html)
-        -   [Array](../the-function-stack/filters/array.html)
-        -   [Transform](../the-function-stack/filters/transform.html)
-        -   [Conversion](../the-function-stack/filters/conversion.html)
-        -   [Comparison](../the-function-stack/filters/comparison.html)
-        -   [Security](../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../the-function-stack/data-types/text.html)
-        -   [Expression](../the-function-stack/data-types/expression.html)
-        -   [Array](../the-function-stack/data-types/array.html)
-        -   [Object](../the-function-stack/data-types/object.html)
-        -   [Integer](../the-function-stack/data-types/integer.html)
-        -   [Decimal](../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../the-function-stack/data-types/timestamp.html)
-        -   [Null](../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [The Key: Auto-documented APIs](#the-key-auto-documented-apis)
-
--   [Get your API documentation](#get-your-api-documentation)
-
--   [On the documentation page that opens, save the JSON version by right-clicking the link at the top and saving it.](#on-the-documentation-page-that-opens-save-the-json-version-by-right-clicking-the-link-at-the-top-and)
-
--   [Import the documentation into your AI of choice, and start building!](#import-the-documentation-into-your-ai-of-choice-and-start-building)
-
--   [Best Practices and Tips](#best-practices-and-tips)
-
-Was this helpful?
-
-Copy
-
-1.  [Build With AI](using-ai-builders-with-xano.html)
-
-Using AI Builders with Xano 
-===========================
-
-Get the latest on using platforms like Bolt.new, v0, and Cursor with Xano
-
-[](https://youtu.be/m4YoJXaqdEc?si=-T0O0RXVTL93HHls)
-
-![Cover](../_gitbook/image768d.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FZgrQdzImsczBc3bSBmCM%252Fmaxresdefault.jpg%3Falt%3Dmedia%26token%3Ded318a43-9f8d-4e21-ad6a-ccd8d4a7f7ff&width=376&dpr=4&quality=100&sign=7a963e5d&sv=2)
-
-![](../_gitbook/imagec045.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FQoqF1QGDlbsDxG2OnkF7%252Fimage.png%3Falt%3Dmedia%26token%3D77e586a8-a2c2-4aa4-9934-eae3aa3ccaca&width=56&dpr=4&quality=100&sign=c8145685&sv=2) **Using Xano with Cursor**
-
-![Cover](../_gitbook/image72a8.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FmDxXwvTWapMhGVftUZWi%252F4ULVUlsjN9U-HD.jpg%3Falt%3Dmedia%26token%3D115d0bef-bfa3-4bf9-9f9a-854a220de8a8&width=376&dpr=4&quality=100&sign=851a9b3a&sv=2)
-
-![](../_gitbook/imagef8ec.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FBnNgejSgdpAM4rPLKL9W%252Fimage.png%3Falt%3Dmedia%26token%3D8d8c5ae1-a8ee-4ed2-b4d8-2eb5dd45a52a&width=56&dpr=4&quality=100&sign=7917d2d2&sv=2) **Using Swagger Docs with ChatGPT**
-
- 
-
-The Key: Auto-documented APIs
-
-When you\'re building API endpoints in Xano, they\'re auto-documented in the OpenAPI specification using Swagger. This means that without any effort from you, you already have AI-ready documentation that can be used in combination with your favorite AI builder to spin up fully baked applications very quickly.
-
-We have a full section on this functionality here: [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html). For now though, you can get started quickly with the instructions below.
-
-<div>
-
-1
-
-###  
-
-Get your API documentation
-
-Inside your API group(s), you\'ll find a link to the documentation in the top-right, as shown below.
-
-![](../_gitbook/image0017.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FpgDMpqh0D1KaLsuzcvBc%252FCleanShot%25202025-05-01%2520at%252011.40.04.png%3Falt%3Dmedia%26token%3D8d840728-300f-4406-8669-e20a386ebb19&width=768&dpr=4&quality=100&sign=5ced7208&sv=2)
-
-2
-
-###  
-
-On the documentation page that opens, save the JSON version by right-clicking the link at the top and saving it.
-
-You\'ll want to save separate files for each of the API groups that you want to use in the AI builder.
-
-![](../_gitbook/image2713.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FjW3hk3TeB8bmxEiaDnzT%252FCleanShot%25202025-05-01%2520at%252011.44.09.png%3Falt%3Dmedia%26token%3D88228b91-4467-4d0b-922d-4028b0b095f1&width=768&dpr=4&quality=100&sign=4cfd91c6&sv=2)
-
-3
-
-###  
-
-Import the documentation into your AI of choice, and start building!
-
-Here\'s a quick demo of us importing some API documentation into ChatGPT, and getting a fully functional app returned.
-
-<div>
-
-</div>
-
-Please note that this video does not contain any audio, and is not intended to be a full tutorial; only a quick demonstration.
-
-</div>
-
- 
-
-Best Practices and Tips
-
--   
-    
-        
-    
-    **Start with a clear objective**
-
-    -   
-        
-                
-        
-        Understand the scope of what you want the end result to look like. Try to keep in mind what a successful MVP (minimum viable product) or version 1 would require, and use that to guide the AI builder.
-            
--   
-    
-        
-    
-    **Use versioning**
-
-    -   
-        
-                
-        
-        Store your app\'s code on Github and use versioning to ensure that you can always roll back, and that it\'s easier to start new conversations if necessary with other AI platforms. [Here\'s a great tutorial from FreeCodeCamp.](https://www.freecodecamp.org/news/git-and-github-for-beginners/)
-            
-
-Last updated 2 months ago
-
-Was this helpful?
+**Next Steps**: Ready to start building? Choose your preferred AI builder and begin with our [Agent Templates](templates.md) for common backend functionality, or explore [AI Tools](ai-tools.md) for advanced customization
