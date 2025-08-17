@@ -1,263 +1,315 @@
 ---
+title: Boolean Data Type Reference
+description: Complete guide to working with boolean values in Xano - true/false logic for conditions, flags, and decision-making in no-code workflows
 category: functions
-has_code_examples: false
-last_updated: '2025-01-23'
+subcategory: 08-reference/functions
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: Boolean
+- boolean
+- data-types
+- true-false
+- conditional-logic
+- n8n-integration
+- weweb-integration
+- make-automation
+last_updated: '2025-01-17'
+difficulty: beginner
+has_code_examples: true
+related_docs:
+- 05-advanced-features/conditionals/the-development-life-cycle.md
+- 02-core-concepts/function-stack/conditional.md
+- expressions/configuring-expressions.md
 ---
 
-# Boolean
+# Boolean Data Type Reference
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: boolean
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Boolean \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-[](../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
+## 📋 **Quick Summary**
+Boolean values represent true/false logic in Xano. Essential for feature flags, user permissions, status tracking, and conditional workflows in no-code platforms like n8n, WeWeb, and Make.com.
+
+## What You'll Learn
+- Boolean value syntax and usage
+- Creating conditional logic with booleans
+- Boolean operations and comparisons
+- Integration patterns for no-code platforms
+- Best practices for boolean flags
+- Common boolean use cases
+
+## Boolean Values
+
+Boolean data type has only two possible values:
+- `true` (enabled, yes, on, active)
+- `false` (disabled, no, off, inactive)
+
+### Basic Boolean Syntax
+
+**Simple Boolean Values:**
+```javascript
+true
+false
+```
+
+**In Objects:**
+```javascript
+{
+  "is_active": true,
+  "is_premium": false,
+  "email_verified": true,
+  "notifications_enabled": false
+}
+```
+
+**In Arrays:**
+```javascript
+[true, false, true, true, false]
+```
+
+## 🔄 **No-Code Platform Integration**
+
+### n8n Integration
+```javascript
+// In n8n If node - condition based on boolean
+{
+  "conditions": {
+    "boolean": [
+      {
+        "value1": "{{$json.user.is_active}}",
+        "operation": "equal",
+        "value2": true
+      }
+    ]
+  }
+}
+```
+
+### WeWeb Integration
+```javascript
+// WeWeb conditional display formula
+user.is_premium && user.subscription_active
+```
+
+### Make.com Integration
+```javascript
+// Make.com filter condition
+{
+  "condition": "{{user.email_verified}} = true AND {{user.account_status}} = active"
+}
+```
+
+## Common Boolean Use Cases
+
+### User Management
+```javascript
+{
+  "user_id": 123,
+  "is_active": true,
+  "email_verified": true,
+  "is_premium": false,
+  "notifications": {
+    "email": true,
+    "sms": false,
+    "push": true
+  }
+}
+```
+
+### Feature Flags
+```javascript
+{
+  "features": {
+    "dark_mode": true,
+    "beta_features": false,
+    "advanced_search": true,
+    "ai_assistant": false
+  }
+}
+```
+
+### Content Management
+```javascript
+{
+  "post_id": 456,
+  "title": "My Blog Post",
+  "is_published": true,
+  "is_featured": false,
+  "allow_comments": true,
+  "is_pinned": false
+}
+```
+
+## Boolean Operations
+
+### Comparison Operations
+```javascript
+// Equal comparison
+user.is_active == true
+
+// Not equal comparison
+user.is_banned != true
+
+// Direct boolean check
+user.is_verified  // true or false
+```
+
+### Logical Operations
+```javascript
+// AND operation
+user.is_active && user.email_verified
+
+// OR operation
+user.is_admin || user.is_moderator
+
+// NOT operation
+!user.is_suspended
+```
+
+## 💡 **Try This: User Permission System**
+
+Create a boolean-based permission system:
+
+```javascript
+{
+  "user_id": 789,
+  "permissions": {
+    "can_read": true,
+    "can_write": false,
+    "can_delete": false,
+    "can_admin": false
+  },
+  "features": {
+    "premium_content": true,
+    "api_access": false,
+    "priority_support": true
+  },
+  "settings": {
+    "email_notifications": true,
+    "sms_notifications": false,
+    "marketing_emails": false,
+    "security_alerts": true
+  }
+}
+```
+
+## Boolean in Database Fields
+
+### Field Configuration
+```javascript
+// Boolean database field setup
+{
+  "field_name": "is_active",
+  "field_type": "boolean",
+  "default_value": true,
+  "required": true
+}
+```
+
+### Query Examples
+```javascript
+// Find active users
+WHERE is_active = true
+
+// Find users with verified emails
+WHERE email_verified = true AND is_active = true
+
+// Find inactive premium users
+WHERE is_premium = true AND is_active = false
+```
+
+## ⚠️ **Common Mistakes to Avoid**
+
+1. **String vs Boolean**: Don't use `"true"` (string) instead of `true` (boolean)
+2. **Null Confusion**: Remember `null` is not the same as `false`
+3. **Inconsistent Naming**: Use clear, consistent boolean field names
+4. **Default Values**: Always set appropriate default values for boolean fields
+
+## 🚀 **Pro Tips**
+
+### Naming Conventions
+```javascript
+// Good boolean naming patterns
+{
+  "is_active": true,      // State
+  "has_access": false,    // Possession
+  "can_edit": true,       // Permission
+  "should_notify": false, // Instruction
+  "was_sent": true        // Past action
+}
+```
+
+### Boolean Aggregation
+```javascript
+// Count boolean values
+SELECT 
+  COUNT(*) as total_users,
+  SUM(is_active) as active_users,
+  SUM(is_premium) as premium_users
+FROM users
+```
+
+### Toggle Functionality
+```javascript
+// Toggle boolean value
+UPDATE users 
+SET is_active = NOT is_active 
+WHERE user_id = 123
+```
+
+## Integration Best Practices
+
+### For n8n Workflows
+- Use Switch nodes for multiple boolean conditions
+- Implement proper boolean validation in Set nodes
+- Use boolean fields for workflow routing decisions
+
+### For WeWeb Apps
+- Bind boolean values to toggle components
+- Use boolean expressions for conditional styling
+- Implement boolean-based user interface states
+
+### For Make.com Scenarios
+- Use boolean filters for scenario routing
+- Set up boolean-based trigger conditions
+- Implement boolean status tracking across modules
+
+## Boolean Conversion
+
+### From Other Types
+```javascript
+// String to boolean
+"true" → true (using proper conversion)
+"false" → false
+"" → false (empty string)
+"anything" → true (non-empty string)
+
+// Number to boolean
+0 → false
+1 → true
+-1 → true (any non-zero)
+
+// Null/undefined to boolean
+null → false
+undefined → false
+```
+
+### API Response Patterns
+```javascript
+// Clean boolean API response
+{
+  "success": true,
+  "data": {
+    "user": {
+      "is_active": true,
+      "permissions": {
+        "read": true,
+        "write": false
+      }
+    }
+  },
+  "has_more": false
+}
+```
+
+## Related Functions
+- [Conditional Functions](../../02-core-concepts/function-stack/conditional.md) - Using booleans in conditions
+- [Configuring Expressions](../../05-advanced-features/expressions/configuring-expressions.md) - Boolean expressions
+- [Development Lifecycle](../../05-advanced-features/conditionals/the-development-life-cycle.md) - Boolean logic in workflows
+
+Boolean values are the backbone of decision-making in Xano. Use them effectively to create smart, responsive applications that adapt to user needs and business logic.
