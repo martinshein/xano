@@ -1,583 +1,378 @@
 # Code Examples Index
 
-## Function: Async Functions
+This index provides quick access to code examples organized by category and functionality. Each example includes practical implementations for common Xano use cases.
 
+## 📋 **Quick Summary**
+Comprehensive collection of code examples for Xano functions, organized by category to help developers quickly find and implement common patterns for no-code platforms.
+
+## Database Operations
+
+### Basic CRUD Operations
+- **Add Record**: [03-data-operations/add_record.md](03-data-operations/add_record.md)
+- **Get Record**: [03-data-operations/get_record.md](03-data-operations/get_record.md)
+- **Edit Record**: [03-data-operations/edit_record.md](03-data-operations/edit_record.md)
+- **Delete Record**: [03-data-operations/delete_record.md](03-data-operations/delete_record.md)
+- **Query All Records**: [03-data-operations/query_all_records.md](03-data-operations/query_all_records.md)
+
+### Advanced Database Operations
+- **Database Transactions**: [03-data-operations/add_a_database_transaction_function_to_your_function_stack_.md](03-data-operations/add_a_database_transaction_function_to_your_function_stack_.md)
+- **External Database Query**: [03-data-operations/external_database_query.md](03-data-operations/external_database_query.md)
+- **Complex Filtering**: [03-data-operations/two_conditions_combined_with_or.md](03-data-operations/two_conditions_combined_with_or.md)
+
+## Function Stack Examples
+
+### Data Manipulation
+- **Create Variable**: [02-core-concepts/function-stack/create-variable.md](02-core-concepts/function-stack/create-variable.md)
+- **Update Variable**: [02-core-concepts/function-stack/update-variable.md](02-core-concepts/function-stack/update-variable.md)
+- **Conditional Logic**: [02-core-concepts/function-stack/conditional.md](02-core-concepts/function-stack/conditional.md)
+- **Switch Statements**: [02-core-concepts/function-stack/switch.md](02-core-concepts/function-stack/switch.md)
+- **Loops**: [02-core-concepts/function-stack/loops.md](02-core-concepts/function-stack/loops.md)
+
+### Mathematical Operations
+```javascript
+// Basic math operations
+{
+  "subtotal": 299.99,
+  "tax_rate": 0.08,
+  "tax_amount": 23.99,
+  "total": 323.98
+}
+
+// Rounding for currency
+Math.round((price * quantity * (1 + tax_rate)) * 100) / 100
 ```
- 
-6f10cc09-d3e0-4ead-9a98-a0bc66bbe673
 
+### Array Processing
+```javascript
+// Filter array
+products.filter(product => product.price > 50)
+
+// Map array
+users.map(user => ({
+  id: user.id,
+  name: user.name,
+  email: user.email
+}))
+
+// Reduce array
+orders.reduce((total, order) => total + order.amount, 0)
 ```
 
----
+### Object Manipulation
+```javascript
+// Merge objects
+Object.assign({}, defaults, user_preferences)
 
-## Look for the Template Engine function under Utility Functions.
+// Extract properties
+const {id, name, email} = user
+
+// Nested object access
+user?.profile?.address?.city || "Unknown"
+```
+
+## API Integration Examples
+
+### External API Requests
+- **Basic API Call**: [02-core-concepts/function-stack/external-api-request.md](02-core-concepts/function-stack/external-api-request.md)
+- **API Authentication**: Examples with headers and tokens
+- **Error Handling**: Proper error handling for API failures
 
 ```javascript
- 
-Write a personalized email to {} {} about their recent {} purchase.
-Include:
-Sign off with the name of their account manager: {}
-
+// API request with authentication
+{
+  "url": "https://api.example.com/users",
+  "method": "GET",
+  "headers": {
+    "Authorization": "Bearer {auth_token}",
+    "Content-Type": "application/json"
+  }
+}
 ```
 
----
-
-## Look for the Template Engine function under Utility Functions.
-
+### Webhook Examples
 ```javascript
- 
-Hi, {}
-
+// Process incoming webhook data
+{
+  "event_type": "payment.completed",
+  "data": {
+    "payment_id": "pay_123",
+    "amount": 99.99,
+    "customer_id": "cust_456"
+  }
+}
 ```
 
----
+## Template Engine Examples
 
-## Look for the Template Engine function under Utility Functions.
-
+### Email Templates
 ```javascript
- 
-Hi, {}
+// Personalized email template
+`Hi {{user.first_name}},
 
+Thank you for your recent {{product.name}} purchase.
+
+Your order #{{order.id}} has been confirmed.
+
+Best regards,
+{{account_manager.name}}`
 ```
 
----
-
-## Look for the Template Engine function under Utility Functions.
-
+### Dynamic Content Generation
 ```javascript
- 
-  Hey, {}! Thanks for being a part of our VIP program.
-  Hey, {}! Thanks for reading.
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-> 
-> 
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-> Hey, Chris! Thanks for being a part of our VIP program.
-> 
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-  Your grade is an A
-  Your grade is a B
-  Your grade is a C
-  Your grade is an F
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-> score = 85
-> 
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-> Your grade is a B
-> 
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-  - {}x {} at ${} each
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-[
-  ,
-  ,
-]
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-  {}
-  No items found.
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-{}
-Outputs: &lt;script&gt;alert(&quot;XSS&quot;);&lt;/script&gt;
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-{}
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-{}
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-{}
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-
-```
-
----
-
-## [🖥️] Instance
-
-```
- 
-[
-  ,
-  ,
-  ,
-  ,
-  ,
-  ,
-]
-
-```
-
----
-
-## [🖥️] Instance
-
-```
- 
-
-```
-
----
-
-## [🖥️] Instance
-
-```
- 
-[
-  ,
-  ,
-]
-
-```
-
----
-
-## [🖥️] Instance
-
-```
- 
-
-```
-
----
-
-## [🖥️] Instance
-
-```
- 
-
-```
-
----
-
-## [🖥️] Instance
-
-```
- 
-
-```
-
----
-
-## [🖥️] Instance
-
-```
- 
-
-```
-
----
-
-## [🖥️] Instance
-
-```
- 
-    "exists": true
-
-```
-
----
-
-## [🖥️] Instance
-
-```
- 
-    "phone": null
-
-```
-
----
-
-## [🖥️] Instance
-
-```
- 
-[
-    "red",
-    "blue",
-    "green"
-    ]
-
-```
-
----
-
-## [🖥️] Instance
-
-```
- 
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-Write a personalized email to {} {} about their recent {} purchase.
-Include:
-Sign off with the name of their account manager: {}
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-Hi, {}
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-Hi, {}
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-  Hey, {}! Thanks for being a part of our VIP program.
-  Hey, {}! Thanks for reading.
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-> 
-> 
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-> Hey, Chris! Thanks for being a part of our VIP program.
-> 
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-  Your grade is an A
-  Your grade is a B
-  Your grade is a C
-  Your grade is an F
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-> score = 85
-> 
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-> Your grade is a B
-> 
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-  - {}x {} at ${} each
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-[
-  ,
-  ,
-]
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-  {}
-  No items found.
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-{}
-Outputs: &lt;script&gt;alert(&quot;XSS&quot;);&lt;/script&gt;
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-{}
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-{}
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-{}
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```
- 
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
-You are an AI assistant tasked with {}.
-Context:
-{}
-*No additional context provided*
-Instructions:
-1. {}
-{}. {}
-Constraints:
-- {}
-Output Format:
-{}
-Example Input:
-{}
-Example Expected Output:
-{}
-
-```
-
----
-
-## Look for the Template Engine function under Utility Functions.
-
-```javascript
- 
+// Conditional content
+`{{#if user.is_premium}}
+Welcome to our VIP program!
+{{else}}
+Upgrade to premium for exclusive benefits.
+{{/if}}`
+```
+
+### HTML Template Generation
+```html
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>{}</title>
-    </head>
-    <body>
-        <header>
-            <h1>Welcome, {}!</h1>
-        </header>
-        <nav>
-                <a href="/profile">My Profile</a>
-                <a href="/logout">Logout</a>
-                <a href="/login">Login</a>
-                <a href="/register">Register</a>
-        </nav>
-        <main>
-                <div class="product">
-                    <h2>{}</h2>
-                    <p>Price: ${}</p>
-                        <button>Add to Cart</button>
-                        <span class="out-of-stock">Out of Stock</span>
-                </div>
-        </main>
-    </body>
+<html>
+<head>
+    <title>{{page.title}}</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome, {{user.name}}!</h1>
+    </header>
+    <main>
+        {{#each products}}
+        <div class="product">
+            <h2>{{this.name}}</h2>
+            <p>Price: ${{this.price}}</p>
+        </div>
+        {{/each}}
+    </main>
+</body>
 </html>
-
 ```
 
----
+## Authentication Examples
 
-## Look for the Template Engine function under Utility Functions.
-
+### User Registration
 ```javascript
- 
-SELECT 
-    id, 
-    {} 
-FROM {}
-WHERE 
-        1=1
-        organization_id = {}
-        AND status = '{}'
-ORDER BY 
-        {} {}
-        created_at DESC
-LIMIT {}
-
+// User registration payload
+{
+  "email": "user@example.com",
+  "password": "secure_password",
+  "profile": {
+    "first_name": "John",
+    "last_name": "Doe"
+  }
+}
 ```
 
----
-
-## Look for the Template Engine function under Utility Functions.
-
+### JWT Token Handling
+```javascript
+// JWT token validation
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user_id": 123,
+  "expires_at": 1705507200000
+}
 ```
 
-###  
-Email Template
-**Context**: A flexible email template system that supports personalized messaging, dynamic sections, and optional signatures.
-Copy
+## Data Validation Examples
 
+### Input Validation
+```javascript
+// Validate email format
+function validateEmail(email) {
+  const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return pattern.test(email);
+}
+
+// Validate required fields
+function validateRequired(data, fields) {
+  return fields.every(field => 
+    data.hasOwnProperty(field) && data[field] !== null
+  );
+}
 ```
 
----
+### Data Sanitization
+```javascript
+// Sanitize user input
+function sanitizeInput(input) {
+  return input
+    .trim()
+    .replace(/<script[^>]*>.*?<\/script>/gi, '')
+    .substring(0, 1000);
+}
+```
 
+## File Storage Examples
+
+### File Upload
+```javascript
+// File upload configuration
+{
+  "field_name": "avatar",
+  "allowed_types": ["image/jpeg", "image/png"],
+  "max_size": 5242880, // 5MB
+  "destination": "/uploads/avatars/"
+}
+```
+
+### File Processing
+```javascript
+// Image processing
+{
+  "resize": {
+    "width": 300,
+    "height": 300,
+    "quality": 80
+  },
+  "thumbnails": [
+    {"width": 100, "height": 100},
+    {"width": 50, "height": 50}
+  ]
+}
+```
+
+## AI Integration Examples
+
+### OpenAI Integration
+```javascript
+// AI prompt template
+`You are an AI assistant tasked with {{task}}.
+
+Context:
+{{context}}
+
+Instructions:
+1. {{instruction_1}}
+2. {{instruction_2}}
+
+Constraints:
+- {{constraint_1}}
+- {{constraint_2}}
+
+Output Format:
+{{output_format}}`
+```
+
+### Agent Configuration
+```javascript
+// AI agent setup
+{
+  "model": "gpt-4",
+  "temperature": 0.7,
+  "max_tokens": 1000,
+  "system_prompt": "You are a helpful assistant.",
+  "tools": ["web_search", "calculator"]
+}
+```
+
+## No-Code Platform Integration
+
+### n8n Workflow Examples
+```javascript
+// n8n Set node configuration
+{
+  "user_data": {
+    "id": "{{$json.id}}",
+    "name": "{{$json.first_name}} {{$json.last_name}}",
+    "created_at": "{{Date.now()}}"
+  }
+}
+```
+
+### WeWeb Component Binding
+```javascript
+// WeWeb data binding
+{
+  "users": "{{api.users.data}}",
+  "loading": "{{api.users.loading}}",
+  "error": "{{api.users.error}}"
+}
+```
+
+### Make.com Module Configuration
+```javascript
+// Make.com HTTP module
+{
+  "url": "{{xano.api_url}}/users",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer {{xano.api_token}}"
+  },
+  "body": "{{json(user_data)}}"
+}
+```
+
+## Performance Optimization Examples
+
+### Caching Strategies
+```javascript
+// Redis cache configuration
+{
+  "key": "user_{{user_id}}_profile",
+  "ttl": 3600, // 1 hour
+  "data": user_profile
+}
+```
+
+### Query Optimization
+```sql
+-- Optimized query with indexes
+SELECT u.id, u.name, p.title 
+FROM users u 
+JOIN posts p ON u.id = p.user_id 
+WHERE u.status = 'active' 
+AND p.published_at > NOW() - INTERVAL '30 days'
+ORDER BY p.published_at DESC 
+LIMIT 10
+```
+
+## Error Handling Examples
+
+### Try-Catch Patterns
+```javascript
+// Error handling in function stack
+try {
+  const result = await external_api_call();
+  return { success: true, data: result };
+} catch (error) {
+  return { 
+    success: false, 
+    error: error.message,
+    code: error.status || 500
+  };
+}
+```
+
+### Validation Errors
+```javascript
+// Validation error response
+{
+  "success": false,
+  "errors": [
+    {
+      "field": "email",
+      "message": "Invalid email format"
+    },
+    {
+      "field": "password",
+      "message": "Password must be at least 8 characters"
+    }
+  ]
+}
+```
+
+## Related Documentation
+
+- [Function Stack Reference](02-core-concepts/function-stack/)
+- [Data Operations Guide](03-data-operations/)
+- [API Endpoints](02-core-concepts/api-endpoints/)
+- [Filters Reference](08-reference/filters/)
+- [Quick Reference Guide](QUICK_REFERENCE.md)
+
+## Contributing Examples
+
+Found a useful example or want to add more? See our [Contributing Guide](CONTRIBUTING.md) for information on how to add examples to this index.
+
+This index is continuously updated as new examples are added to the documentation. Each example includes context, implementation details, and integration patterns for popular no-code platforms.
