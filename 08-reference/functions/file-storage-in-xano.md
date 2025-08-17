@@ -1,453 +1,709 @@
 ---
+title: File Storage Functions Reference
+description: Complete guide to implementing file storage in Xano - upload, manage, and serve files for no-code platforms with secure access controls
 category: functions
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
 subcategory: 08-reference/functions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+- file-storage
+- file-upload
+- cloud-storage
+- file-management
+- security
+- access-control
+- image-processing
+- n8n-integration
+- weweb-integration
+- make-automation
+last_updated: '2025-01-17'
+difficulty: intermediate
+has_code_examples: true
+related_docs:
+- 02-core-concepts/function-stack/file-storage.md
+- 08-reference/functions/private-file-storage.md
+- 08-reference/functions/middleware.md
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
+## 📋 **Quick Summary**
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'file-storage-in-xano'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+Xano provides comprehensive file storage capabilities for uploading, managing, and serving files with built-in security, access controls, and integration options. Files can be stored publicly or privately with advanced processing features.
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+## What You'll Learn
 
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
+- How to implement file upload and management
+- Public vs private file storage configurations
+- File security and access control patterns
+- Image processing and transformation features
+- File storage integration with no-code platforms
+- Best practices for file organization and performance
+- Advanced file handling scenarios
 
+## File Storage Overview
 
+### Storage Types
 
+**Public File Storage:**
+- Directly accessible via URL
+- Suitable for images, documents, media
+- Cached and CDN-optimized
+- No authentication required
 
+**Private File Storage:**
+- Access-controlled downloads
+- Secure file serving with permissions
+- Time-limited access tokens
+- Audit trail capabilities
 
+### File Field Types
 
+```javascript
+// Database field configurations
+{
+  "public_file_field": {
+    "type": "file",
+    "storage": "public",
+    "allowed_extensions": ["jpg", "png", "gif", "pdf"],
+    "max_size": "10MB"
+  },
+  "private_file_field": {
+    "type": "file", 
+    "storage": "private",
+    "allowed_extensions": ["pdf", "doc", "docx"],
+    "max_size": "50MB"
+  },
+  "multiple_files_field": {
+    "type": "file",
+    "multiple": true,
+    "storage": "public",
+    "max_files": 5
+  }
+}
+```
 
+## File Upload Implementation
 
+### 1. Basic File Upload API
 
+```javascript
+// File upload endpoint
+{
+  "endpoint": "/api/upload",
+  "method": "POST",
+  "inputs": [
+    {"name": "file", "type": "file"},
+    {"name": "title", "type": "text"},
+    {"name": "category", "type": "text"}
+  ],
+  "function_stack": [
+    {
+      "function": "conditional",
+      "condition": "{{!file}}",
+      "true_stack": [
+        {
+          "function": "return_response",
+          "status": 400,
+          "body": {"error": "No file provided"}
+        }
+      ]
+    },
+    {
+      "function": "add_record",
+      "table": "files",
+      "data": {
+        "file": "{{file}}",
+        "title": "{{title}}",
+        "category": "{{category}}",
+        "uploaded_by": "{{auth.user.id}}",
+        "uploaded_at": "{{now()}}"
+      }
+    }
+  ]
+}
+```
 
+### 2. File Validation and Processing
 
+```javascript
+// Advanced file upload with validation
+{
+  "function_stack": [
+    {
+      "function": "create_variable",
+      "name": "file_info",
+      "value": {
+        "name": "{{file.name}}",
+        "size": "{{file.size}}",
+        "type": "{{file.type}}",
+        "extension": "{{file_extension(file.name)}}"
+      }
+    },
+    {
+      "function": "conditional",
+      "condition": "{{file_info.size > 10485760}}", // 10MB
+      "true_stack": [
+        {
+          "function": "throw_error",
+          "message": "File too large. Max size is 10MB",
+          "code": "FILE_TOO_LARGE"
+        }
+      ]
+    },
+    {
+      "function": "conditional",
+      "condition": "{{!in_array(file_info.extension, ['jpg', 'png', 'gif', 'pdf'])}}",
+      "true_stack": [
+        {
+          "function": "throw_error",
+          "message": "Invalid file type",
+          "code": "INVALID_FILE_TYPE"
+        }
+      ]
+    },
+    {
+      "function": "add_record",
+      "table": "uploads",
+      "data": {
+        "file": "{{file}}",
+        "original_name": "{{file_info.name}}",
+        "file_size": "{{file_info.size}}",
+        "mime_type": "{{file_info.type}}",
+        "uploaded_by": "{{auth.user.id}}"
+      }
+    }
+  ]
+}
+```
 
+### 3. Multiple File Upload
 
+```javascript
+// Handle multiple file uploads
+{
+  "function_stack": [
+    {
+      "function": "create_variable",
+      "name": "uploaded_files",
+      "value": []
+    },
+    {
+      "function": "for_each_loop",
+      "array": "{{files}}",
+      "function_stack": [
+        {
+          "function": "conditional",
+          "condition": "{{loop_item.size <= 5242880}}", // 5MB per file
+          "true_stack": [
+            {
+              "function": "add_record",
+              "table": "gallery_images",
+              "data": {
+                "image": "{{loop_item}}",
+                "gallery_id": "{{gallery_id}}",
+                "order": "{{loop_index}}",
+                "uploaded_at": "{{now()}}"
+              }
+            },
+            {
+              "function": "update_variable",
+              "variable": "uploaded_files",
+              "value": "{{append(uploaded_files, gallery_images.id)}}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
 
+## Private File Storage and Security
 
--   
+### 1. Secure File Access
 
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+```javascript
+// Private file download with permissions
+{
+  "endpoint": "/api/files/{file_id}/download",
+  "method": "GET",
+  "authentication": "required",
+  "function_stack": [
+    {
+      "function": "get_record",
+      "table": "private_files",
+      "record_id": "{{file_id}}"
+    },
+    {
+      "function": "conditional",
+      "condition": "{{private_files.owner_id != auth.user.id && !has_file_permission(auth.user.id, file_id)}}",
+      "true_stack": [
+        {
+          "function": "return_response",
+          "status": 403,
+          "body": {"error": "Access denied"}
+        }
+      ]
+    },
+    {
+      "function": "add_record",
+      "table": "file_access_log",
+      "data": {
+        "file_id": "{{file_id}}",
+        "user_id": "{{auth.user.id}}",
+        "accessed_at": "{{now()}}",
+        "ip_address": "{{request.ip}}"
+      }
+    },
+    {
+      "function": "return_file",
+      "file": "{{private_files.file}}",
+      "filename": "{{private_files.original_name}}"
+    }
+  ]
+}
+```
 
--   
+### 2. Time-Limited Access Tokens
 
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../the-function-stack/filters/manipulation.html)
-        -   [Math](../the-function-stack/filters/math.html)
-        -   [Timestamp](../the-function-stack/filters/timestamp.html)
-        -   [Text](../the-function-stack/filters/text.html)
-        -   [Array](../the-function-stack/filters/array.html)
-        -   [Transform](../the-function-stack/filters/transform.html)
-        -   [Conversion](../the-function-stack/filters/conversion.html)
-        -   [Comparison](../the-function-stack/filters/comparison.html)
-        -   [Security](../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../the-function-stack/data-types/text.html)
-        -   [Expression](../the-function-stack/data-types/expression.html)
-        -   [Array](../the-function-stack/data-types/array.html)
-        -   [Object](../the-function-stack/data-types/object.html)
-        -   [Integer](../the-function-stack/data-types/integer.html)
-        -   [Decimal](../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../the-function-stack/data-types/timestamp.html)
-        -   [Null](../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+```javascript
+// Generate temporary file access token
+{
+  "function_stack": [
+    {
+      "function": "create_variable",
+      "name": "access_token",
+      "value": "{{generate_uuid()}}"
+    },
+    {
+      "function": "create_variable",
+      "name": "expires_at",
+      "value": "{{add_hours(now(), 24)}}"
+    },
+    {
+      "function": "add_record",
+      "table": "file_access_tokens",
+      "data": {
+        "token": "{{access_token}}",
+        "file_id": "{{file_id}}",
+        "user_id": "{{auth.user.id}}",
+        "expires_at": "{{expires_at}}",
+        "created_at": "{{now()}}"
+      }
+    },
+    {
+      "function": "return_response",
+      "body": {
+        "download_url": "{{env.APP_URL}}/api/files/download/{{access_token}}",
+        "expires_at": "{{expires_at}}"
+      }
+    }
+  ]
+}
 
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+// Token-based download
+{
+  "endpoint": "/api/files/download/{token}",
+  "function_stack": [
+    {
+      "function": "get_record",
+      "table": "file_access_tokens",
+      "filter": {"token": "{{token}}"}
+    },
+    {
+      "function": "conditional",
+      "condition": "{{!file_access_tokens || file_access_tokens.expires_at < now()}}",
+      "true_stack": [
+        {
+          "function": "return_response",
+          "status": 404,
+          "body": {"error": "Invalid or expired token"}
+        }
+      ]
+    },
+    {
+      "function": "get_record",
+      "table": "private_files",
+      "record_id": "{{file_access_tokens.file_id}}"
+    },
+    {
+      "function": "return_file",
+      "file": "{{private_files.file}}"
+    }
+  ]
+}
+```
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+## Image Processing Features
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+### 1. Image Transformations
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+```javascript
+// Image resize and optimization
+{
+  "function_stack": [
+    {
+      "function": "conditional",
+      "condition": "{{is_image(file.type)}}",
+      "true_stack": [
+        {
+          "function": "create_variable",
+          "name": "processed_image",
+          "value": "{{resize_image(file, {width: 800, height: 600, quality: 80})}}"
+        },
+        {
+          "function": "create_variable",
+          "name": "thumbnail",
+          "value": "{{resize_image(file, {width: 200, height: 200, crop: 'center'})}}"
+        },
+        {
+          "function": "add_record",
+          "table": "images",
+          "data": {
+            "original": "{{file}}",
+            "processed": "{{processed_image}}",
+            "thumbnail": "{{thumbnail}}",
+            "alt_text": "{{alt_text}}",
+            "uploaded_by": "{{auth.user.id}}"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+### 2. Dynamic Image Serving
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+```javascript
+// Dynamic image transformation API
+{
+  "endpoint": "/api/images/{image_id}",
+  "method": "GET",
+  "inputs": [
+    {"name": "width", "type": "integer", "required": false},
+    {"name": "height", "type": "integer", "required": false},
+    {"name": "quality", "type": "integer", "required": false},
+    {"name": "format", "type": "text", "required": false}
+  ],
+  "function_stack": [
+    {
+      "function": "get_record",
+      "table": "images",
+      "record_id": "{{image_id}}"
+    },
+    {
+      "function": "create_variable",
+      "name": "transform_params",
+      "value": {
+        "width": "{{width || 'auto'}}",
+        "height": "{{height || 'auto'}}",
+        "quality": "{{quality || 80}}",
+        "format": "{{format || 'jpg'}}"
+      }
+    },
+    {
+      "function": "return_file",
+      "file": "{{images.original}}",
+      "transform": "{{transform_params}}"
+    }
+  ]
+}
+```
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+## No-Code Platform Integration
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+### n8n File Processing
+```javascript
+// Send file data to n8n for processing
+{
+  "function_stack": [
+    {
+      "function": "external_api_request",
+      "url": "https://hooks.n8n.cloud/webhook/file-processor",
+      "method": "POST",
+      "data": {
+        "file_url": "{{file.url}}",
+        "file_id": "{{file.id}}",
+        "file_type": "{{file.mime_type}}",
+        "uploaded_by": "{{auth.user.id}}",
+        "processing_type": "extract_text"
+      }
+    }
+  ]
+}
+```
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+### WeWeb File Components
+```javascript
+// File upload for WeWeb components
+{
+  "endpoint": "/api/weweb/upload",
+  "function_stack": [
+    {
+      "function": "add_record",
+      "table": "user_uploads",
+      "data": {
+        "file": "{{file}}",
+        "user_id": "{{auth.user.id}}",
+        "component_id": "{{component_id}}",
+        "uploaded_at": "{{now()}}"
+      }
+    },
+    {
+      "function": "return_response",
+      "body": {
+        "file_id": "{{user_uploads.id}}",
+        "file_url": "{{user_uploads.file.url}}",
+        "thumbnail_url": "{{user_uploads.file.thumbnail_url}}"
+      }
+    }
+  ]
+}
+```
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+### Make.com File Automation
+```javascript
+// Trigger Make.com scenario on file upload
+{
+  "function_stack": [
+    {
+      "function": "external_api_request",
+      "url": "https://hook.us1.make.com/file-uploaded",
+      "data": {
+        "file_id": "{{new_record.id}}",
+        "file_url": "{{new_record.file.url}}",
+        "file_name": "{{new_record.original_name}}",
+        "uploaded_by": "{{new_record.uploaded_by}}",
+        "category": "{{new_record.category}}"
+      }
+    }
+  ]
+}
+```
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+## Advanced File Management
 
--   
-    Security
-    
-    -   Best Practices
+### 1. File Organization System
 
-[Powered by GitBook]
+```javascript
+// Hierarchical file organization
+{
+  "function_stack": [
+    {
+      "function": "create_variable",
+      "name": "file_path",
+      "value": "{{auth.user.id}}/{{category}}/{{format_date(now(), 'Y/m')}}"
+    },
+    {
+      "function": "add_record",
+      "table": "organized_files",
+      "data": {
+        "file": "{{file}}",
+        "path": "{{file_path}}",
+        "category": "{{category}}",
+        "tags": "{{tags}}",
+        "metadata": {
+          "size": "{{file.size}}",
+          "type": "{{file.type}}",
+          "uploaded_at": "{{now()}}"
+        }
+      }
+    }
+  ]
+}
+```
 
-On this page
+### 2. File Cleanup and Archival
 
--   
-    
-    [How does file storage work?](#how-does-file-storage-work)
+```javascript
+// Automated file cleanup
+{
+  "scheduled_function": "cleanup_old_files",
+  "schedule": "0 2 * * *", // Daily at 2 AM
+  "function_stack": [
+    {
+      "function": "query_all_records",
+      "table": "temporary_files",
+      "filter": {
+        "created_at": {"$lt": "{{subtract_days(now(), 7)}}"}
+      }
+    },
+    {
+      "function": "for_each_loop",
+      "array": "{{temporary_files}}",
+      "function_stack": [
+        {
+          "function": "delete_file",
+          "file": "{{loop_item.file}}"
+        },
+        {
+          "function": "delete_record",
+          "table": "temporary_files",
+          "record_id": "{{loop_item.id}}"
+        }
+      ]
+    }
+  ]
+}
+```
 
--   [Public vs Private Storage](#public-vs-private-storage)
+### 3. File Versioning
 
--   [File Management](#file-management)
+```javascript
+// File version management
+{
+  "function_stack": [
+    {
+      "function": "get_record",
+      "table": "documents",
+      "record_id": "{{document_id}}"
+    },
+    {
+      "function": "add_record",
+      "table": "document_versions",
+      "data": {
+        "document_id": "{{document_id}}",
+        "version_number": "{{documents.current_version + 1}}",
+        "file": "{{new_file}}",
+        "changes": "{{changes}}",
+        "created_by": "{{auth.user.id}}",
+        "created_at": "{{now()}}"
+      }
+    },
+    {
+      "function": "edit_record",
+      "table": "documents",
+      "record_id": "{{document_id}}",
+      "data": {
+        "current_version": "{{documents.current_version + 1}}",
+        "current_file": "{{new_file}}",
+        "updated_at": "{{now()}}"
+      }
+    }
+  ]
+}
+```
 
-Was this helpful?
+## Try This: Complete File Management System
 
-Copy
+Create a comprehensive file management workflow:
 
-1.  [File Storage](file-storage-in-xano.html)
+```javascript
+// Complete file management implementation
+{
+  "upload_endpoint": {
+    "path": "/api/files/upload",
+    "method": "POST",
+    "function_stack": [
+      {
+        "function": "validate_file",
+        "max_size": "50MB",
+        "allowed_types": ["image/*", "application/pdf", "text/*"]
+      },
+      {
+        "function": "add_record",
+        "table": "files",
+        "data": {
+          "file": "{{file}}",
+          "name": "{{name || file.name}}",
+          "description": "{{description}}",
+          "folder_id": "{{folder_id || null}}",
+          "is_public": "{{is_public || false}}",
+          "uploaded_by": "{{auth.user.id}}",
+          "uploaded_at": "{{now()}}"
+        }
+      },
+      {
+        "function": "conditional",
+        "condition": "{{is_image(file.type)}}",
+        "true_stack": [
+          {
+            "function": "generate_thumbnails",
+            "sizes": [{"width": 150, "height": 150}, {"width": 300, "height": 300}]
+          }
+        ]
+      },
+      {
+        "function": "add_record",
+        "table": "file_activity",
+        "data": {
+          "file_id": "{{files.id}}",
+          "action": "uploaded",
+          "user_id": "{{auth.user.id}}",
+          "timestamp": "{{now()}}"
+        }
+      }
+    ]
+  },
+  "download_endpoint": {
+    "path": "/api/files/{file_id}/download",
+    "method": "GET",
+    "function_stack": [
+      {
+        "function": "check_file_permissions",
+        "file_id": "{{file_id}}",
+        "user_id": "{{auth.user.id}}"
+      },
+      {
+        "function": "log_file_access",
+        "file_id": "{{file_id}}",
+        "user_id": "{{auth.user.id}}"
+      },
+      {
+        "function": "serve_file",
+        "file_id": "{{file_id}}"
+      }
+    ]
+  }
+}
+```
 
-File Storage in Xano 
-====================
+## Common File Storage Mistakes to Avoid
 
- 
+### ❌ Poor Practices
+- Storing files without validation
+- Missing access controls on private files
+- Not implementing file cleanup
+- Ignoring file size and type restrictions
+- Storing sensitive files in public storage
 
-How does file storage work?
+### ✅ Best Practices
+- Always validate file uploads
+- Implement proper access controls
+- Use appropriate storage types (public/private)
+- Set up automated cleanup processes
+- Monitor storage usage and costs
 
-In Xano, you are provided a separate \"bucket\" that can hold all of your files, whether these are files you are providing to your users, or files they are uploading to your application.
+## Pro Tips
 
-You can upload almost anything, from images, to documents and PDFs, and even audio / video.
+### 💡 **Performance Optimization**
+- Use CDN for public file delivery
+- Implement lazy loading for images
+- Compress images before storage
+- Cache frequently accessed files
 
-File storage has two essential components:
+### 🔒 **Security Best Practices**
+- Validate file types and content
+- Scan uploads for malware
+- Use signed URLs for private files
+- Implement rate limiting on uploads
 
--   
-    
-        
-    
-    The files themselves
-    
--   
-    
-        
-    
-    Database records with metadata
-    
-While the files themselves are not stored in your database, if you choose to reference a file in a database record, it will be storing the **metadata**, or general information about the file, such as the filename, size, file type, and a URL to access the file.
+### 📊 **Storage Management**
+- Monitor storage usage regularly
+- Implement file lifecycle policies
+- Use appropriate file formats
+- Set up automated backups
 
-**Review all of the available functions for working with files** [**here**](../the-function-stack/functions/file-storage.html)**.**
+### 🔄 **Integration Patterns**
+- Use webhooks for file processing
+- Implement real-time upload progress
+- Create file sharing workflows
+- Set up automated file transformations
 
- 
+## Troubleshooting File Storage Issues
 
-Public vs Private Storage
+### Common Problems
+1. **Upload failures**: Check file size limits and network connectivity
+2. **Access denied errors**: Verify authentication and permissions
+3. **Missing files**: Check file paths and storage configuration
+4. **Slow uploads**: Optimize file sizes and use appropriate storage regions
 
-It\'s important to note that files uploaded to Xano have static URLs --- this means that once a user has a URL to a file stored in your Xano backend, that URL will always be accessible without any kind of authentication or other checks to determine if it should be accessed.
-
-If you have files that you need to restrict access to, you should be utilizing [private file storage](private-file-storage.html) instead.
-
-You can review all of your public and private files from the [![](../_gitbook/image154d.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FIOICvTIXowRnVcqCWA9p%252FCleanShot%25202025-01-14%2520at%252008.14.42.png%3Falt%3Dmedia%26token%3D82d18ea9-7c4c-445e-bfc3-8249426a3315&width=300&dpr=4&quality=100&sign=d7015956&sv=2)]section in the left-side navigation menu.
-
- 
-
-File Management
-
-The File section enables you to view and manage all of the files (images, videos, audio files, and attachments) in your workspace. You can easily see and search the files of your workspace and see the file name, mime type, size, and date it was created.
-
-If a file appears in this section, then it is included in the overall media storage of your plan. Files will be added here once one of the following happens:
-
-1.  
-    
-        
-    
-    Uploading a file directly to the database.
-    
-2.  
-    
-        
-    
-    Uploading a file directly to the File page.
-    
-3.  
-    
-        
-    
-    Creating Metadata for any type of file in the function stack.
-    
-
-Files do not need to be added to your database to be a file of your workspace. Creating the metadata of a file through the function stack associates that file with your workspace - even if you do not add it to a record in one of your database tables.
-
-Last updated 5 months ago
-
-Was this helpful?
+File storage in Xano provides robust capabilities for managing all types of files with security, performance, and integration features essential for modern no-code applications.
