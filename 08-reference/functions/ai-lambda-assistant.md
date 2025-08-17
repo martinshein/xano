@@ -14,7 +14,7 @@ tags:
 - n8n-integration
 - weweb-integration
 - make-automation
-last_updated: '2025-01-17'
+last_updated: '2025-08-17'
 difficulty: intermediate
 has_code_examples: true
 related_docs:
