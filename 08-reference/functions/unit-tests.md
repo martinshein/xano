@@ -1,507 +1,932 @@
 ---
+title: Unit Tests Functions Reference
+description: Complete guide to implementing unit testing in Xano - automated testing, test suites, mocking, and quality assurance for no-code platforms
 category: functions
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
 subcategory: 08-reference/functions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+- unit-tests
+- testing
+- quality-assurance
+- test-automation
+- mocking
+- test-suites
+- ci-cd
+- debugging
+- n8n-integration
+- weweb-integration
+- make-automation
+last_updated: '2025-01-17'
+difficulty: intermediate
+has_code_examples: true
+related_docs:
+- 02-core-concepts/function-stack/testing.md
+- 08-reference/functions/background-tasks.md
+- 08-reference/functions/middleware.md
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
-
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'unit-tests'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../the-function-stack/filters/manipulation.html)
-        -   [Math](../the-function-stack/filters/math.html)
-        -   [Timestamp](../the-function-stack/filters/timestamp.html)
-        -   [Text](../the-function-stack/filters/text.html)
-        -   [Array](../the-function-stack/filters/array.html)
-        -   [Transform](../the-function-stack/filters/transform.html)
-        -   [Conversion](../the-function-stack/filters/conversion.html)
-        -   [Comparison](../the-function-stack/filters/comparison.html)
-        -   [Security](../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../the-function-stack/data-types/text.html)
-        -   [Expression](../the-function-stack/data-types/expression.html)
-        -   [Array](../the-function-stack/data-types/array.html)
-        -   [Object](../the-function-stack/data-types/object.html)
-        -   [Integer](../the-function-stack/data-types/integer.html)
-        -   [Decimal](../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../the-function-stack/data-types/timestamp.html)
-        -   [Null](../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [Building a Unit Test](#building-a-unit-test)
-
--   [Mocking Responses](#mocking-responses)
-
--   [Right-click on a function and choose Mock Test Response](#right-click-on-a-function-and-choose-mock-test-response)
-
--   [In the panel that opens on the right, you can add mock data for this function that will be used during your unit test.](#in-the-panel-that-opens-on-the-right-you-can-add-mock-data-for-this-function-that-will-be-used-durin)
-
-Was this helpful?
-
-Copy
-
-1.  [Testing and Debugging](testing-and-debugging-function-stacks.html)
-
-Unit Tests 
-==========
-
- 
-
-Quick Summary
-
-Unit Tests allow you to store the responses of your function stacks as a \'test\' and quickly use them to ensure that your function stacks continue to operate properly as you make changes.
-
- 
-
-Building a Unit Test
-
-The fastest way to create a unit test is by using Run & Debug. Once you are achieving the desired result by running your function stack, you can click **Create Unit Test** under the result.
-
-[![](../_gitbook/image6465.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fuploads%252Fd8QAuFky4jq4QY7Zo4Yo%252FCleanShot%25202024-09-10%2520at%252005.43.27.png%3Falt%3Dmedia%26token%3D95ee6f57-7435-474c-8523-fcae5b6786c4&width=768&dpr=4&quality=100&sign=2592b5d&sv=2)]
-
-You can also create a test manually at any time from the API settings menu.
-
-[![](../_gitbook/image19be.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fuploads%252FS5kzPGf5ZnoN0sjpMJ7U%252FCleanShot%25202024-09-10%2520at%252005.45.03.png%3Falt%3Dmedia%26token%3D0e22606a-9210-49b3-a056-9acaf6cbde15&width=768&dpr=4&quality=100&sign=74b24706&sv=2)]
-
-Give your unit test a name, a description, and the data source that it should use to run the test if different from your live data source.
-
-[![](../_gitbook/image983c.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fuploads%252FR2ZeXoqGWgAZt4FAW7Z5%252FCleanShot%25202024-09-10%2520at%252005.46.54.png%3Falt%3Dmedia%26token%3Dfdd3d0d1-42b3-4a9d-8071-371b44ee25f3&width=768&dpr=4&quality=100&sign=5d27e382&sv=2)]
-
-Unit tests are defined by your **input** and **expects**.
-
-[![](../_gitbook/image44e6.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fuploads%252FDpSj6I1BNxCUmNH8Eze3%252FCleanShot%25202024-09-10%2520at%252005.47.50.png%3Falt%3Dmedia%26token%3D17b8d548-f3bf-447a-8918-e55a05623c7a&width=768&dpr=4&quality=100&sign=2421b858&sv=2)]
-In this example, we are providing an input of 2 and expect a response of 2.
-
--   
-    
-        
-    
-    **Inputs** align with the inputs that your function stack expects. You can fill out any desired values here that you would like to use to run the test. If you used the **Create Unit Test** option in Run & Debug, this should already be populated for you.
-    
--   
-    
-        
-    
-    **Expects** are the statements that are used to validate your test. These could be anything from a simple equals statement, or use more complex operators based on your needs.
-    
-Your unit test can have multiple expect statements, which can be added by clicking the **+ Add an expect statement** option.
-
--   
-    
-        
-    
-    Use the ✏️ button to delete expect statements.
-    
--   
-    
-        
-    
-    Use the ⏩ button to check all expect statements, or you can run them selectively with the ▶️ button.
-    
-**Unit Tests and Authentication**
-
-When creating a unit test on a function stack that requires authentication, you can provide an auth token and extras just like you would during Run & Debug.
-
-To avoid having to recycle the auth token upon expiration, we have added the ability to ignore auth token expiration when running your unit tests.
-
-![](../_gitbook/imagef9bc.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fuploads%252FVlwgA1OeFRRlyELKkOAM%252FCleanShot%25202024-09-13%2520at%252017.59.04.png%3Falt%3Dmedia%26token%3Dae65562c-1ec5-4562-af16-ea3b1cd03daa&width=768&dpr=4&quality=100&sign=7149fa6d&sv=2)
-
-####  
-
-Using the Testing Suite
-
-Once you have your unit tests built, you can always run them individually from that API\'s testing panel. If you want to run all of your tests at once, you can use the testing suite.
-
-[![](../_gitbook/imageacce.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fuploads%252FZSGA72ssP4eS8ip6QsdU%252FCleanShot%25202024-09-10%2520at%252005.53.13.png%3Falt%3Dmedia%26token%3D998ccc77-677a-480d-bde3-c237ab552f6f&width=768&dpr=4&quality=100&sign=b9784734&sv=2)]
-
-In the left-hand navigation menu, find your Library and click Unit Tests.
-
-[![](../_gitbook/imagef3b5.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fuploads%252Fp8td4VX4PZFmyKfpu9cR%252FCleanShot%25202024-09-10%2520at%252005.54.27.png%3Falt%3Dmedia%26token%3D2ec24698-4491-4297-9b5f-44959c357372&width=768&dpr=4&quality=100&sign=493ca6ae&sv=2)]
-
-Once inside the testing suite, you can perform the following actions:
-
--   
-    
-        
-    
-    Review where your application has and is missing coverage.
-    
--   
-    
-        
-    
-    Run all tests at once.
-    
-For complex applications with a significant number of objects, you have the ability to dial down further into checking coverage and tests for functions, APIs, and middleware separately. You can also filter your tests by tested / untested only, or failed only, to quickly understand where your attention should be to ensure 100% coverage and success.
-
- 
-
-Mocking Responses
-
-For each of the functions in your function stack, you can add *mock responses* to assist in the consistency of your unit tests.
-
-<div>
-
-1
-
-###  
-
-Right-click on a function and choose Mock Test Response
-
-![](../_gitbook/image3733.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FZgU2mNWuJbxaYUmFbcwA%252FCleanShot%25202025-05-02%2520at%252015.04.53.png%3Falt%3Dmedia%26token%3Dac116c39-188e-40a9-b567-5fc0b757afc2&width=768&dpr=4&quality=100&sign=c679232a&sv=2)
-
-2
-
-###  
-
-In the panel that opens on the right, you can add mock data for this function that will be used during your unit test.
-
-You can specify different pieces of data for each individual unit test you\'ve built for this function stack.
-
-![](../_gitbook/imageacc1.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FVonXhT9oNfMNlqTms997%252FCleanShot%25202025-05-02%2520at%252015.08.22.png%3Falt%3Dmedia%26token%3Dcde073b6-1684-445f-aa6b-add6fd61adff&width=768&dpr=4&quality=100&sign=1f1464b3&sv=2)
-
-</div>
-
-Last updated 1 month ago
-
-Was this helpful?
+## 📋 **Quick Summary**
+
+Unit testing in Xano enables automated testing of function stacks, API endpoints, and business logic to ensure code quality and reliability. It includes test creation, execution, mocking, and integration with CI/CD workflows.
+
+## What You'll Learn
+
+- How to create and organize unit tests in Xano
+- Test suite creation and management
+- Mocking external dependencies and services
+- Assertion patterns and validation techniques
+- Integration testing for complex workflows
+- CI/CD pipeline integration for automated testing
+- Best practices for test coverage and maintainability
+
+## Understanding Unit Testing in Xano
+
+### Test Types and Scope
+
+**Unit Tests:**
+- Test individual functions in isolation
+- Mock external dependencies
+- Fast execution and focused scope
+- Validate specific business logic
+
+**Integration Tests:**
+- Test multiple functions working together
+- Include real database operations
+- Validate end-to-end workflows
+- Test API endpoint behavior
+
+**System Tests:**
+- Test complete user scenarios
+- Include external service interactions
+- Validate system behavior under load
+- Test deployment configurations
+
+### Test Execution Flow
+
+```javascript
+// Test execution lifecycle
+Test Setup → Execute Function → Assert Results → Cleanup
+    ↓              ↓               ↓           ↓
+Mock Data    Run Function    Validate     Reset State
+```
+
+## Basic Unit Test Implementation
+
+### 1. Simple Function Test
+
+```javascript
+// Basic unit test for a calculation function
+{
+  "test_name": "calculate_order_total",
+  "description": "Test order total calculation with tax and discount",
+  "test_setup": [
+    {
+      "function": "create_test_data",
+      "data": {
+        "order_items": [
+          {"price": 10.00, "quantity": 2},
+          {"price": 15.50, "quantity": 1}
+        ],
+        "tax_rate": 0.08,
+        "discount_percent": 10
+      }
+    }
+  ],
+  "test_execution": [
+    {
+      "function": "calculate_order_total",
+      "items": "{{test_data.order_items}}",
+      "tax_rate": "{{test_data.tax_rate}}",
+      "discount": "{{test_data.discount_percent}}"
+    }
+  ],
+  "assertions": [
+    {
+      "assertion": "equals",
+      "actual": "{{calculate_order_total.subtotal}}",
+      "expected": 35.50,
+      "message": "Subtotal should be 35.50"
+    },
+    {
+      "assertion": "equals",
+      "actual": "{{calculate_order_total.tax_amount}}",
+      "expected": 2.56,
+      "message": "Tax amount should be 2.56"
+    },
+    {
+      "assertion": "equals",
+      "actual": "{{calculate_order_total.final_total}}",
+      "expected": 34.40,
+      "message": "Final total should be 34.40"
+    }
+  ],
+  "cleanup": [
+    {
+      "function": "clear_test_data"
+    }
+  ]
+}
+```
+
+### 2. API Endpoint Test
+
+```javascript
+// Test API endpoint behavior
+{
+  "test_name": "user_registration_endpoint",
+  "description": "Test user registration with validation",
+  "test_setup": [
+    {
+      "function": "create_test_database",
+      "table": "users"
+    },
+    {
+      "function": "mock_email_service",
+      "return_value": {"success": true, "message_id": "test_123"}
+    }
+  ],
+  "test_cases": [
+    {
+      "name": "valid_registration",
+      "request": {
+        "method": "POST",
+        "endpoint": "/api/register",
+        "body": {
+          "email": "test@example.com",
+          "password": "SecurePass123!",
+          "name": "Test User"
+        }
+      },
+      "expected_response": {
+        "status": 201,
+        "body_contains": {
+          "user_id": "{{any_integer}}",
+          "email": "test@example.com",
+          "status": "pending_verification"
+        }
+      },
+      "assertions": [
+        {
+          "assertion": "database_record_exists",
+          "table": "users",
+          "filter": {"email": "test@example.com"},
+          "message": "User should be created in database"
+        },
+        {
+          "assertion": "mock_called",
+          "mock": "email_service",
+          "times": 1,
+          "message": "Verification email should be sent"
+        }
+      ]
+    },
+    {
+      "name": "duplicate_email",
+      "pre_setup": [
+        {
+          "function": "add_record",
+          "table": "users",
+          "data": {"email": "existing@example.com", "status": "active"}
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "endpoint": "/api/register",
+        "body": {
+          "email": "existing@example.com",
+          "password": "SecurePass123!",
+          "name": "Test User"
+        }
+      },
+      "expected_response": {
+        "status": 409,
+        "body_contains": {
+          "error": "Email already exists"
+        }
+      }
+    }
+  ]
+}
+```
+
+### 3. Database Operation Test
+
+```javascript
+// Test database operations with transactions
+{
+  "test_name": "order_processing_transaction",
+  "description": "Test order processing with inventory update",
+  "test_setup": [
+    {
+      "function": "create_test_products",
+      "products": [
+        {"id": 1, "name": "Product A", "stock": 10, "price": 25.00},
+        {"id": 2, "name": "Product B", "stock": 5, "price": 40.00}
+      ]
+    }
+  ],
+  "test_execution": [
+    {
+      "function": "database_transaction",
+      "operations": [
+        {
+          "function": "add_record",
+          "table": "orders",
+          "data": {
+            "customer_id": 123,
+            "status": "pending",
+            "total": 90.00
+          }
+        },
+        {
+          "function": "add_record",
+          "table": "order_items",
+          "data": [
+            {"order_id": "{{orders.id}}", "product_id": 1, "quantity": 2},
+            {"order_id": "{{orders.id}}", "product_id": 2, "quantity": 1}
+          ]
+        },
+        {
+          "function": "update_inventory",
+          "updates": [
+            {"product_id": 1, "quantity_change": -2},
+            {"product_id": 2, "quantity_change": -1}
+          ]
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "assertion": "database_record_exists",
+      "table": "orders",
+      "filter": {"customer_id": 123, "status": "pending"}
+    },
+    {
+      "assertion": "equals",
+      "actual": "{{get_product_stock(1)}}",
+      "expected": 8,
+      "message": "Product A stock should be reduced to 8"
+    },
+    {
+      "assertion": "equals",
+      "actual": "{{get_product_stock(2)}}",
+      "expected": 4,
+      "message": "Product B stock should be reduced to 4"
+    }
+  ]
+}
+```
+
+## Advanced Testing Patterns
+
+### 1. Mocking External Services
+
+```javascript
+// Mock external API services
+{
+  "test_name": "payment_processing_with_mocks",
+  "description": "Test payment processing with external service mocks",
+  "mocks": [
+    {
+      "mock_name": "stripe_payment_api",
+      "service_url": "https://api.stripe.com/v1/payment_intents",
+      "responses": {
+        "success": {
+          "status": 200,
+          "body": {
+            "id": "pi_test_123",
+            "status": "succeeded",
+            "amount": 2000,
+            "currency": "usd"
+          }
+        },
+        "failure": {
+          "status": 400,
+          "body": {
+            "error": {
+              "code": "card_declined",
+              "message": "Your card was declined."
+            }
+          }
+        }
+      }
+    },
+    {
+      "mock_name": "email_service",
+      "service_url": "https://api.sendgrid.com/v3/mail/send",
+      "responses": {
+        "success": {
+          "status": 202,
+          "body": {"message": "Email sent successfully"}
+        }
+      }
+    }
+  ],
+  "test_cases": [
+    {
+      "name": "successful_payment",
+      "mock_behavior": {
+        "stripe_payment_api": "success",
+        "email_service": "success"
+      },
+      "test_execution": [
+        {
+          "function": "process_payment",
+          "amount": 20.00,
+          "currency": "usd",
+          "payment_method": "card_test_123"
+        }
+      ],
+      "assertions": [
+        {
+          "assertion": "mock_called",
+          "mock": "stripe_payment_api",
+          "with_params": {
+            "amount": 2000,
+            "currency": "usd"
+          }
+        },
+        {
+          "assertion": "equals",
+          "actual": "{{process_payment.status}}",
+          "expected": "succeeded"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 2. Test Data Factories
+
+```javascript
+// Reusable test data factories
+{
+  "test_data_factories": {
+    "user_factory": {
+      "default": {
+        "email": "user{{random_number()}}@example.com",
+        "name": "Test User {{random_number()}}",
+        "password": "SecurePass123!",
+        "status": "active",
+        "created_at": "{{now()}}"
+      },
+      "admin": {
+        "email": "admin{{random_number()}}@example.com",
+        "name": "Admin User {{random_number()}}",
+        "password": "AdminPass123!",
+        "role": "admin",
+        "status": "active"
+      },
+      "inactive": {
+        "email": "inactive{{random_number()}}@example.com",
+        "name": "Inactive User",
+        "status": "inactive"
+      }
+    },
+    "product_factory": {
+      "default": {
+        "name": "Test Product {{random_number()}}",
+        "price": "{{random_decimal(10, 100)}}",
+        "stock": "{{random_integer(1, 50)}}",
+        "category": "electronics",
+        "status": "active"
+      },
+      "out_of_stock": {
+        "name": "Out of Stock Product",
+        "price": 25.99,
+        "stock": 0,
+        "status": "active"
+      }
+    }
+  },
+  "factory_usage": [
+    {
+      "function": "create_test_user",
+      "factory": "user_factory",
+      "variant": "admin",
+      "overrides": {
+        "email": "specific@example.com"
+      }
+    }
+  ]
+}
+```
+
+### 3. Parameterized Tests
+
+```javascript
+// Data-driven parameterized tests
+{
+  "test_name": "email_validation_scenarios",
+  "description": "Test email validation with multiple scenarios",
+  "parameters": [
+    {
+      "email": "valid@example.com",
+      "expected_valid": true,
+      "description": "Valid email format"
+    },
+    {
+      "email": "invalid.email",
+      "expected_valid": false,
+      "description": "Missing @ symbol"
+    },
+    {
+      "email": "@example.com",
+      "expected_valid": false,
+      "description": "Missing local part"
+    },
+    {
+      "email": "user@",
+      "expected_valid": false,
+      "description": "Missing domain"
+    },
+    {
+      "email": "user@example",
+      "expected_valid": false,
+      "description": "Missing TLD"
+    },
+    {
+      "email": "user+tag@example.com",
+      "expected_valid": true,
+      "description": "Email with plus addressing"
+    }
+  ],
+  "test_template": {
+    "test_execution": [
+      {
+        "function": "validate_email",
+        "email": "{{parameter.email}}"
+      }
+    ],
+    "assertions": [
+      {
+        "assertion": "equals",
+        "actual": "{{validate_email.is_valid}}",
+        "expected": "{{parameter.expected_valid}}",
+        "message": "{{parameter.description}}: {{parameter.email}}"
+      }
+    ]
+  }
+}
+```
+
+## Test Suite Organization
+
+### 1. Test Suite Structure
+
+```javascript
+// Comprehensive test suite organization
+{
+  "test_suite": {
+    "name": "User Management API",
+    "description": "Complete test suite for user management functionality",
+    "setup": [
+      {
+        "function": "create_test_database",
+        "tables": ["users", "user_sessions", "user_profiles"]
+      },
+      {
+        "function": "load_test_fixtures",
+        "fixtures": ["test_users.json", "test_roles.json"]
+      }
+    ],
+    "teardown": [
+      {
+        "function": "cleanup_test_database"
+      },
+      {
+        "function": "reset_mocks"
+      }
+    ],
+    "test_groups": [
+      {
+        "group": "Authentication Tests",
+        "tests": [
+          "user_registration_test",
+          "user_login_test",
+          "password_reset_test",
+          "token_validation_test"
+        ]
+      },
+      {
+        "group": "Profile Management Tests",
+        "tests": [
+          "profile_update_test",
+          "profile_validation_test",
+          "profile_image_upload_test"
+        ]
+      },
+      {
+        "group": "Security Tests",
+        "tests": [
+          "rate_limiting_test",
+          "sql_injection_prevention_test",
+          "xss_prevention_test"
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 2. Continuous Integration Tests
+
+```javascript
+// CI/CD pipeline test configuration
+{
+  "ci_test_configuration": {
+    "pipeline_name": "xano_api_tests",
+    "triggers": ["push", "pull_request", "scheduled"],
+    "environments": {
+      "test": {
+        "database_url": "{{env.TEST_DATABASE_URL}}",
+        "api_base_url": "{{env.TEST_API_URL}}",
+        "external_services": "mocked"
+      },
+      "staging": {
+        "database_url": "{{env.STAGING_DATABASE_URL}}",
+        "api_base_url": "{{env.STAGING_API_URL}}",
+        "external_services": "sandbox"
+      }
+    },
+    "test_stages": [
+      {
+        "stage": "unit_tests",
+        "parallel": true,
+        "tests": ["unit/**/*.test.js"],
+        "timeout": 300
+      },
+      {
+        "stage": "integration_tests",
+        "parallel": false,
+        "tests": ["integration/**/*.test.js"],
+        "timeout": 600,
+        "depends_on": ["unit_tests"]
+      },
+      {
+        "stage": "e2e_tests",
+        "parallel": false,
+        "tests": ["e2e/**/*.test.js"],
+        "timeout": 900,
+        "depends_on": ["integration_tests"],
+        "run_condition": "branch == 'main'"
+      }
+    ],
+    "reporting": {
+      "formats": ["junit", "coverage", "html"],
+      "coverage_threshold": 80,
+      "notification_channels": ["slack", "email"]
+    }
+  }
+}
+```
+
+## No-Code Platform Testing Integration
+
+### n8n Workflow Testing
+```javascript
+// Test n8n workflow integration
+{
+  "test_name": "n8n_webhook_processing",
+  "description": "Test n8n webhook data processing",
+  "test_setup": [
+    {
+      "function": "mock_n8n_webhook",
+      "webhook_url": "https://hooks.n8n.cloud/webhook/test",
+      "expected_payload": {
+        "trigger": "order_created",
+        "order_id": "{{test_order.id}}",
+        "customer_email": "test@example.com"
+      }
+    }
+  ],
+  "test_execution": [
+    {
+      "function": "trigger_order_created_event",
+      "order_data": "{{test_order}}"
+    }
+  ],
+  "assertions": [
+    {
+      "assertion": "webhook_called",
+      "webhook": "n8n_webhook",
+      "within_seconds": 5,
+      "with_payload": {
+        "trigger": "order_created",
+        "order_id": "{{test_order.id}}"
+      }
+    }
+  ]
+}
+```
+
+### WeWeb Component Testing
+```javascript
+// Test WeWeb component data flow
+{
+  "test_name": "weweb_component_data_binding",
+  "description": "Test data binding for WeWeb components",
+  "test_setup": [
+    {
+      "function": "create_test_component_data",
+      "component": "user_dashboard",
+      "data": {
+        "user_stats": {
+          "orders_count": 5,
+          "total_spent": 150.00,
+          "loyalty_points": 75
+        }
+      }
+    }
+  ],
+  "test_execution": [
+    {
+      "function": "get_dashboard_data",
+      "user_id": "{{test_user.id}}"
+    }
+  ],
+  "assertions": [
+    {
+      "assertion": "has_properties",
+      "actual": "{{get_dashboard_data.response}}",
+      "expected_properties": [
+        "orders_count",
+        "total_spent", 
+        "loyalty_points",
+        "recent_orders"
+      ]
+    },
+    {
+      "assertion": "equals",
+      "actual": "{{get_dashboard_data.response.orders_count}}",
+      "expected": 5
+    }
+  ]
+}
+```
+
+### Make.com Scenario Testing
+```javascript
+// Test Make.com scenario triggers
+{
+  "test_name": "make_scenario_execution",
+  "description": "Test Make.com scenario triggering",
+  "test_setup": [
+    {
+      "function": "mock_make_webhook",
+      "scenario_id": "123456",
+      "webhook_url": "https://hook.us1.make.com/test-webhook"
+    }
+  ],
+  "test_execution": [
+    {
+      "function": "process_customer_signup",
+      "customer_data": {
+        "email": "newcustomer@example.com",
+        "source": "website_form"
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "assertion": "webhook_received",
+      "webhook": "make_webhook",
+      "payload_contains": {
+        "event": "customer_signup",
+        "customer_email": "newcustomer@example.com"
+      }
+    }
+  ]
+}
+```
+
+## Performance and Load Testing
+
+### 1. Performance Benchmarks
+
+```javascript
+// Performance testing configuration
+{
+  "performance_tests": [
+    {
+      "test_name": "api_response_time",
+      "description": "Test API response time under normal load",
+      "endpoint": "/api/users",
+      "method": "GET",
+      "concurrent_users": 10,
+      "duration_seconds": 60,
+      "assertions": [
+        {
+          "metric": "average_response_time",
+          "threshold": 200,
+          "unit": "milliseconds"
+        },
+        {
+          "metric": "95th_percentile_response_time",
+          "threshold": 500,
+          "unit": "milliseconds"
+        },
+        {
+          "metric": "error_rate",
+          "threshold": 1,
+          "unit": "percentage"
+        }
+      ]
+    },
+    {
+      "test_name": "database_query_performance",
+      "description": "Test database query performance",
+      "queries": [
+        {
+          "name": "user_lookup",
+          "query": "SELECT * FROM users WHERE email = ?",
+          "parameters": ["test@example.com"],
+          "max_execution_time": 50
+        },
+        {
+          "name": "order_history",
+          "query": "SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC LIMIT 10",
+          "parameters": [123],
+          "max_execution_time": 100
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 2. Load Testing Scenarios
+
+```javascript
+// Load testing configuration
+{
+  "load_tests": [
+    {
+      "scenario": "user_registration_load",
+      "description": "Test user registration under heavy load",
+      "load_pattern": "ramp_up",
+      "users": {
+        "start": 1,
+        "end": 100,
+        "ramp_duration": 300
+      },
+      "test_duration": 600,
+      "user_behavior": [
+        {
+          "action": "register_user",
+          "weight": 70,
+          "think_time": 2
+        },
+        {
+          "action": "login_user", 
+          "weight": 30,
+          "think_time": 1
+        }
+      ],
+      "success_criteria": [
+        {
+          "metric": "error_rate",
+          "threshold": 2,
+          "unit": "percentage"
+        },
+        {
+          "metric": "throughput",
+          "threshold": 50,
+          "unit": "requests_per_second"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Try This: Complete Test Implementation
+
+Create a comprehensive test for a user authentication system:
+
+```javascript
+// Complete authentication test suite
+{
+  "test_suite": "user_authentication_complete",
+  "description": "Complete test suite for user authentication",
+  "global_setup": [
+    {
+      "function": "create_test_environment",
+      "database": "test_auth_db",
+      "tables": ["users", "sessions", "password_resets"]
+    },
+    {
+      "function": "setup_mocks",
+      "services": ["email_service", "sms_service"]
+    }
+  ],
+  "tests": [
+    {
+      "name": "complete_user_registration_flow",
+      "steps": [
+        {
+          "description": "Register new user",
+          "action": "POST /api/register",
+          "data": {
+            "email": "test@example.com",
+            "password": "SecurePass123!",
+            "name": "Test User"
+          },
+          "assertions": [
+            {"status": 201},
+            {"body_contains": {"user_id": "{{any_integer}}"}}
+          ]
+        },
+        {
+          "description": "Verify email was sent",
+          "assertions": [
+            {
+              "assertion": "mock_called",
+              "mock": "email_service",
+              "with_template": "email_verification"
+            }
+          ]
+        },
+        {
+          "description": "Activate user account",
+          "action": "GET /api/verify/{{verification_token}}",
+          "assertions": [
+            {"status": 200},
+            {"body_contains": {"message": "Account verified"}}
+          ]
+        },
+        {
+          "description": "Login with activated account",
+          "action": "POST /api/login",
+          "data": {
+            "email": "test@example.com",
+            "password": "SecurePass123!"
+          },
+          "assertions": [
+            {"status": 200},
+            {"body_contains": {"access_token": "{{any_string}}"}}
+          ]
+        }
+      ]
+    }
+  ],
+  "global_teardown": [
+    {
+      "function": "cleanup_test_environment"
+    }
+  ]
+}
+```
+
+## Common Testing Mistakes to Avoid
+
+### ❌ Poor Practices
+- Testing implementation details instead of behavior
+- Not using proper test isolation
+- Creating flaky tests with timing dependencies
+- Missing edge case coverage
+- Not maintaining test data properly
+
+### ✅ Best Practices
+- Focus on testing behavior, not implementation
+- Use proper setup/teardown for test isolation
+- Mock external dependencies consistently
+- Test both happy path and error scenarios
+- Maintain clear and descriptive test names
+
+## Pro Tips
+
+### 💡 **Test Organization**
+- Group related tests in test suites
+- Use descriptive test names and descriptions
+- Implement proper test data management
+- Create reusable test utilities and factories
+
+### 🔒 **Quality Assurance**
+- Aim for high test coverage of critical paths
+- Include security testing scenarios
+- Test error handling and edge cases
+- Validate performance under load
+
+### 📊 **Monitoring and Reporting**
+- Track test execution metrics
+- Monitor test suite performance
+- Generate comprehensive test reports
+- Set up alerts for test failures
+
+### 🔄 **CI/CD Integration**
+- Run tests on every code change
+- Use different test environments appropriately
+- Implement proper test result reporting
+- Set up automated deployment based on test results
+
+## Troubleshooting Test Issues
+
+### Common Problems
+1. **Flaky tests**: Improve test isolation and remove timing dependencies
+2. **Slow test execution**: Optimize database operations and use mocking
+3. **Test data conflicts**: Implement proper cleanup and unique test data
+4. **Mock configuration issues**: Verify mock setup and reset procedures
+
+Unit testing in Xano provides comprehensive quality assurance capabilities for function stacks, APIs, and business logic. Proper implementation ensures reliable, maintainable code and confident deployments.
