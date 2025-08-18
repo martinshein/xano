@@ -1,547 +1,487 @@
 ---
+title: Xano Backup and Restore - Complete Data Protection Guide
+description: Master comprehensive backup and restore strategies for your Xano instances, including automated backups, manual snapshots, and disaster recovery planning
 category: functions
 difficulty: advanced
-last_updated: '2025-01-23'
+last_updated: '2025-08-17'
 related_docs: []
 subcategory: 08-reference/functions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - backup-restore
+  - data-protection
+  - disaster-recovery
+  - instance-management
+  - data-security
+  - business-continuity
+  - automated-backup
+  - recovery-planning
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
+# Xano Backup and Restore - Complete Data Protection Guide
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'backup-and-restore'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## 📋 **Quick Summary**
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+Xano's backup and restore system provides comprehensive data protection with automated rolling backups on paid plans, manual backup creation, custom scheduling, and full instance restoration capabilities for business continuity and disaster recovery.
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+## What You'll Learn
 
+- **Automated Backup Management**: Understand Xano's automatic 3-day rolling backup system
+- **Manual Backup Creation**: Create on-demand backups for critical milestones and deployments
+- **Custom Backup Policies**: Configure backup timing and frequency for your specific needs
+- **Media Storage Handling**: Decide when to include file storage in your backup strategy
+- **Restore Operations**: Safely restore instances from backups with proper precautions
+- **Disaster Recovery Planning**: Implement comprehensive backup strategies for business continuity
 
+## Understanding Xano Backup System
 
+### Automatic Rolling Backups
+On all paid plans, Xano automatically maintains a **3-day rolling backup** of your entire instance:
+- **Frequency**: Daily automatic backups
+- **Retention**: 3 days of backup history
+- **Coverage**: Complete instance including database, function stacks, and API configurations
+- **Accessibility**: Available for restoration at any time during the retention period
 
+### Plan-Based Backup Availability
+| Plan Type | Backup Features |
+|-----------|----------------|
+| Free | ❌ No backups available |
+| Launch/Starter/Scale | ✅ 3-day rolling backups + Manual backups |
+| Pro/Enterprise | ✅ 3-day rolling backups + Manual backups + Custom policies |
 
+## Creating Manual Backups
 
+### Step-by-Step Manual Backup Process
 
+**Step 1: Access Instance Settings**
+From your instance selection screen, click the settings icon (⚙️) next to the instance you want to backup.
 
+**Step 2: Navigate to Database Backup**
+In the settings panel, choose "Database Backup" from the available options.
 
+**Step 3: Create Manual Backup**
+Click "Manual Backup" to start the backup creation process.
 
+**Step 4: Configure Backup Options**
+- **Database Backup**: Always included by default
+- **Media Storage**: Check the option to include file storage if needed
+  - ⚠️ **Important**: Media storage significantly increases backup size and duration
+  - Only include media storage when absolutely necessary
 
+**Step 5: Execute Backup**
+Click "Create Backup" to start the backup process. The system will:
+- Create a complete snapshot of your instance
+- Include all database tables and data
+- Package function stacks and API configurations
+- Optionally include media storage files
 
+### Best Practices for Manual Backups
 
+```javascript
+// Recommended backup timing strategy
+const backupStrategy = {
+  // Before major deployments
+  preDeployment: {
+    timing: "Immediately before releasing new features",
+    includes: ["database", "functions", "apis"],
+    excludeMedia: "Unless media changes are part of deployment"
+  },
+  
+  // Weekly development milestones
+  weeklySnapshots: {
+    timing: "End of each development sprint",
+    includes: ["complete_instance"],
+    retention: "Keep for 30 days minimum"
+  },
+  
+  // Before schema changes
+  schemaUpdates: {
+    timing: "Before any database structure modifications",
+    critical: true,
+    includes: ["database", "relationships", "indexes"]
+  }
+};
+```
 
+## Restoring from Backups
 
--   
+### Critical Pre-Restoration Steps
 
+⚠️ **STRONGLY ADVISED**: Always create a current backup before restoring from an older one. This allows rollback if the restoration doesn't meet expectations.
+
+### Restoration Process
+
+**Step 1: Access Backup Management**
+From your instance selection screen, click the settings icon next to the target instance.
+
+**Step 2: Open Database Backup Panel**
+Select "Database Backup" from the settings menu.
+
+**Step 3: Choose Restoration Option**
+Click "Download and Restore" to view available backup options.
+
+**Step 4: Select Backup Version**
+- Review available backups with timestamps
+- Choose the specific backup point for restoration
+- Verify backup contents and creation date
+
+**Step 5: Execute Restoration**
+Click "Restore" to begin the restoration process. The system will:
+- Replace current instance data with backup data
+- Restore database structure and content
+- Recover function stacks and API configurations
+- Apply backup-specific settings and configurations
+
+### Post-Restoration Verification
+```javascript
+// Post-restoration checklist
+const restorationVerification = {
+  dataIntegrity: [
+    "Verify critical tables have expected record counts",
+    "Check data relationships are intact",
+    "Validate recent data changes are as expected"
+  ],
+  
+  functionalityTests: [
+    "Test critical API endpoints",
+    "Verify authentication systems",
+    "Check third-party integrations",
+    "Validate file upload/download features"
+  ],
+  
+  configurationReview: [
+    "Confirm environment variables",
+    "Check team member permissions",
+    "Verify instance settings",
+    "Review custom function configurations"
+  ]
+};
+```
+
+## Custom Backup Policies
+
+### Advanced Backup Scheduling
+
+**Access Policy Settings**
+1. Navigate to instance settings (⚙️ icon)
+2. Choose "Database Backup"
+3. Click "Policy" to access custom scheduling options
+
+**Configure Backup Windows**
+- **Default**: Early morning PST hours
+- **Custom Options**: Select optimal backup windows based on:
+  - Low traffic periods
+  - Development team schedules
+  - Business operation hours
+  - Geographic considerations
+
+```javascript
+// Example custom backup policy configuration
+const customBackupPolicy = {
+  // Configure for global team with EU/US presence
+  backupWindow: {
+    timezone: "UTC",
+    startHour: 2,  // 2 AM UTC (low traffic)
+    duration: 2,   // 2-hour window
+    frequency: "daily"
+  },
+  
+  // Special policies for different environments
+  environments: {
+    production: {
+      frequency: "daily",
+      retention: "7_days",
+      includeMedia: false,
+      priority: "high"
+    },
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+    staging: {
+      frequency: "weekly", 
+      retention: "3_days",
+      includeMedia: true,
+      priority: "normal"
+    }
+  }
+};
+```
 
--   
+## Integration with n8n, WeWeb, and Make.com
 
+### n8n Automated Backup Management
+```javascript
+// n8n workflow for backup monitoring and management
+{
+  "nodes": [
+    {
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.cron",
+      "parameters": {
+        "expression": "0 0 * * 0"  // Weekly on Sunday
+      }
+    },
+    {
+      "name": "Create Xano Backup",
+      "type": "n8n-nodes-base.httpRequest",
+      "parameters": {
+        "method": "POST",
+        "url": "https://your-instance.xano.io/api:meta/backup/create",
+        "authentication": "genericCredentialType",
+        "headers": {
+          "Authorization": "Bearer {{$credentials.xano.authToken}}"
+        },
+        "body": {
+          "include_media": false,
+          "backup_type": "scheduled"
+        }
+      }
+    },
+    {
+      "name": "Backup Notification",
+      "type": "n8n-nodes-base.slack",
+      "parameters": {
+        "channel": "#devops-alerts",
+        "text": "✅ Weekly Xano backup completed successfully"
+      }
+    }
+  ]
+}
+```
+
+### WeWeb Backup Dashboard
+```javascript
+// WeWeb backup management interface
+const backupDashboard = {
+  // Display recent backups
+  getBackupHistory: async () => {
+    const backups = await xano.get('/api:meta/backups', {
+      limit: 10,
+      sort: 'created_at:desc'
+    });
     
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../the-function-stack/filters/manipulation.html)
-        -   [Math](../../the-function-stack/filters/math.html)
-        -   [Timestamp](../../the-function-stack/filters/timestamp.html)
-        -   [Text](../../the-function-stack/filters/text.html)
-        -   [Array](../../the-function-stack/filters/array.html)
-        -   [Transform](../../the-function-stack/filters/transform.html)
-        -   [Conversion](../../the-function-stack/filters/conversion.html)
-        -   [Comparison](../../the-function-stack/filters/comparison.html)
-        -   [Security](../../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../the-function-stack/data-types/text.html)
-        -   [Expression](../../the-function-stack/data-types/expression.html)
-        -   [Array](../../the-function-stack/data-types/array.html)
-        -   [Object](../../the-function-stack/data-types/object.html)
-        -   [Integer](../../the-function-stack/data-types/integer.html)
-        -   [Decimal](../../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../../the-function-stack/data-types/timestamp.html)
-        -   [Null](../../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
+    return backups.map(backup => ({
+      id: backup.id,
+      created: new Date(backup.created_at).toLocaleDateString(),
+      size: formatBytes(backup.size_bytes),
+      type: backup.includes_media ? 'Complete' : 'Database Only',
+      status: backup.status
+    }));
+  },
+  
+  // Backup creation interface
+  createBackup: async (includeMedia = false) => {
+    const response = await xano.post('/api:meta/backup/create', {
+      include_media: includeMedia,
+      description: `Manual backup - ${new Date().toISOString()}`
+    });
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+    // Show progress notification
+    showNotification('Backup creation started', 'success');
+    return response;
+  }
+};
+```
 
--   
-    The Database
+### Make.com Disaster Recovery Automation
+```javascript
+// Make.com scenario for automated disaster recovery
+{
+  "scenario": {
+    "name": "Xano Disaster Recovery Monitor",
+    "modules": [
+      {
+        "id": 1,
+        "module": "http:ActionSendData",
+        "parameters": {
+          "url": "https://your-instance.xano.io/api:health",
+          "method": "GET"
+        }
+      },
+      {
+        "id": 2,
+        "module": "builtin:BasicRouter",
+        "filter": {
+          "conditions": [
+            {
+              "field": "{{1.statusCode}}",
+              "operator": "notEqual",
+              "value": "200"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "module": "http:ActionSendData",
+        "parameters": {
+          "url": "https://your-instance.xano.io/api:meta/backup/restore",
+          "method": "POST",
+          "body": {
+            "backup_id": "{{last_known_good_backup_id}}",
+            "notify_team": true
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+## Advanced Backup Strategies
+
+### Multi-Environment Backup Management
+```javascript
+// Comprehensive backup strategy for multiple environments
+const enterpriseBackupStrategy = {
+  environments: {
+    production: {
+      frequency: "4_times_daily",
+      retention: "30_days",
+      includeMedia: true,
+      verification: "automated_testing",
+      offsite: "s3_backup",
+      encryption: "required"
+    },
     
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
+    staging: {
+      frequency: "daily",
+      retention: "7_days", 
+      includeMedia: false,
+      verification: "basic_checks",
+      offsite: "optional"
+    },
     
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+    development: {
+      frequency: "weekly",
+      retention: "3_days",
+      includeMedia: false,
+      verification: "none"
+    }
+  },
+  
+  // Automated backup verification
+  verification: {
+    postBackup: [
+      "Test critical API endpoints",
+      "Verify data integrity checksums",
+      "Confirm backup file accessibility",
+      "Validate backup metadata"
+    ]
+  }
+};
+```
 
--   
-    Build With AI
+### Backup Size Optimization
+```javascript
+// Strategies for managing backup storage efficiently
+const backupOptimization = {
+  // Media storage considerations
+  mediaStrategy: {
+    include: [
+      "Critical user uploads",
+      "System configuration files",
+      "Essential assets"
+    ],
+    exclude: [
+      "Temporary files", 
+      "Cache directories",
+      "Log files",
+      "Development assets"
+    ]
+  },
+  
+  // Database optimization before backup
+  preBackupCleanup: [
+    "Clear expired sessions",
+    "Archive old audit logs", 
+    "Remove temporary data",
+    "Optimize database indexes"
+  ],
+  
+  // Backup retention strategy
+  retention: {
+    daily: "7_days",
+    weekly: "4_weeks", 
+    monthly: "12_months",
+    yearly: "permanent"
+  }
+};
+```
+
+## 💡 **Pro Tips**
+
+1. **Backup Before Updates**: Always create a manual backup before major system updates, schema changes, or new feature deployments
+
+2. **Test Restore Procedures**: Periodically test your restore process in a staging environment to ensure backups are viable
+
+3. **Monitor Backup Sizes**: Track backup sizes over time to identify data growth patterns and optimize storage costs
+
+4. **Document Backup Procedures**: Maintain clear documentation of your backup and restore procedures for team members
+
+5. **Consider External Backups**: For critical applications, implement additional backup strategies using external services
+
+## Try This: Comprehensive Backup Automation
+
+Set up an automated backup and monitoring system:
+
+```javascript
+// Complete backup automation workflow
+const backupAutomation = {
+  // Daily production backup
+  schedule: {
+    production: "0 2 * * *",  // 2 AM daily
+    staging: "0 4 * * 0",     // 4 AM weekly
+    development: "0 6 1 * *"  // 6 AM monthly
+  },
+  
+  // Backup validation
+  validation: async (backupId) => {
+    const tests = [
+      'database_integrity',
+      'api_functionality', 
+      'authentication_flow',
+      'data_relationships'
+    ];
     
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](release-track-preferences.html)
-        -   [Static IP (Outgoing)](static-ip-outgoing.html)
-        -   [Change Server Region](change-server-region.html)
-        -   [Direct Database Connector](direct-database-connector.html)
-        -   [Backup and Restore](backup-and-restore.html)
-        -   [Security Policy](security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../metadata-api/tables-and-schema.html)
-        -   [Content](../metadata-api/content.html)
-        -   [Search](../metadata-api/search.html)
-        -   [File](../metadata-api/file.html)
-        -   [Request History](../metadata-api/request-history.html)
-        -   [Workspace Import and Export](../metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [How do backups work in Xano?](#how-do-backups-work-in-xano)
-
--   [Creating a Backup](#creating-a-backup)
-
--   [From your instance selection screen, click next to the instance you want to create a backup of. ](#from-your-instance-selection-screen-click-next-to-the-instance-you-want-to-create-a-backup-of)
-
--   [In the panel that opens, choose Database Backup.](#in-the-panel-that-opens-choose-database-backup)
-
--   [Click Manual Backup](#click-manual-backup)
-
--   [Check the option to include media storage if you\'d like that to be included in your backup.](#check-the-option-to-include-media-storage-if-youd-like-that-to-be-included-in-your-backup)
-
--   [Click to start the process.](#click-to-start-the-process)
-
--   [Restoring a Backup](#restoring-a-backup)
-
--   [From your instance selection screen, click next to the instance you want to restore a backup of. ](#from-your-instance-selection-screen-click-next-to-the-instance-you-want-to-restore-a-backup-of)
-
--   [In the panel that opens, choose Database Backup.](#in-the-panel-that-opens-choose-database-backup-1)
-
--   [Click Download and Restore](#click-download-and-restore)
-
--   [Choose the backup you\'d like to restore and click ](#choose-the-backup-youd-like-to-restore-and-click)
-
--   [Custom Backup Policy](#custom-backup-policy)
-
--   [From your instance selection screen, click next to the instance you want to adjust backup policy for.](#from-your-instance-selection-screen-click-next-to-the-instance-you-want-to-adjust-backup-policy-for)
-
--   [In the panel that opens, choose Database Backup.](#in-the-panel-that-opens-choose-database-backup-2)
-
--   [Click Policy](#click-policy)
-
--   [Choose the time window you\'d like your backups to run in.](#choose-the-time-window-youd-like-your-backups-to-run-in)
-
-Was this helpful?
-
-Copy
-
-1.  [Xano Features](../snippets.html)
-2.  Instance Settings
-
-Backup and Restore 
-==================
-
- 
-
-How do backups work in Xano?
-
-On all of our paid plans, Xano keeps a rolling 3-day backup of your entire instance automatically, should the need arise to restore to an earlier point.
-
-You also have the ability to take and restore backups manually.
-
-If you are on a free plan, please note that **no backups are available**.
-
- 
-
-Creating a Backup
-
-<div>
-
-1
-
-###  
-
-From your instance selection screen
-
-, click [![](../../_gitbook/image3d2a.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FnPaPLzKTdWMTToytGJ35%252FCleanShot%25202025-02-06%2520at%252006.10.48.png%3Falt%3Dmedia%26token%3D2e2820df-6a83-41af-beaa-d6b0cacd3d26&width=300&dpr=4&quality=100&sign=afc9d131&sv=2)] next to the instance you want to create a backup of.
-
-2
-
-###  
-
-In the panel that opens, choose Database Backup.
-
-3
-
-###  
-
-Click Manual Backup
-
-4
-
-###  
-
-Check the option to include media storage if you\'d like that to be included in your backup.
-
-Please note that media storage should only be backed up if absolutely necessary, as it can greatly increase the size of and duration to backup / restore the instance.
-
-5
-
-###  
-
-Click [![](../../_gitbook/image1319.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F8z7Ni03xveXFFaeQEbZv%252FCleanShot%25202025-02-06%2520at%252006.15.33.png%3Falt%3Dmedia%26token%3D0b6232c9-6790-4690-9018-f17e4eeab6d8&width=300&dpr=4&quality=100&sign=ba5fc2d5&sv=2)] to start the process.
-
-</div>
-
- 
-
-Restoring a Backup
-
- 
-
-WARNING
-
-It is **strongly advised** that you first create a backup before restoring another, just in case you need to roll back.
-
-<div>
-
-1
-
-###  
-
-From your instance selection screen
-
-, click [![](../../_gitbook/image3d2a.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FnPaPLzKTdWMTToytGJ35%252FCleanShot%25202025-02-06%2520at%252006.10.48.png%3Falt%3Dmedia%26token%3D2e2820df-6a83-41af-beaa-d6b0cacd3d26&width=300&dpr=4&quality=100&sign=afc9d131&sv=2)] next to the instance you want to restore a backup of.
-
-2
-
-###  
-
-In the panel that opens, choose Database Backup.
-
-3
-
-###  
-
-Click Download and Restore
-
-4
-
-###  
-
-Choose the backup you\'d like to restore and click [![](../../_gitbook/image427f-2.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FUm1Lg19QsibMTqJXHtWY%252FCleanShot%25202025-02-06%2520at%252006.13.01.png%3Falt%3Dmedia%26token%3D1e2923b3-9efb-464e-a75d-8176cc8b6d8e&width=300&dpr=4&quality=100&sign=f18292b1&sv=2)]
-
-</div>
-
- 
-
-Custom Backup Policy
-
-You can define your own custom schedule for when automatic backups take place.
-
-<div>
-
-1
-
-###  
-
-From your instance selection screen
-
-, click [![](../../_gitbook/image3d2a.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FnPaPLzKTdWMTToytGJ35%252FCleanShot%25202025-02-06%2520at%252006.10.48.png%3Falt%3Dmedia%26token%3D2e2820df-6a83-41af-beaa-d6b0cacd3d26&width=300&dpr=4&quality=100&sign=afc9d131&sv=2)] next to the instance you want to adjust backup policy for.
-
-2
-
-###  
-
-In the panel that opens, choose Database Backup.
-
-3
-
-###  
-
-Click Policy
-
-4
-
-###  
-
-Choose the time window you\'d like your backups to run in.
-
-Typically, backups will happen early morning PST hours. However, you can select your own time window to more closely align with your needs from here.
-
-</div>
-
-Last updated 3 months ago
-
-Was this helpful?
+    for (const test of tests) {
+      const result = await runValidationTest(test, backupId);
+      if (!result.success) {
+        await notifyTeam(`Backup validation failed: ${test}`);
+        return false;
+      }
+    }
+    return true;
+  },
+  
+  // Recovery procedures
+  recovery: {
+    rto: "15_minutes",  // Recovery Time Objective
+    rpo: "1_hour",      // Recovery Point Objective
+    steps: [
+      "Assess incident scope",
+      "Select appropriate backup",
+      "Notify stakeholders",
+      "Execute restoration",
+      "Validate recovery",
+      "Resume operations"
+    ]
+  }
+};
+```
+
+## Common Mistakes to Avoid
+
+❌ **Forgetting to backup before major changes**
+✅ Always create a pre-deployment backup before significant updates
+
+❌ **Including media storage unnecessarily**
+✅ Only include media storage when file changes are critical to preserve
+
+❌ **Not testing restore procedures**
+✅ Regularly test backup restoration in staging environments
+
+❌ **Relying solely on automatic backups**
+✅ Create manual backups at critical development milestones
+
+❌ **Ignoring backup size growth**
+✅ Monitor and optimize backup sizes to manage storage costs effectively
+
+Proper backup and restore procedures are essential for maintaining business continuity and protecting your valuable data. Implement comprehensive backup strategies that match your business requirements and regularly test your disaster recovery procedures.

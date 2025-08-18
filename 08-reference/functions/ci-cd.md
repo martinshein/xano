@@ -1,562 +1,698 @@
 ---
+title: Xano CI/CD - Continuous Integration and Deployment Guide
+description: Master continuous integration and continuous deployment workflows in Xano with branching, testing, environment management, and automated deployment strategies
 category: functions
 difficulty: advanced
-last_updated: '2025-01-23'
+last_updated: '2025-08-17'
 related_docs: []
 subcategory: 08-reference/functions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- integration
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - ci-cd
+  - continuous-integration
+  - continuous-deployment
+  - branching-merging
+  - testing
+  - environment-management
+  - deployment-automation
+  - development-workflow
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
+# Xano CI/CD - Continuous Integration and Deployment Guide
 
-color-scheme: dark light
-description: Learn more about CI/CD inside of Xano
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'ci-cd'
-twitter:card: summary\_large\_image
-twitter:description: Learn more about CI/CD inside of Xano
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## 📋 **Quick Summary**
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+CI/CD (Continuous Integration and Continuous Delivery) in Xano enables automated testing, deployment workflows, and environment management using branching/merging, unit tests, test suites, and triggers to deliver reliable software updates efficiently.
 
-[![](_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](index.html)
+## What You'll Learn
 
+- **CI/CD Fundamentals**: Understand continuous integration and delivery concepts in Xano's context
+- **Environment Setup**: Configure Dev, Stage, and Production environments using different Xano features
+- **Testing Automation**: Implement comprehensive testing strategies with Unit Tests and Test Suites
+- **Deployment Workflows**: Create automated deployment pipelines for reliable releases
+- **Team Collaboration**: Manage development workflows across distributed teams
+- **Environment Variables**: Handle configuration management across different environments
 
+## Understanding CI/CD in Xano
 
+### CI/CD Explained
+**Continuous Integration (CI)**: Regularly integrating small code changes, with automated testing to catch errors early.
 
+**Continuous Delivery (CD)**: Automated testing and deployment processes that ensure updates can be safely released to production.
 
+In Xano, your **function stacks** serve as your codebase, while **branching/merging**, **unit tests**, **test suites**, and **triggers** form the foundation of your CI/CD pipeline.
 
+### Benefits of Xano CI/CD
+- **Faster Development**: Automated testing and deployment reduce manual overhead
+- **Higher Quality**: Systematic testing catches bugs before production
+- **Team Collaboration**: Structured workflows enable parallel development
+- **Risk Reduction**: Staged deployments minimize production issues
+- **Consistency**: Standardized processes ensure reliable releases
 
+## Environment Configuration Strategies
 
+### Three-Environment Setup
 
+| Environment | Purpose | Xano Implementation |
+|-------------|---------|-------------------|
+| **Development** | Feature development and initial testing | Development branch or workspace |
+| **Staging** | Pre-production testing and validation | Staging branch or separate instance |
+| **Production** | Live user-facing environment | Production branch or dedicated instance |
 
+### Implementation by Plan Type
 
-
-
-
-
--   
-
+#### Launch/Self-Serve Plans: Branch-Based Strategy
+```javascript
+// Branch-based CI/CD workflow
+const branchStrategy = {
+  branches: {
+    development: {
+      name: "dev",
+      purpose: "Feature development and initial testing",
+      testing: "Unit tests and basic validation",
+      deployment: "Automatic on merge"
+    },
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
+    staging: {
+      name: "stage", 
+      purpose: "Pre-production testing and validation",
+      testing: "Full test suites and integration testing",
+      deployment: "Manual approval required"
+    },
     
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](the-function-stack/functions/utility-functions.html)
-        -   [File Storage](the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](the-function-stack/filters/manipulation.html)
-        -   [Math](the-function-stack/filters/math.html)
-        -   [Timestamp](the-function-stack/filters/timestamp.html)
-        -   [Text](the-function-stack/filters/text.html)
-        -   [Array](the-function-stack/filters/array.html)
-        -   [Transform](the-function-stack/filters/transform.html)
-        -   [Conversion](the-function-stack/filters/conversion.html)
-        -   [Comparison](the-function-stack/filters/comparison.html)
-        -   [Security](the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](the-function-stack/data-types/text.html)
-        -   [Expression](the-function-stack/data-types/expression.html)
-        -   [Array](the-function-stack/data-types/array.html)
-        -   [Object](the-function-stack/data-types/object.html)
-        -   [Integer](the-function-stack/data-types/integer.html)
-        -   [Decimal](the-function-stack/data-types/decimal.html)
-        -   [Boolean](the-function-stack/data-types/boolean.html)
-        -   [Timestamp](the-function-stack/data-types/timestamp.html)
-        -   [Null](the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
+    production: {
+      name: "main",
+      purpose: "Live production environment", 
+      testing: "Smoke tests and monitoring",
+      deployment: "Manual approval with rollback capability"
+    }
+  },
+  
+  workflow: [
+    "Develop features in dev branch",
+    "Run unit tests automatically",
+    "Merge to staging for integration testing", 
+    "Run full test suites",
+    "Manual approval for production merge",
+    "Deploy to production with monitoring"
+  ]
+};
+```
+
+#### Scale/Enterprise Plans: Multi-Instance Strategy
+```javascript
+// Multi-instance CI/CD with Xano Link
+const multiInstanceStrategy = {
+  instances: {
+    development: {
+      workspace: "myapp-dev",
+      purpose: "Feature development",
+      database: "Full copy with test data",
+      apis: "Development endpoints"
+    },
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
+    staging: {
+      workspace: "myapp-stage",
+      purpose: "Integration testing",
+      database: "Production-like data subset",
+      apis: "Staging endpoints"
+    },
     
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](the-database/database-basics/field-types.html)
-        -   [Relationships](the-database/database-basics/relationships.html)
-        -   [Database Views](the-database/database-basics/database-views.html)
-        -   [Export and Sharing](the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+    production: {
+      workspace: "myapp-prod", 
+      purpose: "Live environment",
+      database: "Production data",
+      apis: "Production endpoints"
+    }
+  },
+  
+  deployment: {
+    tool: "Xano Link",
+    automation: "Automated deployment between instances",
+    rollback: "Instance-level rollback capability"
+  }
+};
+```
 
--   
-    Build For AI
+#### Enterprise Plans: Tenant-Based Strategy
+```javascript
+// Enterprise tenant-based CI/CD
+const tenantStrategy = {
+  tenants: {
+    development: {
+      tenant: "dev-tenant",
+      purpose: "Development and testing",
+      isolation: "Complete tenant isolation",
+      resources: "Dedicated development resources"
+    },
     
-    -   Agents
-        
-        -   [Templates](ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
+    staging: {
+      tenant: "stage-tenant", 
+      purpose: "Pre-production validation",
+      isolation: "Production-like configuration",
+      resources: "Scaled resources for testing"
+    },
     
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+    production: {
+      tenant: "prod-tenant",
+      purpose: "Live customer environment",
+      isolation: "Production security and compliance",
+      resources: "Full production resources"
+    }
+  },
+  
+  management: {
+    tool: "Tenant Center",
+    deployment: "Release-based deployments",
+    security: "Enterprise security policies"
+  }
+};
+```
 
--   
-    File Storage
+## Comprehensive Testing Strategy
+
+### Unit Testing Implementation
+```javascript
+// Unit test examples for Xano function stacks
+const unitTestStrategy = {
+  // API endpoint testing
+  apiTests: {
+    userRegistration: {
+      test: "User Registration API",
+      scenarios: [
+        {
+          name: "Valid registration",
+          input: {
+            email: "test@example.com",
+            password: "SecurePass123",
+            name: "Test User"
+          },
+          expected: {
+            status: 201,
+            response: {success: true, user_id: "number"}
+          }
+        },
+        {
+          name: "Duplicate email registration", 
+          input: {
+            email: "existing@example.com",
+            password: "SecurePass123"
+          },
+          expected: {
+            status: 409,
+            response: {error: "Email already exists"}
+          }
+        }
+      ]
+    }
+  },
+  
+  // Function stack testing
+  functionTests: {
+    dataValidation: {
+      test: "Input validation function",
+      mockData: {
+        validInput: {email: "test@example.com", age: 25},
+        invalidInput: {email: "invalid-email", age: "not-a-number"}
+      },
+      assertions: [
+        "Valid input returns success",
+        "Invalid email returns validation error", 
+        "Invalid age returns type error"
+      ]
+    }
+  }
+};
+```
+
+### Test Suite (Workflow Testing)
+```javascript
+// Comprehensive test suite for user journey
+const testSuiteStrategy = {
+  userJourneyTest: {
+    name: "Complete User Registration and Purchase Flow",
+    steps: [
+      {
+        step: 1,
+        action: "User Registration",
+        endpoint: "/api/auth/register",
+        validation: "User created successfully"
+      },
+      {
+        step: 2, 
+        action: "Email Verification",
+        endpoint: "/api/auth/verify",
+        validation: "Email verified, user activated"
+      },
+      {
+        step: 3,
+        action: "User Login",
+        endpoint: "/api/auth/login", 
+        validation: "JWT token returned"
+      },
+      {
+        step: 4,
+        action: "Product Purchase",
+        endpoint: "/api/purchases/create",
+        validation: "Purchase recorded, payment processed"
+      },
+      {
+        step: 5,
+        action: "Confirmation Email",
+        trigger: "Purchase confirmation trigger",
+        validation: "Email sent successfully"
+      }
+    ],
     
-    -   File Storage in Xano
-    -   Private File Storage
+    coverage: [
+      "Authentication flow",
+      "Database operations", 
+      "Third-party integrations",
+      "Email notifications",
+      "Error handling"
+    ]
+  }
+};
+```
 
--   
-    Realtime
+## Automated CI/CD Workflows
+
+### n8n CI/CD Pipeline
+```javascript
+// Complete n8n CI/CD workflow
+const n8nCicdPipeline = {
+  trigger: {
+    type: "webhook",
+    event: "git_push",
+    branch: "development"
+  },
+  
+  stages: [
+    {
+      name: "Unit Testing",
+      node: "xano-test-runner",
+      config: {
+        testSuite: "unit_tests",
+        environment: "development",
+        failureAction: "stop_pipeline"
+      }
+    },
+    {
+      name: "Deploy to Staging",
+      node: "xano-deployer", 
+      config: {
+        source: "development",
+        target: "staging",
+        method: "branch_merge"
+      }
+    },
+    {
+      name: "Integration Testing",
+      node: "xano-test-runner",
+      config: {
+        testSuite: "integration_tests", 
+        environment: "staging",
+        parallelExecution: true
+      }
+    },
+    {
+      name: "Manual Approval",
+      node: "manual-approval",
+      config: {
+        approvers: ["tech-lead@company.com"],
+        timeout: "24_hours"
+      }
+    },
+    {
+      name: "Production Deployment",
+      node: "xano-deployer",
+      config: {
+        source: "staging",
+        target: "production", 
+        rollbackPlan: "automatic_on_failure"
+      }
+    }
+  ]
+};
+```
+
+### WeWeb Deployment Dashboard
+```javascript
+// WeWeb CI/CD monitoring dashboard
+const deploymentDashboard = {
+  // Display deployment status
+  getPipelineStatus: async () => {
+    const pipelines = await xano.get('/api/cicd/pipelines', {
+      limit: 10,
+      status: 'active'
+    });
     
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
+    return pipelines.map(pipeline => ({
+      id: pipeline.id,
+      branch: pipeline.source_branch,
+      status: pipeline.status,
+      stage: pipeline.current_stage,
+      progress: `${pipeline.completed_stages}/${pipeline.total_stages}`,
+      startTime: new Date(pipeline.started_at).toLocaleString(),
+      duration: calculateDuration(pipeline.started_at, pipeline.updated_at)
+    }));
+  },
+  
+  // Deployment controls
+  deploymentActions: {
+    approvePipeline: async (pipelineId) => {
+      return await xano.post(`/api/cicd/pipelines/${pipelineId}/approve`, {
+        approved_by: currentUser.id,
+        approval_timestamp: new Date().toISOString()
+      });
+    },
     
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
+    rollbackDeployment: async (deploymentId) => {
+      return await xano.post(`/api/cicd/deployments/${deploymentId}/rollback`, {
+        reason: "Manual rollback initiated",
+        rollback_target: "previous_stable_version"
+      });
+    }
+  }
+};
+```
+
+### Make.com CI/CD Automation
+```javascript
+// Make.com scenario for automated CI/CD
+{
+  "scenario": {
+    "name": "Xano CI/CD Pipeline",
+    "modules": [
+      {
+        "id": 1,
+        "module": "webhook:customWebhook",
+        "parameters": {
+          "hook": "cicd_trigger"
+        }
+      },
+      {
+        "id": 2,
+        "module": "xano:runTests", 
+        "parameters": {
+          "instance": "{{1.instance}}",
+          "testSuite": "unit_tests",
+          "branch": "{{1.branch}}"
+        }
+      },
+      {
+        "id": 3,
+        "module": "router:basicRouter",
+        "filter": {
+          "conditions": [
+            {
+              "field": "{{2.testsStatus}}",
+              "operator": "equal",
+              "value": "passed"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "module": "xano:mergeBranches",
+        "parameters": {
+          "fromBranch": "{{1.branch}}",
+          "toBranch": "staging",
+          "autoMerge": true
+        }
+      },
+      {
+        "id": 5, 
+        "module": "slack:sendMessage",
+        "parameters": {
+          "channel": "#deployments",
+          "text": "✅ {{1.branch}} successfully deployed to staging"
+        }
+      }
+    ]
+  }
+}
+```
+
+## Environment Variables Management
+
+### Branch-Based Variable Strategy
+```javascript
+// Environment variable management for branch-based CI/CD
+const envVarStrategy = {
+  // Single workspace with conditional logic
+  implementation: "branch_conditional",
+  
+  variableNaming: {
+    pattern: "ENV_VARIABLENAME",
+    examples: [
+      "DEV_API_KEY",
+      "STAGING_API_KEY", 
+      "PROD_API_KEY"
+    ]
+  },
+  
+  // Function to get environment-specific variables
+  getEnvironmentVars: `
+    // In Xano function stack
+    const currentBranch = getCurrentBranch();
+    const envVars = getEnvironmentVariables();
     
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
+    const config = {
+      apiKey: envVars[\`\${currentBranch.toUpperCase()}_API_KEY\`],
+      database: envVars[\`\${currentBranch.toUpperCase()}_DB_URL\`],
+      emailService: envVars[\`\${currentBranch.toUpperCase()}_EMAIL_API\`]
+    };
     
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](xano-features/metadata-api/content.html)
-        -   [Search](xano-features/metadata-api/search.html)
-        -   [File](xano-features/metadata-api/file.html)
-        -   [Request History](xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
+    return config;
+  `
+};
+```
+
+### Multi-Instance Variable Strategy
+```javascript
+// Environment variables for multi-instance setup
+const multiInstanceEnvVars = {
+  implementation: "instance_specific",
+  
+  instances: {
+    development: {
+      variables: {
+        API_KEY: "dev_api_key_value",
+        DATABASE_URL: "dev_database_connection",
+        EMAIL_SERVICE: "dev_email_provider"
+      }
+    },
     
-    -   Using Xano Transform
-
--   
-    Xano Actions
+    staging: {
+      variables: {
+        API_KEY: "staging_api_key_value", 
+        DATABASE_URL: "staging_database_connection",
+        EMAIL_SERVICE: "staging_email_provider"
+      }
+    },
     
-    -   What are Actions?
-    -   Browse Actions
+    production: {
+      variables: {
+        API_KEY: "prod_api_key_value",
+        DATABASE_URL: "prod_database_connection", 
+        EMAIL_SERVICE: "prod_email_provider"
+      }
+    }
+  },
+  
+  management: "No additional logic needed - automatic per instance"
+};
+```
 
--   
-    Team Collaboration
+## Team Collaboration and RBAC
+
+### Development Team Structure
+```javascript
+// RBAC configuration for CI/CD teams
+const teamRbacConfig = {
+  roles: {
+    developer: {
+      permissions: [
+        "create_branches",
+        "commit_to_dev_branch",
+        "run_unit_tests", 
+        "view_test_results"
+      ],
+      restrictions: [
+        "cannot_merge_to_staging",
+        "cannot_deploy_to_production"
+      ]
+    },
     
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
+    techLead: {
+      permissions: [
+        "merge_to_staging",
+        "approve_staging_deployments", 
+        "run_integration_tests",
+        "manage_environment_variables"
+      ],
+      restrictions: [
+        "cannot_deploy_to_production_without_approval"
+      ]
+    },
     
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](agencies/agency-features/agency-profile.html)
-        -   [Commission](agencies/agency-features/commission.html)
-        -   [Private Marketplace](agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
+    devOpsEngineer: {
+      permissions: [
+        "deploy_to_all_environments",
+        "manage_ci_cd_pipelines",
+        "configure_automated_testing",
+        "manage_backup_policies"
+      ],
+      restrictions: []
+    }
+  },
+  
+  workflows: {
+    featureDevelopment: [
+      "Developer creates feature branch",
+      "Developer commits changes and runs unit tests",
+      "Developer creates pull request for staging",
+      "Tech Lead reviews and approves merge to staging", 
+      "Automated integration tests run",
+      "Tech Lead or DevOps approves production deployment"
+    ]
+  }
+};
+```
+
+## Advanced CI/CD Patterns
+
+### Database Migration Handling
+```javascript
+// Database migration strategy in CI/CD
+const migrationStrategy = {
+  // Automated schema versioning
+  schemaVersioning: {
+    approach: "incremental_migrations",
+    storage: "migration_table_in_database",
+    automation: "run_migrations_on_deployment"
+  },
+  
+  // Migration testing
+  testingApproach: [
+    "Test migrations on staging data copy",
+    "Validate data integrity post-migration", 
+    "Performance test with production-size datasets",
+    "Rollback testing for all migrations"
+  ],
+  
+  // Production deployment
+  productionStrategy: {
+    timing: "maintenance_window",
+    backupRequired: true,
+    rollbackPlan: "automated_rollback_on_failure",
+    monitoring: "real_time_health_checks"
+  }
+};
+```
+
+### Feature Flagging Integration
+```javascript
+// Feature flags in Xano CI/CD
+const featureFlagStrategy = {
+  implementation: {
+    storage: "environment_variables_or_database",
+    evaluation: "function_stack_conditional_logic",
+    management: "external_feature_flag_service"
+  },
+  
+  // Example feature flag usage
+  featureFlagExample: `
+    // In Xano function stack
+    const featureFlags = getEnvironmentVariable('FEATURE_FLAGS');
+    const flags = JSON.parse(featureFlags);
     
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [CI/CD Explained](#ci-cd-explained)
-
--   [Achieving CI/CD in Xano](#achieving-ci-cd-in-xano)
-
--   [Build your Dev, Stage, and Prod Environments](#build-your-dev-stage-and-prod-environments)
-
--   [Build Tests](#build-tests)
-
--   [Deploy Changes to Stage & Test](#deploy-changes-to-stage-and-test)
-
--   [Pushing to Production](#pushing-to-production)
-
--   [Additional Notes](#additional-notes)
-
--   [Managing Environment Variables](#managing-environment-variables)
-
--   [Managing Development Across Teams](#managing-development-across-teams)
-
--   [Using Mock Responses for Test-Driven Development](#using-mock-responses-for-test-driven-development)
-
-Was this helpful?
-
-Copy
-
-CI/CD 
-=====
-
-Learn more about CI/CD inside of Xano
-
- 
-
-Quick Summary
-
-CI/CD stands for **continuous integration and continuous delivery** and is a set of best practices that define how new logic is tested and deployed.
-
-While fully automated CI/CD is not available today in Xano, we have a number of features designed to replicate the most important pieces of the concept, outlined below.
-
-Each feature mentioned below offers its own in-depth documentation, which we also recommend reviewing.
-
- 
-
-CI/CD Explained
-
-CI/CD is a technique used in software development to make the process of updating applications faster and more reliable.
-
-CI, or Continuous Integration, involves regularly adding small updates to the codebase, helping developers catch and fix errors quickly. CD, or Continuous Delivery, ensures these updates can be automatically tested and deployed to production environments seamlessly. Together, these practices help deliver new features and improvements to users more efficiently, ensuring a better, more stable experience.
-
-In Xano, you can think of any function stacks you\'re building as your **codebase**. Features such as **branching/merging, unit and workflow tests**, and **triggers** can all play a role in building a seamless CI/CD-style workflow in Xano for you and your team.
-
- 
-
-Achieving CI/CD in Xano
-
-<div>
-
-1
-
-###  
-
-Build your Dev, Stage, and Prod Environments
-
-Typically, you\'ll have at least three environments for proper development.
-
--   
-    
-        
-    
-    **Dev** - This is where you build updates and new features
-    
--   
-    
-        
-    
-    **Stage** - This is where you deploy changes and initiate testing to ensure they work as expected, and there are no new bugs or regressions (old bugs returning) introduced
-    
--   
-    
-        
-    
-    **Prod** - This is the production environment that serves the live experience to your users
-    
-These environments in Xano are best laid out differently, depending on your plan.
-
--   
-    
-        
-    
-    **Launch / Self-Serve Plans**: Use [Branching & Merging](team-collaboration/branching-and-merging.html) and create separate branches for dev, stage, and prod. Your frontend should typically only be calling production endpoints, but you can also deploy a second frontend for testing that defaults to stage or dev
-    
--   
-    
-        
-    
-    **Scale or Enterprise Plans with Xano Link**: Deploy your changes to separate workspaces using [Xano Link](xano-features/advanced-back-end-features/xano-link.html)
-    
--   
-    
-        
-    
-    **Enterprise Plans with Tenant Center**: Create separate tenants in your [Tenant Center](enterprise/enterprise-features/tenant-center.html) for each environment, and deploy releases to them
-    
-
-2
-
-###  
-
-Build Tests
-
-You should always be building tests for your function stacks using our [Unit Tests](testing-debugging/unit-tests.html) and [Test Suites](testing-debugging/test-suites.html) features. Unit Tests are designed to run a test on a single function stack (such as a sign-up API), and Test Suites (Workflow Tests) are designed to check what would be a typical multi-step flow for your application (such as a user signing up, purchasing a subscription plan, and receiving a confirmation email).
-
-To ensure full coverage, make sure that your tests not only check for positive results, but they also check for proper error handling when things go wrong. The goal is not necessarily to achieve 100% success, but to achieve 100% coverage for all possible scenarios.
-
-3
-
-###  
-
-Deploy Changes to Stage & Test
-
-Deploy your changes to Stage and run your [Unit Tests](testing-debugging/unit-tests.html) and [Test Suites](testing-debugging/test-suites.html) to ensure everything is behaving as expected.
-
-If you have tests that fail, it would be recommended to head back to your development environment and make any corrections necessary, and deploy those new changes back to Stage to test again.
-
-4
-
-###  
-
-Pushing to Production
-
-Once you\'ve confirmed that your tests pass and you have full coverage, you can push your changes to your production branch or environment.
-
-</div>
-
- 
-
-How do tests impact my database?
-
-[Test Suites](testing-debugging/test-suites.html) create a duplicate copy of your database, temporarily, just for testing. So, if your production database is large or complex, you may have trouble completing your tests or experience additional complications. It is strongly recommended to utilize [Data Sources](the-database/database-basics/data-sources.html) to navigate around this potential issue.
-
-You can also run tests with no database **(Empty)** if a database is not necessary for that specific test, or if your tests can run from an empty database, such as if they\'re only adding data that isn\'t used later anywhere.
-
- 
-
-Additional Notes
-
-###  
-
-Managing Environment Variables
-
-If you\'re working with external services, you may require different configurations between your development, stage, and production environments, such as different API keys. Typically, you\'d store these in your [Environment Variables](the-function-stack/environment-variables.html).
-
--   
-    
-        
-    
-    **If you\'re using Branching/Merging**, you\'ll be limited to storing all environment variables together. You can use statements like [Get Environment Variables](the-function-stack/functions/utility-functions.html#get-environment-variables) to manually parse all available environment variables and retrieve the ones necessary depending on the branch you\'re on.
-    
--   
-    
-        
-    
-    **If you\'re using Xano Link**, each workspace can contain its own environment variables, and no additional logic is necessary.
-    
--   
-    
-        
-    
-    **If you\'re using Tenant Center**, you have the ability to manage each tenant\'s environment variables from the Tenant Center. Each tenant can contain its own environment variables, and no additional logic is necessary.
-    
-###  
-
-Managing Development Across Teams
-
-Each team or team member should be responsible for developing specific features. Ideally, these features would not cross-contaminate function stacks that separate teams or team members might be working on.
-
-If you find that multiple team members need to work on the same function stacks, we have [Team Collaboration](team-collaboration/realtime-collaboration.html) features built right into Xano to ensure that the experience is as smooth as possible.
-
-If your plan has access to RBAC (Role-based Access Control), it is imperative that you manage permissions properly to ensure that only specific team members can push changes from development to stage, and even more so from stage to production. Be sure to review our documentation on [Role-based Access Control (RBAC)](team-collaboration/role-based-access-control-rbac.html) for more information.
-
-###  
-
-Using Mock Responses for Test-Driven Development
-
-For certain steps, you should also be [Mocking Responses](testing-debugging/unit-tests.html#mocking-responses) both for the sake of speed and consistency when running your tests.
-
-As an example, if you\'re calling an external API and want to ensure that you always test with the same response, you can add a mock response to your unit test to accommodate that. This allows for **test driven development**, or essentially being able to have different team members build endpoints that you\'ll be relying on, but might not be complete yet. Adding a mock response allows you to continue working alongside the other team member, instead of having to wait.
-
-Last updated 3 months ago
-
-Was this helpful?
+    if (flags.newPaymentFlow) {
+      // Use new payment processing logic
+      return processPaymentV2(paymentData);
+    } else {
+      // Use existing payment logic
+      return processPaymentV1(paymentData);
+    }
+  `,
+  
+  benefits: [
+    "Deploy code without enabling features",
+    "Gradual rollout to user segments",
+    "Quick feature rollback without deployment",
+    "A/B testing capabilities"
+  ]
+};
+```
+
+## 💡 **Pro Tips**
+
+1. **Start Simple**: Begin with basic branch-based CI/CD before implementing complex multi-instance workflows
+
+2. **Test Database Changes**: Always test database migrations and schema changes in staging before production
+
+3. **Monitor Deployments**: Implement comprehensive monitoring and alerting for deployment success and application health
+
+4. **Automate Rollbacks**: Set up automated rollback procedures for failed deployments to minimize downtime
+
+5. **Document Workflows**: Maintain clear documentation of your CI/CD processes for team onboarding and troubleshooting
+
+## Try This: Complete CI/CD Pipeline
+
+Set up a full CI/CD pipeline with testing and deployment automation:
+
+```javascript
+// Complete CI/CD implementation
+const cicdImplementation = {
+  // 1. Environment setup
+  environments: {
+    dev: "feature-development",
+    staging: "integration-testing", 
+    prod: "live-production"
+  },
+  
+  // 2. Testing strategy
+  testing: {
+    unit: "individual_function_validation",
+    integration: "complete_workflow_testing",
+    performance: "load_and_stress_testing"
+  },
+  
+  // 3. Deployment pipeline
+  pipeline: [
+    "Code commit triggers unit tests",
+    "Successful tests auto-deploy to staging",
+    "Integration tests run on staging", 
+    "Manual approval gate for production",
+    "Production deployment with monitoring",
+    "Automatic rollback on failure detection"
+  ],
+  
+  // 4. Monitoring and alerting
+  monitoring: {
+    healthChecks: "automated_endpoint_monitoring",
+    alerts: "slack_and_email_notifications", 
+    metrics: "deployment_success_rates"
+  }
+};
+```
+
+## Common Mistakes to Avoid
+
+❌ **Skipping staging environment testing**
+✅ Always test in staging before production deployment
+
+❌ **Not implementing automated testing**
+✅ Create comprehensive unit tests and test suites for all critical functionality
+
+❌ **Manual deployment processes**
+✅ Automate deployments to reduce errors and improve consistency
+
+❌ **Ignoring database migration testing** 
+✅ Test all schema changes thoroughly in staging environments
+
+❌ **Lack of rollback procedures**
+✅ Implement and test rollback mechanisms for quick recovery
+
+CI/CD in Xano enables reliable, automated software delivery with reduced manual effort and improved code quality. Start with basic workflows and gradually implement more advanced patterns as your team and application grow.

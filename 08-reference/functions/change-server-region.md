@@ -1,581 +1,615 @@
 ---
+title: Xano Server Region Migration - Global Deployment Guide
+description: Master server region changes in Xano for optimal performance, compliance, and user experience with comprehensive migration strategies and URL management
 category: functions
 difficulty: advanced
-last_updated: '2025-01-23'
+last_updated: '2025-08-17'
 related_docs: []
 subcategory: 08-reference/functions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - server-region
+  - migration
+  - global-deployment
+  - performance-optimization
+  - compliance
+  - url-management
+  - infrastructure
+  - latency-reduction
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
+# Xano Server Region Migration - Global Deployment Guide
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'change-server-region'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## 📋 **Quick Summary**
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+Xano's server region migration enables optimal performance and compliance by relocating your instance to different geographic regions, with automatic URL updates and complete data migration while preserving all functionality.
 
-[![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../../index.html)
+## What You'll Learn
 
+- **Global Server Regions**: Understand Xano's worldwide infrastructure and regional options
+- **Migration Process**: Execute safe and reliable server region changes
+- **URL Management**: Handle base URL changes and update external connections
+- **Performance Optimization**: Select optimal regions for your user base and compliance needs
+- **Migration Planning**: Prepare for regional moves with minimal downtime strategies
+- **Cost Considerations**: Understand billing implications and subscription management
 
+## Available Server Regions
 
+Xano offers global coverage with strategically located data centers:
 
+### Americas
+- 🇺🇸 **United States (Oregon)** - Primary US West Coast location
+- 🇨🇦 **Canada (Montreal)** - Canadian compliance and low-latency coverage
+- 🇧🇷 **Brazil (São Paulo)** - South American regional hub
 
+### Europe
+- 🇬🇧 **United Kingdom (London)** - European primary location
+- 🇩🇪 **Germany (Frankfurt)** - Central European data hub
+- 🇫🇷 **France (Paris)** - Western European coverage
+- 🇧🇪 **Belgium** - Additional European option
 
+### Asia-Pacific
+- 🇯🇵 **Japan (Tokyo)** - Primary Asian hub
+- 🇸🇬 **Singapore** - Southeast Asian regional center
+- 🇰🇷 **South Korea (Seoul)** - Korean peninsula coverage
+- 🇮🇳 **India (Mumbai)** - South Asian regional hub
+- 🇮🇩 **Indonesia (Jakarta)** - Indonesian archipelago coverage
+- 🇦🇺 **Australia (Sydney)** - Oceanic regional center
 
+### Middle East
+- 🇸🇦 **Saudi Arabia (Dammam)** - Gulf region coverage
 
+## Region Selection Strategy
 
-
-
-
-
-
-
--   
-
+### Performance Considerations
+```javascript
+// Region selection framework
+const regionSelection = {
+  // Analyze user base geographic distribution
+  userAnalysis: {
+    primaryMarkets: [
+      "Identify where 80% of users are located",
+      "Calculate average distance to potential regions",
+      "Consider peak usage time zones"
+    ],
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+    latencyTargets: {
+      excellent: "< 50ms",
+      good: "50-100ms", 
+      acceptable: "100-200ms",
+      poor: "> 200ms"
+    }
+  },
+  
+  // Compliance requirements
+  compliance: {
+    gdpr: ["Europe-based users require EU data residency"],
+    ccpa: ["California users benefit from US West Coast"],
+    localLaws: ["Check data sovereignty requirements"],
+    industry: ["Financial, healthcare may have specific needs"]
+  },
+  
+  // Business considerations
+  business: {
+    mainOffice: "Consider team location for development/support",
+    partnerships: "Proximity to key business partners",
+    futureExpansion: "Anticipated market growth areas",
+    costOptimization: "Regional pricing variations"
+  }
+};
+```
 
--   
-
+### Regional Performance Testing
+```javascript
+// Test latency from different regions
+const latencyTesting = {
+  // Simple latency test for region evaluation
+  testRegionPerformance: async (regions) => {
+    const results = {};
     
-    -   Building with Visual Development
-        
-        -   APIs
+    for (const region of regions) {
+      const testUrl = `https://test-${region}.xano.io/ping`;
+      const startTime = performance.now();
+      
+      try {
+        await fetch(testUrl, {method: 'HEAD'});
+        const latency = performance.now() - startTime;
+        results[region] = {
+          latency: Math.round(latency),
+          status: 'success'
+        };
+      } catch (error) {
+        results[region] = {
+          latency: null,
+          status: 'failed',
+          error: error.message
+        };
+      }
+    }
+    
+    return results;
+  },
+  
+  // Automated testing from multiple locations
+  globalLatencyTest: {
+    locations: [
+      'us-east', 'us-west', 'eu-central', 'asia-pacific',
+      'south-america', 'middle-east', 'oceania'
+    ],
+    metrics: ['latency', 'throughput', 'packet_loss'],
+    frequency: 'hourly_during_evaluation'
+  }
+};
+```
+
+## Pre-Migration Planning
+
+### Critical Considerations
+
+#### 🚨 URL Change Impact
+**Your instance base URL will change completely**:
+- Old: `https://abc1-def2-ghi3.xano.io/`
+- New: `https://xyz9-uvw8-rst7.xano.io/`
+
+This affects **all API endpoints** and external integrations.
+
+#### 📋 Pre-Migration Checklist
+```javascript
+const preMigrationChecklist = {
+  documentation: [
+    "Inventory all external systems calling your APIs",
+    "Document current API endpoints and webhooks",
+    "List frontend applications and mobile apps",
+    "Identify third-party integrations (Zapier, n8n, etc.)"
+  ],
+  
+  communication: [
+    "Notify development team of planned migration",
+    "Schedule maintenance window for updates",
+    "Prepare user communication if customer-facing",
+    "Coordinate with DevOps and frontend teams"
+  ],
+  
+  backup: [
+    "Create full backup before migration",
+    "Verify backup integrity and completeness",
+    "Test restoration process in staging",
+    "Document rollback procedures"
+  ],
+  
+  testing: [
+    "Prepare post-migration test suite",
+    "Create performance benchmarks",
+    "Set up monitoring for new region",
+    "Plan user acceptance testing"
+  ]
+};
+```
+
+### Draft Synchronization Strategy
+⚠️ **Important**: Unpublished drafts will NOT be migrated. 
+
+```javascript
+// Draft management before migration
+const draftManagement = {
+  inventory: {
+    process: [
+      "List all unpublished function stacks",
+      "Document draft API endpoints",
+      "Identify work-in-progress features",
+      "Note any experimental configurations"
+    ]
+  },
+  
+  decisions: {
+    publish: "Publish completed features before migration",
+    discard: "Remove abandoned or test drafts", 
+    document: "Document draft features for recreation",
+    postpone: "Delay migration until drafts are ready"
+  },
+  
+  postupdate: {
+    recreation: "Recreate necessary drafts after migration",
+    testing: "Validate recreated draft functionality",
+    teamnotification: "Inform team of draft recreation needs"
+  }
+};
+```
+
+## Step-by-Step Migration Process
+
+### Phase 1: Preparation and Planning
+```javascript
+// Migration preparation workflow
+const migrationPreparation = {
+  assessment: {
+    currentPerformance: "Benchmark existing performance metrics",
+    userDistribution: "Analyze traffic patterns and user locations",
+    integrations: "Audit all external connections and dependencies",
+    compliance: "Review regulatory requirements for target region"
+  },
+  
+  planning: {
+    timeline: "Schedule migration during low-traffic period",
+    rollback: "Prepare rollback strategy and timeline",
+    testing: "Design comprehensive post-migration validation",
+    communication: "Prepare stakeholder notification plan"
+  }
+};
+```
+
+### Phase 2: Billing and Region Selection
+
+**Step 1: Access Account Billing**
+Navigate to your account settings by clicking your name in the lower-left corner and selecting "Billing".
+
+**Step 2: Initiate Plan Change**
+Click "Change Plan" to access region selection options.
+
+**Step 3: Plan Selection**
+- Select your current plan to avoid billing changes
+- Alternatively, use this opportunity to upgrade if needed
+- Region changes are free, but subscription restarts
+
+**Step 4: Region Configuration**
+Scroll to "Server Region" and select your target region using the dropdown menu.
+
+### Phase 3: Pre-Migration Configuration
+```javascript
+// Pre-migration setup
+const preMigrationSetup = {
+  urlDocumentation: {
+    currentUrls: {
+      baseUrl: "https://current-instance.xano.io",
+      apiEndpoints: [
+        "/api/auth/login",
+        "/api/users/profile", 
+        "/api/products/list"
+      ],
+      webhooks: [
+        "payment processing webhook",
+        "user notification webhook"
+      ]
+    },
+    
+    updatePlan: [
+      "Frontend applications (React, Vue, WeWeb)",
+      "Mobile applications (iOS, Android, Flutter)",
+      "Third-party integrations (n8n, Make.com, Zapier)",
+      "External webhooks and API consumers",
+      "Documentation and API references"
+    ]
+  }
+};
+```
+
+### Phase 4: Execute Migration
+
+**Step 5: Complete Checkout**
+Proceed through the checkout process. You'll be charged for your plan minus unused time from the current billing cycle.
+
+**Step 6: Review New Configuration**
+After checkout, review your new server URL and configuration details.
+
+**Step 7: Update External Connections**
+Update all external systems with the new base URL before proceeding.
+
+**Step 8: Initiate Migration**
+Click the migration button to begin the actual data transfer process.
+
+### Phase 5: Post-Migration Validation
+```javascript
+// Post-migration validation workflow
+const postMigrationValidation = {
+  immediate: {
+    healthCheck: "Verify instance is responding to requests",
+    authentication: "Test login and JWT token generation",
+    databaseConnectivity: "Confirm database operations work",
+    basicApiCalls: "Test critical API endpoints"
+  },
+  
+  comprehensive: {
+    performanceTesting: "Compare response times to baseline",
+    integrationTesting: "Validate all external connections",
+    userAcceptanceTesting: "Test complete user workflows",
+    monitoringSetup: "Configure alerts for new region"
+  },
+  
+  ongoing: {
+    performanceMonitoring: "Track metrics for 48-72 hours",
+    errorMonitoring: "Watch for migration-related issues",
+    userFeedback: "Collect performance feedback from users",
+    optimizationReview: "Assess if region choice meets expectations"
+  }
+};
+```
+
+## Integration Updates
+
+### n8n Workflow Updates
+```javascript
+// n8n configuration update for region migration
+const n8nMigrationUpdate = {
+  // Automated URL update workflow
+  updateWorkflow: {
+    nodes: [
+      {
+        name: "Read Current Workflows",
+        type: "n8n-nodes-base.httpRequest",
+        parameters: {
+          method: "GET",
+          url: "{{$node[\"n8n API\"].json[\"baseUrl\"]}}/workflows"
+        }
+      },
+      {
+        name: "Update Xano URLs",
+        type: "n8n-nodes-base.function",
+        parameters: {
+          functionCode: `
+            const oldBaseUrl = "https://old-instance.xano.io";
+            const newBaseUrl = "https://new-instance.xano.io";
             
-            -   [Swagger (OpenAPI Documentation)](../../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
+            // Update all Xano HTTP request nodes
+            const updatedWorkflows = items.map(workflow => {
+              workflow.json.nodes = workflow.json.nodes.map(node => {
+                if (node.type === 'n8n-nodes-base.httpRequest' && 
+                    node.parameters?.url?.includes(oldBaseUrl)) {
+                  node.parameters.url = node.parameters.url.replace(
+                    oldBaseUrl, 
+                    newBaseUrl
+                  );
+                }
+                return node;
+              });
+              return workflow;
+            });
             
-            -   [Async Functions](../../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../../the-function-stack/filters/manipulation.html)
-        -   [Math](../../the-function-stack/filters/math.html)
-        -   [Timestamp](../../the-function-stack/filters/timestamp.html)
-        -   [Text](../../the-function-stack/filters/text.html)
-        -   [Array](../../the-function-stack/filters/array.html)
-        -   [Transform](../../the-function-stack/filters/transform.html)
-        -   [Conversion](../../the-function-stack/filters/conversion.html)
-        -   [Comparison](../../the-function-stack/filters/comparison.html)
-        -   [Security](../../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../../the-function-stack/data-types/text.html)
-        -   [Expression](../../the-function-stack/data-types/expression.html)
-        -   [Array](../../the-function-stack/data-types/array.html)
-        -   [Object](../../the-function-stack/data-types/object.html)
-        -   [Integer](../../the-function-stack/data-types/integer.html)
-        -   [Decimal](../../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../../the-function-stack/data-types/timestamp.html)
-        -   [Null](../../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
+            return updatedWorkflows;
+          `
+        }
+      }
+    ]
+  },
+  
+  // Manual update checklist
+  manualUpdates: [
+    "Update HTTP Request nodes with new base URL",
+    "Verify webhook URLs in Xano match n8n endpoints",
+    "Test all workflows after URL updates",
+    "Update stored credentials if URL-dependent"
+  ]
+};
+```
+
+### WeWeb Application Updates
+```javascript
+// WeWeb configuration updates for new region
+const wewebMigrationUpdate = {
+  // Environment configuration
+  environmentUpdate: {
+    development: {
+      xanoBaseUrl: "https://new-dev-instance.xano.io",
+      apiEndpoints: {
+        auth: "/api/auth",
+        users: "/api/users",
+        products: "/api/products"
+      }
+    },
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
+    production: {
+      xanoBaseUrl: "https://new-prod-instance.xano.io",
+      apiEndpoints: {
+        auth: "/api/auth",
+        users: "/api/users", 
+        products: "/api/products"
+      }
+    }
+  },
+  
+  // WeWeb data source updates
+  dataSourceUpdate: `
+    // In WeWeb data source configuration
+    const xanoConfig = {
+      baseUrl: 'https://new-instance.xano.io',
+      authToken: await getAuthToken(),
+      endpoints: {
+        getUserProfile: '/api/users/profile',
+        updateUserData: '/api/users/update',
+        getProducts: '/api/products/list'
+      }
+    };
     
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../../the-database/database-basics/field-types.html)
-        -   [Relationships](../../the-database/database-basics/relationships.html)
-        -   [Database Views](../../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+    // Update all API calls to use new base URL
+    const response = await fetch(xanoConfig.baseUrl + xanoConfig.endpoints.getUserProfile, {
+      headers: {
+        'Authorization': 'Bearer ' + xanoConfig.authToken,
+        'Content-Type': 'application/json'
+      }
+    });
+  `
+};
+```
 
--   
-    Build For AI
+### Make.com Integration Updates
+```javascript
+// Make.com scenario updates for region migration
+const makecomMigrationUpdate = {
+  connectionUpdate: {
+    steps: [
+      "Edit Xano connection in Make.com",
+      "Update base URL to new region endpoint",
+      "Test connection with new URL",
+      "Update all scenarios using the connection"
+    ],
     
-    -   Agents
-        
-        -   [Templates](../../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+    bulkUpdate: {
+      method: "connection_level_update",
+      impact: "All scenarios automatically updated",
+      validation: "Test key scenarios after connection update"
+    }
+  },
+  
+  webhookUpdates: [
+    "Update webhook URLs in Xano to point to Make.com",
+    "Verify webhook signatures still validate correctly",
+    "Test webhook delivery from new region",
+    "Monitor webhook delivery latency"
+  ]
+};
+```
 
--   
-    Build With AI
+## Performance Optimization Post-Migration
+
+### Regional Performance Tuning
+```javascript
+// Post-migration performance optimization
+const performanceOptimization = {
+  // CDN and caching strategies
+  contentDelivery: {
+    strategy: "Implement regional CDN for static assets",
+    caching: {
+      static: "Cache static content close to users",
+      api: "Implement smart API response caching",
+      database: "Optimize database query caching"
+    }
+  },
+  
+  // Database optimization for new region
+  databaseTuning: {
+    indexOptimization: "Review and optimize indexes for query patterns",
+    connectionPooling: "Adjust connection settings for new latency",
+    queryOptimization: "Profile and optimize slow queries",
+    caching: "Implement regional database caching strategies"
+  },
+  
+  // Monitoring and alerting
+  monitoring: {
+    metrics: [
+      "API response times",
+      "Database query performance",
+      "Error rates and types",
+      "User experience metrics"
+    ],
+    alerts: [
+      "Response time degradation",
+      "Error rate spikes", 
+      "Database performance issues",
+      "Regional connectivity problems"
+    ]
+  }
+};
+```
+
+### A/B Testing Regional Performance
+```javascript
+// Regional performance comparison
+const performanceComparison = {
+  // Automated performance testing
+  benchmarkTest: async (oldMetrics, testDuration = '24h') => {
+    const metrics = {
+      responseTime: [],
+      throughput: [],
+      errorRate: [],
+      userSatisfaction: []
+    };
     
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
+    // Collect performance data
+    const testResults = await runPerformanceTest(testDuration);
     
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
+    // Compare with baseline
+    const comparison = {
+      responseTimeImprovement: calculateImprovement(
+        oldMetrics.avgResponseTime,
+        testResults.avgResponseTime
+      ),
+      throughputChange: calculateChange(
+        oldMetrics.throughput,
+        testResults.throughput
+      ),
+      errorRateChange: calculateChange(
+        oldMetrics.errorRate,
+        testResults.errorRate
+      )
+    };
     
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](release-track-preferences.html)
-        -   [Static IP (Outgoing)](static-ip-outgoing.html)
-        -   [Change Server Region](change-server-region.html)
-        -   [Direct Database Connector](direct-database-connector.html)
-        -   [Backup and Restore](backup-and-restore.html)
-        -   [Security Policy](security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../metadata-api/tables-and-schema.html)
-        -   [Content](../metadata-api/content.html)
-        -   [Search](../metadata-api/search.html)
-        -   [File](../metadata-api/file.html)
-        -   [Request History](../metadata-api/request-history.html)
-        -   [Workspace Import and Export](../metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../../agencies/agency-features/agency-profile.html)
-        -   [Commission](../../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [Before You Proceed](#before-you-proceed)
-
--   [Changing server regions will change your API base URL](#changing-server-regions-will-change-your-api-base-url)
-
--   [Unpublished drafts will NOT be migrated](#unpublished-drafts-will-not-be-migrated)
-
--   [How to Change Server Region](#how-to-change-server-region)
-
--   [Click your name in the lower-left corner and choose Billing](#click-your-name-in-the-lower-left-corner-and-choose-billing)
-
--   [Click ](#click)
-
--   [Select your existing plan to ensure no billing changes are made. You can also choose to upgrade your plan at this time, if you\'d like.](#select-your-existing-plan-to-ensure-no-billing-changes-are-made.-you-can-also-choose-to-upgrade-your)
-
--   [Scroll down to Server Region and select where you\'d like your server to be hosted.](#scroll-down-to-server-region-and-select-where-youd-like-your-server-to-be-hosted)
-
--   [Proceed through checkout.](#proceed-through-checkout)
-
--   [After checkout, review your new server URL and update any external connections.](#after-checkout-review-your-new-server-url-and-update-any-external-connections)
-
--   [Once you\'re ready, proceed with the migration by clicking the button shown below.](#once-youre-ready-proceed-with-the-migration-by-clicking-the-button-shown-below)
-
-Was this helpful?
-
-Copy
-
-1.  [Xano Features](../snippets.html)
-2.  Instance Settings
-
-Change Server Region 
-====================
-
-Xano\'s paid plans allows you to choose your server region. At the time of this page was published, server regions include:
-
-1.  
-    
-        
-    
-    Australia (Sydney)
-    
-2.  
-    
-        
-    
-    Belgium
-    
-3.  
-    
-        
-    
-    Brazil (São Paulo)
-    
-4.  
-    
-        
-    
-    Canada (Montreal)
-    
-5.  
-    
-        
-    
-    France (Paris)
-    
-6.  
-    
-        
-    
-    Germany (Frankfurt)
-    
-7.  
-    
-        
-    
-    India (Mumbai)
-    
-8.  
-    
-        
-    
-    Indonesia (Jakarta)
-    
-9.  
-    
-        
-    
-    Japan (Tokyo)
-    
-10. 
-    
-        
-    
-    Saudi Arabia (Dammam)
-    
-11. 
-    
-        
-    
-    Singapore
-    
-12. 
-    
-        
-    
-    South Korea (Seoul)
-    
-13. 
-    
-        
-    
-    United Kingdom (London)
-    
-14. 
-    
-        
-    
-    United States (Oregon)
-    
-From the billing section, you are able to select where you would like your server to be located.
-
- 
-
-Before You Proceed
-
-<div>
-
-1
-
-###  
-
-Changing server regions will change your API base URL
-
-Your instance has a specific URL, such as https://abc1-def2-ghi3.xano.io/ and all of your API endpoints begin with this.
-
-When you change regions, because you are migrating to a new server, your base URL will change.
-
-After selecting your new server region, you will be given an option to beging the migration, so you have time to update anything necessary before proceeding.
-
-**Be sure to update any external connections with the new URL prior to initiating the migration.**
-
-2
-
-###  
-
-Unpublished drafts will NOT be migrated
-
-Make sure to publish anything you want to save before proceeding.
-
-</div>
-
- 
-
-How to Change Server Region
-
-<div>
-
-1
-
-###  
-
-Click your name [![](../../_gitbook/image2902.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252Fg1GyaiPEQWlX3PP2mIbX%252FCleanShot%25202025-02-06%2520at%252005.41.23.png%3Falt%3Dmedia%26token%3Df2909f77-4a39-47ee-97c7-74171f2a91ed&width=300&dpr=4&quality=100&sign=d29fe890&sv=2)]in the lower-left corner and choose Billing
-
-2
-
-###  
-
-Click [![](../../_gitbook/imaged05d.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F7CHuGxI8ygTOYAv19lJa%252FCleanShot%25202025-02-06%2520at%252005.42.01.png%3Falt%3Dmedia%26token%3Dfaad0115-8963-4db2-bde0-45afb65985cd&width=300&dpr=4&quality=100&sign=91f4034&sv=2)]
-
-3
-
-###  
-
-Select your existing plan to ensure no billing changes are made. You can also choose to upgrade your plan at this time, if you\'d like.
-
-Changing server regions is **free**, but because your subscription restarts when making this change, you will be billed at checkout for the cost of your plan, minus any unused time on your current subscription period.
-
-4
-
-###  
-
-Scroll down to Server Region and select where you\'d like your server to be hosted.
-
-Use the dropdown to select your region of choice.
-
-![](../../_gitbook/imagebf45.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FZZb6f4vcKmWX1z9WQ9ya%252FCleanShot%25202025-02-06%2520at%252005.44.54.png%3Falt%3Dmedia%26token%3D9c45a4ac-1d91-4e76-8f50-1768dae0098b&width=768&dpr=4&quality=100&sign=c6aa09b5&sv=2)
-
-5
-
-###  
-
-Proceed through checkout.
-
-6
-
-###  
-
-After checkout, review your new server URL and update any external connections.
-
-7
-
-###  
-
-Once you\'re ready, proceed with the migration by clicking the button shown below.
-
-![](../../_gitbook/image271c.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FLXZsdNgHOSWMM4YxTtix%252Fimage.png%3Falt%3Dmedia%26token%3Da6cd8073-9e52-402e-9196-82e7112878b1&width=768&dpr=4&quality=100&sign=aebfe4a6&sv=2)
-
-</div>
-
-Last updated 6 months ago
-
-Was this helpful?
+    return {
+      success: comparison.responseTimeImprovement > 0,
+      metrics: testResults,
+      comparison: comparison,
+      recommendations: generateOptimizationRecommendations(comparison)
+    };
+  }
+};
+```
+
+## 💡 **Pro Tips**
+
+1. **Plan During Low Traffic**: Schedule migrations during your lowest traffic periods to minimize user impact
+
+2. **Test Latency First**: Use online latency testing tools to verify expected performance improvements before migrating
+
+3. **Staged Rollout**: Consider migrating non-production environments first to validate the process
+
+4. **Monitor Closely**: Set up enhanced monitoring for the first 48 hours after migration to catch any issues quickly
+
+5. **Document Everything**: Keep detailed records of the migration process for future reference and team knowledge
+
+## Try This: Complete Migration Strategy
+
+Implement a comprehensive migration workflow:
+
+```javascript
+// Complete migration workflow
+const comprehensiveMigration = {
+  phase1_preparation: {
+    duration: "1-2 weeks",
+    activities: [
+      "Audit all integrations and dependencies",
+      "Test target region performance", 
+      "Create detailed migration plan",
+      "Set up monitoring and alerting",
+      "Prepare rollback procedures"
+    ]
+  },
+  
+  phase2_execution: {
+    duration: "4-8 hours",
+    activities: [
+      "Create pre-migration backup",
+      "Update external system configurations",
+      "Execute Xano region migration",
+      "Validate basic functionality",
+      "Run comprehensive test suite"
+    ]
+  },
+  
+  phase3_validation: {
+    duration: "48-72 hours", 
+    activities: [
+      "Monitor performance metrics",
+      "Validate all integrations",
+      "Collect user feedback",
+      "Optimize based on real-world performance",
+      "Document lessons learned"
+    ]
+  }
+};
+```
+
+## Common Mistakes to Avoid
+
+❌ **Not updating all external integrations before migration**
+✅ Update frontend apps, mobile apps, and third-party integrations with new URLs
+
+❌ **Forgetting about unpublished drafts**
+✅ Publish or document all important drafts before migration
+
+❌ **Not testing in the target region first**
+✅ Use latency testing tools to verify expected performance improvements
+
+❌ **Migrating during peak traffic hours**
+✅ Schedule migrations during low-traffic periods with maintenance windows
+
+❌ **Insufficient post-migration monitoring**
+✅ Set up comprehensive monitoring and alerting for the new region
+
+Server region migration is a powerful tool for optimizing performance and meeting compliance requirements. With proper planning and execution, you can significantly improve user experience while maintaining system reliability and functionality.
