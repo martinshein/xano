@@ -1,743 +1,902 @@
 ---
+title: Instance Settings - Complete Configuration and Management Guide
+description: Master Xano instance configuration including custom domains, database connectors, plan upgrades, security settings, regional deployment, and enterprise features for optimal performance and scalability
 category: functions
-difficulty: advanced
-last_updated: '2025-01-23'
+difficulty: intermediate
+last_updated: '2025-08-17'
 related_docs: []
 subcategory: 08-reference/functions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+- instance-settings
+- custom-domain
+- database-connector
+- plan-upgrades
+- security-configuration
+- regional-deployment
+- performance-optimization
+- enterprise-features
+- instance-management
+- scaling-configuration
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
-
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'instance-settings'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../the-function-stack/filters/manipulation.html)
-        -   [Math](../the-function-stack/filters/math.html)
-        -   [Timestamp](../the-function-stack/filters/timestamp.html)
-        -   [Text](../the-function-stack/filters/text.html)
-        -   [Array](../the-function-stack/filters/array.html)
-        -   [Transform](../the-function-stack/filters/transform.html)
-        -   [Conversion](../the-function-stack/filters/conversion.html)
-        -   [Comparison](../the-function-stack/filters/comparison.html)
-        -   [Security](../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../the-function-stack/data-types/text.html)
-        -   [Expression](../the-function-stack/data-types/expression.html)
-        -   [Array](../the-function-stack/data-types/array.html)
-        -   [Object](../the-function-stack/data-types/object.html)
-        -   [Integer](../the-function-stack/data-types/integer.html)
-        -   [Decimal](../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../the-function-stack/data-types/timestamp.html)
-        -   [Null](../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
-
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
-
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
-
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
-
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
-
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](instance-settings/change-server-region.html)
-        -   [Direct Database Connector](instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](instance-settings/backup-and-restore.html)
-        -   [Security Policy](instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](metadata-api/tables-and-schema.html)
-        -   [Content](metadata-api/content.html)
-        -   [Search](metadata-api/search.html)
-        -   [File](metadata-api/file.html)
-        -   [Request History](metadata-api/request-history.html)
-        -   [Workspace Import and Export](metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
-
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
-
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
-
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
-
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
-
--   
-    Security
-    
-    -   Best Practices
-
-[Powered by GitBook]
-
-On this page
-
--   
-    
-    [Custom Domain](#custom-domain)
-
--   [Head to the instance selection page and click the icon next to your instance](#head-to-the-instance-selection-page-and-click-the-icon-next-to-your-instance)
-
--   [Choose \'Custom Domain\' from the panel that opens](#choose-custom-domain-from-the-panel-that-opens)
-
--   [Update the DNS records with your domain registrar](#update-the-dns-records-with-your-domain-registrar)
-
--   [Check for propagation and update the domain in Xano once complete](#check-for-propagation-and-update-the-domain-in-xano-once-complete)
-
--   [Add your custom domain to the configuration panel](#add-your-custom-domain-to-the-configuration-panel)
-
--   [Connect via Xano Domain](#connect-via-xano-domain)
-
--   [Database Connector](#database-connector)
-
--   [Upgrading an Instance](#upgrading-an-instance)
-
--   [Does upgrading happen automatically once I pay?](#does-upgrading-happen-automatically-once-i-pay)
-
--   [How to upgrade an instance](#how-to-upgrade-an-instance)
-
--   [Step 1 - Go to the Billing page](#step-1-go-to-the-billing-page)
-
--   [Step 2 - Select a plan](#step-2-select-a-plan)
-
--   [If your base API URL is changing\...](#if-your-base-api-url-is-changing)
-
--   [Step 4 - Update your Front-end with the new API URL ORIGIN if you are upgrading from the FREE plan or changing your server region.](#step-4-update-your-front-end-with-the-new-api-url-origin-if-you-are-upgrading-from-the-free-plan-or)
-
--   [Step 5 - Complete your upgrade](#step-5-complete-your-upgrade)
-
-Was this helpful?
-
-Copy
-
-1.  [Xano Features](snippets.html)
-
-Instance Settings 
-=================
-
- 
-
-Custom Domain
-
-Xano has support for users on any of our paid plans to set up a custom domain to be used for the URLs of their API endpoints.
-
-<div>
-
-</div>
-
-<div>
-
-1
-
-###  
-
-Head to the instance selection page and click the [⚙️]icon next to your instance
-
-2
-
-###  
-
-Choose \'Custom Domain\' from the panel that opens
-
-3
-
-###  
-
-Update the DNS records with your domain registrar
-
-For more information on this process, consult your registrar\'s documentation. Quick links are provided below for your convenience.
-
--   
-    
-        
-    
-    [GoDaddy](https://www.godaddy.com/help/manage-dns-records-680)
-    
--   
-    
-        
-    
-    [Namecheap](https://www.namecheap.com/support/knowledgebase/article.aspx/767/10/how-to-change-dns-for-a-domain/)
-    
--   
-    
-        
-    
-    [Cloudflare](https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/)
-    
--   
-    
-        
-    
-    [Squarespace (formerly Google Domains)](https://support.squarespace.com/hc/en-us/articles/205812348-Accessing-your-Squarespace-managed-domain-s-DNS-settings)
-    
--   
-    
-        
-    
-    [Hover](https://support.hover.com/support/solutions/articles/201000064728-managing-dns-records)
-    
--   
-    
-        
-    
-    [Network Solutions](https://www.networksolutions.com/help/article/manage-dns-adns-records)
-    
--   
-    
-        
-    
-    [1&1 IONOS](https://www.ionos.com/help/domains/dns-settings/)
-    
--   
-    
-        
-    
-    [Bluehost](https://www.bluehost.com/help/article/dns-management-add-edit-or-delete-dns-entries)
-    
--   
-    
-        
-    
-    [HostGator](https://www.hostgator.com/help/article/changing-dns-records)
-    
--   
-    
-        
-    
-    [Porkbun](https://kb.porkbun.com/article/68-how-to-edit-dns-records)
-    
--   
-    
-        
-    
-    [Dynadot](https://www.dynadot.com/community/help/question/set-up-DNS)
-    
--   
-    
-        
-    
-    [Name.com](https://www.name.com/support/articles/206127137-adding-dns-records-and-templates)
-    
--   
-    
-        
-    
-    [Gandi](../../docs.gandi.net/en/domain_names/common_operations/dns_records.html)
-    
-
-4
-
-###  
-
-Check for propagation and update the domain in Xano once complete
-
-Once you add the DNS record, those changes need to propagate across the globe to various DNS servers. You can check the status of propagation at whatismydns.net.
-
-The more green checkmarks you see here, the better. You are free to proceed at any time, but please note that in areas where propagation has not completed, your APIs may not be accessible.
-
-![](../_gitbook/image74db.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FC475tC4rV7rywN7OwcX0%252FCleanShot%25202025-07-24%2520at%252013.34.43.png%3Falt%3Dmedia%26token%3D4774445d-e5ff-48ad-8aea-751c17b7fb8c&width=768&dpr=4&quality=100&sign=5800cf30&sv=2)
-
-5
-
-###  
-
-Add your custom domain to the configuration panel
-
-Add your domain and save your changes. They will be immediately applied, and your APIs and /Xano instance will be available at your new custom domain.
-
-</div>
-
-###  
-
-Connect via Xano Domain
-
-In some cases, you may still want to connect to your Xano instance via the original Xano domain. To connect through your Xano domain, head to your instance selection screen. Click the three dots when hovering over your instance, and choose \"Connect Via Xano Domain\".
-
-![](../_gitbook/image65db.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FY45efLoXNYaLS5HtLFcV%252FCleanShot%25202023-03-15%2520at%252009.31.14.png%3Falt%3Dmedia%26token%3D0f64ac7a-cb4d-4a1f-bae5-e35a4b6e7f3a&width=768&dpr=4&quality=100&sign=bf49ed8b&sv=2)
-
- 
-
-Database Connector
-
-The Database Connector requires an add-on to our **Starter plan** or is included with the **Pro plan**.
-
-You have the option to connect your Xano instance\'s PostgreSQL database directly with an external application or service. This can be useful if there is a platform for manipulating your database that you prefer to use over the Xano interface, creating custom backup and restore solutions, or even performing data analytics.
-
-Use care when accessing your database directly. This type of connection removes a significant portion of normal checks and balances for data validity that using Xano directly provides.
-
-**Proceed with caution.**
-
-####  
-
-How to Access the Database Connector
-
-On your instance selection screen, click the ⚙️ icon, and in the panel that opens, choose Database Connector.
-
-![](../_gitbook/image975c.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F2Kg3cDx4zCr712ST570h%252FCleanShot%25202023-08-16%2520at%252013.18.14.png%3Falt%3Dmedia%26token%3D53814327-2c6d-46db-85b7-aa9f8aa78dba&width=768&dpr=4&quality=100&sign=12b8222d&sv=2)
-
-![](../_gitbook/imageb075.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F1vDaCOfIsyozWQPdLPZz%252FCleanShot%25202023-08-16%2520at%252013.21.19.png%3Falt%3Dmedia%26token%3D670c0737-00d5-4eb6-95b7-b249648a7c43&width=768&dpr=4&quality=100&sign=e6f2f552&sv=2)
-
-The panel that opens is split into two sections, Details and Settings.
-
-![](../_gitbook/image75b9.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F24T5e4KKQn3b0Zmm5HzV%252FCleanShot%25202023-08-16%2520at%252013.22.58.png%3Falt%3Dmedia%26token%3D2a43018f-da6a-4538-aa92-3f4f9ea3b6fc&width=768&dpr=4&quality=100&sign=877563ee&sv=2)
-
-Details allows you to retrieve the access information for a direct database connection.
-
-Settings allows you to enable and use an allow list, to limit direct database connections to specific IP addresses.
-
-1.  
-    
-        
-    
-    Get your database\'s public IP
-    
-2.  
-    
-        
-    
-    Get your database credentials
-    
-3.  
-    
-        
-    
-    Settings Panel
-    
-4.  
-    
-        
-    
-    Add an IP address to your allow list
-    
-Clicking both of the \"Get\" buttons will provide us with the database IP and two sets of credentials, full-access and read-only.
-
-![](../_gitbook/imagef90a.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F9pWMOKvZsOuWK7RuVv2f%252FCleanShot%25202023-08-21%2520at%252007.47.08.png%3Falt%3Dmedia%26token%3Df2a020d0-2dec-4a3f-8c07-12f8360c8193&width=768&dpr=4&quality=100&sign=8cf3f3f&sv=2)
-
-From this panel, you can also **revoke and re-generate** your database credentials, should the need arise.
-
-####  
-
-Establishing a Database Connection (Example)
-
-You can use any application you\'d like that is capable of connecting to a PostgreSQL database. In this example, we\'ll be using Navicat.
-
-Select \'Connection\' in the top-left, and fill in your credentials and the IP recieved from Xano.
-
-![](../_gitbook/imagef3c6.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FIccthSToU11921bM9qck%252FCleanShot%25202023-08-16%2520at%252013.39.09.png%3Falt%3Dmedia%26token%3D725767ff-71eb-41aa-a653-401fbad4131f&width=768&dpr=4&quality=100&sign=23d9606e&sv=2)
-
-Click \'Save\' to save the connection. We can now navigate the PostgreSQL database from Xano using Navicat. We can even add / update data, run queries, etc\...
-
-![](../_gitbook/image5309.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FxKAc25wE7zpTe97HUDeM%252FCleanShot%25202023-08-16%2520at%252013.41.35.gif%3Falt%3Dmedia%26token%3D8c9202c5-ab8d-4856-a441-d30d3e1a6bdb&width=768&dpr=4&quality=100&sign=d235aa70&sv=2)
-
- 
-
-Upgrading an Instance
-
-**Why should you upgrade?**
-Free accounts come with **one workspace that shares resources with other Xano customers**. It also is limited on capabilities such as storage, database records, and processing power. You\'ll easily be able to prototype most of your application in this type of account, but upgrading to a paid plan will give you a more powerful instance that can scale with your needs. [View plan pricing and details](http://www.xano.com/pricing).
-
-**What can I upgrade to?**
-If you are on our Launch plan, your next step would be Scale1x. Upgrades from Launch to Scale1x are able to make use of a 48 hour no questions asked refund policy \-- if you find that Scale1x is not solving the requirement that prompted the upgrade, reach out to support within 48 hours and we\'ll roll you back to Launch and refund the difference.
-
-If you are currently on a Scale plan and considering a higher tier, we can work with you to trial higher Scale tiers by reaching out to support.
-
-**What does upgrading your instance actually do?**
-Upgrading your instance migrates your data and business logic to a brand new, faster instance. If you upgrade to the Scale package, you\'ll be put on your own dedicated instance for maximum performance and scalability.
-
-**How long does upgrading take?**
-Upgrading an instance takes seconds to complete.
-
-###  
-
-**Does upgrading happen automatically once I pay?**
-
-**You will need to update your API URL ORIGIN if:**
-
--   
-    
-        
-    
-    You are adding certain features to your plan, such as Static IP
-    
--   
-    
-        
-    
-    You are upgrading from **free** to **paid**
-    
--   
-    
-        
-    
-    You are changing your server region
-    
-**You do not need to update your API URL ORIGIN if:**
-- You are upgrading from a PAID to PAID instance and not changing your server location.
-
- 
-
-**How to upgrade an instance**
-
-###  
-
-**Step 1 - Go to the Billing page**
-
-Go to the Billing section within Xano. You can get there by clicking \"Billing\" in the side menu on the instances page. You can also click your initials when you\'re in your workspace and clicking the \"Billing\" link.
-
-![](../_gitbook/image7f46.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FdZfomSmkNDqxyr6PWVGz%252FCleanShot%25202023-08-23%2520at%252011.07.49.png%3Falt%3Dmedia%26token%3D2a983b3f-9be6-4f00-96ff-08523070558c&width=768&dpr=4&quality=100&sign=1090d364&sv=2)
-
-###  
-
-**Step 2 - Select a plan**
-
-Click the **Change Plan** button on the instance you want to upgrade.
-
-![](../_gitbook/image8a6f.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FI3LppeElXZXBml3ERMJD%252FCleanShot%25202023-08-23%2520at%252011.08.49.png%3Falt%3Dmedia%26token%3D81b74f27-f30f-4310-843a-9064a9ff03ad&width=768&dpr=4&quality=100&sign=4a124c6&sv=2)
-
-On the next screen, you\'ll be able to change your current plan, modify your billing schedule, add additional upgrades, or change your region.
-
-![](../_gitbook/imagee1b8.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FRYAHhCk8VGQM62wlvh8M%252FCleanShot%25202023-08-23%2520at%252011.13.14.png%3Falt%3Dmedia%26token%3D19b9dd30-9da9-4468-a5c7-99fd6fa89c75&width=768&dpr=4&quality=100&sign=fd740544&sv=2)
-
-Once you\'ve made your selections, click the green button at the bottom to proceed to checkout.
-
-###  
-
-**If your base API URL is changing\...**
-
-###  
-
-**THIS IS THE MOST IMPORTANT STEP**
-
-**To ensure a seamless transition for your users, please read this section carefully.**
-
-####  
-
-**Click the \"Start Upgrade\" button\...**
-
-Don\'t worry, this doesn\'t start the upgrade right away. This will bring up a dialog telling you what you need to be aware of before continuing.
-
-####  
-
-Write down your new API URL Origin
-
-**What is an API URL ORIGIN anyway?**
-It\'s the first part of any API endpoint you have hooked up to the front-end. See below for an example
-
-Copy
-
-``` 
-YOUR API URL ORIGIN (example)
-https://xd6b-cfde-62f6.dev.xano.io/
-
-YOUR FULL API ENDPOINT URL FOR 'GET USERS' (example)
-https://xd6b-cfde-62f6.dev.xano.io/api:4qSkfrOl/user
+# Instance Settings - Complete Configuration and Management Guide
+
+## 📋 **Quick Summary**
+
+Instance Settings provide comprehensive control over your Xano backend infrastructure, including custom domain configuration, database access, plan management, security policies, and performance optimization. Master these settings to scale your applications effectively and maintain optimal performance.
+
+## What You'll Learn
+
+- **Custom Domain Setup**: Configure branded API endpoints with SSL/TLS certificates
+- **Database Connector**: Direct PostgreSQL access for external tools and analytics
+- **Plan Management**: Upgrade instances and manage billing configurations
+- **Security Configuration**: Implement security policies and access controls
+- **Regional Deployment**: Optimize performance with geographic server placement
+- **Integration Workflows**: Connect instance settings to development and deployment pipelines
+
+## Understanding Instance Settings
+
+### Instance Management Overview
+
+```javascript
+// Instance settings architecture and capabilities
+const instanceManagement = {
+  // Core configuration areas
+  configurationAreas: {
+    networking: {
+      customDomain: "Brand your API endpoints with custom domains",
+      sslCertificates: "Automatic SSL/TLS certificate management",
+      regionSelection: "Choose optimal server regions for performance",
+      staticIP: "Consistent outbound IP addresses for integrations"
+    },
+    
+    database: {
+      directAccess: "PostgreSQL database connector for external tools",
+      backupRestore: "Automated and manual backup management",
+      performanceOptimization: "Database indexing and query optimization",
+      maintenanceWindows: "Scheduled maintenance and updates"
+    },
+    
+    security: {
+      accessControls: "IP allowlists and security policies",
+      authenticationSettings: "JWT configuration and token management",
+      encryptionSettings: "Data encryption and security protocols",
+      auditLogging: "Comprehensive audit trail and monitoring"
+    },
+    
+    scaling: {
+      planManagement: "Instance tier upgrades and resource allocation",
+      performanceMonitoring: "Real-time performance metrics and alerting",
+      resourceLimits: "CPU, memory, and storage configuration",
+      autoScaling: "Automatic scaling based on demand"
+    }
+  },
+  
+  // Access and permissions
+  accessManagement: {
+    whoCanAccess: "Instance owners and administrators",
+    permissionLevels: ["Owner", "Admin", "Developer", "Viewer"],
+    settingsHierarchy: "Workspace → Instance → API Group → Individual API",
+    changeTracking: "Audit trail for all configuration changes"
+  },
+  
+  // Impact of changes
+  changeImpact: {
+    immediatChanges: ["Custom domain", "Security policies", "Access controls"],
+    scheduledChanges: ["Plan upgrades", "Region changes", "Major version updates"],
+    disruptiveChanges: ["Region migration", "Plan downgrades", "Database restoration"],
+    rollbackCapabilities: "Configuration rollback and disaster recovery"
+  }
+};
 ```
 
-###  
+### Instance Architecture
 
-Step 4 - Update your Front-end with the new API URL ORIGIN if you are upgrading from the FREE plan or changing your server region.
+```javascript
+// Detailed instance architecture understanding
+const instanceArchitecture = {
+  // Infrastructure components
+  infrastructureComponents: {
+    compute: {
+      cpuAllocation: "Dedicated or shared CPU resources",
+      memoryManagement: "RAM allocation and optimization",
+      processingPower: "Request processing capabilities",
+      concurrentConnections: "Maximum simultaneous connections"
+    },
+    
+    storage: {
+      databaseStorage: "PostgreSQL database storage",
+      fileStorage: "Media and document storage",
+      backupStorage: "Automated backup retention",
+      cacheStorage: "Redis caching layer"
+    },
+    
+    networking: {
+      loadBalancing: "Automatic load distribution",
+      contentDelivery: "CDN integration for static assets",
+      securityLayer: "DDoS protection and firewall",
+      monitoring: "Real-time network monitoring"
+    }
+  },
+  
+  // Service tiers
+  serviceTiers: {
+    free: {
+      resources: "Shared infrastructure with basic limits",
+      features: "Core functionality with restrictions",
+      performance: "Best effort performance",
+      support: "Community support"
+    },
+    
+    starter: {
+      resources: "Enhanced shared resources",
+      features: "Additional features and higher limits",
+      performance: "Improved performance guarantees",
+      support: "Email support with SLA"
+    },
+    
+    scale: {
+      resources: "Dedicated instance resources",
+      features: "Advanced features and enterprise tools",
+      performance: "High-performance dedicated infrastructure",
+      support: "Priority support with faster response"
+    },
+    
+    enterprise: {
+      resources: "Custom resource allocation",
+      features: "All features plus custom development",
+      performance: "Maximum performance with SLA guarantees",
+      support: "Dedicated support team and account management"
+    }
+  }
+};
+```
 
-###  
+## Custom Domain Configuration
 
-Step 5 - Complete your upgrade
+### Setting Up Custom Domains
 
-Once you follow the steps above, type **I UNDERSTAND** into the box and click the button \"Start upgrade now\".
+```javascript
+// Complete custom domain implementation guide
+const customDomainSetup = {
+  // Prerequisites and planning
+  prerequisites: {
+    planRequirements: "Available on Starter plan and above",
+    domainOwnership: "Must own and control the domain",
+    dnsAccess: "Access to domain DNS management",
+    sslRequirements: "Automatic SSL certificate provisioning"
+  },
+  
+  // Step-by-step configuration
+  configurationSteps: {
+    step1: {
+      action: "Access Instance Settings",
+      navigation: "Instance Selection → Settings Icon (⚙️) → Custom Domain",
+      preparation: "Ensure you have DNS management access"
+    },
+    
+    step2: {
+      action: "Configure DNS Records",
+      recordType: "CNAME record pointing to Xano infrastructure",
+      dnsConfiguration: {
+        recordType: "CNAME",
+        name: "api.yourdomain.com",
+        value: "custom-domain.xano.io",
+        ttl: "300 (5 minutes for faster propagation)"
+      }
+    },
+    
+    step3: {
+      action: "Verify Propagation",
+      tools: ["whatismydns.net", "dig command", "nslookup"],
+      checkpoints: [
+        "DNS record resolves correctly",
+        "Propagation across multiple regions",
+        "SSL certificate generation initiated"
+      ]
+    },
+    
+    step4: {
+      action: "Complete Configuration",
+      xanoSettings: "Add domain to Xano configuration panel",
+      testing: "Verify API endpoints work with custom domain",
+      monitoring: "Monitor for any SSL or connectivity issues"
+    }
+  },
+  
+  // DNS provider examples
+  dnsProviderExamples: {
+    cloudflare: {
+      instructions: "DNS → Records → Add Record",
+      settings: {
+        type: "CNAME",
+        name: "api",
+        content: "custom-domain.xano.io",
+        proxy: "DNS only (not proxied)",
+        ttl: "Auto"
+      },
+      advantages: ["Fast propagation", "Built-in security", "Analytics"]
+    },
+    
+    godaddy: {
+      instructions: "DNS Management → Add New Record",
+      settings: {
+        type: "CNAME",
+        host: "api", 
+        pointsTo: "custom-domain.xano.io",
+        ttl: "600 seconds"
+      },
+      considerations: ["Slower propagation", "Basic interface", "Reliable service"]
+    },
+    
+    namecheap: {
+      instructions: "Advanced DNS → Add New Record",
+      settings: {
+        type: "CNAME Record",
+        host: "api",
+        value: "custom-domain.xano.io",
+        ttl: "Automatic"
+      },
+      features: ["Free WHOIS privacy", "Easy interface", "Good documentation"]
+    }
+  }
+};
+```
 
-Last updated 19 days ago
+### SSL Certificate Management
 
-Was this helpful?
+```javascript
+// SSL certificate handling and security
+const sslManagement = {
+  // Automatic SSL provisioning
+  automaticSSL: {
+    provider: "Let's Encrypt integration",
+    process: [
+      "Domain verification via DNS challenge",
+      "Certificate generation and installation",
+      "Automatic renewal every 90 days",
+      "Certificate monitoring and alerts"
+    ],
+    
+    coverage: {
+      encryption: "TLS 1.2+ with strong cipher suites",
+      validation: "Domain validation (DV) certificates",
+      wildcards: "Support for wildcard certificates",
+      multiDomain: "Multiple subdomain support"
+    }
+  },
+  
+  // Certificate monitoring
+  certificateMonitoring: {
+    healthChecks: "Continuous certificate validity monitoring",
+    expirationAlerts: "Automated alerts before expiration",
+    renewalProcess: "Automatic renewal with zero downtime",
+    fallbackMechanisms: "Fallback to Xano domain if certificate fails"
+  },
+  
+  // Security best practices
+  securityBestPractices: {
+    httpRedirection: "Automatic HTTP to HTTPS redirection",
+    hstsHeaders: "HTTP Strict Transport Security headers",
+    securityHeaders: "Additional security headers (CSP, X-Frame-Options)",
+    certificateTransparency: "Certificate transparency log participation"
+  }
+};
+```
+
+## Database Connector Configuration
+
+### Direct Database Access
+
+```javascript
+// Database connector setup and management
+const databaseConnector = {
+  // Access requirements
+  accessRequirements: {
+    planRequirements: "Starter plan add-on or Pro plan included",
+    securityConsiderations: "Direct database access bypasses Xano safeguards",
+    useCases: [
+      "External analytics and reporting tools",
+      "Custom backup and restore solutions",
+      "Data migration and synchronization",
+      "Advanced database administration"
+    ]
+  },
+  
+  // Configuration process
+  configurationProcess: {
+    step1: {
+      action: "Enable Database Connector",
+      navigation: "Instance Settings → Database Connector",
+      authentication: "Instance admin privileges required"
+    },
+    
+    step2: {
+      action: "Retrieve Connection Details",
+      information: {
+        hostname: "Database server hostname",
+        port: "PostgreSQL port (usually 5432)",
+        database: "Database name",
+        credentials: "Username and password"
+      }
+    },
+    
+    step3: {
+      action: "Configure IP Allowlist",
+      security: "Restrict access to specific IP addresses",
+      ipSources: [
+        "Your office/home IP address",
+        "Analytics tool server IPs",
+        "Backup service IP ranges",
+        "Development team IP addresses"
+      ]
+    },
+    
+    step4: {
+      action: "Test Connection",
+      tools: ["pgAdmin", "DBeaver", "Navicat", "DataGrip"],
+      verification: "Test read and write operations"
+    }
+  },
+  
+  // Access levels and permissions
+  accessLevels: {
+    readOnly: {
+      permissions: "SELECT operations only",
+      useCases: "Analytics, reporting, data export",
+      safety: "Cannot modify data or structure",
+      performance: "Minimal impact on production"
+    },
+    
+    fullAccess: {
+      permissions: "Full database administration rights",
+      useCases: "Data migration, schema changes, maintenance",
+      caution: "Can modify or delete data",
+      responsibility: "Use with extreme caution"
+    }
+  }
+};
+```
+
+### Database Security and Best Practices
+
+```javascript
+// Database security and operational best practices
+const databaseSecurity = {
+  // Security configuration
+  securityConfiguration: {
+    accessControl: {
+      ipAllowlisting: "Restrict connections to known IP addresses",
+      credentialRotation: "Regular password rotation",
+      connectionEncryption: "SSL/TLS encrypted connections",
+      sessionMonitoring: "Monitor active database sessions"
+    },
+    
+    dataProtection: {
+      backupEncryption: "Encrypted backup storage",
+      dataAtRest: "Database encryption at rest",
+      dataInTransit: "Encrypted data transmission",
+      accessLogging: "Comprehensive access logging"
+    }
+  },
+  
+  // Operational best practices
+  operationalBestPractices: {
+    connectionManagement: {
+      connectionPooling: "Use connection pooling for applications",
+      timeoutSettings: "Configure appropriate connection timeouts",
+      resourceLimits: "Limit concurrent connections",
+      monitoringAlerts: "Alert on connection threshold breaches"
+    },
+    
+    dataIntegrity: {
+      transactionManagement: "Use transactions for data consistency",
+      constraintValidation: "Maintain database constraints",
+      regularTesting: "Test backup and restore procedures",
+      changeManagement: "Version control for schema changes"
+    },
+    
+    performanceOptimization: {
+      indexOptimization: "Optimize database indexes for queries",
+      queryPerformance: "Monitor and optimize slow queries",
+      resourceMonitoring: "Track CPU, memory, and I/O usage",
+      scheduledMaintenance: "Regular maintenance and optimization"
+    }
+  }
+};
+```
+
+## Plan Management and Upgrades
+
+### Understanding Plan Tiers
+
+```javascript
+// Comprehensive plan management guide
+const planManagement = {
+  // Plan comparison
+  planComparison: {
+    free: {
+      resources: {
+        compute: "Shared infrastructure",
+        storage: "Limited database records",
+        bandwidth: "Basic data transfer limits",
+        features: "Core functionality only"
+      },
+      limitations: [
+        "Shared resources with other users",
+        "Limited API requests per month",
+        "Basic support only",
+        "No custom domain support"
+      ],
+      bestFor: "Prototyping and learning"
+    },
+    
+    starter: {
+      resources: {
+        compute: "Enhanced shared resources",
+        storage: "Increased limits and capabilities",
+        bandwidth: "Higher data transfer allowances",
+        features: "Additional features and integrations"
+      },
+      benefits: [
+        "Custom domain support",
+        "Database connector add-on available",
+        "Email support with SLA",
+        "Advanced function capabilities"
+      ],
+      bestFor: "Small to medium applications"
+    },
+    
+    scale: {
+      resources: {
+        compute: "Dedicated instance infrastructure",
+        storage: "High-performance storage systems",
+        bandwidth: "Generous data transfer limits",
+        features: "All features included"
+      },
+      benefits: [
+        "Dedicated infrastructure",
+        "Priority support",
+        "Advanced monitoring tools",
+        "Enterprise-grade security"
+      ],
+      bestFor: "Production applications with scale"
+    }
+  },
+  
+  // Upgrade process
+  upgradeProcess: {
+    planning: {
+      assessment: "Evaluate current usage and requirements",
+      timing: "Plan upgrade during low-traffic periods",
+      communication: "Notify team and stakeholders",
+      testing: "Prepare testing procedures"
+    },
+    
+    implementation: {
+      step1: "Navigate to Billing → Change Plan",
+      step2: "Select new plan and configuration options",
+      step3: "Review pricing and feature changes",
+      step4: "Confirm upgrade and process payment",
+      step5: "Monitor upgrade completion and test"
+    },
+    
+    postUpgrade: {
+      verification: "Verify all features work correctly",
+      monitoring: "Monitor performance improvements",
+      optimization: "Utilize new features and capabilities",
+      documentation: "Update team documentation"
+    }
+  }
+};
+```
+
+### Migration and URL Management
+
+```javascript
+// Plan upgrade migration and URL management
+const migrationManagement = {
+  // URL change scenarios
+  urlChangeScenarios: {
+    noURLChange: {
+      scenarios: [
+        "Upgrading within same tier (Scale1x to Scale2x)",
+        "Adding features without infrastructure change",
+        "Billing cycle changes"
+      ],
+      impact: "No frontend changes required"
+    },
+    
+    urlChangeRequired: {
+      scenarios: [
+        "Free to paid plan upgrade",
+        "Server region changes",
+        "Static IP addition",
+        "Infrastructure tier changes"
+      ],
+      impact: "Frontend API URL updates required"
+    }
+  },
+  
+  // Migration process
+  migrationProcess: {
+    preparation: {
+      backupData: "Create complete backup before migration",
+      documentCurrentConfig: "Document current configuration",
+      notifyStakeholders: "Inform team of planned changes",
+      prepareRollback: "Prepare rollback procedures"
+    },
+    
+    execution: {
+      initiateUpgrade: "Start upgrade process in Xano",
+      monitorMigration: "Monitor migration progress",
+      updateFrontend: "Update frontend with new API URLs",
+      testConnectivity: "Verify all endpoints work correctly"
+    },
+    
+    validation: {
+      functionalTesting: "Test all application functionality",
+      performanceTesting: "Verify performance improvements",
+      monitoringSetup: "Ensure monitoring continues working",
+      userAcceptance: "Confirm user experience is maintained"
+    }
+  },
+  
+  // Frontend update strategies
+  frontendUpdateStrategies: {
+    environmentVariables: {
+      approach: "Use environment variables for API URLs",
+      benefits: "Easy switching between environments",
+      implementation: "Update environment config files",
+      rollback: "Quick rollback by reverting config"
+    },
+    
+    configurationFiles: {
+      approach: "Centralized configuration management",
+      benefits: "Single source of truth for settings",
+      implementation: "Update configuration files and redeploy",
+      rollback: "Revert configuration file changes"
+    },
+    
+    gradualMigration: {
+      approach: "Gradual migration with feature flags",
+      benefits: "Reduced risk and easier rollback",
+      implementation: "Route traffic gradually to new URLs",
+      rollback: "Instant rollback via feature flag"
+    }
+  }
+};
+```
+
+## Security Configuration
+
+### Security Policies and Access Control
+
+```javascript
+// Comprehensive security configuration
+const securityConfiguration = {
+  // Access control mechanisms
+  accessControl: {
+    ipAllowlisting: {
+      configuration: "Instance Settings → Security → IP Allowlist",
+      scenarios: [
+        "Restrict admin access to office IP addresses",
+        "Limit database connector access",
+        "Geographic access restrictions",
+        "VPN-only access requirements"
+      ],
+      
+      implementation: {
+        singleIP: "192.168.1.100/32",
+        ipRange: "192.168.1.0/24",
+        multipleRanges: ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"],
+        cdnProviders: "Cloudflare, AWS CloudFront IP ranges"
+      }
+    },
+    
+    authenticationPolicies: {
+      jwtConfiguration: {
+        tokenExpiration: "Configure JWT token expiration times",
+        refreshTokens: "Implement refresh token strategy",
+        tokenRevocation: "Token blacklisting and revocation",
+        multiFactorAuth: "Additional authentication factors"
+      },
+      
+      apiKeyManagement: {
+        keyRotation: "Regular API key rotation schedule",
+        scopedAccess: "Limit API key permissions",
+        usageMonitoring: "Monitor API key usage patterns",
+        suspiciousActivity: "Detect and respond to suspicious activity"
+      }
+    }
+  },
+  
+  // Data protection measures
+  dataProtection: {
+    encryption: {
+      dataAtRest: "Database and file storage encryption",
+      dataInTransit: "TLS encryption for all communications",
+      keyManagement: "Secure encryption key management",
+      complianceStandards: "SOC 2, GDPR, HIPAA compliance"
+    },
+    
+    privacy: {
+      dataMinimization: "Collect only necessary data",
+      retentionPolicies: "Implement data retention policies",
+      rightToErasure: "Support data deletion requests",
+      consentManagement: "Manage user consent preferences"
+    }
+  },
+  
+  // Monitoring and incident response
+  securityMonitoring: {
+    threatDetection: {
+      anomalyDetection: "Detect unusual access patterns",
+      bruteForceProtection: "Protect against brute force attacks",
+      sqlInjectionPrevention: "Prevent SQL injection attempts",
+      xssProtection: "Cross-site scripting protection"
+    },
+    
+    incidentResponse: {
+      alerting: "Real-time security alerts",
+      escalation: "Incident escalation procedures",
+      forensics: "Security incident investigation tools",
+      recovery: "Incident recovery and remediation"
+    }
+  }
+};
+```
+
+## Regional Deployment and Performance
+
+### Server Region Selection
+
+```javascript
+// Regional deployment strategy and optimization
+const regionalDeployment = {
+  // Available regions
+  availableRegions: {
+    northAmerica: {
+      regions: ["US East (Virginia)", "US West (Oregon)", "Canada Central"],
+      latency: "Optimal for North American users",
+      compliance: "US data residency requirements",
+      features: "All features available"
+    },
+    
+    europe: {
+      regions: ["EU West (Ireland)", "EU Central (Frankfurt)"],
+      latency: "Optimal for European users", 
+      compliance: "GDPR compliance and EU data residency",
+      features: "All features available"
+    },
+    
+    asiaPacific: {
+      regions: ["Asia Pacific (Sydney)", "Asia Pacific (Singapore)"],
+      latency: "Optimal for APAC users",
+      compliance: "Regional data protection laws",
+      features: "Most features available"
+    }
+  },
+  
+  // Region selection criteria
+  selectionCriteria: {
+    userLocation: {
+      analysis: "Analyze user geographic distribution",
+      latencyTesting: "Test latency from different regions",
+      performanceMetrics: "Measure response times and throughput",
+      userExperience: "Optimize for majority user base"
+    },
+    
+    complianceRequirements: {
+      dataResidency: "Legal requirements for data storage location",
+      crossBorderTransfer: "Restrictions on international data transfer",
+      industryRegulations: "Industry-specific compliance requirements",
+      auditRequirements: "Audit and reporting requirements"
+    },
+    
+    businessFactors: {
+      costConsiderations: "Regional pricing variations",
+      supportCoverage: "Local support availability",
+      partnerIntegrations: "Third-party service availability",
+      futureExpansion: "Plans for geographic expansion"
+    }
+  },
+  
+  // Migration between regions
+  regionMigration: {
+    planningPhase: {
+      impactAssessment: "Assess migration impact on users",
+      downtime: "Plan for minimal downtime",
+      testing: "Test application in target region",
+      communication: "Communicate changes to stakeholders"
+    },
+    
+    executionPhase: {
+      dataExport: "Export data from current region",
+      instanceCreation: "Create new instance in target region",
+      dataImport: "Import data to new region",
+      urlUpdate: "Update frontend to new region URL"
+    },
+    
+    validationPhase: {
+      functionalTesting: "Verify all functionality works",
+      performanceTesting: "Confirm performance improvements",
+      userAcceptance: "Validate user experience",
+      monitoring: "Monitor for any issues"
+    }
+  }
+};
+```
+
+## Integration with Development Workflows
+
+### CI/CD Integration
+
+```javascript
+// Development workflow integration patterns
+const developmentIntegration = {
+  // Environment management
+  environmentManagement: {
+    multipleInstances: {
+      development: "Development instance for feature development",
+      staging: "Staging instance for testing and QA",
+      production: "Production instance for live applications",
+      dr: "Disaster recovery instance for backup"
+    },
+    
+    configurationSync: {
+      schemaSync: "Synchronize database schemas across environments",
+      functionSync: "Deploy function stacks to multiple instances",
+      settingsSync: "Maintain consistent instance settings",
+      dataSeeding: "Populate test data in non-production environments"
+    }
+  },
+  
+  // Deployment automation
+  deploymentAutomation: {
+    cicdPipelines: {
+      triggers: "Automated deployment on code commit",
+      testing: "Automated testing before deployment",
+      deployment: "Automated function stack deployment",
+      verification: "Post-deployment verification tests"
+    },
+    
+    rollbackStrategies: {
+      automaticRollback: "Automatic rollback on deployment failure",
+      manualRollback: "Manual rollback procedures",
+      canaryDeployment: "Gradual deployment with monitoring",
+      blueGreenDeployment: "Zero-downtime deployment strategy"
+    }
+  },
+  
+  // Monitoring and observability
+  monitoringIntegration: {
+    metricsCollection: {
+      performanceMetrics: "Collect and analyze performance data",
+      errorTracking: "Track and alert on application errors",
+      userAnalytics: "Analyze user behavior and usage patterns",
+      businessMetrics: "Monitor business-relevant metrics"
+    },
+    
+    alerting: {
+      performanceAlerts: "Alert on performance degradation",
+      errorAlerts: "Alert on error rate increases",
+      capacityAlerts: "Alert on resource capacity issues",
+      securityAlerts: "Alert on security incidents"
+    }
+  }
+};
+```
+
+### Infrastructure as Code
+
+```javascript
+// Infrastructure as Code approaches
+const infrastructureAsCode = {
+  // Configuration management
+  configurationManagement: {
+    declarativeConfig: {
+      approach: "Define desired instance configuration",
+      benefits: "Reproducible and version-controlled setup",
+      tools: "Terraform, CloudFormation, or custom scripts",
+      implementation: "Infrastructure configuration files"
+    },
+    
+    versionControl: {
+      configVersioning: "Version control for instance configurations",
+      changeTracking: "Track configuration changes over time",
+      rollbackCapability: "Rollback to previous configurations",
+      auditTrail: "Maintain audit trail of changes"
+    }
+  },
+  
+  // Automation strategies
+  automationStrategies: {
+    provisioningAutomation: {
+      instanceCreation: "Automated instance provisioning",
+      configurationApplication: "Apply configurations automatically",
+      validationTesting: "Automated configuration validation",
+      documentationGeneration: "Generate configuration documentation"
+    },
+    
+    maintenanceAutomation: {
+      updateManagement: "Automated update application",
+      backupManagement: "Automated backup scheduling",
+      monitoringSetup: "Automated monitoring configuration",
+      securityUpdates: "Automated security patch management"
+    }
+  }
+};
+```
+
+## 💡 **Pro Tips**
+
+1. **Plan Upgrades Carefully**: Always plan instance upgrades during low-traffic periods and prepare rollback procedures
+
+2. **Use Custom Domains**: Implement custom domains early to avoid URL changes during scaling
+
+3. **Monitor Performance**: Set up comprehensive monitoring before making configuration changes
+
+4. **Test Thoroughly**: Test all configuration changes in staging environments first
+
+5. **Document Changes**: Maintain detailed documentation of all instance configuration changes
+
+## Try This: Complete Instance Configuration
+
+Set up a production-ready instance configuration:
+
+```javascript
+// Complete instance configuration checklist
+const productionInstanceConfig = {
+  // 1. Domain and SSL setup
+  domainSetup: {
+    customDomain: "Configure branded API endpoints",
+    sslCertificates: "Ensure automatic SSL certificate management",
+    dnsOptimization: "Optimize DNS for performance",
+    monitoring: "Monitor certificate renewal and DNS health"
+  },
+  
+  // 2. Security configuration
+  securitySetup: {
+    accessControl: "Configure IP allowlists and authentication policies",
+    dataProtection: "Implement encryption and privacy controls",
+    monitoring: "Set up security monitoring and alerting",
+    compliance: "Ensure compliance with relevant regulations"
+  },
+  
+  // 3. Performance optimization
+  performanceOptimization: {
+    regionSelection: "Choose optimal server region",
+    resourceAllocation: "Configure appropriate plan tier",
+    monitoring: "Set up performance monitoring",
+    alerting: "Configure performance alerts"
+  },
+  
+  // 4. Operational excellence
+  operationalSetup: {
+    backupStrategy: "Implement comprehensive backup strategy",
+    monitoringDashboards: "Create operational dashboards",
+    incidentResponse: "Prepare incident response procedures",
+    documentation: "Document all configurations and procedures"
+  }
+};
+```
+
+## Common Mistakes to Avoid
+
+❌ **Not planning for URL changes during upgrades**
+✅ Plan frontend updates and use environment variables
+
+❌ **Ignoring security best practices**
+✅ Implement comprehensive security measures from the start
+
+❌ **Not testing configuration changes**
+✅ Test all changes in staging environments first
+
+❌ **Poor backup and disaster recovery planning**
+✅ Implement robust backup and recovery procedures
+
+❌ **Inadequate monitoring and alerting**
+✅ Set up comprehensive monitoring before going to production
+
+Instance Settings provide powerful control over your Xano infrastructure. Use these capabilities strategically to build scalable, secure, and high-performance applications that can grow with your business needs.
