@@ -1,482 +1,706 @@
 ---
 category: functions
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
+description: Complete guide to managing team members in Xano with role-based access control, collaboration workflows, and permission management
+difficulty: intermediate
+has_code_examples: true
+last_updated: '2025-08-20'
+related_docs:
+  - add_a_team_member.md
+  - audit-logs.md
+  - workspace-settings.md
+  - ci-cd.md
 subcategory: 08-reference/functions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - team-management
+  - rbac
+  - permissions
+  - collaboration
+  - workflow
+  - security
+title: Managing Team Members
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
+# Managing Team Members
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'managing-team-members'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## 📋 **Quick Summary**
+Master team management in Xano with role-based access control, workflow collaboration, permission systems, and secure development practices for distributed teams and agencies.
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+## What You'll Learn
+- Team member invitation and onboarding
+- Role-based access control (RBAC) implementation
+- Collaboration workflows and permissions
+- Audit logging and activity tracking
+- Agency and client management
+- Integration with external team tools
 
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
+## Team Structure and Roles
 
+### Default Role Hierarchy
+```javascript
+// Xano team roles and permissions
+const teamRoles = {
+  "owner": {
+    "description": "Full system access and billing control",
+    "permissions": ["*"], // All permissions
+    "limitations": "Cannot be removed, only transferred"
+  },
+  "admin": {
+    "description": "Full development and management access",
+    "permissions": [
+      "database.*", "api.*", "settings.*", 
+      "team.manage", "deploy.production"
+    ],
+    "limitations": "Cannot modify billing or transfer ownership"
+  },
+  "developer": {
+    "description": "Development access with deployment restrictions",
+    "permissions": [
+      "database.read", "database.write", "api.*",
+      "deploy.staging", "logs.read"
+    ],
+    "limitations": "No production deployment or team management"
+  },
+  "viewer": {
+    "description": "Read-only access for monitoring and review",
+    "permissions": [
+      "database.read", "api.read", "logs.read"
+    ],
+    "limitations": "Cannot modify any resources"
+  }
+};
+```
 
+### Custom Role Creation
+```javascript
+// Custom role definition
+function createCustomRole(roleData) {
+  return {
+    name: roleData.name,
+    description: roleData.description,
+    permissions: {
+      // Database permissions
+      database: {
+        read: roleData.permissions.includes('database.read'),
+        write: roleData.permissions.includes('database.write'),
+        schema: roleData.permissions.includes('database.schema'),
+        delete: roleData.permissions.includes('database.delete')
+      },
+      // API permissions  
+      api: {
+        read: roleData.permissions.includes('api.read'),
+        write: roleData.permissions.includes('api.write'),
+        deploy: roleData.permissions.includes('api.deploy'),
+        delete: roleData.permissions.includes('api.delete')
+      },
+      // System permissions
+      system: {
+        settings: roleData.permissions.includes('system.settings'),
+        billing: roleData.permissions.includes('system.billing'),
+        team: roleData.permissions.includes('system.team'),
+        logs: roleData.permissions.includes('system.logs')
+      }
+    },
+    restrictions: {
+      ip_whitelist: roleData.ip_restrictions || [],
+      time_restrictions: roleData.time_restrictions || null,
+      resource_limits: roleData.resource_limits || {}
+    }
+  };
+}
+```
 
+## Team Member Management Functions
 
+### Invitation System
+```javascript
+// Function stack for team member invitation
+[
+  {
+    "function": "Validate Invitation",
+    "logic": `
+      // Check if user has permission to invite
+      if (!auth.user.permissions.includes('team.manage')) {
+        return error(403, "Insufficient permissions to invite team members");
+      }
+      
+      // Validate email format
+      if (!inputs.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        return error(400, "Invalid email format");
+      }
+      
+      // Check if user is already a team member
+      const existingMember = await queryDatabase(
+        "SELECT id FROM team_members WHERE email = ? AND workspace_id = ?",
+        [inputs.email, auth.workspace.id]
+      );
+      
+      if (existingMember.length > 0) {
+        return error(409, "User is already a team member");
+      }
+    `
+  },
+  {
+    "function": "Create Invitation Record",
+    "action": "add_record",
+    "table": "team_invitations",
+    "data": {
+      "workspace_id": "auth.workspace.id",
+      "email": "inputs.email",
+      "role": "inputs.role", 
+      "invited_by": "auth.user.id",
+      "invitation_token": "generate_secure_token(32)",
+      "expires_at": "date_add(now(), INTERVAL 7 DAY)",
+      "status": "pending"
+    }
+  },
+  {
+    "function": "Send Invitation Email",
+    "email_template": "team-invitation",
+    "to": "inputs.email",
+    "variables": {
+      "inviter_name": "auth.user.name",
+      "workspace_name": "auth.workspace.name",
+      "role": "inputs.role",
+      "invitation_link": "concat(environment.APP_URL, '/invite/', invitation.invitation_token)",
+      "expires_at": "invitation.expires_at"
+    }
+  },
+  {
+    "function": "Log Activity",
+    "action": "add_record",
+    "table": "activity_logs",
+    "data": {
+      "user_id": "auth.user.id",
+      "action": "team_member_invited",
+      "details": {
+        "invited_email": "inputs.email",
+        "role": "inputs.role"
+      },
+      "timestamp": "now()"
+    }
+  }
+]
+```
 
-
-
-
-
-
-
-
-
-
-
--   
-
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
-    
-    -   Building with Visual Development
+### Invitation Acceptance
+```javascript
+// Accept team invitation workflow
+function acceptInvitation(invitationToken, userData) {
+  const workflow = [
+    {
+      name: "Validate Token",
+      logic: `
+        const invitation = await queryDatabase(
+          "SELECT * FROM team_invitations WHERE invitation_token = ? AND status = 'pending' AND expires_at > NOW()",
+          [invitationToken]
+        );
         
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
+        if (!invitation) {
+          throw new Error("Invalid or expired invitation");
+        }
         
-        -   [AI Tools](../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../the-function-stack/functions/cloud-services.html)
-            -   Filters
+        return invitation;
+      `
+    },
+    {
+      name: "Create User Account",
+      conditional: "user_exists",
+      logic: `
+        // Check if user already has an account
+        const existingUser = await queryDatabase(
+          "SELECT id FROM users WHERE email = ?",
+          [invitation.email]
+        );
         
-        -   [Manipulation](../the-function-stack/filters/manipulation.html)
-        -   [Math](../the-function-stack/filters/math.html)
-        -   [Timestamp](../the-function-stack/filters/timestamp.html)
-        -   [Text](../the-function-stack/filters/text.html)
-        -   [Array](../the-function-stack/filters/array.html)
-        -   [Transform](../the-function-stack/filters/transform.html)
-        -   [Conversion](../the-function-stack/filters/conversion.html)
-        -   [Comparison](../the-function-stack/filters/comparison.html)
-        -   [Security](../the-function-stack/filters/security.html)
-            -   Data Types
+        if (!existingUser) {
+          const newUser = await addRecord("users", {
+            email: invitation.email,
+            name: userData.name,
+            password: hashPassword(userData.password),
+            created_at: new Date()
+          });
+          return newUser;
+        }
         
-        -   [Text](../the-function-stack/data-types/text.html)
-        -   [Expression](../the-function-stack/data-types/expression.html)
-        -   [Array](../the-function-stack/data-types/array.html)
-        -   [Object](../the-function-stack/data-types/object.html)
-        -   [Integer](../the-function-stack/data-types/integer.html)
-        -   [Decimal](../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../the-function-stack/data-types/timestamp.html)
-        -   [Null](../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
+        return existingUser;
+      `
+    },
+    {
+      name: "Add Team Member",
+      action: "add_record",
+      table: "team_members",
+      data: {
+        user_id: "user.id",
+        workspace_id: "invitation.workspace_id", 
+        role: "invitation.role",
+        invited_by: "invitation.invited_by",
+        joined_at: "now()",
+        status: "active"
+      }
+    },
+    {
+      name: "Update Invitation Status",
+      action: "edit_record",
+      table: "team_invitations",
+      where: { id: "invitation.id" },
+      data: {
+        status: "accepted",
+        accepted_at: "now()"
+      }
+    }
+  ];
+  
+  return executeWorkflow(workflow);
+}
+```
+
+## Permission Management System
+
+### RBAC Implementation
+```javascript
+// Role-based access control middleware
+function checkPermissions(requiredPermissions) {
+  return {
+    middleware: "permission_check",
+    logic: `
+      const userPermissions = await getUserPermissions(auth.user.id, auth.workspace.id);
+      
+      // Check if user has required permissions
+      for (const permission of requiredPermissions) {
+        if (!hasPermission(userPermissions, permission)) {
+          return error(403, \`Insufficient permissions: \${permission} required\`);
+        }
+      }
+      
+      // Log permission check for audit
+      await logActivity({
+        user_id: auth.user.id,
+        action: 'permission_check',
+        resource: request.endpoint,
+        permissions_checked: requiredPermissions,
+        result: 'granted'
+      });
+    `
+  };
+}
+
+// Helper function to check permissions
+function hasPermission(userPermissions, requiredPermission) {
+  // Handle wildcard permissions
+  if (userPermissions.includes('*')) {
+    return true;
+  }
+  
+  // Direct permission match
+  if (userPermissions.includes(requiredPermission)) {
+    return true;
+  }
+  
+  // Pattern matching (e.g., 'database.*' includes 'database.read')
+  const permissionParts = requiredPermission.split('.');
+  for (let i = permissionParts.length; i > 0; i--) {
+    const wildcardPermission = permissionParts.slice(0, i).join('.') + '.*';
+    if (userPermissions.includes(wildcardPermission)) {
+      return true;
+    }
+  }
+  
+  return false;
+}
+```
+
+### Dynamic Permission Assignment
+```javascript
+// Update team member permissions
+function updateMemberPermissions(memberId, newPermissions) {
+  return [
+    {
+      function: "Validate Request",
+      logic: `
+        // Only admins can modify permissions
+        if (!auth.user.permissions.includes('team.manage')) {
+          return error(403, "Only administrators can modify permissions");
+        }
         
-        -   [Response Caching](../the-function-stack/additional-features/response-caching.html)
+        // Cannot modify owner permissions
+        const member = await getMemberDetails(memberId);
+        if (member.role === 'owner') {
+          return error(403, "Cannot modify owner permissions");
+        }
+      `
+    },
+    {
+      function: "Update Member Record",
+      action: "edit_record", 
+      table: "team_members",
+      where: { id: memberId },
+      data: {
+        permissions: newPermissions,
+        updated_by: "auth.user.id",
+        updated_at: "now()"
+      }
+    },
+    {
+      function: "Log Permission Change",
+      action: "add_record",
+      table: "permission_changes",
+      data: {
+        member_id: memberId,
+        changed_by: "auth.user.id",
+        previous_permissions: "member.permissions",
+        new_permissions: newPermissions,
+        timestamp: "now()"
+      }
+    },
+    {
+      function: "Notify Member",
+      email_template: "permissions-updated",
+      to: "member.email",
+      variables: {
+        workspace_name: "auth.workspace.name",
+        updated_by: "auth.user.name",
+        new_permissions: newPermissions
+      }
+    }
+  ];
+}
+```
+
+## Collaboration Workflows
+
+### Code Review and Approval
+```javascript
+// Code review workflow
+const codeReviewWorkflow = {
+  // Submit for review
+  submitForReview: [
+    {
+      function: "Create Review Request",
+      action: "add_record",
+      table: "code_reviews",
+      data: {
+        author_id: "auth.user.id",
+        branch: "inputs.branch",
+        changes_summary: "inputs.summary",
+        reviewers: "inputs.reviewers",
+        status: "pending",
+        created_at: "now()"
+      }
+    },
+    {
+      function: "Notify Reviewers",
+      loop: "inputs.reviewers",
+      email_template: "code-review-request",
+      variables: {
+        author_name: "auth.user.name",
+        branch: "inputs.branch",
+        summary: "inputs.summary",
+        review_url: "generate_review_url(code_review.id)"
+      }
+    }
+  ],
+  
+  // Approve changes
+  approveReview: [
+    {
+      function: "Validate Reviewer",
+      logic: `
+        const review = await getCodeReview(inputs.review_id);
         
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
-
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
+        if (!review.reviewers.includes(auth.user.id)) {
+          return error(403, "You are not assigned as a reviewer");
+        }
         
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
+        if (review.author_id === auth.user.id) {
+          return error(403, "Cannot review your own code");
+        }
+      `
+    },
+    {
+      function: "Record Approval",
+      action: "add_record", 
+      table: "review_approvals",
+      data: {
+        review_id: "inputs.review_id",
+        reviewer_id: "auth.user.id",
+        status: "approved",
+        comments: "inputs.comments",
+        approved_at: "now()"
+      }
+    },
+    {
+      function: "Check All Approvals",
+      logic: `
+        const approvals = await getReviewApprovals(inputs.review_id);
+        const review = await getCodeReview(inputs.review_id);
         
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
+        if (approvals.length >= review.required_approvals) {
+          await updateRecord("code_reviews", inputs.review_id, {
+            status: "approved",
+            approved_at: new Date()
+          });
+          
+          // Auto-deploy if configured
+          if (review.auto_deploy) {
+            await triggerDeployment(review.branch);
+          }
+        }
+      `
+    }
+  ]
+};
+```
+
+### n8n Team Automation
+```javascript
+// n8n workflow: Team onboarding automation
+{
+  "name": "New Team Member Onboarding",
+  "trigger": {
+    "type": "xano-webhook",
+    "event": "team_member_joined"
+  },
+  "nodes": [
+    {
+      "name": "Create Accounts",
+      "type": "parallel",
+      "branches": [
+        {
+          "name": "Slack Account",
+          "type": "slack-api",
+          "action": "invite_user",
+          "email": "{{ $json.member.email }}"
+        },
+        {
+          "name": "GitHub Access",
+          "type": "github-api", 
+          "action": "add_collaborator",
+          "username": "{{ $json.member.github_username }}"
+        },
+        {
+          "name": "Documentation Access",
+          "type": "notion-api",
+          "action": "share_workspace",
+          "email": "{{ $json.member.email }}"
+        }
+      ]
+    },
+    {
+      "name": "Send Welcome Package",
+      "type": "email",
+      "template": "team-welcome",
+      "attachments": [
+        "team-handbook.pdf",
+        "development-guidelines.pdf"
+      ]
+    },
+    {
+      "name": "Schedule Check-in",
+      "type": "calendar-api",
+      "action": "create_event",
+      "title": "New Member Check-in",
+      "attendees": ["{{ $json.member.email }}", "{{ $json.manager.email }}"],
+      "date": "{{ $moment().add(1, 'week').format() }}"
+    }
+  ]
+}
+```
+
+## WeWeb Team Dashboard
+
+### Team Management Interface
+```javascript
+// WeWeb team management component
+const teamManagement = {
+  data: {
+    teamMembers: [],
+    pendingInvitations: [],
+    selectedMember: null,
+    rolePermissions: {}
+  },
+  
+  async mounted() {
+    await this.loadTeamData();
+    this.setupRealTimeUpdates();
+  },
+  
+  methods: {
+    async loadTeamData() {
+      // Load team members
+      this.teamMembers = await wwLib.executeWorkflow('get-team-members', {
+        workspace_id: this.currentWorkspace.id
+      });
+      
+      // Load pending invitations
+      this.pendingInvitations = await wwLib.executeWorkflow('get-pending-invitations', {
+        workspace_id: this.currentWorkspace.id
+      });
+      
+      // Load role permissions
+      this.rolePermissions = await wwLib.executeWorkflow('get-role-permissions');
+    },
+    
+    async inviteMember(email, role) {
+      try {
+        const response = await wwLib.executeWorkflow('invite-team-member', {
+          email: email,
+          role: role,
+          workspace_id: this.currentWorkspace.id
+        });
         
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
+        if (response.success) {
+          this.showSuccess('Invitation sent successfully');
+          await this.loadTeamData(); // Refresh data
+        }
+      } catch (error) {
+        this.showError(error.message);
+      }
+    },
+    
+    async updateMemberRole(memberId, newRole) {
+      const confirmed = await this.confirmAction(
+        `Change member role to ${newRole}?`,
+        'This will update their permissions immediately.'
+      );
+      
+      if (confirmed) {
+        const response = await wwLib.executeWorkflow('update-member-role', {
+          member_id: memberId,
+          new_role: newRole
+        });
         
--   CI/CD
-
--   
-    Build For AI
+        if (response.success) {
+          await this.loadTeamData();
+          this.showSuccess('Member role updated');
+        }
+      }
+    },
     
-    -   Agents
+    async removeMember(memberId) {
+      const confirmed = await this.confirmAction(
+        'Remove team member?',
+        'This action cannot be undone.'
+      );
+      
+      if (confirmed) {
+        await wwLib.executeWorkflow('remove-team-member', {
+          member_id: memberId
+        });
         
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
-
--   
-    Build With AI
+        await this.loadTeamData();
+        this.showSuccess('Member removed from team');
+      }
+    },
     
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+    setupRealTimeUpdates() {
+      // Listen for team changes
+      wwLib.realtime.subscribe('team-updates', {
+        onMemberJoined: (data) => {
+          this.teamMembers.push(data.member);
+          this.showNotification(`${data.member.name} joined the team`);
+        },
+        onMemberLeft: (data) => {
+          this.teamMembers = this.teamMembers.filter(m => m.id !== data.member_id);
+          this.showNotification(`Team member left`);
+        },
+        onRoleChanged: (data) => {
+          const member = this.teamMembers.find(m => m.id === data.member_id);
+          if (member) {
+            member.role = data.new_role;
+            this.showNotification(`${member.name}'s role updated to ${data.new_role}`);
+          }
+        }
+      });
+    }
+  }
+};
+```
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+## Activity Monitoring and Audit
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+### Comprehensive Audit Logging
+```javascript
+// Audit logging system
+function logTeamActivity(activityData) {
+  return {
+    function: "Log Team Activity",
+    action: "add_record",
+    table: "team_audit_logs",
+    data: {
+      user_id: activityData.user_id,
+      workspace_id: activityData.workspace_id,
+      action: activityData.action,
+      resource_type: activityData.resource_type,
+      resource_id: activityData.resource_id,
+      details: JSON.stringify(activityData.details),
+      ip_address: activityData.ip_address,
+      user_agent: activityData.user_agent,
+      timestamp: "now()"
+    }
+  };
+}
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+// Activity monitoring dashboard data
+function getTeamActivitySummary(timeframe = '7d') {
+  const query = `
+    SELECT 
+      u.name as user_name,
+      u.email,
+      tm.role,
+      COUNT(*) as activity_count,
+      MAX(tal.timestamp) as last_activity,
+      GROUP_CONCAT(DISTINCT tal.action) as actions
+    FROM team_audit_logs tal
+    JOIN users u ON tal.user_id = u.id  
+    JOIN team_members tm ON tal.user_id = tm.user_id
+    WHERE tal.timestamp >= DATE_SUB(NOW(), INTERVAL ? DAY)
+      AND tal.workspace_id = ?
+    GROUP BY tal.user_id
+    ORDER BY activity_count DESC
+  `;
+  
+  return executeQuery(query, [parseInt(timeframe), workspace.id]);
+}
+```
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+## Try This: Set Up Team Management
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+1. **Create Team Roles**
+   - Define custom roles with specific permissions
+   - Set up approval workflows for sensitive operations
+   - Test permission boundaries
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+2. **Build Invitation System**
+   - Create invitation email templates
+   - Set up token-based acceptance flow
+   - Add expiration and security measures
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+3. **Implement Audit Logging**
+   - Track all team activities
+   - Create monitoring dashboard in WeWeb
+   - Set up alert notifications
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+4. **Integrate External Tools**
+   - Connect Slack for notifications
+   - Set up GitHub collaboration
+   - Automate onboarding workflows
 
--   
-    Security
-    
-    -   Best Practices
+## Common Mistakes to Avoid
 
-[Powered by GitBook]
+- **Overly complex permission systems** - Start simple and add complexity as needed
+- **Missing audit trails** - Always log permission changes and sensitive actions
+- **Poor invitation security** - Use secure tokens and expiration dates
+- **Inadequate role separation** - Ensure clear boundaries between roles
+- **Forgotten offboarding** - Create processes to revoke access when members leave
 
-On this page
+## Pro Tips
 
--   
-    
-    [Add a Team Member](#h_0d243484c2)
+💡 **Use least privilege principle** - Start with minimal permissions and add as needed
 
--   [Team Member Roles](#team-member-roles)
+💡 **Implement approval workflows** - Require approvals for production deployments
 
--   [Remove a Team Member and Update Roles](#remove-a-team-member-and-update-roles)
+💡 **Monitor team activity** - Set up dashboards to track collaboration patterns
 
--   [Manage an Agency](#manage-an-agency)
+💡 **Automate routine tasks** - Use n8n workflows for onboarding and notifications
 
--   [Remove an Agency](#remove-an-agency)
-
-Was this helpful?
-
-Copy
-
-1.  [Team Collaboration](realtime-collaboration.html)
-
-Managing Team Members 
-=====================
-
-Xano allows you to collaborate on projects by adding a team member to your instance. Be sure to check your plan to see if additional team members are included.
-
-###  
-
-Add a Team Member
-
-From the instance page, find the instance that you wish to add a team member. Click the menu icon and select **Manage Team**.
-
-![](../_gitbook/imagec1f6.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FZiLdzI5RZAo9FmaP0ckj%252FCleanShot%25202023-04-26%2520at%252011.35.21.png%3Falt%3Dmedia%26token%3Da7cb0c3e-0000-411b-a2cb-5f6ba04e8ded&width=768&dpr=4&quality=100&sign=dae0ecde&sv=2)
-
-Open the Instance Admin Panel.
-
-![](../_gitbook/image3745.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FQJRaMmTejXeix3sUMUw0%252FCleanShot%25202023-04-26%2520at%252011.36.10.png%3Falt%3Dmedia%26token%3Dfd763f31-cd1e-4e92-8639-1a5712ae9c81&width=768&dpr=4&quality=100&sign=c2d8ba71&sv=2)
-
-Select Manage Team.
-
-Only the owner of the instance can add additional team members.
-
-![](../_gitbook/image4c10.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252F8ICd6r9J5J7rTnLTeMle%252FCleanShot%25202023-04-26%2520at%252011.37.04.png%3Falt%3Dmedia%26token%3Db4170c05-752e-4394-8adf-b733a74a8114&width=768&dpr=4&quality=100&sign=39dc3ef&sv=2)
-
-Select Add New Team Member.
-
-**Make sure your team member has already signed up for a Xano account** (a free account is perfectly fine). Enter the email address the team member uses for their Xano account. Then choose the role of admin or developer for the team member.
-
-###  
-
-Team Member Roles
-
-***Owner*** is the owner of the instance. You have full control over who has access to the instance and what roles someone will have.
-
--   
-    
-        
-    
-    Admin - full access to everything including the ability to manage team members.
-    
--   
-    
-        
-    
-    Developer - full access to everything except managing team members.
-    
--   
-    
-        
-    
-    Read-only - read-only access to everything except for actions like workspace export and run & debug.
-    
--   
-    
-        
-    
-    Suspended - no access at all, but still a team member (this tends to be a temporary state, so you can switch back without having to re-invite the user).
-    
-***Agency*** is a special role, which gives admin rights to members of the [Agency](managing-team-members.html#undefined).
-
-![](../_gitbook/image56a9.jpg?url=https%3A%2F%2Fdownloads.intercomcdn.com%2Fi%2Fo%2F470329564%2F9f80c28f569eb7e071c7cf40%2FCleanShot%2B2022-02-23%2Bat%2B17.20.01.png&width=768&dpr=4&quality=100&sign=cc70b575&sv=2)
-
-An email will be sent and once the team member accepts the invitation, they can log in using their own credentials and access your instance.
-
-###  
-
-Remove a Team Member and Update Roles
-
-By selecting one of the team members you are able to either update their role or remove them from instance access.
-
-![](../_gitbook/image8fa5.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FudVuFDAoV8qIHY0pVK5K%252FCleanShot%25202023-04-26%2520at%252011.51.21.png%3Falt%3Dmedia%26token%3D507f6a5f-01d5-44b4-9076-0b1fb34d25fb&width=768&dpr=4&quality=100&sign=18383d9f&sv=2)
-
-Manage a team member\'s role or remove the team member.
-
-###  
-
-Manage an Agency
-
-*Agency* is a special role, which is designated when you have accepted an invitation from a Xano Agency plan instance. The Agency role is designed for full-service management. Meaning any team members attached to the Agency plan instance will have admin rights to your instance.
-
-![](../_gitbook/image5129.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FjuG0KHfCmO0UdYFIBDDD%252FCleanShot%25202022-02-25%2520at%252011.58.42.png%3Falt%3Dmedia%26token%3D886cd3f5-9b53-431b-a80c-b6bc0b3e83b5&width=768&dpr=4&quality=100&sign=82e41c26&sv=2)
-
-Agency ABC has the Agency role.
-
-###  
-
-Remove an Agency
-
-You can remove an Agency from your instance by clicking on the Agency under Team Membership.
-
-![](../_gitbook/image076c.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FScUrkqPXjBvMZo40AiVL%252FCleanShot%25202022-02-25%2520at%252012.03.17.png%3Falt%3Dmedia%26token%3Db556a90a-d040-4e04-bc77-c2487c3f7dc2&width=768&dpr=4&quality=100&sign=832e7955&sv=2)
-
-Remove an Agency from accessing your Instance.
-
-Last updated 6 months ago
-
-Was this helpful?
+💡 **Regular permission audits** - Review and update team permissions quarterly

@@ -1,402 +1,574 @@
 ---
 category: functions
-has_code_examples: false
-last_updated: '2025-01-23'
+description: Complete guide to creating POST API endpoints and webhooks in Xano with security implementation, data processing patterns, and integration examples
+difficulty: intermediate
+has_code_examples: true
+last_updated: '2025-08-20'
+related_docs:
+  - webhooks.md
+  - middleware.md
+  - external-api-request.md
+  - triggers.md
+subcategory: 08-reference/functions
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
+  - api
+  - webhooks
+  - post-method
+  - security
+  - integration
+  - automation
 title: Create a new API endpoint with a POST method
 ---
 
 # Create a new API endpoint with a POST method
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-description: Webhooks are specialized API endpoints designed to be triggered based on other events
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: webhooks
-twitter:card: summary\_large\_image
-twitter:description: Webhooks are specialized API endpoints designed to be triggered based on other events
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Webhooks \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-[](../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Building Webhooks
-Was this helpful?
-Copy
-1.  Building Backend Features
-Webhooks 
-========
-Webhooks are specialized API endpoints designed to be triggered based on other events
-Quick Summary
-Webhooks are API endpoints specifically designed for one system to **automatically push** information to another when a specific **event** happens. For example, Slack provides you with a webhook URL. This URL is ready and listening, much like your own API endpoint.
-But here's the key difference:
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Something like a **form submission endpoint** receives data because the *user initiated* the request (e.g., they clicked \'Submit\').
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    The **Slack webhook** receives data because *your server*, after processing the form (the **event**), *initiated* a new request, automatically pushing the form details *to* Slack\'s URL. Slack didn\'t ask for it; your system sent it because something happened.
-    :::
-You\'d build webhooks in Xano typically to ingest information ***pushed*** from other places --- like if a user pays for something via Stripe, or they perform an action in your app that you want to log.
-<div>
-</div>
-Building Webhooks
-<div>
-1
-###  
-Create a new API endpoint with a POST method
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Click [ + Add API Endpoint ] from inside one of your API groups.
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Choose **Custom API Endpoint** and fill in the details. Make sure to select **POST** as the verb.
-    []
-    :::
-2
-###  
-Add a Get All Raw Input function
-Typically, webhooks need to be able to dynamically process data that might look a little different between requests. So, we use Get All Raw Input to make sure that we aren\'t confined to just the inputs that are defined in the inputs section.
-You\'ll need to choose the encoding, or the format, of the data being sent to this endpoint. This will more often than not be JSON.
-While Get All Raw Input offers flexibility, always check the documentation of the service *sending* the webhook. They will specify the structure (schema) of the data payload you should expect.
-3
-###  
-Process the output of Get All Raw Input as needed
-From here, the process is completely unique to whatever data is being sent to the webhook, and what you need to do with it.
-**Examples:**
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Store the data in a database table using Add Record
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    If the webhook is receiving a list of items, loop against them using For Each Loop
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Transform or manipulate the data using Filters or an Expression
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Send the data to another service, such as an analytics platform, using an External API Request
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Begin a more in-depth process using a combination of the above to perform multiple actions, such as transforming data, storing it, and sending Emails
-    :::
-</div>
-Securing your Webhooks
-Just like any other API endpoint you\'re building, it\'s important to ensure that they are built securely. Webhooks have some more specific-to-them ways that they are usually kept locked up.
-<div>
-1
-###  
-Signature Verification (recommended)
-The service you\'re accepting requests from may offer signature verification. At a high level, this means that you would cross-check the signature they sent with your own calculated signature, using a private key that only you and the service are aware of, and ensure that they match.
-**If they match**: The request is verified and you can proceed.
-**If they don\'t match**: you should deny the request
-In general, this process follows a typical flow:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Extract the signature provided in the request headers
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Ensure you have a raw, unaltered copy of the request body (which you do using Get All Raw Input)
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Use the proper Security filter (such as hmac\_sha256 / hmac384 / hmac512) to encode your own signature, and ensure that it matches with the one you extracted from the request.
-    :::
-2
-###  
-Check a static token provided in the headers
-Similar to how standard User Authentication & User Data works, some services may just send an API key or bearer token as part of the request header. You\'ll want to compare this against your own stored key and ensure that they match.
-It\'s also good practice to rotate this token on a regular basis to ensure that it is not compromised.
-</div>
-Tip
-Use Middleware or Custom Functions to build your webhook verification and quickly deploy it across multiple function stacks.
-Last updated 3 months ago
-Was this helpful?
+## 📋 **Quick Summary**
+Learn to build secure POST API endpoints and webhooks in Xano for receiving data from external services, processing form submissions, and handling automated system integrations with proper validation and security measures.
+
+## What You'll Learn
+- How to create POST endpoints for data submission
+- Webhook implementation with signature verification
+- Data processing patterns for dynamic payloads
+- Security best practices for public endpoints
+- Integration patterns with n8n, WeWeb, and external services
+- Error handling and response formatting
+
+## Understanding POST Endpoints vs Webhooks
+
+### POST API Endpoints
+**User-initiated requests** where clients send data to your server:
+- Form submissions
+- Data creation requests
+- File uploads
+- Authentication requests
+
+### Webhooks
+**System-initiated requests** where external services push data to your endpoints:
+- Payment notifications (Stripe, PayPal)
+- User actions (Slack, Discord)
+- System events (GitHub, Zapier)
+- Real-time updates (WebSockets fallback)
+
+```javascript
+// Comparison
+const requestTypes = {
+  "POST Endpoint": {
+    initiator: "User/Frontend",
+    purpose: "Submit data",
+    examples: ["form submission", "create user", "upload file"]
+  },
+  "Webhook": {
+    initiator: "External Service", 
+    purpose: "Receive notifications",
+    examples: ["payment completed", "user mentioned", "deployment finished"]
+  }
+};
+```
+
+## Creating POST Endpoints
+
+### Step 1: Create the Endpoint
+```javascript
+// Endpoint configuration
+{
+  "method": "POST",
+  "path": "/api/users/create",
+  "authentication": "required", // or "optional" for webhooks
+  "inputs": {
+    "name": {
+      "type": "text",
+      "required": true,
+      "validation": "min:2,max:50"
+    },
+    "email": {
+      "type": "text", 
+      "required": true,
+      "validation": "email,unique:users"
+    },
+    "password": {
+      "type": "text",
+      "required": true,
+      "validation": "min:8,secure"
+    }
+  }
+}
+```
+
+### Step 2: Build Function Stack
+```javascript
+// Function stack for user creation
+[
+  {
+    "function": "Input Validation",
+    "logic": `
+      if (!inputs.email || !isValidEmail(inputs.email)) {
+        return error(400, "Invalid email format");
+      }
+      if (inputs.password.length < 8) {
+        return error(400, "Password must be at least 8 characters");
+      }
+    `
+  },
+  {
+    "function": "Check Existing User",
+    "query": "SELECT id FROM users WHERE email = ?",
+    "params": ["inputs.email"]
+  },
+  {
+    "function": "Hash Password",
+    "filter": "hash_password",
+    "input": "inputs.password"
+  },
+  {
+    "function": "Create User",
+    "action": "add_record",
+    "table": "users",
+    "data": {
+      "name": "inputs.name",
+      "email": "inputs.email", 
+      "password": "hashed_password",
+      "created_at": "now()"
+    }
+  },
+  {
+    "function": "Generate JWT",
+    "filter": "create_jwt",
+    "payload": {
+      "user_id": "new_user.id",
+      "email": "new_user.email"
+    }
+  },
+  {
+    "function": "Return Response",
+    "response": {
+      "success": true,
+      "user": {
+        "id": "new_user.id",
+        "name": "new_user.name",
+        "email": "new_user.email"
+      },
+      "token": "jwt_token"
+    }
+  }
+]
+```
+
+### n8n Integration Example
+```javascript
+// n8n workflow: User registration with email verification
+{
+  "name": "User Registration Flow",
+  "trigger": {
+    "type": "webhook",
+    "method": "POST",
+    "path": "/register-user"
+  },
+  "nodes": [
+    {
+      "name": "Validate Input",
+      "type": "javascript",
+      "code": `
+        const { name, email, password } = $json;
+        
+        // Validation
+        if (!email.includes('@')) {
+          throw new Error('Invalid email format');
+        }
+        
+        if (password.length < 8) {
+          throw new Error('Password too short');
+        }
+        
+        return { name, email, password, validated: true };
+      `
+    },
+    {
+      "name": "Create User in Xano",
+      "type": "http-request",
+      "url": "https://app.xano.com/api/users/create",
+      "method": "POST",
+      "body": {
+        "name": "{{ $json.name }}",
+        "email": "{{ $json.email }}",
+        "password": "{{ $json.password }}"
+      }
+    },
+    {
+      "name": "Send Welcome Email",
+      "type": "email",
+      "to": "{{ $json.email }}",
+      "subject": "Welcome to Our Platform!",
+      "template": "welcome-user"
+    },
+    {
+      "name": "Add to CRM",
+      "type": "http-request",
+      "url": "https://api.hubspot.com/contacts",
+      "body": {
+        "email": "{{ $json.email }}",
+        "name": "{{ $json.name }}",
+        "source": "website-registration"
+      }
+    }
+  ]
+}
+```
+
+## Building Webhooks
+
+### Step 1: Create Webhook Endpoint
+```javascript
+// Webhook endpoint configuration
+{
+  "method": "POST",
+  "path": "/webhooks/stripe-payment",
+  "authentication": "none", // Webhooks typically don't use standard auth
+  "rate_limiting": {
+    "requests_per_minute": 100,
+    "burst_capacity": 20
+  }
+}
+```
+
+### Step 2: Process Dynamic Data
+```javascript
+// Function stack for webhook processing
+[
+  {
+    "function": "Get All Raw Input",
+    "encoding": "json", // or "form-data", "xml"
+    "output": "raw_payload"
+  },
+  {
+    "function": "Extract Headers",
+    "headers": [
+      "stripe-signature",
+      "stripe-webhook-id",
+      "content-type"
+    ],
+    "output": "request_headers"
+  },
+  {
+    "function": "Verify Signature",
+    "logic": `
+      const signature = request_headers['stripe-signature'];
+      const payload = raw_payload;
+      const secret = environment_variables.STRIPE_WEBHOOK_SECRET;
+      
+      const expectedSignature = hmac_sha256(payload, secret);
+      
+      if (signature !== expectedSignature) {
+        return error(401, "Invalid signature");
+      }
+    `
+  },
+  {
+    "function": "Parse Event Data",
+    "logic": `
+      const eventData = JSON.parse(raw_payload);
+      
+      return {
+        event_type: eventData.type,
+        event_id: eventData.id,
+        data: eventData.data.object,
+        created: eventData.created
+      };
+    `
+  },
+  {
+    "function": "Process Event",
+    "conditional": "event_type",
+    "cases": {
+      "payment_intent.succeeded": "process_successful_payment",
+      "payment_intent.payment_failed": "process_failed_payment", 
+      "customer.subscription.created": "process_new_subscription",
+      "invoice.payment_succeeded": "process_invoice_payment"
+    }
+  }
+]
+```
+
+### Webhook Security Implementation
+```javascript
+// Signature verification function
+function verifyWebhookSignature(payload, signature, secret) {
+  // Extract timestamp and signature from header
+  const elements = signature.split(',');
+  const timestamp = elements.find(e => e.startsWith('t=')).replace('t=', '');
+  const sig = elements.find(e => e.startsWith('v1=')).replace('v1=', '');
+  
+  // Create expected signature
+  const payloadWithTimestamp = timestamp + '.' + payload;
+  const expectedSig = hmac_sha256(payloadWithTimestamp, secret);
+  
+  // Verify signature matches
+  if (sig !== expectedSig) {
+    throw new Error('Invalid signature');
+  }
+  
+  // Verify timestamp (prevent replay attacks)
+  const now = Math.floor(Date.now() / 1000);
+  if (now - parseInt(timestamp) > 300) { // 5 minute tolerance
+    throw new Error('Timestamp too old');
+  }
+  
+  return true;
+}
+```
+
+### Advanced Webhook Processing
+```javascript
+// Multi-service webhook handler
+{
+  "function_stack": [
+    {
+      "name": "Identify Source",
+      "logic": `
+        const userAgent = request_headers['user-agent'] || '';
+        const signature = request_headers['x-hub-signature-256'] || 
+                         request_headers['stripe-signature'] || 
+                         request_headers['paypal-auth-algo'];
+        
+        if (signature.includes('sha256=')) return 'github';
+        if (signature.includes('t=')) return 'stripe';
+        if (userAgent.includes('PayPal')) return 'paypal';
+        
+        return 'unknown';
+      `
+    },
+    {
+      "name": "Route to Handler",
+      "switch": "webhook_source",
+      "cases": {
+        "github": {
+          "function": "handle_github_webhook",
+          "security": "verify_github_signature"
+        },
+        "stripe": {
+          "function": "handle_stripe_webhook", 
+          "security": "verify_stripe_signature"
+        },
+        "paypal": {
+          "function": "handle_paypal_webhook",
+          "security": "verify_paypal_signature"
+        }
+      }
+    }
+  ]
+}
+```
+
+## WeWeb Integration Patterns
+
+### Form Submission Handler
+```javascript
+// WeWeb component: Contact form
+const contactForm = {
+  // Form submission method
+  async submitForm() {
+    this.loading = true;
+    this.errors = {};
+    
+    try {
+      const response = await wwLib.executeWorkflow('xano-contact-form', {
+        name: this.formData.name,
+        email: this.formData.email,
+        message: this.formData.message,
+        source: 'website-contact'
+      });
+      
+      if (response.success) {
+        this.showSuccess = true;
+        this.resetForm();
+        
+        // Track conversion
+        wwLib.executeWorkflow('track-conversion', {
+          event: 'contact-form-submitted',
+          email: this.formData.email
+        });
+      }
+    } catch (error) {
+      this.errors.general = error.message;
+    } finally {
+      this.loading = false;
+    }
+  },
+  
+  // Real-time validation
+  validateField(field, value) {
+    switch (field) {
+      case 'email':
+        if (!value.includes('@')) {
+          this.errors.email = 'Please enter a valid email';
+        } else {
+          delete this.errors.email;
+        }
+        break;
+      case 'message':
+        if (value.length < 10) {
+          this.errors.message = 'Message must be at least 10 characters';
+        } else {
+          delete this.errors.message;
+        }
+        break;
+    }
+  }
+};
+```
+
+### Real-time Webhook Processing
+```javascript
+// WeWeb: Live webhook monitoring
+const webhookMonitor = {
+  // Connect to real-time updates
+  connectToWebhooks() {
+    wwLib.realtime.connect('/webhooks/live-feed', {
+      onMessage: (data) => {
+        this.addWebhookEvent(data);
+        this.updateStats(data);
+      },
+      onError: (error) => {
+        console.error('Webhook feed error:', error);
+      }
+    });
+  },
+  
+  // Process webhook events
+  addWebhookEvent(event) {
+    this.recentEvents.unshift({
+      id: event.id,
+      type: event.type,
+      source: event.source,
+      timestamp: event.timestamp,
+      status: event.success ? 'success' : 'failed',
+      data: event.data
+    });
+    
+    // Keep only last 100 events
+    if (this.recentEvents.length > 100) {
+      this.recentEvents = this.recentEvents.slice(0, 100);
+    }
+  },
+  
+  // Update dashboard stats
+  updateStats(event) {
+    this.stats.totalEvents += 1;
+    if (event.success) {
+      this.stats.successfulEvents += 1;
+    } else {
+      this.stats.failedEvents += 1;
+    }
+    
+    // Update source stats
+    if (!this.stats.sources[event.source]) {
+      this.stats.sources[event.source] = 0;
+    }
+    this.stats.sources[event.source] += 1;
+  }
+};
+```
+
+## Error Handling and Response Formatting
+
+### Standardized Error Responses
+```javascript
+// Error handling middleware
+function handleWebhookError(error, context) {
+  const errorResponse = {
+    success: false,
+    error: {
+      code: error.code || 'WEBHOOK_ERROR',
+      message: error.message,
+      timestamp: new Date().toISOString(),
+      webhook_id: context.webhook_id,
+      source: context.source
+    }
+  };
+  
+  // Log error for monitoring
+  logWebhookError({
+    error: errorResponse,
+    payload: context.raw_payload,
+    headers: context.headers
+  });
+  
+  // Return appropriate HTTP status
+  const statusCode = getErrorStatusCode(error.code);
+  return response(statusCode, errorResponse);
+}
+
+function getErrorStatusCode(errorCode) {
+  const statusMap = {
+    'INVALID_SIGNATURE': 401,
+    'MALFORMED_PAYLOAD': 400,
+    'RATE_LIMITED': 429,
+    'PROCESSING_ERROR': 422,
+    'WEBHOOK_ERROR': 500
+  };
+  
+  return statusMap[errorCode] || 500;
+}
+```
+
+### Success Response Format
+```javascript
+// Standardized success response
+function formatWebhookSuccess(processedData, context) {
+  return {
+    success: true,
+    data: {
+      processed_at: new Date().toISOString(),
+      webhook_id: context.webhook_id,
+      event_type: processedData.event_type,
+      actions_taken: processedData.actions || [],
+      next_steps: processedData.next_steps || null
+    },
+    meta: {
+      processing_time: Date.now() - context.start_time,
+      version: '1.0'
+    }
+  };
+}
+```
+
+## Try This: Build Your First Webhook
+
+1. **Create Basic Webhook Endpoint**
+   - Set up POST endpoint with no authentication
+   - Add "Get All Raw Input" function
+   - Test with simple payload
+
+2. **Add Security Verification**
+   - Implement signature verification
+   - Add timestamp validation
+   - Test with real webhook service
+
+3. **Build Processing Logic**
+   - Parse webhook payload
+   - Add conditional processing
+   - Store relevant data in database
+
+4. **Connect to Frontend**
+   - Create monitoring dashboard in WeWeb
+   - Add real-time event display
+   - Implement error notifications
+
+## Common Mistakes to Avoid
+
+- **Missing signature verification** - Always validate webhook authenticity
+- **Blocking synchronous processing** - Use background tasks for heavy operations
+- **Poor error handling** - Implement comprehensive error responses
+- **Ignoring replay attacks** - Validate timestamps and use idempotency keys
+- **Insufficient logging** - Log all webhook events for debugging
+
+## Pro Tips
+
+💡 **Use middleware for common webhook patterns** - Create reusable verification logic
+
+💡 **Implement idempotency** - Handle duplicate webhook deliveries gracefully
+
+💡 **Set up monitoring and alerting** - Track webhook failure rates and performance
+
+💡 **Version your webhook endpoints** - Plan for API evolution and backward compatibility
+
+💡 **Test with webhook simulation tools** - Use ngrok, RequestBin, or service-specific testing tools
