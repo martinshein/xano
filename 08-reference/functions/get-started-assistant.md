@@ -1,451 +1,516 @@
 ---
 category: functions
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
+description: Complete guide to using Xano's Getting Started Assistant for rapid backend development with AI-powered project initialization and setup automation
+difficulty: beginner
+has_code_examples: true
+last_updated: '2025-08-20'
+related_docs:
+  - building-a-backend-using-ai.md
+  - ai-database-assistant.md
+  - ai-sql-assistant.md
+  - ai_lambda_assistant.md
 subcategory: 08-reference/functions
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- crud
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: 'apple-mobile-web-app-status-bar-style: black'
+  - ai-assistant
+  - getting-started
+  - project-setup
+  - backend-generation
+  - automation
+  - onboarding
+title: Get Started Assistant
 ---
 
----
-apple-mobile-web-app-status-bar-style: black
+# Get Started Assistant
 
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'get-started-assistant'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
+## 📋 **Quick Summary**
+Transform your ideas into fully functional backends instantly with Xano's Getting Started Assistant. This AI-powered tool creates complete database schemas, API endpoints, and authentication systems from simple descriptions.
 
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
+## What You'll Learn
+- How to use Getting Started Assistant effectively
+- Project initialization with AI guidance
+- Database schema generation from descriptions
+- API endpoint creation and configuration
+- Authentication system setup
+- Integration with n8n, WeWeb, and other platforms
 
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
+## Getting Started Assistant Overview
 
+The **Getting Started Assistant** is Xano's most powerful onboarding tool, designed to eliminate the complexity of backend setup. Simply describe your project idea, and the assistant creates a complete, production-ready backend infrastructure.
 
+### Key Capabilities
+```javascript
+// What Getting Started Assistant creates
+const assistantOutputs = {
+  "database_schema": {
+    "tables": "Complete relational database structure",
+    "relationships": "Foreign keys and associations", 
+    "indexes": "Optimized query performance",
+    "constraints": "Data integrity rules"
+  },
+  "api_endpoints": {
+    "crud_operations": "Create, Read, Update, Delete for all entities",
+    "authentication": "User registration and login endpoints",
+    "business_logic": "Custom endpoints for specific requirements",
+    "documentation": "Auto-generated API documentation"
+  },
+  "security": {
+    "authentication": "JWT-based user authentication",
+    "authorization": "Role-based access control",
+    "validation": "Input sanitization and validation",
+    "error_handling": "Comprehensive error responses"
+  }
+};
+```
 
+## Using the Getting Started Assistant
 
+### Step 1: Project Description
+```javascript
+// Example project descriptions that work well
+const effectiveDescriptions = {
+  "e_commerce": {
+    "description": "Build an e-commerce platform with products, categories, shopping cart, user accounts, orders, and payment processing. Include inventory management and order tracking.",
+    "generates": ["products", "categories", "users", "carts", "orders", "payments"]
+  },
+  
+  "social_media": {
+    "description": "Create a social media app with user profiles, posts, comments, likes, following system, and real-time notifications. Include media upload capabilities.",
+    "generates": ["users", "posts", "comments", "likes", "follows", "notifications"]
+  },
+  
+  "task_management": {
+    "description": "Build a project management tool with teams, projects, tasks, assignments, deadlines, and progress tracking. Include time logging and reporting.",
+    "generates": ["teams", "projects", "tasks", "assignments", "time_logs", "reports"]
+  },
+  
+  "learning_platform": {
+    "description": "Create an online learning platform with courses, lessons, quizzes, student progress, instructor management, and certificate generation.",
+    "generates": ["courses", "lessons", "quizzes", "students", "instructors", "certificates"]
+  }
+};
+```
 
+### Step 2: AI Analysis and Generation
+```javascript
+// How the assistant processes your description
+const processingSteps = [
+  {
+    "step": "Natural Language Processing",
+    "description": "Extracts entities, relationships, and business rules",
+    "example": "Identifies 'products have categories' and 'users place orders'"
+  },
+  {
+    "step": "Schema Design",
+    "description": "Creates optimal database structure",
+    "example": "Generates normalized tables with proper foreign keys"
+  },
+  {
+    "step": "API Planning",
+    "description": "Designs RESTful endpoints for all operations",
+    "example": "Creates /products, /users, /orders with full CRUD"
+  },
+  {
+    "step": "Security Implementation",
+    "description": "Adds authentication and authorization",
+    "example": "Protects sensitive endpoints, validates inputs"
+  }
+];
+```
 
+## Generated Project Structure
 
+### Database Schema Example
+```javascript
+// E-commerce schema generated by assistant
+{
+  "users": {
+    "id": "auto_increment",
+    "email": "text_unique",
+    "password": "text_encrypted",
+    "first_name": "text",
+    "last_name": "text",
+    "phone": "text_nullable",
+    "address": "json",
+    "created_at": "timestamp",
+    "updated_at": "timestamp"
+  },
+  
+  "categories": {
+    "id": "auto_increment",
+    "name": "text_unique",
+    "description": "text_long",
+    "parent_id": "integer_fk_nullable",
+    "image_url": "text_nullable",
+    "active": "boolean_default_true"
+  },
+  
+  "products": {
+    "id": "auto_increment",
+    "name": "text",
+    "description": "text_long",
+    "price": "decimal_2",
+    "category_id": "integer_fk",
+    "sku": "text_unique",
+    "inventory_count": "integer",
+    "images": "json_array",
+    "active": "boolean_default_true",
+    "created_at": "timestamp"
+  },
+  
+  "orders": {
+    "id": "auto_increment",
+    "user_id": "integer_fk",
+    "status": "enum[pending,processing,shipped,delivered,cancelled]",
+    "total_amount": "decimal_2",
+    "shipping_address": "json",
+    "order_date": "timestamp",
+    "tracking_number": "text_nullable"
+  },
+  
+  "order_items": {
+    "id": "auto_increment",
+    "order_id": "integer_fk",
+    "product_id": "integer_fk",
+    "quantity": "integer",
+    "unit_price": "decimal_2",
+    "total_price": "decimal_2"
+  }
+}
+```
 
+### Generated API Endpoints
+```javascript
+// Complete API structure created automatically
+const generatedEndpoints = {
+  "authentication": [
+    "POST /auth/register",
+    "POST /auth/login", 
+    "POST /auth/logout",
+    "POST /auth/refresh",
+    "POST /auth/forgot-password",
+    "POST /auth/reset-password"
+  ],
+  
+  "users": [
+    "GET /users/profile",
+    "PUT /users/profile",
+    "DELETE /users/account"
+  ],
+  
+  "products": [
+    "GET /products",
+    "GET /products/:id",
+    "POST /products",
+    "PUT /products/:id", 
+    "DELETE /products/:id",
+    "GET /products/category/:category_id"
+  ],
+  
+  "orders": [
+    "GET /orders",
+    "GET /orders/:id",
+    "POST /orders",
+    "PUT /orders/:id/status",
+    "GET /users/:user_id/orders"
+  ],
+  
+  "categories": [
+    "GET /categories",
+    "GET /categories/:id",
+    "POST /categories",
+    "PUT /categories/:id",
+    "DELETE /categories/:id"
+  ]
+};
+```
 
+## Advanced Configuration Options
 
+### Customization During Setup
+```javascript
+// Options available during assistant setup
+const customizationOptions = {
+  "authentication_type": {
+    "options": ["JWT", "OAuth", "Social Login"],
+    "recommendation": "JWT for most applications"
+  },
+  
+  "database_preferences": {
+    "naming_convention": ["snake_case", "camelCase"],
+    "soft_deletes": "boolean",
+    "timestamps": "boolean",
+    "uuid_vs_increment": "primary key preference"
+  },
+  
+  "api_features": {
+    "pagination": "automatic for list endpoints",
+    "filtering": "query parameter filters",
+    "sorting": "sortable fields configuration",
+    "search": "full-text search capabilities"
+  },
+  
+  "security_level": {
+    "basic": "Authentication + basic validation",
+    "standard": "RBAC + advanced validation",
+    "enterprise": "Advanced security + audit logging"
+  }
+};
+```
 
+### Post-Generation Enhancements
+```javascript
+// What to add after initial generation
+const enhancements = [
+  {
+    "category": "Business Logic",
+    "additions": [
+      "Custom validation rules",
+      "Automated email notifications", 
+      "Payment processing integration",
+      "Inventory management logic"
+    ]
+  },
+  {
+    "category": "Performance",
+    "additions": [
+      "Response caching",
+      "Database query optimization",
+      "Background task processing",
+      "Real-time updates"
+    ]
+  },
+  {
+    "category": "Integrations",
+    "additions": [
+      "Third-party API connections",
+      "Webhook endpoints",
+      "File upload handling",
+      "Analytics tracking"
+    ]
+  }
+];
+```
 
+## Integration Patterns
 
+### n8n Workflow Integration
+```javascript
+// n8n workflow using generated endpoints
+{
+  "name": "E-commerce Order Processing",
+  "trigger": {
+    "type": "webhook",
+    "path": "/order-webhook"
+  },
+  "nodes": [
+    {
+      "name": "Create Order",
+      "type": "xano-api",
+      "endpoint": "/orders",
+      "method": "POST",
+      "data": {
+        "user_id": "{{ $json.customer_id }}",
+        "total_amount": "{{ $json.total }}",
+        "items": "{{ $json.cart_items }}"
+      }
+    },
+    {
+      "name": "Update Inventory",
+      "type": "loop",
+      "items": "{{ $json.cart_items }}",
+      "nodes": [
+        {
+          "name": "Reduce Stock",
+          "type": "xano-api",
+          "endpoint": "/products/{{ $json.product_id }}",
+          "method": "PUT",
+          "data": {
+            "inventory_count": "{{ $json.current_stock - $json.quantity }}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Send Confirmation Email",
+      "type": "email",
+      "to": "{{ $json.customer_email }}",
+      "template": "order-confirmation",
+      "data": {
+        "order_id": "{{ $json.order.id }}",
+        "total": "{{ $json.order.total_amount }}"
+      }
+    }
+  ]
+}
+```
 
-
--   
-
+### WeWeb Frontend Connection
+```javascript
+// WeWeb configuration for generated backend
+const wewebConfig = {
+  // Data collections automatically mapped
+  collections: {
+    products: {
+      endpoint: '/products',
+      realtime: false,
+      pagination: true,
+      filters: ['category_id', 'active', 'price_range']
+    },
     
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
-
--   
-
+    orders: {
+      endpoint: '/orders', 
+      realtime: true,
+      userSpecific: true,
+      include: ['order_items', 'products']
+    },
     
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async Functions](../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background Tasks](../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring Expressions](../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with Data](../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI Tools](../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering Examples](../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get Record](../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add Record](../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit Record](../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit Record](../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch Record](../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete Record](../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk Operations](../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database Transaction](../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database Query](../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database Query](../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database Schema](../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create Variable](../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update Variable](../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime Functions](../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API Request](../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda Functions](../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching (Redis)](../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom Functions](../the-function-stack/functions/custom-functions.html)
-        -   [Utility Functions](../the-function-stack/functions/utility-functions.html)
-        -   [File Storage](../the-function-stack/functions/file-storage.html)
-        -   [Cloud Services](../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../the-function-stack/filters/manipulation.html)
-        -   [Math](../the-function-stack/filters/math.html)
-        -   [Timestamp](../the-function-stack/filters/timestamp.html)
-        -   [Text](../the-function-stack/filters/text.html)
-        -   [Array](../the-function-stack/filters/array.html)
-        -   [Transform](../the-function-stack/filters/transform.html)
-        -   [Conversion](../the-function-stack/filters/conversion.html)
-        -   [Comparison](../the-function-stack/filters/comparison.html)
-        -   [Security](../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../the-function-stack/data-types/text.html)
-        -   [Expression](../the-function-stack/data-types/expression.html)
-        -   [Array](../the-function-stack/data-types/array.html)
-        -   [Object](../the-function-stack/data-types/object.html)
-        -   [Integer](../the-function-stack/data-types/integer.html)
-        -   [Decimal](../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../the-function-stack/data-types/timestamp.html)
-        -   [Null](../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response Caching](../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
+    categories: {
+      endpoint: '/categories',
+      realtime: false,
+      hierarchical: true,
+      parentField: 'parent_id'
+    }
+  },
+  
+  // Authentication integration
+  auth: {
+    loginEndpoint: '/auth/login',
+    registerEndpoint: '/auth/register',
+    refreshEndpoint: '/auth/refresh',
+    tokenStorage: 'localStorage',
+    redirectAfterLogin: '/dashboard'
+  },
+  
+  // Form configurations
+  forms: {
+    productForm: {
+      fields: ['name', 'description', 'price', 'category_id'],
+      validation: 'server-side',
+      fileUpload: 'images'
+    },
     
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+    checkoutForm: {
+      fields: ['shipping_address', 'payment_method'],
+      workflow: 'multi-step',
+      integration: 'stripe'
+    }
+  }
+};
+```
 
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database Views](../the-database/database-basics/database-views.html)
-        -   [Export and Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import & Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+## Best Practices for Assistant Usage
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+### Effective Project Descriptions
+```javascript
+// Tips for better AI generation
+const descriptionBestPractices = {
+  "be_specific": {
+    "good": "E-commerce with product variants, inventory tracking, and multi-currency support",
+    "bad": "Online store"
+  },
+  
+  "mention_relationships": {
+    "good": "Users can create multiple projects, projects have tasks, tasks are assigned to users",
+    "bad": "Project management system"
+  },
+  
+  "include_business_rules": {
+    "good": "Orders require approval if total exceeds $1000, inventory reduces on order confirmation",
+    "bad": "Simple ordering system"
+  },
+  
+  "specify_user_types": {
+    "good": "Admin users manage inventory, customers place orders, vendors manage their products",
+    "bad": "Multi-user system"
+  }
+};
+```
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+### Post-Generation Optimization
+```javascript
+// Steps after initial generation
+const optimizationSteps = [
+  {
+    "step": "Review Generated Schema",
+    "actions": [
+      "Check field types and constraints",
+      "Verify relationship cardinalities", 
+      "Add missing indexes",
+      "Adjust field lengths"
+    ]
+  },
+  {
+    "step": "Test API Endpoints",
+    "actions": [
+      "Verify CRUD operations work",
+      "Test authentication flows",
+      "Check error responses",
+      "Validate input sanitization"
+    ]
+  },
+  {
+    "step": "Add Business Logic",
+    "actions": [
+      "Implement custom validation rules",
+      "Add calculated fields",
+      "Create automated workflows",
+      "Set up notifications"
+    ]
+  },
+  {
+    "step": "Performance Tuning",
+    "actions": [
+      "Add response caching",
+      "Optimize database queries",
+      "Implement pagination",
+      "Set up monitoring"
+    ]
+  }
+];
+```
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+## Try This: Build Your First AI-Generated Backend
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+1. **Plan Your Project**
+   - Write detailed project description
+   - Include user types and relationships
+   - Specify business rules and constraints
+   - List required integrations
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+2. **Use Getting Started Assistant**
+   - Paste your project description
+   - Review generated schema
+   - Customize authentication options
+   - Accept or modify suggestions
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+3. **Test and Validate**
+   - Test all generated endpoints
+   - Verify authentication works
+   - Check data validation rules
+   - Review API documentation
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+4. **Enhance and Deploy**
+   - Add custom business logic
+   - Implement integrations
+   - Set up monitoring
+   - Deploy to production
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+## Common Mistakes to Avoid
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+- **Vague descriptions** - Be specific about requirements and relationships
+- **Ignoring generated structure** - Review and understand what was created
+- **Skipping testing** - Always test generated endpoints thoroughly
+- **Not adding business rules** - Enhance with custom validation and logic
+- **Missing security review** - Verify access controls and data protection
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+## Pro Tips
 
--   
-    Security
-    
-    -   Best Practices
+💡 **Use iterative refinement** - Start with basic description, then enhance
 
-[Powered by GitBook]
+💡 **Leverage generated documentation** - Use auto-created API docs as foundation
 
-On this page
+💡 **Plan for scalability** - Consider future requirements in initial description
 
--   
-    
-    [Build a Workspace with AI](#build-a-workspace-with-ai)
+💡 **Test with real data** - Use realistic test data from the start
 
--   [During setup, make sure to choose Create With AI](#during-setup-make-sure-to-choose-create-with-ai)
-
--   [Provide the AI with its first instructions.](#provide-the-ai-with-its-first-instructions)
-
-Was this helpful?
-
-Copy
-
-1.  [Build With AI](using-ai-builders-with-xano.html)
-
-Get Started Assistant 
-=====================
-
- 
-
-Build a Workspace with AI
-
-When you create a new workspace in Xano, you can either start from scratch, or use our AI copilot to build your database and basic CRUD endpoints for you.
-
-<div>
-
-1
-
-###  
-
-During setup, make sure to choose Create With AI
-
-![](../_gitbook/imageac4d.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FQjc5MnHcPVhMJUeuYf8L%252FCleanShot%25202025-01-15%2520at%252016.12.11.png%3Falt%3Dmedia%26token%3D0cdbd837-7e5d-4026-b6f5-562df2ea52ae&width=768&dpr=4&quality=100&sign=5abb7e5d&sv=2)
-
-2
-
-###  
-
-Provide the AI with its first instructions.
-
-There are a few different ways you can work with the AI generator.
-
--   
-    
-        
-    
-    **Start with a template**
-
-    -   
-        
-                
-        
-        Choose from any of the starter templates, and converse with the AI to make it your own.
-            
--   
-    
-        
-    
-    **Tell it about what you want to build.**
-
-    -   
-        
-                
-        
-        Start a conversation with the AI generator and let it know what your goals are. It can recommend database design strategies to you, and implement them for you right away.
-            
--   
-    
-        
-    
-    **Tell it exactly the database structure you have in mind**
-
-    -   
-        
-                
-        
-        This is especially useful if you are already familiar with app development, or maybe you\'ve done the design outside of Xano already --- just tell the AI what tables you want in plain language, and it will do the heavy lifting for you.
-            
-</div>
-
-Last updated 6 months ago
-
-Was this helpful?
+💡 **Document customizations** - Track changes made to generated code
