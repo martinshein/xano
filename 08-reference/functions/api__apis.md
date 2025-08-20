@@ -1,6 +1,6 @@
 ---
 category: functions
-has_code_examples: false
+has_code_examples: true
 last_updated: '2025-01-23'
 tags:
 - API
@@ -8,819 +8,997 @@ tags:
 - Functions
 - Queries
 - CRUD
-title: 'API: Apis'
+- REST
+- HTTP
+- Endpoints
+- Integration
+title: 'API Design & REST Endpoints'
 ---
 
-# API: Apis
+# API Design & REST Endpoints
 
-[🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI
-                Documentation)
-            :::
-            ::: 
-            -   Async
-                Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring
-            Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering
-                    Examples
-                :::
-            -   Get
-                Record
-            -   Add
-                Record
-            -   Edit
-                Record
-            -   Add or Edit
-                Record
-            -   Patch
-                Record
-            -   Delete
-                Record
-            -   Bulk
-                Operations
-            -   Database
-                Transaction
-            -   External Database
-                Query
-            -   Direct Database
-                Query
-            -   Get Database
-                Schema
-            :::
-            ::: 
-            -   Create
-                Variable
-            -   Update
-                Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime
-                Functions
-            -   External API
-                Request
-            -   Lambda
-                Functions
-            :::
-        -   Data Caching
-            (Redis)
-        -   Custom
-            Functions
-        -   Utility
-            Functions
-        -   File
-            Storage
-        -   Cloud
-            Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response
-            Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano
-            Database
-        -   Field
-            Types
-        -   Relationships
-        -   Database
-            Views
-        -   Export and
-            Sharing
-        -   Data
-            Sources
-        :::
-        ::: 
-        -   Airtable to
-            Xano
-        -   Supabase to
-            Xano
-        -   CSV Import &
-            Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema
-            Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting
-            Clients
-        -   MCP
-            Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User
-            Data
-        -   Restricting Access
-            (RBAC)
-        -   OAuth
-            (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track
-            Preferences
-        -   Static IP
-            (Outgoing)
-        -   Change Server
-            Region
-        -   Direct Database
-            Connector
-        -   Backup and
-            Restore
-        -   Security
-            Policy
-        :::
-        ::: 
-        -   Audit
-            Logs
-        :::
-        ::: 
-        -   Xano
-            Link
-        -   Developer API
-            (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata
-            API
-        -   Tables and
-            Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request
-            History
-        -   Workspace Import and
-            Export
-        -   Token Scopes
-            Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency
-            Dashboard
-        -   Client
-            Invite
-        -   Transfer
-            Ownership
-        -   Agency
-            Profile
-        -   Commission
-        -   Private
-            Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a
-                    Model
-                :::
-            :::
-        -   Tenant
-            Center
-        -   Compliance
-            Center
-        -   Security
-            Policy
-        -   Instance
-            Activity
-        -   Deployment
-        -   RBAC (Role-based Access
-            Control)
-        -   Xano
-            Link
-        -   Resource
-            Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels
-            slow
-        -   When everything feels
-            slow
-        -   RAM
-            Usage
-        -   Function Stack
-            Performance
-        :::
-        ::: 
-        -   Granting
-            Access
-        -   Community Code of
-            Conduct
-        -   Community Content Modification
-            Policy
-        -   Reporting Potential Bugs and
-            Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    What is an API?
--   API Groups & API Group
-    Settings
--   CORS Management for API
-    Groups
--   Click to create a new API
-    endpoint.
-Was this helpful?
-Copy
-1.  [[🛠️]The Visual
-    Builder](../building-with-visual-development.html)
-2.  Building with Visual Development
-APIs 
-====
-Learn more about building APIs using visual development in Xano
-**Quick Summary**
-Think of an API like a waiter in a restaurant - you (the user) give your
-order to the waiter (the API), who takes it to the kitchen and brings
-back exactly what you asked for. The waiter creates a seamless
-connection between you and the kitchen, just like an API connects
-different parts of an application.
-An API acts like a messenger between different parts of an application.
-When your website needs something done (like creating a new user), it
-sends a request with the necessary data and gets back a response
-containing the results. Both requests and responses include headers
-(which provide context) and data (the actual content being sent or
-received).
-What is an API?
-APIs allow different applications to communicate and share data with
-each other. When you use Google Maps inside another app, that\'s an API
-at work. When you click a Buy Now button on Amazon, APIs are firing at
-all cylinders behind the scenes.
-APIs don\'t have to only be based on user action, either. For example,
-most websites implement some sort of tracking to ensure that the user
-experience is as smooth as possible. When you visit these websites,
-there are API calls being made as you navigate through their frontend.
-APIs set the rules for how different pieces of software can talk to each
-other, making it possible for developers to integrate various services
-without starting from scratch.
-An API has a few main components.
-<div>
-1
-###  
-Headers
-Headers are the configuration that rides along with an API request. They
-contain information like where the request is coming from and what type
-of data it contains.
-2
-###  
-Method
-The method, also known as the verb, is assigned to an API to typically
-dictate the type of operation the API is designed to complete.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **GET**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Retrieve data
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **POST**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Send data
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **PUT / PATCH**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Update data
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **DELETE**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Delete data
-        :::
-    :::
-Please note that when you build APIs in Xano, you can choose the method
-to apply, giving you full flexibility in exactly what function that API
-serves. While it isn\'t always best practice, a DELETE endpoint could
-technically do nothing but add new data, if it makes sense for your use
-case.
-3
-###  
-Query parameters / Request body
-Query parameters and the request body are kind of the same thing, but
-sent in an API request in different ways.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Query parameters** live as part of the request URL. If the API URL
-    is `https://myapi.com/getThings` and expects you to send a
-    thingId with your request, you would append it to the URL with
-    `?thingId=99`, so your full
-    request URL would be
-    `https://myapi.com/getThings?thingId=99.` You would typically use query
-    parameters for GET and DELETE endpoints.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Request Body** is like a set of query parameters, but sent as a
-    JSON object. It\'s more flexible when sending complex data types,
-    such as lists, nested objects, or files.
-    :::
-In the Xano visual builder, these are known as **inputs**. You can add
-inputs manually, or add a **Database Link** input to automatically
-populate and sync all fields from a database table.
-4
-###  
-Response
-The response is whatever the API sends back once it has completed the
-logic it is meant to perform. An API doesn\'t necessarily need to
-deliver a response, but it is typical.
-Think of your frontend sending an API request when a user logs in. That
-API request would probably return information about the user logging in,
-such as their name, location, or other relevant user data.
-A response has a few different pieces, similar to what\'s included in
-the request, including **response headers** and a **response body**.
-</div>
-------------------------------------------------------------------------
-Auto-generated APIs
-When adding a new API endpoint in Xano, you have four options to choose
-from --- some of which will give you prebuilt APIs, ready to go right
-away!
-###  
-CRUD Operations
-These are database operations for reading, adding, and updating data in
-your database.
-Please note that our default **PATCH** endpoint is designed to
-automatically filter out any null values or empty text strings that are
-typically sent by most frontend platforms. If you don\'t need these, you
-can remove the filters **filter\_null** and **filter\_empty\_text** from
-the Patch Record function.
-###  
-Authentication
-These are APIs that handle login, signup, and checking an authenticated
-user\'s information.
-###  
-File Storage
-These APIs facilitate file upload to Xano.
-###  
-Custom
-Start with a blank canvas. Build anything.
-------------------------------------------------------------------------
-API Groups & API Group Settings
-All APIs live inside of API groups. These are just like folders that you
-can use to organize all of your different APIs.
-Each API group can be customized to your liking using the following
-options.
-Setting
-Function
-Name
-The name of the API group. Each name in an API group must be unique,
-including trailing parameters. This means that if you have an API named
-/user/, you can not also have an API named /user/getUser
-Description
-An internal description of the API group
-Tags
-Tags are used to label different things you build in Xano, used to
-search for related items across the workspace
-Swagger
-Determines the access level of your auto-generated API documentation
-**Public** - Anyone with the link can access **Private (requires
-token)** - Anyone with the link appended with an auto-generated token
-can access **Disabled** - No API documentation will be made available
-[📖] **Learn more about API
-auto-documentation**
-Request History
-Choose whether to inherit your workspace\'s default request history
-settings, or specify new ones for this API group
-[📖] **Learn more about request
-history**
-External Access
-Quickly enable or disable public access to these APIs
-Additionally, you can change the **canonical ID** of an API group from
-the Security section of the settings menu. The canonical ID dictates
-part of the endpoint URLs used to access those APIs, so proceed with
-caution before changing this.
-To access your API groups, click
-[]in the left-hand navigation menu.
-Click on a group to enter it, or click
-[]to create a new one.
-Some of these settings are only available after the API group is
-created.
-###  
-CORS Management for API Groups
-CORS, or Cross-Origin Resource Sharing, is like a security guard for web
-applications. It ensures that resources on a web page only talk to
-servers they are allowed to. Imagine visiting a friend\'s house; if your
-friend\'s parents don\'t know you, they might not let you in. Similarly,
-CORS ensures that only trusted sources can interact with your web
-application, keeping data safe and secure. This is important because it
-helps protect users from potentially harmful interactions between
-different websites.
-In Xano, you can change CORS to one of three options:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Default** - Xano uses wildcard values to allow all origins,
-    methods, and headers. This satisfies the requirements of servers
-    that ask for CORS, and also ensures that all requests are allowed.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Custom** - You can specify your own CORS rules from here, such as
-    only allowing requests from certain servers.
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Allow Credentials** - When checked, this allows requests to
-        include credentials like cookies, HTTP authentication, or
-        client-side SSL certificates. This is necessary if your frontend
-        needs to send authentication information to your backend.
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Allow Methods** - These are the HTTP methods that your API
-        will accept from other origins.
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Allow Origins** - This section lets you specify which domains
-        can access your API. The \"Add Origin\" button lets you:
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            Add specific domains (e.g.,
-            https://yourfrontend.com)
-            :::
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            Use wildcards (e.g., \*)
-            :::
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            List multiple allowed origins
-            :::
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Allow Headers** - Defines which HTTP headers can be used in
-        requests. The \"Add Header\" button lets you specify custom
-        headers beyond the standard ones.
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Max Age** - Set to 1 hour by default, this determines how long
-        browsers should cache the CORS preflight response. This helps
-        reduce the number of preflight requests (OPTIONS calls) that
-        browsers make.
-        :::
-    :::
-**What is a preflight request?**
-Before accessing data from another site, your browser sends a
-\"preflight request\" to ask for permission. If approved, it proceeds
-with the main request. This step ensures your information stays safe
-during web interactions.
-------------------------------------------------------------------------
-Creating a new API
-###  
-Click
-[] to create a new API endpoint.
-Choose from one of the four different API types available.
-CRUD Database Operations
-Authentication
-Upload Content
-Custom
-CRUD stands for **create, read, update,** and **delete**. These are
-basic database operations that most applications will need to perform on
-one or more tables.
-Xano can create these for you automatically, based on your database
-tables.
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Choose the table you want to create an action for.
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Select the endpoint type you want to create.
-    :::
-3.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Adjust any settings you wish for the new endpoint being created, and
-    click
-    []
-    :::
-Authentication endpoints are used for basic auth operations such as
-**sign up**, **log in**, and **verifying an authenticated user**.
-Xano has pre-built authentication endpoints ready to go that can be
-added here.
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Choose the authentication endpoint you would like to add.
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Choose your user table.
-    :::
-If you don\'t see the database table you want to authenticate against,
-then you need to first enable authentication for that specific database
-table within its settings panel.
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Adjust any settings you wish for the new endpoint being created, and
-    click
-    []
-    :::
-These endpoints are pre-built content upload functions that you can use
-to upload and store images, videos, and other attachments in Xano.
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Choose the endpoint type you\'d like to create.
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Adjust any settings you wish for the new endpoint being created, and
-    click
-    []
-    :::
-Start with a blank canvas to build upon.
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Adjust any settings you wish for the new endpoint being created, and
-    click
-    []
-    :::
-------------------------------------------------------------------------
-API Settings
-###  
-From the Settings panel
-Name
-Purpose
-Name
-The name of the API endpoint. This also directly impacts the API URL.
-Description
-An internal description, just for you.
-Verb
-The API method
-Tags
-Use tags to organize objects throughout your Xano workspace and find
-them later
-Request History
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Inherit Settings
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Use whatever is set in your workspace branch defaults
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Other
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Set specific request history settings for this endpoint
-        :::
-    :::
-[📖] **Learn more about request
-history**
-External access
-When disabled, this endpoint will not respond to requests.
-Authentication
-Choose whether this endpoint requires a valid authentication token
-present in the headers to execute
-Response type
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Standard
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Waits for execution to finish and delivers the response all at
-        once
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    Streaming
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Used with the Streaming API Response function, stream the
-        response in chunks to a service that supports it
-        :::
-    :::
-[📖] **Learn more about streaming
-APIs**
-Response caching
-Cache the response and redeliver it for future calls [📖]
-**Learn more about response
-caching**
-Last updated 4 months ago
-Was this helpful?
+## 📋 **Quick Summary**
+Xano's API system enables you to build robust REST endpoints with visual workflows. Create CRUD operations, authentication flows, file upload handlers, and custom business logic endpoints that integrate seamlessly with n8n, WeWeb, and any frontend framework or external system.
+
+## 🎯 **Core Concepts**
+
+### What is an API?
+An API (Application Programming Interface) acts as a communication bridge between different software applications. Like a waiter taking your order to the kitchen and bringing back your meal, an API takes requests, processes them, and returns responses.
+
+### RESTful Architecture
+REST (Representational State Transfer) is an architectural pattern that uses HTTP methods to perform operations on resources, creating predictable and scalable API interfaces.
+
+## 🔧 **HTTP Methods & Operations**
+
+### Standard HTTP Methods
+
+```javascript
+// HTTP methods and their typical usage
+{
+  "http_methods": {
+    "GET": {
+      "purpose": "Retrieve data without modifying anything",
+      "examples": ["Fetch user profile", "List products", "Get order details"],
+      "characteristics": ["Safe", "Idempotent", "Cacheable"]
+    },
+    "POST": {
+      "purpose": "Create new resources or trigger actions",
+      "examples": ["Create user", "Submit order", "Send email"],
+      "characteristics": ["Not safe", "Not idempotent", "May have side effects"]
+    },
+    "PUT": {
+      "purpose": "Update or create entire resource",
+      "examples": ["Update complete user profile", "Replace document"],
+      "characteristics": ["Not safe", "Idempotent", "Full resource replacement"]
+    },
+    "PATCH": {
+      "purpose": "Partial updates to existing resources",
+      "examples": ["Update user email", "Change order status"],
+      "characteristics": ["Not safe", "Not idempotent", "Partial updates"]
+    },
+    "DELETE": {
+      "purpose": "Remove resources",
+      "examples": ["Delete user account", "Remove product"],
+      "characteristics": ["Not safe", "Idempotent", "Resource removal"]
+    }
+  }
+}
+```
+
+## 🛠️ **CRUD Operations**
+
+### Auto-Generated Database APIs
+
+```javascript
+// Standard CRUD endpoints for a 'products' table
+{
+  "crud_endpoints": {
+    "create_product": {
+      "method": "POST",
+      "endpoint": "/products",
+      "purpose": "Create new product",
+      "request_body": {
+        "name": "Product Name",
+        "price": 29.99,
+        "description": "Product description",
+        "category_id": 5,
+        "active": true
+      },
+      "response": {
+        "id": 123,
+        "name": "Product Name",
+        "price": 29.99,
+        "description": "Product description",
+        "category_id": 5,
+        "active": true,
+        "created_at": "2025-01-23T10:00:00Z",
+        "updated_at": "2025-01-23T10:00:00Z"
+      }
+    },
+    "get_products": {
+      "method": "GET",
+      "endpoint": "/products",
+      "purpose": "List all products with filtering and pagination",
+      "query_parameters": {
+        "page": 1,
+        "per_page": 20,
+        "category_id": 5,
+        "active": true,
+        "search": "keyword"
+      },
+      "response": {
+        "data": ["...array of products..."],
+        "meta": {
+          "current_page": 1,
+          "per_page": 20,
+          "total": 150,
+          "total_pages": 8
+        }
+      }
+    },
+    "get_product": {
+      "method": "GET",
+      "endpoint": "/products/{id}",
+      "purpose": "Get specific product by ID",
+      "response": {
+        "id": 123,
+        "name": "Product Name",
+        "price": 29.99,
+        "category": {
+          "id": 5,
+          "name": "Electronics"
+        }
+      }
+    },
+    "update_product": {
+      "method": "PATCH",
+      "endpoint": "/products/{id}",
+      "purpose": "Update specific product fields",
+      "request_body": {
+        "price": 24.99,
+        "active": false
+      },
+      "response": {
+        "id": 123,
+        "name": "Product Name",
+        "price": 24.99,
+        "active": false,
+        "updated_at": "2025-01-23T11:00:00Z"
+      }
+    },
+    "delete_product": {
+      "method": "DELETE",
+      "endpoint": "/products/{id}",
+      "purpose": "Remove product",
+      "response": {
+        "message": "Product deleted successfully"
+      }
+    }
+  }
+}
+```
+
+### Custom Business Logic Endpoints
+
+```javascript
+// Advanced product search endpoint
+{
+  "endpoint": "/products/search",
+  "method": "POST",
+  "purpose": "Advanced product search with multiple criteria",
+  "function_stack": [
+    {
+      "function": "Create Variable",
+      "variable_name": "search_conditions",
+      "value": []
+    },
+    // Build dynamic search conditions
+    {
+      "function": "Conditional",
+      "condition": "{{inputs.name !== null}}",
+      "true_steps": [
+        {
+          "function": "Arrays",
+          "operation": "push",
+          "array": "{{search_conditions}}",
+          "value": {
+            "name": {"LIKE": "%{{inputs.name}}%"}
+          },
+          "output_variable": "search_conditions"
+        }
+      ]
+    },
+    {
+      "function": "Conditional",
+      "condition": "{{inputs.price_range !== null}}",
+      "true_steps": [
+        {
+          "function": "Arrays",
+          "operation": "push",
+          "array": "{{search_conditions}}",
+          "value": {
+            "price": {
+              ">=": "{{inputs.price_range.min}}",
+              "<=": "{{inputs.price_range.max}}"
+            }
+          },
+          "output_variable": "search_conditions"
+        }
+      ]
+    },
+    // Execute search with dynamic conditions
+    {
+      "function": "Query All Records",
+      "table": "products",
+      "filter": "{{search_conditions | combine_with_and}}",
+      "limit": "{{inputs.limit || 20}}",
+      "offset": "{{inputs.offset || 0}}",
+      "output_variable": "products"
+    },
+    // Enrich with related data
+    {
+      "function": "Loop",
+      "input_array": "{{products}}",
+      "loop_item_variable": "product",
+      "steps": [
+        {
+          "function": "Get Record",
+          "table": "categories",
+          "record_id": "{{product.category_id}}",
+          "output_variable": "category"
+        },
+        {
+          "function": "Query All Records",
+          "table": "product_images",
+          "filter": {
+            "product_id": "{{product.id}}"
+          },
+          "limit": 3,
+          "output_variable": "images"
+        },
+        {
+          "function": "Objects",
+          "operation": "merge",
+          "object1": "{{product}}",
+          "object2": {
+            "category": "{{category}}",
+            "images": "{{images}}"
+          },
+          "output_variable": "enriched_product"
+        }
+      ]
+    },
+    {
+      "function": "Response",
+      "body": {
+        "products": "{{loop_results}}",
+        "total_found": "{{products.length}}",
+        "search_criteria": "{{inputs}}"
+      }
+    }
+  ]
+}
+```
+
+## 🔗 **Integration Examples**
+
+### n8n API Integration
+
+```javascript
+// n8n workflow calling Xano API
+{
+  "workflow_name": "Product Management",
+  "trigger": {
+    "type": "Webhook",
+    "path": "product-update"
+  },
+  "nodes": [
+    {
+      "name": "Validate Product Data",
+      "type": "Code",
+      "code": `
+        const product = $input.first().json;
+        if (!product.name || !product.price) {
+          throw new Error('Missing required product fields');
+        }
+        return { product };
+      `
+    },
+    {
+      "name": "Update Product in Xano",
+      "type": "HTTP Request",
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://your-xano.xano.io/api:v1/products/{{$json.product.id}}",
+        "headers": {
+          "Authorization": "Bearer {{$credentials.xanoApi.token}}",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "name": "={{$json.product.name}}",
+          "price": "={{$json.product.price}}",
+          "updated_by": "n8n_automation"
+        }
+      }
+    },
+    {
+      "name": "Sync to External Systems",
+      "type": "HTTP Request",
+      "parameters": {
+        "method": "POST",
+        "url": "https://your-xano.xano.io/api:v1/products/sync-external",
+        "body": {
+          "product_id": "={{$json.id}}",
+          "systems": ["shopify", "stripe", "mailchimp"]
+        }
+      }
+    }
+  ]
+}
+
+// Corresponding Xano sync endpoint
+{
+  "endpoint": "/products/sync-external",
+  "method": "POST",
+  "function_stack": [
+    {
+      "function": "Get Record",
+      "table": "products",
+      "record_id": "{{inputs.product_id}}",
+      "output_variable": "product"
+    },
+    {
+      "function": "Loop",
+      "input_array": "{{inputs.systems}}",
+      "loop_item_variable": "system",
+      "parallel": true,
+      "steps": [
+        {
+          "function": "Custom Function",
+          "custom_function": "sync_to_{{system}}",
+          "execution_mode": "async",
+          "parameters": {
+            "product": "{{product}}"
+          }
+        }
+      ]
+    },
+    {
+      "function": "Response",
+      "body": {
+        "message": "Sync initiated for {{inputs.systems.length}} systems",
+        "product_id": "{{inputs.product_id}}"
+      }
+    }
+  ]
+}
+```
+
+### WeWeb Data Collection Integration
+
+```javascript
+// WeWeb collection configuration
+{
+  "collection_name": "Products",
+  "data_source": {
+    "type": "rest_api",
+    "base_url": "https://your-xano.xano.io/api:v1",
+    "endpoints": {
+      "list": {
+        "method": "GET",
+        "path": "/products",
+        "cache_duration": 300
+      },
+      "create": {
+        "method": "POST",
+        "path": "/products"
+      },
+      "update": {
+        "method": "PATCH",
+        "path": "/products/{id}"
+      },
+      "delete": {
+        "method": "DELETE",
+        "path": "/products/{id}"
+      }
+    }
+  },
+  "headers": {
+    "Authorization": "Bearer {{globals.authToken}}",
+    "Content-Type": "application/json"
+  },
+  "auto_pagination": true,
+  "real_time_updates": true
+}
+
+// WeWeb component using the collection
+{
+  "component_name": "ProductList",
+  "data_binding": {
+    "products": "{{collections.Products.data}}",
+    "loading": "{{collections.Products.loading}}",
+    "error": "{{collections.Products.error}}"
+  },
+  "methods": {
+    "createProduct": `
+      const newProduct = {
+        name: this.form.name,
+        price: this.form.price,
+        description: this.form.description
+      };
+      
+      await this.$collections.Products.create(newProduct);
+      this.showForm = false;
+      this.$toast.success('Product created successfully');
+    `,
+    "updateProduct": `
+      await this.$collections.Products.update(productId, updatedData);
+      this.$toast.success('Product updated successfully');
+    `
+  }
+}
+```
+
+## 🚀 **Advanced API Patterns**
+
+### Authentication Endpoints
+
+```javascript
+// Complete authentication system
+{
+  "auth_endpoints": {
+    "register": {
+      "endpoint": "/auth/register",
+      "method": "POST",
+      "function_stack": [
+        {
+          "function": "Text",
+          "operation": "lowercase",
+          "text": "{{inputs.email}}",
+          "output_variable": "email"
+        },
+        {
+          "function": "Query All Records",
+          "table": "users",
+          "filter": {"email": "{{email}}"},
+          "output_variable": "existing_users"
+        },
+        {
+          "function": "Conditional",
+          "condition": "{{existing_users.length > 0}}",
+          "true_steps": [
+            {
+              "function": "Response",
+              "status_code": 409,
+              "body": {"error": "Email already registered"}
+            }
+          ]
+        },
+        {
+          "function": "Add Record",
+          "table": "users",
+          "data": {
+            "email": "{{email}}",
+            "password": "{{inputs.password | hash}}",
+            "first_name": "{{inputs.first_name}}",
+            "last_name": "{{inputs.last_name}}",
+            "role": "user",
+            "status": "active"
+          },
+          "output_variable": "new_user"
+        },
+        {
+          "function": "Custom Function",
+          "custom_function": "generate_auth_token",
+          "parameters": {"user_id": "{{new_user.id}}"},
+          "output_variable": "auth_token"
+        },
+        {
+          "function": "Response",
+          "status_code": 201,
+          "body": {
+            "user": {
+              "id": "{{new_user.id}}",
+              "email": "{{new_user.email}}",
+              "name": "{{new_user.first_name}} {{new_user.last_name}}"
+            },
+            "auth_token": "{{auth_token}}"
+          }
+        }
+      ]
+    },
+    "login": {
+      "endpoint": "/auth/login",
+      "method": "POST",
+      "function_stack": [
+        {
+          "function": "Query All Records",
+          "table": "users",
+          "filter": {
+            "email": "{{inputs.email | lowercase}}",
+            "status": "active"
+          },
+          "limit": 1,
+          "output_variable": "users"
+        },
+        {
+          "function": "Conditional",
+          "condition": "{{users.length === 0}}",
+          "true_steps": [
+            {
+              "function": "Response",
+              "status_code": 401,
+              "body": {"error": "Invalid credentials"}
+            }
+          ]
+        },
+        {
+          "function": "Create Variable",
+          "variable_name": "user",
+          "value": "{{users[0]}}"
+        },
+        {
+          "function": "Conditional",
+          "condition": "{{!verify_password(inputs.password, user.password)}}",
+          "true_steps": [
+            {
+              "function": "Response",
+              "status_code": 401,
+              "body": {"error": "Invalid credentials"}
+            }
+          ]
+        },
+        {
+          "function": "Edit Record",
+          "table": "users",
+          "record_id": "{{user.id}}",
+          "data": {"last_login_at": "{{timestamp}}"}
+        },
+        {
+          "function": "Custom Function",
+          "custom_function": "generate_auth_token",
+          "parameters": {"user_id": "{{user.id}}"},
+          "output_variable": "auth_token"
+        },
+        {
+          "function": "Response",
+          "body": {
+            "user": {
+              "id": "{{user.id}}",
+              "email": "{{user.email}}",
+              "name": "{{user.first_name}} {{user.last_name}}",
+              "role": "{{user.role}}"
+            },
+            "auth_token": "{{auth_token}}"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+### File Upload Endpoints
+
+```javascript
+// Multi-file upload with processing
+{
+  "endpoint": "/files/upload",
+  "method": "POST",
+  "function_stack": [
+    {
+      "function": "Create Variable",
+      "variable_name": "uploaded_files",
+      "value": []
+    },
+    {
+      "function": "Loop",
+      "input_array": "{{inputs.files}}",
+      "loop_item_variable": "file",
+      "steps": [
+        // Validate file
+        {
+          "function": "Conditional",
+          "condition": "{{file.size > 10485760}}", // 10MB
+          "true_steps": [
+            {
+              "function": "Response",
+              "status_code": 400,
+              "body": {
+                "error": "File too large",
+                "filename": "{{file.name}}"
+              }
+            }
+          ]
+        },
+        // Upload to file storage
+        {
+          "function": "File Storage",
+          "operation": "upload",
+          "file": "{{file}}",
+          "folder": "{{inputs.folder || 'uploads'}}",
+          "output_variable": "uploaded_file"
+        },
+        // Create database record
+        {
+          "function": "Add Record",
+          "table": "files",
+          "data": {
+            "filename": "{{uploaded_file.filename}}",
+            "original_name": "{{file.name}}",
+            "size": "{{file.size}}",
+            "mime_type": "{{file.type}}",
+            "url": "{{uploaded_file.url}}",
+            "folder": "{{inputs.folder || 'uploads'}}",
+            "uploaded_by": "{{auth_user.id}}",
+            "uploaded_at": "{{timestamp}}"
+          },
+          "output_variable": "file_record"
+        },
+        // Process image files
+        {
+          "function": "Conditional",
+          "condition": "{{file.type | starts_with:'image/'}}",
+          "true_steps": [
+            {
+              "function": "Custom Function",
+              "custom_function": "generate_image_thumbnails",
+              "execution_mode": "async",
+              "parameters": {
+                "file_id": "{{file_record.id}}",
+                "source_url": "{{uploaded_file.url}}"
+              }
+            }
+          ]
+        },
+        {
+          "function": "Arrays",
+          "operation": "push",
+          "array": "{{uploaded_files}}",
+          "value": "{{file_record}}",
+          "output_variable": "uploaded_files"
+        }
+      ]
+    },
+    {
+      "function": "Response",
+      "body": {
+        "message": "Files uploaded successfully",
+        "files": "{{uploaded_files}}",
+        "count": "{{uploaded_files.length}}"
+      }
+    }
+  ]
+}
+```
+
+### Pagination & Filtering
+
+```javascript
+// Advanced pagination and filtering endpoint
+{
+  "endpoint": "/orders",
+  "method": "GET",
+  "function_stack": [
+    // Set up pagination defaults
+    {
+      "function": "Create Variable",
+      "variable_name": "page",
+      "value": "{{inputs.page || 1}}"
+    },
+    {
+      "function": "Create Variable",
+      "variable_name": "per_page",
+      "value": "{{inputs.per_page || 20}}"
+    },
+    {
+      "function": "Math",
+      "operation": "multiply",
+      "value1": "{{page - 1}}",
+      "value2": "{{per_page}}",
+      "output_variable": "offset"
+    },
+    // Build dynamic filters
+    {
+      "function": "Create Variable",
+      "variable_name": "filters",
+      "value": {}
+    },
+    {
+      "function": "Conditional",
+      "condition": "{{inputs.status !== null}}",
+      "true_steps": [
+        {
+          "function": "Objects",
+          "operation": "set",
+          "object": "{{filters}}",
+          "key": "status",
+          "value": "{{inputs.status}}",
+          "output_variable": "filters"
+        }
+      ]
+    },
+    {
+      "function": "Conditional",
+      "condition": "{{inputs.date_range !== null}}",
+      "true_steps": [
+        {
+          "function": "Objects",
+          "operation": "set",
+          "object": "{{filters}}",
+          "key": "created_at",
+          "value": {
+            ">=": "{{inputs.date_range.start}}",
+            "<=": "{{inputs.date_range.end}}"
+          },
+          "output_variable": "filters"
+        }
+      ]
+    },
+    // Get total count for pagination
+    {
+      "function": "Query All Records",
+      "table": "orders",
+      "filter": "{{filters}}",
+      "count_only": true,
+      "output_variable": "total_count"
+    },
+    // Get paginated results
+    {
+      "function": "Query All Records",
+      "table": "orders",
+      "filter": "{{filters}}",
+      "limit": "{{per_page}}",
+      "offset": "{{offset}}",
+      "sort": [{"created_at": "desc"}],
+      "output_variable": "orders"
+    },
+    // Calculate pagination metadata
+    {
+      "function": "Math",
+      "operation": "ceiling",
+      "value1": "{{total_count}}",
+      "value2": "{{per_page}}",
+      "output_variable": "total_pages"
+    },
+    {
+      "function": "Response",
+      "body": {
+        "data": "{{orders}}",
+        "pagination": {
+          "current_page": "{{page}}",
+          "per_page": "{{per_page}}",
+          "total_items": "{{total_count}}",
+          "total_pages": "{{total_pages}}",
+          "has_next": "{{page < total_pages}}",
+          "has_prev": "{{page > 1}}"
+        },
+        "filters_applied": "{{filters}}"
+      }
+    }
+  ]
+}
+```
+
+## 📊 **API Design Best Practices**
+
+### RESTful URL Design
+
+```javascript
+// URL design patterns
+{
+  "url_patterns": {
+    "resource_collections": {
+      "pattern": "/resources",
+      "examples": ["/users", "/products", "/orders"],
+      "methods": ["GET (list)", "POST (create)"]
+    },
+    "specific_resources": {
+      "pattern": "/resources/{id}",
+      "examples": ["/users/123", "/products/456"],
+      "methods": ["GET (read)", "PATCH/PUT (update)", "DELETE (remove)"]
+    },
+    "nested_resources": {
+      "pattern": "/resources/{id}/subresources",
+      "examples": ["/users/123/orders", "/products/456/reviews"],
+      "methods": ["GET (list)", "POST (create)"]
+    },
+    "actions_on_resources": {
+      "pattern": "/resources/{id}/action",
+      "examples": ["/orders/123/cancel", "/users/456/activate"],
+      "methods": ["POST (perform action)"]
+    },
+    "search_and_filtering": {
+      "pattern": "/resources/search",
+      "examples": ["/products/search", "/users/search"],
+      "methods": ["GET", "POST (complex queries)"]
+    }
+  }
+}
+```
+
+### Response Formatting
+
+```javascript
+// Consistent response formats
+{
+  "response_formats": {
+    "success_response": {
+      "status_code": 200,
+      "body": {
+        "success": true,
+        "data": "{{actual_data}}",
+        "message": "Operation completed successfully"
+      }
+    },
+    "error_response": {
+      "status_code": 400,
+      "body": {
+        "success": false,
+        "error": {
+          "code": "VALIDATION_ERROR",
+          "message": "Invalid input provided",
+          "details": [
+            "Email is required",
+            "Password must be at least 8 characters"
+          ]
+        }
+      }
+    },
+    "paginated_response": {
+      "status_code": 200,
+      "body": {
+        "success": true,
+        "data": ["...array of items..."],
+        "meta": {
+          "pagination": {
+            "current_page": 1,
+            "per_page": 20,
+            "total": 100,
+            "total_pages": 5
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Error Handling
+
+```javascript
+// Comprehensive error handling
+{
+  "error_handling_pattern": [
+    {
+      "function": "Try-Catch",
+      "try_steps": [
+        "...main API logic..."
+      ],
+      "catch_steps": [
+        {
+          "function": "Switch",
+          "variable": "{{error.type}}",
+          "cases": {
+            "validation_error": [
+              {
+                "function": "Response",
+                "status_code": 400,
+                "body": {
+                  "error": "Invalid input",
+                  "details": "{{error.details}}"
+                }
+              }
+            ],
+            "not_found": [
+              {
+                "function": "Response",
+                "status_code": 404,
+                "body": {
+                  "error": "Resource not found"
+                }
+              }
+            ],
+            "permission_denied": [
+              {
+                "function": "Response",
+                "status_code": 403,
+                "body": {
+                  "error": "Insufficient permissions"
+                }
+              }
+            ]
+          },
+          "default": [
+            {
+              "function": "Add Record",
+              "table": "error_logs",
+              "data": {
+                "endpoint": "{{request.endpoint}}",
+                "error": "{{error}}",
+                "timestamp": "{{timestamp}}"
+              }
+            },
+            {
+              "function": "Response",
+              "status_code": 500,
+              "body": {
+                "error": "Internal server error"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 🔒 **Security & CORS**
+
+### CORS Configuration
+
+```javascript
+// CORS settings for different environments
+{
+  "cors_configurations": {
+    "development": {
+      "allow_origins": ["http://localhost:3000", "http://localhost:8080"],
+      "allow_methods": ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+      "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"],
+      "allow_credentials": true,
+      "max_age": 3600
+    },
+    "production": {
+      "allow_origins": [
+        "https://your-frontend.com",
+        "https://admin.your-frontend.com"
+      ],
+      "allow_methods": ["GET", "POST", "PATCH", "DELETE"],
+      "allow_headers": ["Content-Type", "Authorization"],
+      "allow_credentials": true,
+      "max_age": 86400
+    }
+  }
+}
+```
+
+### API Security Implementation
+
+```javascript
+// Security middleware patterns
+{
+  "security_middleware": {
+    "authentication_check": [
+      {
+        "function": "Conditional",
+        "condition": "{{request.headers.authorization === null}}",
+        "true_steps": [
+          {
+            "function": "Response",
+            "status_code": 401,
+            "body": {"error": "Authentication required"}
+          }
+        ]
+      },
+      {
+        "function": "Custom Function",
+        "custom_function": "verify_auth_token",
+        "parameters": {
+          "token": "{{request.headers.authorization | remove:'Bearer '}}"
+        },
+        "output_variable": "auth_user"
+      }
+    ],
+    "rate_limiting": [
+      {
+        "function": "Custom Function",
+        "custom_function": "check_rate_limit",
+        "parameters": {
+          "ip": "{{request.ip}}",
+          "endpoint": "{{request.endpoint}}"
+        },
+        "output_variable": "rate_limit_status"
+      },
+      {
+        "function": "Conditional",
+        "condition": "{{rate_limit_status.exceeded}}",
+        "true_steps": [
+          {
+            "function": "Response",
+            "status_code": 429,
+            "headers": {
+              "X-RateLimit-Reset": "{{rate_limit_status.reset_time}}"
+            },
+            "body": {"error": "Rate limit exceeded"}
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+---
+
+*Well-designed APIs serve as the backbone of modern applications, enabling seamless integration between different systems and providing the foundation for scalable, maintainable software architecture.*
