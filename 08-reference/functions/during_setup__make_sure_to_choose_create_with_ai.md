@@ -1,6 +1,6 @@
 ---
 category: functions
-has_code_examples: false
+has_code_examples: true
 last_updated: '2025-01-23'
 tags:
 - API
@@ -8,319 +8,266 @@ tags:
 - Functions
 - Queries
 - CRUD
+- AI
+- Setup
+- Workspace
 title: During setup, make sure to choose Create With AI
 ---
 
-# During setup, make sure to choose Create With AI
+# Get Started Assistant: Create With AI
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'get-started-assistant'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Get Started Assistant \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
+## 📋 **Quick Summary**
+Xano's AI-powered workspace creation helps you build databases and CRUD endpoints automatically. Choose "Create With AI" during setup to leverage intelligent database design recommendations, auto-generated endpoints, and conversational development assistance for faster project initialization.
+
+## 🎯 **Core Concepts**
+
+### AI Workspace Creation
+When creating a new Xano workspace, you can:
+- **Start from scratch**: Manual database and endpoint creation
+- **Create With AI**: Automated database design and CRUD endpoint generation
+
+### AI Generator Capabilities
+- Database schema recommendations
+- Automatic table creation with relationships
+- CRUD endpoint generation
+- Template-based initialization
+- Conversational development guidance
+
+## 🛠️ **Implementation Guide**
+
+### Step 1: Choose Create With AI During Setup
+
+```javascript
+// When creating a new workspace in Xano dashboard:
+// 1. Click "New Workspace"
+// 2. Select "Create With AI" option
+// 3. Proceed to AI conversation interface
+```
+
+### Step 2: Provide AI Instructions
+
+There are three main approaches to working with the AI generator:
+
+#### Option A: Start with Template
+```javascript
+// Example AI prompt:
+"I want to build an e-commerce platform. 
+Show me available templates and help customize one for my needs."
+
+// AI will:
+// - Present relevant templates
+// - Allow customization through conversation
+// - Generate appropriate database structure
+```
+
+#### Option B: Describe Your Project
+```javascript
+// Example AI prompt:
+"I'm building a task management app for teams. 
+Users should be able to create projects, assign tasks, 
+track progress, and collaborate with team members."
+
+// AI will:
+// - Analyze requirements
+// - Suggest database design
+// - Create tables and relationships
+// - Generate CRUD endpoints
+```
+
+#### Option C: Specify Database Structure
+```javascript
+// Example AI prompt:
+"Create these tables:
+- Users (id, name, email, role)
+- Projects (id, title, description, user_id)
+- Tasks (id, title, status, project_id, assigned_to)
+- Comments (id, content, task_id, user_id)
+
+Set up proper relationships and CRUD endpoints."
+
+// AI will:
+// - Create exact table structure
+// - Establish foreign key relationships
+// - Generate appropriate endpoints
+```
+
+## 🔗 **Integration Examples**
+
+### n8n Workflow Integration
+```javascript
+// n8n HTTP Request node to newly created AI endpoints
+{
+  "method": "POST",
+  "url": "https://your-xano-workspace.xano.io/api:v1/projects",
+  "headers": {
+    "Authorization": "Bearer {{$node.auth.token}}",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "title": "{{$json.projectName}}",
+    "description": "{{$json.description}}",
+    "user_id": "{{$json.userId}}"
+  }
+}
+```
+
+### WeWeb Component Integration
+```vue
+<template>
+  <div class="ai-generated-dashboard">
+    <!-- Bind to auto-generated Xano collections -->
+    <ww-list 
+      :data="xano.projects"
+      :loading="isLoading"
+    >
+      <template #item="{ item }">
+        <project-card :project="item" />
+      </template>
+    </ww-list>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isLoading: false
+    }
+  },
+  async created() {
+    // Fetch from AI-generated endpoints
+    await this.fetchProjects()
+  },
+  methods: {
+    async fetchProjects() {
+      this.isLoading = true
+      try {
+        // Use auto-generated collection bindings
+        await this.$xano.projects.fetch()
+      } catch (error) {
+        console.error('Error fetching projects:', error)
+      } finally {
+        this.isLoading = false
+      }
+    }
+  }
+}
+</script>
+```
+
+## 🚀 **Advanced Usage Patterns**
+
+### Iterative Development with AI
+```javascript
+// Initial AI conversation:
+"Create a blog platform with users, posts, and comments"
+
+// Follow-up refinements:
+"Add categories and tags to posts"
+"Include user roles (admin, editor, author)"
+"Add post scheduling functionality"
+"Create analytics tracking for post views"
+
+// AI adapts existing structure incrementally
+```
+
+### Template Customization Flow
+```javascript
+// Start with template:
+"Use the social media template"
+
+// Customize features:
+"Remove video upload, add polls feature"
+"Change user profiles to include company information"
+"Add private messaging between users"
+"Include content moderation workflows"
+```
+
+## 🎯 **Best Practices**
+
+### 1. Clear Project Description
+```javascript
+// Good prompt:
+"Build a customer support ticketing system with:
+- Customer ticket creation
+- Agent assignment and routing
+- Priority levels and status tracking
+- Internal notes and customer communication
+- Reporting and analytics"
+
+// Avoid vague prompts:
+"Create a support system"
+```
+
+### 2. Specify Relationships
+```javascript
+// Be explicit about data relationships:
+"Each customer can have multiple tickets.
+Each ticket belongs to one customer and one agent.
+Tickets can have multiple comments from both customers and agents."
+```
+
+### 3. Define User Roles Early
+```javascript
+"Include these user types:
+- Customers (can create tickets, view own tickets)
+- Agents (can be assigned tickets, add internal notes)
+- Admins (full access, can manage agents and customers)"
+```
+
+## 🔧 **Common Use Cases**
+
+### E-commerce Platform
+```javascript
+"Create an e-commerce backend with products, categories, 
+orders, customers, inventory tracking, and payment processing"
+```
+
+### Event Management System
+```javascript
+"Build an event platform where organizers can create events, 
+users can register, and there's ticketing with different price tiers"
+```
+
+### Learning Management System
+```javascript
+"Design an LMS with courses, lessons, students, instructors, 
+assignments, grades, and progress tracking"
+```
+
+### Project Management Tool
+```javascript
+"Create a project management system with workspaces, projects, 
+tasks, team members, time tracking, and milestone management"
+```
+
+## 📊 **Expected Outputs**
+
+When using AI workspace creation, you'll receive:
+
+1. **Database Tables**: Properly structured with appropriate field types
+2. **Relationships**: Foreign keys and table connections
+3. **CRUD Endpoints**: Auto-generated API endpoints for each table
+4. **Authentication Setup**: User management and security configurations
+5. **Sample Data**: Optional test records for development
+
+## 🔍 **Troubleshooting**
+
+### AI Misunderstood Requirements
+- Provide more specific details in follow-up messages
+- Use examples to clarify complex relationships
+- Reference similar platforms or applications
+
+### Missing Features
+- Ask AI to add specific tables or fields
+- Request additional endpoints or functions
+- Describe the missing functionality clearly
+
+### Structure Modifications
+- AI can modify existing tables and relationships
+- Request schema changes through conversation
+- Test changes in development environment first
+
 ---
-[](../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Build a Workspace with AI
-Was this helpful?
-Copy
-1.  Build With AI
-Get Started Assistant 
-=====================
-Build a Workspace with AI
-When you create a new workspace in Xano, you can either start from scratch, or use our AI copilot to build your database and basic CRUD endpoints for you.
-<div>
-1
-###  
-During setup, make sure to choose Create With AI
-2
-###  
-Provide the AI with its first instructions.
-There are a few different ways you can work with the AI generator.
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Start with a template**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Choose from any of the starter templates, and converse with the AI to make it your own.
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Tell it about what you want to build.**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Start a conversation with the AI generator and let it know what your goals are. It can recommend database design strategies to you, and implement them for you right away.
-        :::
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Tell it exactly the database structure you have in mind**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        This is especially useful if you are already familiar with app development, or maybe you\'ve done the design outside of Xano already --- just tell the AI what tables you want in plain language, and it will do the heavy lifting for you.
-        :::
-    :::
-</div>
-Last updated 6 months ago
-Was this helpful?
+
+*This AI-powered setup process significantly accelerates initial project development and ensures proper database design patterns from the start.*

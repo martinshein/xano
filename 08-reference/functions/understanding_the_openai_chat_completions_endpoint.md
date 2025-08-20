@@ -1,6 +1,6 @@
 ---
 category: functions
-has_code_examples: false
+has_code_examples: true
 last_updated: '2025-01-23'
 tags:
 - API
@@ -8,585 +8,679 @@ tags:
 - Functions
 - Queries
 - CRUD
+- OpenAI
+- Chatbots
+- AI Integration
 title: Understanding the OpenAI Chat Completions Endpoint
 ---
 
 # Understanding the OpenAI Chat Completions Endpoint
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: chatbots
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Chatbots \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
+## 📋 **Quick Summary**
+The OpenAI Chat Completions endpoint enables building conversational AI applications in Xano. It requires sending the complete conversation history with each request, proper authentication, and structured message objects to maintain context and generate intelligent responses from GPT models.
+## 🎯 **Core Concepts**
+
+### OpenAI Chat Completions API
+- **Endpoint**: `/v1/chat/completions`
+- **Method**: POST requests with JSON payload
+- **Authentication**: Bearer token (OpenAI API key)
+- **Conversation History**: Complete message array required for each request
+- **Model Selection**: Choose from available GPT models (gpt-3.5-turbo, gpt-4, etc.)
+
+### Message Structure
+- **Role-based messaging**: `system`, `user`, `assistant` roles
+- **Content preservation**: Full conversation context maintained
+- **Sequential processing**: Messages processed in chronological order
+- **Context management**: API stateless, requires complete history
+
+## 🛠️ **Implementation Guide**
+
+### Prerequisites
+Before building a chatbot with Xano and OpenAI, ensure you understand:
+- Database table creation and management
+- Xano function stack development
+- External API Request function usage
+- User authentication and data handling
+### Step 1: Understanding OpenAI Chat Completions Endpoint
+
+```javascript
+// OpenAI Chat Completions API Structure
+const apiRequest = {
+  "url": "https://api.openai.com/v1/chat/completions",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer sk-...", // Your OpenAI API key
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "model": "gpt-3.5-turbo", // or gpt-4, gpt-4-turbo, etc.
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful customer service assistant."
+      },
+      {
+        "role": "user", 
+        "content": "Hello, I need help with my order."
+      },
+      {
+        "role": "assistant",
+        "content": "I'd be happy to help! Can you provide your order number?"
+      },
+      {
+        "role": "user",
+        "content": "My order number is 12345."
+      }
+    ],
+    "temperature": 0.7, // Optional: creativity level (0-2)
+    "max_tokens": 1000   // Optional: response length limit
+  }
+}
+
+// API Response Structure
+const apiResponse = {
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "created": 1677652288,
+  "model": "gpt-3.5-turbo",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "I found your order #12345. It was shipped yesterday and should arrive by tomorrow."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 56,
+    "completion_tokens": 31,
+    "total_tokens": 87
+  }
+}
+```
+
+### Step 2: Database Schema Design
+
+```sql
+-- User Table
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Conversation Table (Parent)
+CREATE TABLE conversations (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL, -- "Customer Support Chat", "Product Questions"
+  model TEXT DEFAULT 'gpt-3.5-turbo', -- OpenAI model used
+  user_id INTEGER REFERENCES users(id),
+  system_prompt TEXT, -- Initial AI context/instructions
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Messages Table (Child)
+CREATE TABLE messages (
+  id INTEGER PRIMARY KEY,
+  conversation_id INTEGER REFERENCES conversations(id),
+  role TEXT CHECK(role IN ('system', 'user', 'assistant')),
+  content TEXT NOT NULL,
+  index INTEGER NOT NULL, -- Message order (0, 1, 2, ...)
+  tokens_used INTEGER, -- Track token consumption
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+```javascript
+// Xano Database Table Configuration
+const databaseTables = {
+  "users": {
+    "fields": {
+      "id": { "type": "integer", "primary_key": true },
+      "name": { "type": "text", "required": true },
+      "email": { "type": "text", "unique": true },
+      "created_at": { "type": "datetime", "default": "now" }
+    }
+  },
+  "conversations": {
+    "fields": {
+      "id": { "type": "integer", "primary_key": true },
+      "name": { "type": "text", "required": true },
+      "model": { "type": "text", "default": "gpt-3.5-turbo" },
+      "user_id": { "type": "table_reference", "reference": "users" },
+      "system_prompt": { "type": "text" },
+      "created_at": { "type": "datetime", "default": "now" },
+      "updated_at": { "type": "datetime", "default": "now" }
+    }
+  },
+  "messages": {
+    "fields": {
+      "id": { "type": "integer", "primary_key": true },
+      "conversation_id": { "type": "table_reference", "reference": "conversations" },
+      "role": { "type": "text", "enum": ["system", "user", "assistant"] },
+      "content": { "type": "text", "required": true },
+      "index": { "type": "integer", "required": true },
+      "tokens_used": { "type": "integer" },
+      "created_at": { "type": "datetime", "default": "now" }
+    }
+  }
+}
+```
+
+### Step 3: Create OpenAI Endpoint in Xano
+```javascript
+// Xano Function Stack for OpenAI Integration
+
+// API Endpoint: send_message_to_openai
+// Inputs:
+// - conversation_id (Table Reference -> conversations)
+// - user_message (Text)
+
+// Function Stack Steps:
+{
+  "steps": [
+    // Step 1: Get OpenAI API Key from Environment Variables
+    {
+      "function": "Get Environment Variable",
+      "variable": "OPENAI_API_KEY",
+      "return_variable": "openai_key"
+    },
+    
+    // Step 2: Get Conversation History
+    {
+      "function": "Query All Records",
+      "table": "messages",
+      "filter": {
+        "conversation_id": "{{inputs.conversation_id}}"
+      },
+      "sort": {
+        "field": "index",
+        "order": "ascending"
+      },
+      "return_variable": "message_history"
+    },
+    
+    // Step 3: Get Next Index Number
+    {
+      "function": "Math",
+      "operation": "add",
+      "value1": "{{message_history.length}}",
+      "value2": 1,
+      "return_variable": "next_index"
+    },
+    
+    // Step 4: Add User Message to History (Temporary)
+    {
+      "function": "Arrays",
+      "operation": "append",
+      "array": "{{message_history}}",
+      "item": {
+        "role": "user",
+        "content": "{{inputs.user_message}}"
+      },
+      "return_variable": "updated_history"
+    },
+    
+    // Step 5: Call OpenAI API
+    {
+      "function": "External API Request",
+      "url": "https://api.openai.com/v1/chat/completions",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer {{openai_key}}",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "model": "gpt-3.5-turbo",
+        "messages": "{{updated_history}}",
+        "temperature": 0.7,
+        "max_tokens": 1000
+      },
+      "return_variable": "openai_response"
+    },
+    
+    // Step 6: Extract Assistant Response
+    {
+      "function": "Create Variable",
+      "variable": "assistant_message",
+      "value": "{{openai_response.choices[0].message.content}}"
+    },
+    
+    // Step 7: Save User Message to Database
+    {
+      "function": "Add Record",
+      "table": "messages",
+      "data": {
+        "conversation_id": "{{inputs.conversation_id}}",
+        "role": "user",
+        "content": "{{inputs.user_message}}",
+        "index": "{{next_index}}",
+        "tokens_used": "{{openai_response.usage.prompt_tokens}}"
+      }
+    },
+    
+    // Step 8: Save Assistant Response to Database
+    {
+      "function": "Add Record",
+      "table": "messages",
+      "data": {
+        "conversation_id": "{{inputs.conversation_id}}",
+        "role": "assistant",
+        "content": "{{assistant_message}}",
+        "index": "{{next_index + 1}}",
+        "tokens_used": "{{openai_response.usage.completion_tokens}}"
+      }
+    },
+    
+    // Step 9: Update Conversation Timestamp
+    {
+      "function": "Edit Record",
+      "table": "conversations",
+      "record_id": "{{inputs.conversation_id}}",
+      "data": {
+        "updated_at": "{{timestamp}}"
+      }
+    }
+  ],
+  
+  // Return Response
+  "response": {
+    "success": true,
+    "assistant_message": "{{assistant_message}}",
+    "conversation_id": "{{inputs.conversation_id}}",
+    "tokens_used": "{{openai_response.usage.total_tokens}}"
+  }
+}
+```
+
+## 🔗 **Integration Examples**
+
+### n8n Chatbot Workflow
+```javascript
+// n8n HTTP Request to Xano Chatbot Endpoint
+{
+  "method": "POST",
+  "url": "https://your-xano.xano.io/api:v1/send_message_to_openai",
+  "headers": {
+    "Authorization": "Bearer {{$json.user_token}}",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "conversation_id": "{{$json.conversation_id}}",
+    "user_message": "{{$json.message}}"
+  }
+}
+
+// Follow-up n8n processing
+// Send response to user via email, SMS, or webhook
+{
+  "recipient": "{{$json.user_email}}",
+  "subject": "AI Assistant Response",
+  "message": "{{$json.assistant_message}}"
+}
+```
+
+### WeWeb Chatbot Interface
+```vue
+<template>
+  <div class="chatbot-container">
+    <div class="chat-messages" ref="messagesContainer">
+      <div 
+        v-for="message in messages" 
+        :key="message.id"
+        :class="['message', message.role]"
+      >
+        <div class="message-content">{{ message.content }}</div>
+        <div class="message-time">{{ formatTime(message.created_at) }}</div>
+      </div>
+      
+      <div v-if="isTyping" class="typing-indicator">
+        AI is typing...
+      </div>
+    </div>
+    
+    <div class="chat-input">
+      <input 
+        v-model="newMessage" 
+        @keyup.enter="sendMessage"
+        :disabled="isTyping"
+        placeholder="Type your message..."
+      />
+      <button 
+        @click="sendMessage" 
+        :disabled="isTyping || !newMessage.trim()"
+      >
+        Send
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    conversationId: String,
+    userId: String
+  },
+  data() {
+    return {
+      messages: [],
+      newMessage: '',
+      isTyping: false
+    }
+  },
+  async mounted() {
+    await this.loadConversationHistory()
+  },
+  methods: {
+    async loadConversationHistory() {
+      try {
+        const response = await this.$xano.auth.get(`/messages`, {
+          filter: { conversation_id: this.conversationId },
+          sort: { field: 'index', order: 'asc' }
+        })
+        this.messages = response.data
+        this.scrollToBottom()
+      } catch (error) {
+        console.error('Error loading conversation:', error)
+      }
+    },
+    
+    async sendMessage() {
+      if (!this.newMessage.trim()) return
+      
+      // Add user message to UI immediately
+      const userMessage = {
+        role: 'user',
+        content: this.newMessage,
+        created_at: new Date().toISOString()
+      }
+      this.messages.push(userMessage)
+      
+      const messageToSend = this.newMessage
+      this.newMessage = ''
+      this.isTyping = true
+      
+      try {
+        // Call Xano chatbot endpoint
+        const response = await this.$xano.auth.post('/send_message_to_openai', {
+          conversation_id: this.conversationId,
+          user_message: messageToSend
+        })
+        
+        // Add assistant response to UI
+        const assistantMessage = {
+          role: 'assistant',
+          content: response.assistant_message,
+          created_at: new Date().toISOString()
+        }
+        this.messages.push(assistantMessage)
+        
+      } catch (error) {
+        console.error('Error sending message:', error)
+        // Add error message to UI
+        this.messages.push({
+          role: 'assistant',
+          content: 'Sorry, I encountered an error. Please try again.',
+          created_at: new Date().toISOString()
+        })
+      } finally {
+        this.isTyping = false
+        this.scrollToBottom()
+      }
+    },
+    
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const container = this.$refs.messagesContainer
+        container.scrollTop = container.scrollHeight
+      })
+    },
+    
+    formatTime(timestamp) {
+      return new Date(timestamp).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    }
+  }
+}
+</script>
+
+<style scoped>
+.chatbot-container {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background-color: #f9f9f9;
+}
+
+.message {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  max-width: 80%;
+}
+
+.message.user {
+  background-color: #007bff;
+  color: white;
+  margin-left: auto;
+  text-align: right;
+}
+
+.message.assistant {
+  background-color: white;
+  border: 1px solid #ddd;
+}
+
+.message.system {
+  background-color: #6c757d;
+  color: white;
+  font-style: italic;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.message-time {
+  font-size: 0.8em;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.typing-indicator {
+  font-style: italic;
+  color: #6c757d;
+  padding: 8px 12px;
+}
+
+.chat-input {
+  display: flex;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  background-color: white;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.chat-input button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.chat-input button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+</style>
+```
+
+## 🚀 **Advanced Usage Patterns**
+
+### System Prompt Management
+```javascript
+// Dynamic system prompts based on conversation type
+const systemPrompts = {
+  "customer_support": "You are a helpful customer service representative. Be polite, professional, and focus on resolving customer issues efficiently.",
+  "technical_support": "You are a technical support specialist. Provide step-by-step instructions and ask clarifying questions when needed.",
+  "sales": "You are a sales assistant. Help customers find the right products and answer questions about features and pricing.",
+  "general": "You are a helpful AI assistant. Provide accurate information and assist with various tasks."
+}
+
+// Function to initialize conversation with system prompt
+{
+  "function": "Add Record",
+  "table": "messages",
+  "data": {
+    "conversation_id": "{{new_conversation.id}}",
+    "role": "system",
+    "content": "{{systemPrompts[conversation_type]}}",
+    "index": 0
+  }
+}
+```
+
+### Token Usage Tracking
+```javascript
+// Monitor and limit token usage per user
+{
+  "function": "Query All Records",
+  "table": "messages",
+  "filter": {
+    "conversation.user_id": "{{auth_user.id}}",
+    "created_at": {
+      ">=": "{{start_of_month}}"
+    }
+  },
+  "return_variable": "monthly_messages"
+}
+
+// Calculate total tokens used this month
+{
+  "function": "Math",
+  "operation": "sum",
+  "values": "{{monthly_messages.tokens_used}}",
+  "return_variable": "monthly_tokens"
+}
+
+// Check if user is within limits
+{
+  "function": "Conditional",
+  "condition": "{{monthly_tokens > user.token_limit}}",
+  "true_steps": [
+    {
+      "function": "Response",
+      "status_code": 429,
+      "message": "Monthly token limit exceeded. Please upgrade your plan."
+    }
+  ]
+}
+```
+
+### Conversation Branching
+```javascript
+// Create conversation branches for different topics
+function createConversationBranch(parentConversationId, branchTopic) {
+  return {
+    "function": "Add Record",
+    "table": "conversations",
+    "data": {
+      "name": `${branchTopic} - Branch`,
+      "user_id": "{{auth_user.id}}",
+      "parent_conversation_id": parentConversationId,
+      "model": "gpt-3.5-turbo",
+      "system_prompt": `Continue the conversation focusing on: ${branchTopic}`
+    }
+  }
+}
+```
+
+## 🎯 **Best Practices**
+
+### 1. Error Handling
+```javascript
+// Robust error handling for OpenAI API calls
+try {
+  const response = await callOpenAI(messages)
+  return response
+} catch (error) {
+  if (error.status === 429) {
+    return "I'm currently experiencing high demand. Please try again in a moment."
+  } else if (error.status === 401) {
+    return "Authentication error. Please contact support."
+  } else if (error.status === 400) {
+    return "I had trouble understanding your request. Could you rephrase it?"
+  } else {
+    return "I'm temporarily unavailable. Please try again later."
+  }
+}
+```
+
+### 2. Message Filtering
+```javascript
+// Filter sensitive content before sending to OpenAI
+const contentFilters = {
+  "remove_pii": /\b\d{3}-\d{2}-\d{4}\b|\b\d{16}\b/g, // SSN, credit cards
+  "remove_profanity": /\b(badword1|badword2)\b/gi,
+  "remove_urls": /https?:\/\/[^\s]+/g
+}
+
+function sanitizeMessage(content) {
+  let cleaned = content
+  Object.values(contentFilters).forEach(filter => {
+    cleaned = cleaned.replace(filter, '[REDACTED]')
+  })
+  return cleaned
+}
+```
+
+### 3. Performance Optimization
+```javascript
+// Limit conversation history to prevent large payloads
+const MAX_MESSAGES = 20 // Keep last 20 messages for context
+
+{
+  "function": "Query All Records",
+  "table": "messages",
+  "filter": {
+    "conversation_id": "{{inputs.conversation_id}}"
+  },
+  "sort": { "field": "index", "order": "descending" },
+  "limit": MAX_MESSAGES,
+  "return_variable": "recent_messages"
+}
+
+// Reverse array to get chronological order
+{
+  "function": "Arrays",
+  "operation": "reverse",
+  "array": "{{recent_messages}}",
+  "return_variable": "conversation_history"
+}
+```
+
 ---
-[](../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
--   ::: 
-    :::
-    Building a Chatbot with OpenAI/ChatGPT and Xano
-Was this helpful?
-Copy
-1.  Building Backend Features
-Chatbots 
-========
-[](https://www.xano.com/learn/introduction-to-building-with-llms-in-xano/)
- **Intro to LLMs in Xano**
-[](chatbots.html#building-a-chatbot-with-openai-chatgpt-and-xano)
- **Build a Chatbot with ChatGPT & Xano**
-------------------------------------------------------------------------
-Building a Chatbot with OpenAI/ChatGPT and Xano
-<div>
-</div>
-This guide will walk you through building a chatbot using ChatGPT and Xano.
-Before we begin, it\'s important that you understand the following key concepts:
-Database Basics
-Building with Visual Development
-APIs & Lambdas
-User Authentication & User Data
-You should know how to build a database table, build basic function stacks, work with user authentication, and utilize the External API Request function.
-------------------------------------------------------------------------
-<div>
-1
-###  
-Understanding the OpenAI Chat Completions Endpoint
-**Objective:** To create a chatbot, you\'ll primarily use OpenAI\'s chat completions API endpoint.
-**Endpoint:** The specific endpoint is `/v1/chat/completions`. You\'ll make `POST` requests to this endpoint.
-**Authentication:** All requests to the OpenAI API require authentication. This is done by including an `Authorization` header with a bearer token (your OpenAI API key).
-**Request Body:**
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `model`: Specifies which OpenAI model to use (e.g., `gpt-3.5-turbo`). You can find compatible models in the OpenAI documentation.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `messages`: This is a crucial part. It\'s an *array* containing the *entire* conversation history. Unlike interacting directly with ChatGPT, the API requires you to send all previous messages in each request.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Message Object Structure**: Each object in the `messages` array needs a `role` and `content`:
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        `role`: Defines who sent the message.
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            `system`: Sets the initial context or persona for the chatbot (the first \"training\" prompt).
-            :::
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            `user`: Represents messages sent by the end-user interacting with the bot.
-            :::
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            `assistant`: Represents messages sent *by* the chatbot (responses from the API).
-            :::
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        `content`: The actual text of the message.
-        :::
-    :::
-**Benefits of Sending Full History:** This allows for fine-tuning or guiding the conversation by potentially modifying or constructing messages within the history you send to the API.
-**Other Parameters:** There are optional parameters like `temperature`, but they aren\'t required to get started.
-2
-###  
-Define Database Schema
-**User Table:** Create at least one test user for authentication purposes later.
-**Conversation Table (**`conversation`**)**: This acts as the parent table. Add the following fields:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `name` (Type: text): To easily identify conversations.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `model` (Type: text): To store which OpenAI model is used for this conversation (e.g., \"gpt-3.5-turbo\").
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `user_id` (Type: Table Reference -\> `user`): To link the conversation to the user who initiated it.
-    :::
-**Messages Table (**`messages`**)**: This stores individual messages. Add the following fields, mirroring the structure needed for the OpenAI API request:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `role` (Type: text): Stores \"system\", \"user\", or \"assistant\".
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `content` (Type: text): Stores the actual message text.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `index` (Type: integer): A number to track the order of messages within a conversation (0, 1, 2, \...). This is crucial for sorting messages correctly for display and for sending them in the right order to the API.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `conversation_id` (Type: Table Reference -\> `conversation`): To link the message back to its parent conversation.
-    :::
-3
-###  
-Create an endpoint to call OpenAI
-**API Group:** Navigate to your API groups in Xano. You can use the default group or create a new one.
-**New API Endpoint:** Add a new API endpoint. Choose \"Start from scratch\" or \"Custom\". Name it something descriptive, like `send_message_to_openai`.
-**Inputs:** Define the necessary inputs for this endpoint. You\'ll likely need:
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `conversation_id` (Input Type: Table Reference -\> `conversation`): To know which conversation this message belongs to.
-    :::
--   ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    `user_message` (Input Type: text): The new message typed by the user.
-    :::
-**Function Stack:** This is where the logic happens using Xano\'s visual builder.
-1.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Get OpenAI API Key:** Securely retrieve your OpenAI API key. Store it in Xano\'s Environment Variables for security rather than hardcoding it.
-    :::
-2.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Get Conversation History:**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Add a `Query All Records` step for the `messages` table.
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Filter by the input `conversation_id`.
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Sort** by the `index` field in ascending order. This ensures messages are retrieved chronologically.
-        :::
-    :::
-3.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Add User\'s New Message to History (Temporary):** Add the incoming `user_message` to the list/array of messages retrieved in the previous step. Make sure it has the correct format: ``.
-    :::
-4.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Add External API Request:** This is the core step to call OpenAI.
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Click the \"+\" button in the function stack and select \"External API Request\".
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Import cURL:** Use the OpenAI documentation\'s cURL example for the chat completions endpoint. Copy the cURL command and use Xano\'s \"Import cURL\" feature. This will pre-fill most settings.
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **URL:** Should be `https://api.openai.com/v1/chat/completions`.
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Method:** `POST`.
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Headers:**
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            Ensure `Content-Type` is `application/json`.
-            :::
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            Add the `Authorization` header. The value should be `Bearer YOUR_API_KEY`, replacing `YOUR_API_KEY` dynamically using the environment variable retrieved in step 1. Use Xano\'s concatenation filters or sprintf for this.
-            :::
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        **Parameters/Body:**
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            Set `model` to your desired model (e.g., \"gpt-3.5-turbo\"). You could make this dynamic based on the `conversation` record if needed.
-            :::
-        -   ::: 
-            ::: 
-            :::
-            :::
-            ::: 
-            Set `messages` to the *full* conversation history array you prepared in step 3 (including the new user message).
-            :::
-        :::
-    :::
-5.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Process API Response:** The response from OpenAI will contain the assistant\'s reply. You\'ll typically find it in `response.result.choices[0].message.content`. Add steps to extract this content.
-    :::
-6.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Store Messages in Database:**
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Add a `Add Record` step for the `messages` table to save the *user\'s* new message. Include `conversation_id`, `role` (\"user\"), `content` (`user_message`), and the next `index` number.
-        :::
-    -   ::: 
-        ::: 
-        :::
-        :::
-        ::: 
-        Add another `Add Record` step for the `messages` table to save the *assistant\'s* response. Include `conversation_id`, `role` (\"assistant\"), `content` (the extracted response), and the subsequent `index` number.
-        :::
-    :::
-7.  ::: 
-    ::: 
-    :::
-    :::
-    ::: 
-    **Response:** Define what the Xano API endpoint should return to your frontend (e.g., the assistant\'s message content, or the updated full conversation).
-    :::
-4
-###  
-Calling from a Frontend
-Call the Xano API endpoint (`send_message_to_openai`) from your frontend application whenever a user sends a message.
-Pass the `conversation_id` and the `user_message`.
-Display the conversation history, potentially fetching it separately using the auto-generated Xano CRUD endpoints for the `messages` table, ensuring you sort by the `index` field.
-</div>
-Last updated 3 months ago
-Was this helpful?
+
+*This comprehensive guide enables you to build sophisticated chatbot applications using OpenAI's powerful language models with Xano's backend infrastructure.*
