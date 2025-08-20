@@ -1,713 +1,931 @@
 ---
-title: Chatbots Functions Reference
-description: Complete guide to implementing AI chatbots in Xano - conversational AI, natural language processing, and intelligent automation for no-code platforms
 category: functions
-subcategory: 08-reference/functions
-tags:
-- chatbots
-- conversational-ai
-- natural-language-processing
-- ai-integration
-- automated-responses
-- chat-automation
-- openai-integration
-- n8n-integration
-- weweb-integration
-- make-automation
-last_updated: '2025-01-17'
-difficulty: advanced
 has_code_examples: true
-related_docs:
-- 02-core-concepts/function-stack/ai-tools.md
-- 08-reference/functions/messaging.md
-- 08-reference/functions/external-api-request.md
+last_updated: '2025-01-23'
+tags:
+- API
+- Database
+- Functions
+- Queries
+- Authentication
+- AI Integration
+- Chatbots
+- OpenAI
+- Natural Language
+- Automation
+- n8n
+- WeWeb
+- Customer Support
+title: 'AI Chatbots & Conversational Interfaces'
 ---
 
+# AI Chatbots & Conversational Interfaces
+
 ## 📋 **Quick Summary**
+Build intelligent AI-powered chatbots in Xano with natural language processing, context management, and automated customer support. Create engaging conversational experiences with OpenAI integration, multi-turn dialogues, and seamless escalation to human agents.
 
-Chatbot functionality in Xano enables AI-powered conversational interfaces, automated customer support, and intelligent response systems using natural language processing and machine learning for enhanced user engagement in no-code applications.
+## 🎯 **Core Concepts**
 
-## What You'll Learn
+### Chatbot Architecture Types
+- **Rule-Based Chatbots**: Pattern matching with predefined responses
+- **AI-Powered Chatbots**: Natural language understanding with dynamic responses
+- **Hybrid Chatbots**: Combines rule-based and AI approaches with fallbacks
+- **Voice-Enabled Chatbots**: Speech-to-text and text-to-speech capabilities
 
-- How to implement AI chatbots with OpenAI and other services
-- Building conversational flows and intent recognition
-- Natural language processing and response generation
-- Context management and conversation memory
-- Integration with customer support and automation workflows
-- Advanced chatbot features and optimization strategies
-- Multi-platform chatbot deployment patterns
+### Key Components
+- **Intent Recognition**: Understand user goals and requests
+- **Entity Extraction**: Identify important information (dates, names, products)
+- **Context Management**: Maintain conversation state across messages
+- **Response Generation**: Create appropriate and helpful responses
+- **Escalation Handling**: Transfer complex issues to human agents
 
-## Understanding Chatbot Architecture
+## 🛠️ **Basic Chatbot Implementation**
 
-### Chatbot Types and Capabilities
-
-**Rule-Based Chatbots:**
-- Predefined conversation flows
-- Pattern matching responses
-- Decision tree logic
-- Simple keyword recognition
-
-**AI-Powered Chatbots:**
-- Natural language understanding
-- Context-aware responses
-- Machine learning capabilities
-- Dynamic conversation handling
-
-**Hybrid Chatbots:**
-- Combines rule-based and AI approaches
-- Fallback mechanisms
-- Escalation to human agents
-- Specialized domain knowledge
-
-**Voice-Enabled Chatbots:**
-- Speech-to-text integration
-- Voice response generation
-- Multi-modal interactions
-- Accessibility features
-
-### Chatbot Components
-
+### Simple Rule-Based Chatbot
 ```javascript
-// Core chatbot architecture
+// Foundation rule-based chatbot with pattern matching
 {
-  "chatbot_components": {
-    "intent_recognition": {
-      "natural_language_understanding": true,
-      "confidence_scoring": true,
-      "multi_intent_support": true
+  "chatbot_function": {
+    "endpoint": "/api/chatbot/simple",
+    "method": "POST",
+    "inputs": {
+      "message": "{{user_message}}",
+      "user_id": "{{auth.user.id}}"
     },
-    "context_management": {
-      "conversation_memory": true,
-      "session_persistence": true,
-      "user_profile_integration": true
-    },
-    "response_generation": {
-      "template_based": true,
-      "ai_generated": true,
-      "dynamic_content": true
-    },
-    "integration_layer": {
-      "external_apis": true,
-      "database_access": true,
-      "third_party_services": true
-    }
+    
+    "function_stack": [
+      {
+        "step": "Define Conversation Rules",
+        "function": "Create Variable",
+        "name": "conversation_patterns",
+        "value": {
+          "greetings": {
+            "keywords": ["hello", "hi", "hey", "good morning", "good afternoon"],
+            "responses": [
+              "Hello! How can I help you today?",
+              "Hi there! What can I do for you?",
+              "Hey! I'm here to assist you."
+            ]
+          },
+          "product_inquiry": {
+            "keywords": ["product", "price", "cost", "buy", "purchase", "features"],
+            "responses": [
+              "I'd be happy to help with product information. What specific product are you interested in?",
+              "Our products offer great value. Which product would you like to know more about?"
+            ]
+          },
+          "support_request": {
+            "keywords": ["help", "support", "problem", "issue", "bug", "error"],
+            "responses": [
+              "I'm here to help with your support request. Can you describe the issue you're experiencing?",
+              "Let me assist you with that. What specific problem are you facing?"
+            ]
+          },
+          "account_questions": {
+            "keywords": ["account", "profile", "settings", "password", "login"],
+            "responses": [
+              "I can help with account-related questions. What do you need assistance with?",
+              "For account support, I'm here to help. What would you like to know?"
+            ]
+          }
+        }
+      },
+      {
+        "step": "Process Message",
+        "function": "Create Variable",
+        "name": "message_lower",
+        "value": "{{lowercase(trim(message))}}"
+      },
+      {
+        "step": "Find Intent",
+        "function": "Create Variable",
+        "name": "matched_intent",
+        "value": null
+      },
+      {
+        "step": "Pattern Matching",
+        "function": "For Each",
+        "array": "{{object_keys(conversation_patterns)}}",
+        "inner_functions": [
+          {
+            "function": "Create Variable",
+            "name": "pattern",
+            "value": "{{conversation_patterns[item]}}"
+          },
+          {
+            "function": "For Each",
+            "array": "{{pattern.keywords}}",
+            "inner_functions": [
+              {
+                "function": "Conditional",
+                "condition": "{{contains(message_lower, item)}}",
+                "true_functions": [
+                  {
+                    "function": "Update Variable",
+                    "variable": "matched_intent",
+                    "value": "{{parent_item}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "step": "Generate Response",
+        "function": "Conditional", 
+        "condition": "{{matched_intent != null}}",
+        "true_functions": [
+          {
+            "function": "Create Variable",
+            "name": "bot_response",
+            "value": "{{random_item(conversation_patterns[matched_intent].responses)}}"
+          }
+        ],
+        "false_functions": [
+          {
+            "function": "Create Variable",
+            "name": "bot_response",
+            "value": "I'm not sure how to help with that. Could you please rephrase your question or ask about our products, support, or account services?"
+          }
+        ]
+      },
+      {
+        "step": "Log Conversation",
+        "function": "Add Record",
+        "table": "chat_conversations",
+        "data": {
+          "user_id": "{{user_id}}",
+          "user_message": "{{message}}",
+          "bot_response": "{{bot_response}}",
+          "intent": "{{matched_intent}}",
+          "timestamp": "{{now()}}",
+          "conversation_type": "rule_based"
+        }
+      }
+    ]
   }
 }
 ```
 
-## Basic Chatbot Implementation
-
-### 1. Simple Rule-Based Chatbot
-
+### AI-Powered Chatbot with OpenAI
 ```javascript
-// Basic rule-based chatbot
+// Advanced AI chatbot using OpenAI GPT
 {
-  "function": "process_chatbot_message",
-  "user_message": "{{message}}",
-  "user_id": "{{auth.user.id}}",
-  "function_stack": [
-    {
-      "function": "create_variable",
-      "name": "conversation_rules",
-      "value": {
-        "greetings": {
-          "patterns": ["hello", "hi", "hey", "good morning", "good afternoon"],
-          "responses": [
-            "Hello! How can I help you today?",
-            "Hi there! What can I do for you?",
-            "Hey! I'm here to assist you."
+  "ai_chatbot_function": {
+    "endpoint": "/api/chatbot/ai",
+    "method": "POST", 
+    "inputs": {
+      "message": "{{user_message}}",
+      "user_id": "{{auth.user.id}}",
+      "conversation_id": "{{conversation_id}}"
+    },
+    
+    "function_stack": [
+      {
+        "step": "Get User Context",
+        "function": "Get Record",
+        "table": "users",
+        "record_id": "{{user_id}}"
+      },
+      {
+        "step": "Retrieve Conversation History",
+        "function": "Get Records",
+        "table": "ai_conversations",
+        "filter": {
+          "user_id": "{{user_id}}",
+          "conversation_id": "{{conversation_id}}"
+        },
+        "limit": 10,
+        "sort": [{"field": "timestamp", "direction": "desc"}]
+      },
+      {
+        "step": "Prepare System Context",
+        "function": "Create Variable",
+        "name": "system_prompt",
+        "value": "You are a helpful customer service assistant. You have access to user information and can help with account questions, product information, and support requests. Be friendly, professional, and concise. User: {{users.name}}, Account Type: {{users.subscription_type}}, Join Date: {{format_date(users.created_at)}}"
+      },
+      {
+        "step": "Format Conversation History",
+        "function": "Create Variable",
+        "name": "messages_array",
+        "value": [
+          {"role": "system", "content": "{{system_prompt}}"}
+        ]
+      },
+      {
+        "step": "Add Historical Messages",
+        "function": "For Each",
+        "array": "{{reverse(ai_conversations)}}",
+        "inner_functions": [
+          {
+            "function": "Update Variable",
+            "variable": "messages_array",
+            "value": "{{array_push(messages_array, {role: 'user', content: item.user_message})}}"
+          },
+          {
+            "function": "Update Variable", 
+            "variable": "messages_array",
+            "value": "{{array_push(messages_array, {role: 'assistant', content: item.ai_response})}}"
+          }
+        ]
+      },
+      {
+        "step": "Add Current Message",
+        "function": "Update Variable",
+        "variable": "messages_array",
+        "value": "{{array_push(messages_array, {role: 'user', content: message})}}"
+      },
+      {
+        "step": "Call OpenAI API",
+        "function": "External API Request",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "method": "POST",
+        "headers": {
+          "Authorization": "Bearer {{env.OPENAI_API_KEY}}",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "model": "gpt-4",
+          "messages": "{{messages_array}}",
+          "max_tokens": 500,
+          "temperature": 0.7,
+          "presence_penalty": 0.1,
+          "frequency_penalty": 0.1
+        }
+      },
+      {
+        "step": "Extract AI Response",
+        "function": "Create Variable",
+        "name": "ai_response",
+        "value": "{{external_api_request.choices[0].message.content}}"
+      },
+      {
+        "step": "Analyze Response Intent",
+        "function": "Create Variable",
+        "name": "response_analysis",
+        "value": {
+          "requires_escalation": "{{contains(lowercase(ai_response), 'transfer') || contains(lowercase(ai_response), 'human agent')}}",
+          "contains_action": "{{contains(lowercase(ai_response), 'schedule') || contains(lowercase(ai_response), 'book') || contains(lowercase(ai_response), 'order')}}",
+          "sentiment": "{{analyze_sentiment(ai_response)}}"
+        }
+      },
+      {
+        "step": "Store Conversation",
+        "function": "Add Record",
+        "table": "ai_conversations",
+        "data": {
+          "user_id": "{{user_id}}",
+          "conversation_id": "{{conversation_id}}",
+          "user_message": "{{message}}",
+          "ai_response": "{{ai_response}}",
+          "tokens_used": "{{external_api_request.usage.total_tokens}}",
+          "model": "gpt-4",
+          "response_analysis": "{{response_analysis}}",
+          "timestamp": "{{now()}}"
+        }
+      },
+      {
+        "step": "Handle Escalation",
+        "function": "Conditional",
+        "condition": "{{response_analysis.requires_escalation}}",
+        "true_functions": [
+          {
+            "function": "Add Record",
+            "table": "support_escalations",
+            "data": {
+              "user_id": "{{user_id}}",
+              "conversation_id": "{{conversation_id}}",
+              "escalation_reason": "User requested human agent",
+              "priority": "normal",
+              "status": "pending"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## 🔄 **Advanced Context Management**
+
+### Multi-Turn Conversation Flow
+```javascript
+// Context-aware conversation management
+{
+  "conversation_context_manager": {
+    "endpoint": "/api/chatbot/context",
+    "method": "POST",
+    
+    "function_stack": [
+      {
+        "step": "Initialize or Retrieve Session",
+        "function": "Get Record",
+        "table": "conversation_sessions",
+        "filter": {
+          "user_id": "{{user_id}}",
+          "status": "active"
+        }
+      },
+      {
+        "step": "Create Session if None Exists",
+        "function": "Conditional",
+        "condition": "{{!conversation_sessions}}",
+        "true_functions": [
+          {
+            "function": "Add Record",
+            "table": "conversation_sessions",
+            "data": {
+              "user_id": "{{user_id}}",
+              "started_at": "{{now()}}",
+              "status": "active",
+              "context": {
+                "current_flow": null,
+                "collected_data": {},
+                "step_count": 0,
+                "last_intent": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "step": "Analyze Current Message",
+        "function": "Custom Function: analyze_message_intent",
+        "parameters": {
+          "message": "{{message}}",
+          "previous_context": "{{conversation_sessions.context}}"
+        }
+      },
+      {
+        "step": "Determine Conversation Flow",
+        "function": "Switch",
+        "variable": "{{analyzed_intent.intent}}",
+        "cases": {
+          "book_appointment": [
+            {
+              "function": "Custom Function: handle_appointment_flow",
+              "parameters": {
+                "current_step": "{{conversation_sessions.context.current_flow}}",
+                "user_message": "{{message}}",
+                "collected_data": "{{conversation_sessions.context.collected_data}}"
+              }
+            }
+          ],
+          "check_order": [
+            {
+              "function": "Custom Function: handle_order_inquiry",
+              "parameters": {
+                "current_step": "{{conversation_sessions.context.current_flow}}",
+                "user_message": "{{message}}"
+              }
+            }
+          ],
+          "product_question": [
+            {
+              "function": "Custom Function: handle_product_inquiry",
+              "parameters": {
+                "current_step": "{{conversation_sessions.context.current_flow}}",
+                "user_message": "{{message}}"
+              }
+            }
           ]
         },
-        "help": {
-          "patterns": ["help", "support", "assistance", "what can you do"],
-          "responses": [
-            "I can help you with account questions, product information, and general support. What do you need help with?",
-            "I'm here to assist! You can ask me about your account, our products, or get general support."
-          ]
-        },
-        "account": {
-          "patterns": ["account", "profile", "settings", "my account"],
-          "responses": [
-            "I can help with account-related questions. What would you like to know about your account?",
-            "For account assistance, I can help you with profile updates, settings, and account information."
-          ]
-        },
-        "goodbye": {
-          "patterns": ["bye", "goodbye", "see you", "thanks", "thank you"],
-          "responses": [
-            "Goodbye! Feel free to come back if you need more help.",
-            "Thanks for chatting! Have a great day!",
-            "See you later! I'm always here if you need assistance."
-          ]
+        "default": [
+          {
+            "function": "Custom Function: handle_general_inquiry",
+            "parameters": {
+              "message": "{{message}}",
+              "fallback": true
+            }
+          }
+        ]
+      },
+      {
+        "step": "Update Session Context",
+        "function": "Edit Record",
+        "table": "conversation_sessions",
+        "record_id": "{{conversation_sessions.id}}",
+        "data": {
+          "context": {
+            "current_flow": "{{flow_result.next_flow}}",
+            "collected_data": "{{flow_result.updated_data}}",
+            "step_count": "{{conversation_sessions.context.step_count + 1}}",
+            "last_intent": "{{analyzed_intent.intent}}"
+          },
+          "last_updated": "{{now()}}"
         }
       }
+    ]
+  }
+}
+```
+
+### Appointment Booking Flow
+```javascript
+// Multi-step appointment booking conversation
+{
+  "appointment_booking_flow": {
+    "function": "handle_appointment_flow",
+    "parameters": {
+      "current_step": "{{step}}",
+      "user_message": "{{message}}",
+      "collected_data": "{{data}}"
     },
-    {
-      "function": "create_variable",
-      "name": "normalized_message",
-      "value": "{{lowercase(trim(message))}}"
-    },
-    {
-      "function": "create_variable",
-      "name": "matched_intent",
-      "value": null
-    },
-    {
-      "function": "create_variable",
-      "name": "bot_response",
-      "value": "I'm sorry, I didn't understand that. Could you please rephrase your question?"
-    },
-    {
-      "function": "for_each_loop",
-      "array": "{{object_keys(conversation_rules)}}",
-      "function_stack": [
-        {
-          "function": "create_variable",
-          "name": "rule",
-          "value": "{{conversation_rules[loop_item]}}"
-        },
-        {
-          "function": "for_each_loop",
-          "array": "{{rule.patterns}}",
-          "function_stack": [
+    
+    "function_stack": [
+      {
+        "step": "Determine Current Stage",
+        "function": "Switch",
+        "variable": "{{current_step || 'start'}}",
+        "cases": {
+          "start": [
             {
-              "function": "conditional",
-              "condition": "{{contains(normalized_message, loop_item_inner)}}",
-              "true_stack": [
+              "function": "Create Variable",
+              "name": "response",
+              "value": "I'd be happy to help you schedule an appointment! What type of service do you need? We offer:\n- Consultation\n- Technical Support\n- Training Session"
+            },
+            {
+              "function": "Create Variable",
+              "name": "next_step",
+              "value": "collect_service"
+            }
+          ],
+          "collect_service": [
+            {
+              "function": "Create Variable",
+              "name": "extracted_service",
+              "value": "{{extract_service_type(user_message)}}"
+            },
+            {
+              "function": "Conditional",
+              "condition": "{{extracted_service}}",
+              "true_functions": [
                 {
-                  "function": "update_variable",
-                  "variable": "matched_intent",
-                  "value": "{{loop_item_outer}}"
+                  "function": "Create Variable",
+                  "name": "response",
+                  "value": "Great! I'll help you book a {{extracted_service}} appointment. What date would work best for you?"
                 },
                 {
-                  "function": "update_variable",
-                  "variable": "bot_response",
-                  "value": "{{random_item(rule.responses)}}"
+                  "function": "Create Variable",
+                  "name": "next_step",
+                  "value": "collect_date"
+                },
+                {
+                  "function": "Update Variable",
+                  "variable": "collected_data",
+                  "value": "{{merge(collected_data, {service_type: extracted_service})}}"
+                }
+              ],
+              "false_functions": [
+                {
+                  "function": "Create Variable",
+                  "name": "response",
+                  "value": "I didn't catch which service you need. Please choose from:\n- Consultation\n- Technical Support\n- Training Session"
+                },
+                {
+                  "function": "Create Variable",
+                  "name": "next_step",
+                  "value": "collect_service"
+                }
+              ]
+            }
+          ],
+          "collect_date": [
+            {
+              "function": "Create Variable",
+              "name": "parsed_date",
+              "value": "{{parse_date_from_message(user_message)}}"
+            },
+            {
+              "function": "Conditional",
+              "condition": "{{parsed_date && is_future_date(parsed_date)}}",
+              "true_functions": [
+                {
+                  "function": "Get Records",
+                  "table": "available_slots",
+                  "filter": {
+                    "date": "{{parsed_date}}",
+                    "service_type": "{{collected_data.service_type}}",
+                    "is_available": true
+                  }
+                },
+                {
+                  "function": "Conditional",
+                  "condition": "{{available_slots.length > 0}}",
+                  "true_functions": [
+                    {
+                      "function": "Create Variable",
+                      "name": "time_options",
+                      "value": "{{map(available_slots, 'time')}}"
+                    },
+                    {
+                      "function": "Create Variable",
+                      "name": "response",
+                      "value": "Perfect! {{format_date(parsed_date)}} is available. What time would you prefer?\nAvailable times: {{join(time_options, ', ')}}"
+                    },
+                    {
+                      "function": "Create Variable",
+                      "name": "next_step",
+                      "value": "collect_time"
+                    },
+                    {
+                      "function": "Update Variable",
+                      "variable": "collected_data",
+                      "value": "{{merge(collected_data, {preferred_date: parsed_date})}}"
+                    }
+                  ],
+                  "false_functions": [
+                    {
+                      "function": "Get Records",
+                      "table": "available_slots",
+                      "filter": {
+                        "date": {"$gte": "{{add_days(parsed_date, 1)}}"},
+                        "service_type": "{{collected_data.service_type}}",
+                        "is_available": true
+                      },
+                      "limit": 3
+                    },
+                    {
+                      "function": "Create Variable",
+                      "name": "alternative_dates",
+                      "value": "{{map(available_slots, 'date')}}"
+                    },
+                    {
+                      "function": "Create Variable",
+                      "name": "response",
+                      "value": "Unfortunately, {{format_date(parsed_date)}} is not available. How about one of these dates instead?\n{{format_date_options(alternative_dates)}}"
+                    }
+                  ]
+                }
+              ],
+              "false_functions": [
+                {
+                  "function": "Create Variable",
+                  "name": "response",
+                  "value": "I need a valid future date. Could you please specify when you'd like to schedule your appointment? (e.g., 'next Monday', 'January 15th', 'tomorrow')"
+                }
+              ]
+            }
+          ],
+          "collect_time": [
+            {
+              "function": "Create Variable",
+              "name": "parsed_time",
+              "value": "{{parse_time_from_message(user_message)}}"
+            },
+            {
+              "function": "Get Record",
+              "table": "available_slots",
+              "filter": {
+                "date": "{{collected_data.preferred_date}}",
+                "time": "{{parsed_time}}",
+                "service_type": "{{collected_data.service_type}}",
+                "is_available": true
+              }
+            },
+            {
+              "function": "Conditional",
+              "condition": "{{available_slots}}",
+              "true_functions": [
+                {
+                  "function": "Add Record",
+                  "table": "appointments",
+                  "data": {
+                    "user_id": "{{user_id}}",
+                    "service_type": "{{collected_data.service_type}}",
+                    "appointment_date": "{{collected_data.preferred_date}}",
+                    "appointment_time": "{{parsed_time}}",
+                    "status": "confirmed",
+                    "created_via": "chatbot"
+                  }
+                },
+                {
+                  "function": "Edit Record",
+                  "table": "available_slots",
+                  "record_id": "{{available_slots.id}}",
+                  "data": {"is_available": false}
+                },
+                {
+                  "function": "Create Variable",
+                  "name": "response",
+                  "value": "Excellent! Your {{collected_data.service_type}} appointment is confirmed for {{format_date(collected_data.preferred_date)}} at {{format_time(parsed_time)}}. You'll receive a confirmation email shortly. Is there anything else I can help you with?"
+                },
+                {
+                  "function": "Create Variable",
+                  "name": "next_step",
+                  "value": "completed"
+                },
+                {
+                  "function": "Update Variable",
+                  "variable": "collected_data",
+                  "value": "{{merge(collected_data, {confirmed_time: parsed_time, appointment_id: appointments.id})}}"
+                }
+              ],
+              "false_functions": [
+                {
+                  "function": "Create Variable",
+                  "name": "response",
+                  "value": "That time slot is not available. Please choose from the available times I mentioned earlier."
                 }
               ]
             }
           ]
         }
-      ]
-    },
-    {
-      "function": "add_record",
-      "table": "chat_conversations",
-      "data": {
-        "user_id": "{{user_id}}",
-        "user_message": "{{message}}",
-        "bot_response": "{{bot_response}}",
-        "intent": "{{matched_intent}}",
-        "timestamp": "{{now()}}",
-        "session_id": "{{session.id}}"
       }
-    }
-  ]
+    ]
+  }
 }
 ```
 
-### 2. AI-Powered Chatbot with OpenAI
+## 🔗 **n8n Integration**
 
+### Chatbot Workflow Automation
 ```javascript
-// AI chatbot using OpenAI GPT
+// n8n chatbot integration workflow
 {
-  "function": "ai_chatbot_response",
-  "user_message": "{{message}}",
-  "user_id": "{{auth.user.id}}",
-  "function_stack": [
-    {
-      "function": "get_conversation_context",
-      "user_id": "{{user_id}}",
-      "limit": 10 // Last 10 messages for context
-    },
-    {
-      "function": "get_record",
-      "table": "users",
-      "record_id": "{{user_id}}"
-    },
-    {
-      "function": "create_variable",
-      "name": "system_prompt",
-      "value": "You are a helpful customer service assistant for our platform. You have access to user information and can help with account questions, product information, and general support. Be friendly, professional, and concise. If you need to access specific user data or perform actions, explain what you need to do. User name: {{users.name}}, Account type: {{users.account_type}}"
-    },
-    {
-      "function": "create_variable",
-      "name": "conversation_history",
-      "value": "{{format_conversation_for_ai(conversation_context)}}"
-    },
-    {
-      "function": "external_api_request",
-      "url": "https://api.openai.com/v1/chat/completions",
-      "method": "POST",
-      "headers": {
-        "Authorization": "Bearer {{env.OPENAI_API_KEY}}",
-        "Content-Type": "application/json"
-      },
-      "data": {
-        "model": "gpt-4",
-        "messages": [
-          {"role": "system", "content": "{{system_prompt}}"},
-          "{{conversation_history}}",
-          {"role": "user", "content": "{{message}}"}
-        ],
-        "max_tokens": 300,
-        "temperature": 0.7,
-        "presence_penalty": 0.1,
-        "frequency_penalty": 0.1
-      }
-    },
-    {
-      "function": "create_variable",
-      "name": "ai_response",
-      "value": "{{external_api_request.choices[0].message.content}}"
-    },
-    {
-      "function": "add_record",
-      "table": "ai_chat_conversations",
-      "data": {
-        "user_id": "{{user_id}}",
-        "user_message": "{{message}}",
-        "ai_response": "{{ai_response}}",
-        "model": "gpt-4",
-        "tokens_used": "{{external_api_request.usage.total_tokens}}",
-        "timestamp": "{{now()}}",
-        "session_id": "{{session.id}}"
-      }
-    },
-    {
-      "function": "analyze_intent_and_actions",
-      "response": "{{ai_response}}",
-      "user_message": "{{message}}"
-    }
-  ]
-}
-```
-
-### 3. Context-Aware Conversation Management
-
-```javascript
-// Advanced conversation context management
-{
-  "function": "manage_conversation_context",
-  "user_id": "{{user_id}}",
-  "new_message": "{{message}}",
-  "function_stack": [
-    {
-      "function": "get_record",
-      "table": "conversation_sessions",
-      "filter": {
-        "user_id": "{{user_id}}",
-        "status": "active"
-      }
-    },
-    {
-      "function": "conditional",
-      "condition": "{{!conversation_sessions}}",
-      "true_stack": [
-        {
-          "function": "add_record",
-          "table": "conversation_sessions",
-          "data": {
-            "user_id": "{{user_id}}",
-            "started_at": "{{now()}}",
-            "status": "active",
-            "context": {
-              "current_topic": null,
-              "user_intent": null,
-              "collected_info": {},
-              "conversation_stage": "greeting"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "function": "analyze_message_intent",
-      "message": "{{new_message}}",
-      "previous_context": "{{conversation_sessions.context}}"
-    },
-    {
-      "function": "update_conversation_context",
-      "session_id": "{{conversation_sessions.id}}",
-      "new_intent": "{{analyzed_intent}}",
-      "extracted_entities": "{{extracted_entities}}"
-    },
-    {
-      "function": "create_variable",
-      "name": "updated_context",
-      "value": {
-        "current_topic": "{{analyzed_intent.topic}}",
-        "user_intent": "{{analyzed_intent.intent}}",
-        "collected_info": "{{merge(conversation_sessions.context.collected_info, extracted_entities)}}",
-        "conversation_stage": "{{determine_stage(analyzed_intent)}}",
-        "confidence": "{{analyzed_intent.confidence}}"
-      }
-    },
-    {
-      "function": "edit_record",
-      "table": "conversation_sessions",
-      "record_id": "{{conversation_sessions.id}}",
-      "data": {
-        "context": "{{updated_context}}",
-        "last_updated": "{{now()}}"
-      }
-    }
-  ]
-}
-```
-
-## Advanced Chatbot Features
-
-### 1. Intent Recognition and Entity Extraction
-
-```javascript
-// Advanced intent recognition system
-{
-  "function": "recognize_intent_and_entities",
-  "user_message": "{{message}}",
-  "function_stack": [
-    {
-      "function": "create_variable",
-      "name": "intent_patterns",
-      "value": {
-        "book_appointment": {
-          "keywords": ["book", "schedule", "appointment", "meeting", "reserve"],
-          "entities": ["date", "time", "service_type"],
-          "required_info": ["preferred_date", "preferred_time", "service"]
-        },
-        "check_order_status": {
-          "keywords": ["order", "status", "tracking", "delivery", "shipment"],
-          "entities": ["order_number", "email"],
-          "required_info": ["order_id"]
-        },
-        "account_support": {
-          "keywords": ["account", "password", "login", "profile", "settings"],
-          "entities": ["email", "username"],
-          "required_info": ["verification"]
-        },
-        "product_inquiry": {
-          "keywords": ["product", "price", "features", "availability", "compare"],
-          "entities": ["product_name", "category"],
-          "required_info": ["product_interest"]
-        }
-      }
-    },
-    {
-      "function": "external_api_request",
-      "url": "{{env.NLP_SERVICE_URL}}/analyze",
-      "method": "POST",
-      "headers": {
-        "Authorization": "Bearer {{env.NLP_API_KEY}}",
-        "Content-Type": "application/json"
-      },
-      "data": {
-        "text": "{{message}}",
-        "extract_entities": true,
-        "sentiment_analysis": true,
-        "language": "en"
-      }
-    },
-    {
-      "function": "create_variable",
-      "name": "nlp_results",
-      "value": {
-        "entities": "{{external_api_request.entities}}",
-        "sentiment": "{{external_api_request.sentiment}}",
-        "confidence": "{{external_api_request.confidence}}"
-      }
-    },
-    {
-      "function": "match_intent_patterns",
-      "message": "{{message}}",
-      "patterns": "{{intent_patterns}}",
-      "nlp_entities": "{{nlp_results.entities}}"
-    },
-    {
-      "function": "create_variable",
-      "name": "final_intent",
-      "value": {
-        "intent": "{{matched_intent}}",
-        "confidence": "{{intent_confidence}}",
-        "entities": "{{merged_entities}}",
-        "sentiment": "{{nlp_results.sentiment}}",
-        "missing_info": "{{calculate_missing_info(matched_intent, merged_entities)}}"
-      }
-    }
-  ]
-}
-```
-
-### 2. Multi-Turn Conversation Flows
-
-```javascript
-// Multi-turn conversation flow management
-{
-  "function": "handle_conversation_flow",
-  "user_id": "{{user_id}}",
-  "message": "{{message}}",
-  "intent": "{{recognized_intent}}",
-  "function_stack": [
-    {
-      "function": "switch",
-      "variable": "{{intent.intent}}",
-      "cases": {
-        "book_appointment": [
-          {
-            "function": "handle_appointment_booking_flow",
-            "current_stage": "{{intent.conversation_stage}}",
-            "collected_info": "{{intent.entities}}"
-          }
-        ],
-        "check_order_status": [
-          {
-            "function": "handle_order_inquiry_flow",
-            "current_stage": "{{intent.conversation_stage}}",
-            "collected_info": "{{intent.entities}}"
-          }
-        ],
-        "product_inquiry": [
-          {
-            "function": "handle_product_inquiry_flow",
-            "current_stage": "{{intent.conversation_stage}}",
-            "collected_info": "{{intent.entities}}"
-          }
-        ]
-      },
-      "default": [
-        {
-          "function": "handle_general_inquiry",
-          "fallback": true
-        }
-      ]
-    }
-  ]
-}
-
-// Appointment booking conversation flow
-{
-  "function": "handle_appointment_booking_flow",
-  "current_stage": "{{stage}}",
-  "collected_info": "{{info}}",
-  "function_stack": [
-    {
-      "function": "switch",
-      "variable": "{{stage}}",
-      "cases": {
-        "initial": [
-          {
-            "function": "conditional",
-            "condition": "{{!info.service_type}}",
-            "true_stack": [
-              {
-                "function": "create_variable",
-                "name": "response",
-                "value": "I'd be happy to help you book an appointment! What type of service are you looking for? We offer consultation, technical support, and training sessions."
-              },
-              {
-                "function": "update_conversation_stage",
-                "new_stage": "collecting_service"
-              }
-            ],
-            "false_stack": [
-              {
-                "function": "proceed_to_date_collection"
-              }
-            ]
-          }
-        ],
-        "collecting_service": [
-          {
-            "function": "validate_service_type",
-            "service": "{{info.service_type}}"
-          },
-          {
-            "function": "conditional",
-            "condition": "{{is_valid_service}}",
-            "true_stack": [
-              {
-                "function": "create_variable",
-                "name": "response",
-                "value": "Great! I can help you book a {{info.service_type}} appointment. What date works best for you?"
-              },
-              {
-                "function": "update_conversation_stage",
-                "new_stage": "collecting_date"
-              }
-            ],
-            "false_stack": [
-              {
-                "function": "create_variable",
-                "name": "response",
-                "value": "I'm not sure about that service. Our available services are consultation, technical support, and training. Which one interests you?"
-              }
-            ]
-          }
-        ],
-        "collecting_date": [
-          {
-            "function": "validate_and_parse_date",
-            "date_input": "{{info.preferred_date}}"
-          },
-          {
-            "function": "check_date_availability",
-            "date": "{{parsed_date}}",
-            "service": "{{info.service_type}}"
-          },
-          {
-            "function": "conditional",
-            "condition": "{{date_available}}",
-            "true_stack": [
-              {
-                "function": "create_variable",
-                "name": "response",
-                "value": "{{parsed_date}} looks good! What time would you prefer? We have slots available at {{available_times}}."
-              },
-              {
-                "function": "update_conversation_stage",
-                "new_stage": "collecting_time"
-              }
-            ],
-            "false_stack": [
-              {
-                "function": "create_variable",
-                "name": "response",
-                "value": "Unfortunately, {{parsed_date}} is not available. How about {{suggest_alternative_dates()}}?"
-              }
-            ]
-          }
-        ],
-        "collecting_time": [
-          {
-            "function": "validate_time_slot",
-            "time": "{{info.preferred_time}}",
-            "date": "{{info.confirmed_date}}"
-          },
-          {
-            "function": "conditional",
-            "condition": "{{time_available}}",
-            "true_stack": [
-              {
-                "function": "create_appointment",
-                "appointment_details": "{{compile_appointment_details(info)}}"
-              },
-              {
-                "function": "create_variable",
-                "name": "response",
-                "value": "Perfect! I've booked your {{info.service_type}} appointment for {{info.confirmed_date}} at {{info.confirmed_time}}. You'll receive a confirmation email shortly. Is there anything else I can help you with?"
-              },
-              {
-                "function": "update_conversation_stage",
-                "new_stage": "completed"
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
-}
-```
-
-### 3. Chatbot Analytics and Learning
-
-```javascript
-// Chatbot performance analytics
-{
-  "function": "analyze_chatbot_performance",
-  "time_period": "{{period}}",
-  "function_stack": [
-    {
-      "function": "aggregate_query",
-      "table": "chat_conversations",
-      "pipeline": [
-        {
-          "$match": {
-            "timestamp": {
-              "$gte": "{{get_period_start(period)}}",
-              "$lt": "{{get_period_end(period)}}"
-            }
-          }
-        },
-        {
-          "$group": {
-            "_id": "$intent",
-            "total_conversations": {"$sum": 1},
-            "successful_resolutions": {
-              "$sum": {
-                "$cond": [{"$eq": ["$resolution_status", "resolved"]}, 1, 0]
-              }
-            },
-            "escalated_to_human": {
-              "$sum": {
-                "$cond": [{"$eq": ["$escalation_status", "escalated"]}, 1, 0]
-              }
-            },
-            "avg_conversation_length": {"$avg": "$message_count"},
-            "user_satisfaction": {"$avg": "$satisfaction_rating"}
-          }
-        }
-      ]
-    },
-    {
-      "function": "create_variable",
-      "name": "performance_metrics",
-      "value": {
-        "total_conversations": "{{sum(aggregate_query, 'total_conversations')}}",
-        "resolution_rate": "{{calculate_resolution_rate(aggregate_query)}}",
-        "escalation_rate": "{{calculate_escalation_rate(aggregate_query)}}",
-        "avg_satisfaction": "{{calculate_avg_satisfaction(aggregate_query)}}",
-        "top_intents": "{{get_top_intents(aggregate_query)}}",
-        "improvement_areas": "{{identify_improvement_areas(aggregate_query)}}"
-      }
-    },
-    {
-      "function": "add_record",
-      "table": "chatbot_analytics",
-      "data": {
-        "period": "{{period}}",
-        "metrics": "{{performance_metrics}}",
-        "generated_at": "{{now()}}"
-      }
-    }
-  ]
-}
-```
-
-## No-Code Platform Integration
-
-### n8n Chatbot Workflows
-```javascript
-// n8n chatbot automation
-{
-  "n8n_chatbot_integration": {
-    "webhook_url": "https://hooks.n8n.cloud/webhook/chatbot",
-    "chatbot_events": [
+  "n8n_chatbot_automation": {
+    "webhook_endpoint": "https://your-n8n.app/webhook/chatbot",
+    "workflow_triggers": [
       {
         "event": "conversation_started",
-        "data": {
-          "user_id": "{{user_id}}",
-          "initial_message": "{{message}}",
-          "detected_intent": "{{intent}}",
-          "timestamp": "{{now()}}"
+        "n8n_nodes": [
+          {
+            "node": "Webhook",
+            "purpose": "Receive conversation start event"
+          },
+          {
+            "node": "Set Variables",
+            "action": "Extract user information and initial message"
+          },
+          {
+            "node": "HTTP Request",
+            "action": "Call Xano chatbot API",
+            "url": "{{xano_instance}}/api/chatbot/ai",
+            "method": "POST"
+          },
+          {
+            "node": "Conditional",
+            "condition": "Check if escalation needed"
+          },
+          {
+            "node": "Slack",
+            "action": "Notify support team if escalation required"
+          }
+        ]
+      },
+      {
+        "event": "appointment_booked", 
+        "n8n_nodes": [
+          {
+            "node": "Webhook",
+            "purpose": "Receive appointment booking event"
+          },
+          {
+            "node": "Google Calendar",
+            "action": "Create calendar event"
+          },
+          {
+            "node": "Email",
+            "action": "Send confirmation email to user"
+          },
+          {
+            "node": "SMS",
+            "action": "Send SMS reminder 1 hour before"
+          }
+        ]
+      },
+      {
+        "event": "support_escalation",
+        "n8n_nodes": [
+          {
+            "node": "Webhook",
+            "purpose": "Receive escalation request"
+          },
+          {
+            "node": "Zendesk",
+            "action": "Create support ticket"
+          },
+          {
+            "node": "Teams",
+            "action": "Notify support team in chat"
+          },
+          {
+            "node": "Database",
+            "action": "Log escalation in analytics"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## 🌐 **WeWeb Integration**
+
+### Chatbot UI Components
+```javascript
+// WeWeb chatbot interface implementation
+{
+  "weweb_chatbot_components": {
+    "chat_widget": {
+      "component": "Custom Chatbot Widget",
+      "api_integration": {
+        "base_url": "{{xano_instance}}/api/chatbot",
+        "endpoints": {
+          "send_message": "/ai",
+          "get_history": "/conversation",
+          "escalate": "/escalate"
+        }
+      },
+      
+      "widget_configuration": {
+        "position": "bottom-right",
+        "theme": "modern",
+        "avatar_url": "/assets/bot-avatar.png",
+        "welcome_message": "Hi! I'm your AI assistant. How can I help you today?",
+        "placeholder_text": "Type your message here...",
+        "show_typing_indicator": true,
+        "enable_voice_input": false,
+        "max_message_length": 500
+      },
+      
+      "javascript_implementation": `
+// WeWeb Chatbot Component Logic
+const ChatbotWidget = {
+  data: {
+    messages: [],
+    currentMessage: '',
+    isTyping: false,
+    conversationId: null,
+    isOpen: false
+  },
+
+  async sendMessage() {
+    if (!this.currentMessage.trim()) return;
+    
+    // Add user message to chat
+    this.addMessage('user', this.currentMessage);
+    const userMessage = this.currentMessage;
+    this.currentMessage = '';
+    this.isTyping = true;
+
+    try {
+      const response = await fetch('{{xano_api}}/api/chatbot/ai', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + this.getUserToken(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          conversation_id: this.conversationId,
+          user_id: this.getCurrentUserId()
+        })
+      });
+
+      const result = await response.json();
+      
+      // Add bot response to chat
+      this.addMessage('bot', result.ai_response);
+      this.conversationId = result.conversation_id;
+      
+      // Handle special actions
+      if (result.response_analysis?.requires_escalation) {
+        this.showEscalationOption();
+      }
+      
+    } catch (error) {
+      this.addMessage('bot', 'I apologize, but I encountered an error. Please try again.');
+    } finally {
+      this.isTyping = false;
+      this.scrollToBottom();
+    }
+  },
+
+  addMessage(sender, content) {
+    this.messages.push({
+      id: Date.now(),
+      sender,
+      content,
+      timestamp: new Date().toLocaleTimeString()
+    });
+  },
+
+  async escalateToHuman() {
+    try {
+      await fetch('{{xano_api}}/api/chatbot/escalate', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + this.getUserToken(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          conversation_id: this.conversationId,
+          reason: 'User requested human agent'
+        })
+      });
+      
+      this.addMessage('system', 'Your request has been escalated to a human agent. Someone will be with you shortly.');
+    } catch (error) {
+      this.addMessage('system', 'Failed to escalate request. Please try again.');
+    }
+  },
+
+  toggleChat() {
+    this.isOpen = !this.isOpen;
+    if (this.isOpen && this.messages.length === 0) {
+      this.addMessage('bot', this.welcomeMessage);
+    }
+  }
+};`
+    }
+  }
+}
+```
+
+## 🧪 **Testing & Analytics**
+
+### Chatbot Performance Monitoring
+```javascript
+// Comprehensive chatbot analytics system
+{
+  "chatbot_analytics": {
+    "endpoint": "/api/chatbot/analytics",
+    "method": "GET",
+    
+    "function_stack": [
+      {
+        "step": "Calculate Conversation Metrics",
+        "function": "Aggregate Query",
+        "table": "ai_conversations",
+        "pipeline": [
+          {
+            "$match": {
+              "timestamp": {
+                "$gte": "{{subtract_days(now(), 30)}}",
+                "$lt": "{{now()}}"
+              }
+            }
+          },
+          {
+            "$group": {
+              "_id": {
+                "date": {"$dateToString": {"format": "%Y-%m-%d", "date": "$timestamp"}},
+                "intent": "$response_analysis.detected_intent"
+              },
+              "total_conversations": {"$sum": 1},
+              "avg_tokens_used": {"$avg": "$tokens_used"},
+              "escalation_count": {
+                "$sum": {
+                  "$cond": [{"$eq": ["$response_analysis.requires_escalation", true]}, 1, 0]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "step": "Calculate Success Metrics",
+        "function": "Get Records",
+        "table": "conversation_sessions",
+        "filter": {
+          "last_updated": {"$gte": "{{subtract_days(now(), 30)}}"}
         }
       },
       {
-        "event": "escalation_requested",
-        "condition": "{{escalation_needed}}",
-        "data": {
-          "user_id": "{{user_id}}",
-          "conversation_history": "{{conversation_context}}",
-          "escalation_reason": "{{reason}}",
-          "priority": "{{priority_level}}"
-        }
+        "step": "Analyze User Satisfaction",
+        "function": "Aggregate Query", 
+        "table": "conversation_feedback",
+        "pipeline": [
+          {
+            "$group": {
+              "_id": null,
+              "avg_rating": {"$avg": "$rating"},
+              "total_feedback": {"$sum": 1},
+              "positive_feedback": {
+                "$sum": {
+                  "$cond": [{"$gte": ["$rating", 4]}, 1, 0]
+                }
+              }
+            }
+          }
+        ]
       },
       {
-        "event": "appointment_booked",
-        "condition": "{{intent == 'book_appointment' && status == 'completed'}}",
-        "data": {
-          "user_id": "{{user_id}}",
-          "appointment_details": "{{appointment_info}}",
-          "calendar_integration": true
+        "step": "Generate Insights",
+        "function": "Create Variable",
+        "name": "analytics_report",
+        "value": {
+          "period": "last_30_days",
+          "total_conversations": "{{sum(aggregate_query, 'total_conversations')}}",
+          "average_tokens_per_conversation": "{{avg(aggregate_query, 'avg_tokens_used')}}",
+          "escalation_rate": "{{calculate_percentage(sum(aggregate_query, 'escalation_count'), sum(aggregate_query, 'total_conversations'))}}",
+          "user_satisfaction": "{{conversation_feedback[0].avg_rating}}",
+          "satisfaction_rate": "{{calculate_percentage(conversation_feedback[0].positive_feedback, conversation_feedback[0].total_feedback)}}",
+          "top_intents": "{{get_top_intents(aggregate_query)}}",
+          "daily_conversation_trends": "{{group_by_date(aggregate_query)}}"
         }
       }
     ]
@@ -715,323 +933,69 @@ Chatbot functionality in Xano enables AI-powered conversational interfaces, auto
 }
 ```
 
-### WeWeb Chatbot Interface
+## 🎯 **Best Practices**
+
+### Conversation Design Guidelines
 ```javascript
-// WeWeb chatbot component integration
+// Best practices for chatbot conversations
 {
-  "weweb_chatbot_widget": {
-    "component": "ai_chat_widget",
-    "api_endpoints": {
-      "send_message": "/api/chatbot/message",
-      "get_conversation": "/api/chatbot/conversation",
-      "escalate_to_human": "/api/chatbot/escalate"
+  "conversation_best_practices": {
+    "user_experience": {
+      "clear_expectations": "Set clear expectations about chatbot capabilities",
+      "quick_responses": "Aim for response times under 2 seconds",
+      "progressive_disclosure": "Gather information step-by-step, not all at once",
+      "error_recovery": "Provide helpful suggestions when users get stuck",
+      "human_handoff": "Make it easy to escalate to human agents"
     },
-    "features": {
-      "typing_indicators": true,
-      "quick_replies": true,
-      "rich_media_support": true,
-      "voice_input": false,
-      "file_attachments": true
+    
+    "conversation_flow": {
+      "natural_language": "Use conversational, friendly language",
+      "context_awareness": "Remember previous messages in the conversation",
+      "confirmation_steps": "Confirm important information before taking actions",
+      "multiple_paths": "Provide multiple ways to accomplish the same goal",
+      "fallback_options": "Always have fallback responses for unrecognized inputs"
     },
-    "customization": {
-      "theme": "corporate",
-      "avatar_url": "/assets/chatbot-avatar.png",
-      "welcome_message": "Hi! I'm your AI assistant. How can I help you today?",
-      "position": "bottom-right"
+    
+    "technical_implementation": {
+      "error_handling": "Implement comprehensive error handling",
+      "rate_limiting": "Prevent abuse with appropriate rate limits", 
+      "session_management": "Handle session timeouts gracefully",
+      "data_privacy": "Protect user data and conversation history",
+      "performance_monitoring": "Track response times and success rates"
     }
   }
 }
 ```
 
-### Make.com Chatbot Automation
+### Security Considerations
 ```javascript
-// Make.com chatbot integration
+// Chatbot security implementation
 {
-  "make_chatbot_automation": {
-    "scenario_url": "https://hook.us1.make.com/chatbot-processor",
-    "automation_flows": [
-      {
-        "trigger": "unresolved_query",
-        "condition": "{{conversation_turns > 5 && resolution_status != 'resolved'}}",
-        "action": "create_support_ticket",
-        "data": {
-          "user_id": "{{user_id}}",
-          "conversation_summary": "{{summarize_conversation()}}",
-          "priority": "normal",
-          "category": "chatbot_escalation"
-        }
-      },
-      {
-        "trigger": "positive_feedback",
-        "condition": "{{satisfaction_rating >= 4}}",
-        "action": "update_training_data",
-        "data": {
-          "successful_pattern": "{{conversation_pattern}}",
-          "user_intent": "{{final_intent}}",
-          "resolution_method": "{{resolution_approach}}"
-        }
-      }
-    ]
-  }
-}
-```
-
-## Advanced Chatbot Capabilities
-
-### 1. Voice-Enabled Chatbot
-
-```javascript
-// Voice chatbot integration
-{
-  "function": "process_voice_input",
-  "audio_data": "{{voice_input}}",
-  "user_id": "{{user_id}}",
-  "function_stack": [
-    {
-      "function": "external_api_request",
-      "url": "{{env.SPEECH_TO_TEXT_URL}}/transcribe",
-      "method": "POST",
-      "headers": {
-        "Authorization": "Bearer {{env.SPEECH_API_KEY}}",
-        "Content-Type": "audio/wav"
-      },
-      "data": "{{audio_data}}"
+  "chatbot_security": {
+    "input_validation": {
+      "sanitize_inputs": "Clean all user inputs to prevent injection attacks",
+      "length_limits": "Enforce message length limits",
+      "rate_limiting": "Limit messages per user per time period",
+      "content_filtering": "Filter inappropriate or harmful content"
     },
-    {
-      "function": "create_variable",
-      "name": "transcribed_text",
-      "value": "{{external_api_request.transcription}}"
+    
+    "data_protection": {
+      "encrypt_conversations": "Encrypt conversation data at rest",
+      "session_security": "Use secure session management",
+      "pii_handling": "Properly handle personally identifiable information",
+      "audit_logging": "Log all chatbot interactions for security audits"
     },
-    {
-      "function": "process_chatbot_message",
-      "message": "{{transcribed_text}}",
-      "input_type": "voice"
-    },
-    {
-      "function": "external_api_request",
-      "url": "{{env.TEXT_TO_SPEECH_URL}}/synthesize",
-      "method": "POST",
-      "headers": {
-        "Authorization": "Bearer {{env.TTS_API_KEY}}",
-        "Content-Type": "application/json"
-      },
-      "data": {
-        "text": "{{chatbot_response}}",
-        "voice": "en-US-AriaNeural",
-        "speed": "normal"
-      }
-    },
-    {
-      "function": "create_variable",
-      "name": "voice_response",
-      "value": {
-        "text": "{{chatbot_response}}",
-        "audio_url": "{{external_api_request.audio_url}}",
-        "transcription": "{{transcribed_text}}"
-      }
-    }
-  ]
-}
-```
-
-### 2. Multilingual Chatbot Support
-
-```javascript
-// Multilingual chatbot implementation
-{
-  "function": "multilingual_chatbot_response",
-  "user_message": "{{message}}",
-  "user_language": "{{language}}",
-  "function_stack": [
-    {
-      "function": "detect_language",
-      "text": "{{message}}"
-    },
-    {
-      "function": "conditional",
-      "condition": "{{detected_language != 'en'}}",
-      "true_stack": [
-        {
-          "function": "translate_to_english",
-          "text": "{{message}}",
-          "source_language": "{{detected_language}}"
-        },
-        {
-          "function": "create_variable",
-          "name": "english_message",
-          "value": "{{translated_text}}"
-        }
-      ],
-      "false_stack": [
-        {
-          "function": "create_variable",
-          "name": "english_message",
-          "value": "{{message}}"
-        }
-      ]
-    },
-    {
-      "function": "ai_chatbot_response",
-      "message": "{{english_message}}",
-      "language_context": "{{detected_language}}"
-    },
-    {
-      "function": "conditional",
-      "condition": "{{detected_language != 'en'}}",
-      "true_stack": [
-        {
-          "function": "translate_response",
-          "text": "{{ai_response}}",
-          "target_language": "{{detected_language}}"
-        },
-        {
-          "function": "create_variable",
-          "name": "final_response",
-          "value": "{{translated_response}}"
-        }
-      ],
-      "false_stack": [
-        {
-          "function": "create_variable",
-          "name": "final_response",
-          "value": "{{ai_response}}"
-        }
-      ]
-    }
-  ]
-}
-```
-
-## Try This: Complete Chatbot System
-
-Create a comprehensive AI chatbot with multiple capabilities:
-
-```javascript
-// Complete chatbot implementation
-{
-  "intelligent_chatbot_system": {
-    "message_processing": {
-      "endpoint": "/api/chatbot/chat",
-      "method": "POST",
-      "inputs": [
-        {"name": "message", "type": "text", "required": true},
-        {"name": "session_id", "type": "text", "required": false},
-        {"name": "language", "type": "text", "default": "en"},
-        {"name": "input_type", "type": "text", "default": "text"}
-      ],
-      "function_stack": [
-        {
-          "function": "initialize_conversation_session",
-          "user_id": "{{auth.user.id}}",
-          "session_id": "{{session_id}}"
-        },
-        {
-          "function": "preprocess_message",
-          "message": "{{message}}",
-          "language": "{{language}}"
-        },
-        {
-          "function": "recognize_intent_and_entities",
-          "processed_message": "{{preprocessed_message}}"
-        },
-        {
-          "function": "manage_conversation_context",
-          "intent": "{{recognized_intent}}",
-          "entities": "{{extracted_entities}}"
-        },
-        {
-          "function": "generate_ai_response",
-          "context": "{{conversation_context}}",
-          "intent": "{{recognized_intent}}"
-        },
-        {
-          "function": "post_process_response",
-          "raw_response": "{{ai_response}}",
-          "user_language": "{{language}}"
-        },
-        {
-          "function": "log_conversation",
-          "interaction_data": "{{compile_interaction_data()}}"
-        },
-        {
-          "function": "return_chatbot_response",
-          "include_suggestions": true,
-          "include_actions": true
-        }
-      ]
-    },
-    "escalation_handling": {
-      "endpoint": "/api/chatbot/escalate",
-      "method": "POST",
-      "function_stack": [
-        {
-          "function": "create_support_ticket",
-          "conversation_context": "{{conversation_history}}",
-          "escalation_reason": "{{reason}}"
-        },
-        {
-          "function": "notify_support_team",
-          "ticket_id": "{{support_ticket.id}}",
-          "priority": "{{calculate_priority()}}"
-        },
-        {
-          "function": "update_conversation_status",
-          "status": "escalated_to_human"
-        }
-      ]
+    
+    "api_security": {
+      "authentication": "Require proper authentication for chatbot APIs",
+      "authorization": "Verify user permissions for specific actions",
+      "token_management": "Secure handling of AI service API tokens",
+      "network_security": "Use HTTPS for all communications"
     }
   }
 }
 ```
 
-## Common Chatbot Mistakes to Avoid
+---
 
-### ❌ Poor Practices
-- Not handling conversation context properly
-- Missing fallback responses for unrecognized intents
-- Ignoring user sentiment and emotional cues
-- Not implementing proper escalation mechanisms
-- Missing conversation analytics and improvement tracking
-
-### ✅ Best Practices
-- Maintain conversation context across interactions
-- Implement graceful fallbacks and error handling
-- Consider user sentiment in response generation
-- Provide clear escalation paths to human agents
-- Continuously analyze and improve chatbot performance
-
-## Pro Tips
-
-### 💡 **Conversation Design**
-- Design clear conversation flows with multiple paths
-- Use quick replies and suggested actions
-- Implement progressive information gathering
-- Provide context-aware responses
-
-### 🔒 **Security and Privacy**
-- Encrypt sensitive conversation data
-- Implement proper access controls
-- Anonymize conversation logs appropriately
-- Handle personal information securely
-
-### 📊 **Performance Optimization**
-- Monitor response times and accuracy
-- Cache frequently used responses
-- Optimize AI model calls for efficiency
-- Track conversation success metrics
-
-### 🔄 **Integration Strategies**
-- Design modular chatbot components
-- Implement consistent API interfaces
-- Support multiple communication channels
-- Create reusable conversation templates
-
-## Troubleshooting Chatbot Issues
-
-### Common Problems
-1. **Poor intent recognition**: Improve training data and add more examples
-2. **Context loss**: Implement proper session management
-3. **Slow responses**: Optimize AI API calls and implement caching
-4. **Escalation failures**: Test escalation workflows and notification systems
-
-Chatbots in Xano provide powerful conversational AI capabilities that enhance user engagement and automate customer support. Proper implementation ensures intelligent, context-aware, and helpful chatbot experiences for no-code applications.
+*AI chatbots transform customer interactions by providing intelligent, context-aware assistance 24/7. Master these patterns to build engaging conversational experiences that enhance user satisfaction and automate support workflows effectively.*
