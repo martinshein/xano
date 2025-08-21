@@ -1,521 +1,315 @@
 ---
-category: functions
-difficulty: advanced
-last_updated: '2025-01-23'
-related_docs: []
-subcategory: 08-reference/functions
+title: "Set Up Your Free Xano Account"
+description: "Complete guide to creating and configuring your free Xano account with workspace setup, plan comparison, and optimization for non-developers."
+category: getting-started
+difficulty: beginner
+has_code_examples: true
+last_updated: '2025-08-21'
 tags:
-- authentication
-- api
-- webhook
-- trigger
-- query
-- filter
-- middleware
-- expression
-- realtime
-- transaction
-- function
-- background-task
-- custom-function
-- rest
-- database
-title: '[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%'
+  - account-setup
+  - getting-started
+  - free-plan
+  - workspace
+  - onboarding
 ---
 
-[![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)![](../_gitbook/image771a.jpg?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-legacy-files%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Favatar-1626464608697.png%3Fgeneration%3D1626464608902290%26alt%3Dmedia&width=32&dpr=4&quality=100&sign=ed8a4004&sv=2)](../index.html)
+# Set Up Your Free Xano Account
 
+## 📋 **Quick Summary**
+Step-by-step guide to create your free Xano account and set up your first workspace. Perfect for non-developers using n8n, WeWeb, Make.com, and other no-code platforms who want to build powerful backends without technical complexity.
 
+## What You'll Learn
+- How to create a free Xano account with full features
+- Workspace setup and configuration best practices
+- Plan comparison and upgrade options
+- Integration preparation for no-code platforms
+- Account optimization and security setup
 
+## 🚀 Getting Started with Your Free Account
 
+Let's make sure you're ready to build amazing backends with Xano! Choose the option that fits your needs:
 
+### Option 1: Start with Free Plan (Recommended)
 
+**Perfect for**: Beginners, prototyping, learning Xano fundamentals
 
+**What You Get**:
+- ✅ **One Complete Workspace** - Full development environment
+- ✅ **AI Features Access** - MCP servers, AI agents, visual building
+- ✅ **100,000 Database Records** - More than enough for most projects
+- ✅ **Complete Visual Builder** - All core functions and features
+- ✅ **API Creation Tools** - Build REST endpoints easily
+- ✅ **Basic Authentication** - User management and security
+- ✅ **Community Support** - Access to forums and documentation
 
+### Option 2: Paid Plan (For Production)
 
+**Perfect for**: Live applications, team collaboration, unlimited scale
 
+**What You Get**:
+- 🚀 **Unlimited Database Records** - No storage restrictions
+- 🚀 **No Rate Limits** - Handle any traffic volume
+- 🚀 **Team Collaboration** - Multi-user workspaces and RBAC
+- 🚀 **Advanced Features** - Background tasks, middleware, triggers, testing
+- 🚀 **Priority Support** - Faster response times
+- 🚀 **Production Features** - CI/CD, monitoring, backup/restore
 
+## 🎯 Try This: Account Creation Steps
 
+### Step 1: Create Your Account
+```bash
+# Visit Xano signup page
+https://www.xano.com/signup
 
+# Choose "Start Free" option
+# Enter your details:
+- Email address
+- Strong password  
+- Confirm password
+```
 
+### Step 2: Workspace Setup
+```javascript
+// During workspace creation, choose:
+workspace_config = {
+  name: "My First Backend",
+  template: "blank" || "ai_generated", // Choose based on experience
+  region: "us-east-1", // Choose closest to your users
+  features: ["database", "apis", "auth"] // Core features enabled
+}
+```
 
--   
+### Step 3: Initial Configuration
+```javascript
+// Set up your first database table
+create_table({
+  name: "users",
+  fields: [
+    { name: "id", type: "integer", primary: true },
+    { name: "name", type: "text", required: true },
+    { name: "email", type: "text", unique: true },
+    { name: "created_at", type: "timestamp", default: "now()" }
+  ]
+})
+```
 
-    
-    -   Using These Docs
-    -   Where should I start?
-    -   Set Up a Free Xano Account
-    -   Key Concepts
-    -   The Development Life Cycle
-    -   Navigating Xano
-    -   Plans & Pricing
+## 🔗 Integration Setup Examples
 
--   
+### n8n Integration Preparation
+```javascript
+// After account creation, prepare n8n integration:
+api_endpoint_setup = {
+  method: "POST",
+  path: "/api/n8n-webhook",
+  authentication: "bearer_token",
+  cors_enabled: true,
+  response_format: "json"
+}
 
-    
-    -   Building with Visual Development
-        
-        -   APIs
-            
-            -   [Swagger (OpenAPI
-                Documentation)](../the-function-stack/building-with-visual-development/apis/swagger-openapi-documentation.html)
-                    -   Custom Functions
-            
-            -   [Async
-                Functions](../the-function-stack/building-with-visual-development/custom-functions/async-functions.html)
-                    -   [Background
-            Tasks](../the-function-stack/building-with-visual-development/background-tasks.html)
-        -   [Triggers](../the-function-stack/building-with-visual-development/triggers.html)
-        -   [Middleware](../the-function-stack/building-with-visual-development/middleware.html)
-        -   [Configuring
-            Expressions](../the-function-stack/building-with-visual-development/configuring-expressions.html)
-        -   [Working with
-            Data](../the-function-stack/building-with-visual-development/working-with-data.html)
-            -   Functions
-        
-        -   [AI
-            Tools](../the-function-stack/functions/ai-tools.html)
-        -   Database Requests
-            
-            -   Query All Records
-                
-                -   [External Filtering
-                    Examples](../the-function-stack/functions/database-requests/query-all-records/external-filtering-examples.html)
-                            -   [Get
-                Record](../the-function-stack/functions/database-requests/get-record.html)
-            -   [Add
-                Record](../the-function-stack/functions/database-requests/add-record.html)
-            -   [Edit
-                Record](../the-function-stack/functions/database-requests/edit-record.html)
-            -   [Add or Edit
-                Record](../the-function-stack/functions/database-requests/add-or-edit-record.html)
-            -   [Patch
-                Record](../the-function-stack/functions/database-requests/patch-record.html)
-            -   [Delete
-                Record](../the-function-stack/functions/database-requests/delete-record.html)
-            -   [Bulk
-                Operations](../the-function-stack/functions/database-requests/bulk-operations.html)
-            -   [Database
-                Transaction](../the-function-stack/functions/database-requests/database-transaction.html)
-            -   [External Database
-                Query](../the-function-stack/functions/database-requests/external-database-query.html)
-            -   [Direct Database
-                Query](../the-function-stack/functions/database-requests/direct-database-query.html)
-            -   [Get Database
-                Schema](../the-function-stack/functions/database-requests/get-database-schema.html)
-                    -   Data Manipulation
-            
-            -   [Create
-                Variable](../the-function-stack/functions/data-manipulation/create-variable.html)
-            -   [Update
-                Variable](../the-function-stack/functions/data-manipulation/update-variable.html)
-            -   [Conditional](../the-function-stack/functions/data-manipulation/conditional.html)
-            -   [Switch](../the-function-stack/functions/data-manipulation/switch.html)
-            -   [Loops](../the-function-stack/functions/data-manipulation/loops.html)
-            -   [Math](../the-function-stack/functions/data-manipulation/math.html)
-            -   [Arrays](../the-function-stack/functions/data-manipulation/arrays.html)
-            -   [Objects](../the-function-stack/functions/data-manipulation/objects.html)
-            -   [Text](../the-function-stack/functions/data-manipulation/text.html)
-                    -   [Security](../the-function-stack/functions/security.html)
-        -   APIs & Lambdas
-            
-            -   [Realtime
-                Functions](../the-function-stack/functions/apis-and-lambdas/realtime-functions.html)
-            -   [External API
-                Request](../the-function-stack/functions/apis-and-lambdas/external-api-request.html)
-            -   [Lambda
-                Functions](../the-function-stack/functions/apis-and-lambdas/lambda-functions.html)
-                    -   [Data Caching
-            (Redis)](../the-function-stack/functions/data-caching-redis.html)
-        -   [Custom
-            Functions](../the-function-stack/functions/custom-functions.html)
-        -   [Utility
-            Functions](../the-function-stack/functions/utility-functions.html)
-        -   [File
-            Storage](../the-function-stack/functions/file-storage.html)
-        -   [Cloud
-            Services](../the-function-stack/functions/cloud-services.html)
-            -   Filters
-        
-        -   [Manipulation](../the-function-stack/filters/manipulation.html)
-        -   [Math](../the-function-stack/filters/math.html)
-        -   [Timestamp](../the-function-stack/filters/timestamp.html)
-        -   [Text](../the-function-stack/filters/text.html)
-        -   [Array](../the-function-stack/filters/array.html)
-        -   [Transform](../the-function-stack/filters/transform.html)
-        -   [Conversion](../the-function-stack/filters/conversion.html)
-        -   [Comparison](../the-function-stack/filters/comparison.html)
-        -   [Security](../the-function-stack/filters/security.html)
-            -   Data Types
-        
-        -   [Text](../the-function-stack/data-types/text.html)
-        -   [Expression](../the-function-stack/data-types/expression.html)
-        -   [Array](../the-function-stack/data-types/array.html)
-        -   [Object](../the-function-stack/data-types/object.html)
-        -   [Integer](../the-function-stack/data-types/integer.html)
-        -   [Decimal](../the-function-stack/data-types/decimal.html)
-        -   [Boolean](../the-function-stack/data-types/boolean.html)
-        -   [Timestamp](../the-function-stack/data-types/timestamp.html)
-        -   [Null](../the-function-stack/data-types/null.html)
-            -   Environment Variables
-    -   Additional Features
-        
-        -   [Response
-            Caching](../the-function-stack/additional-features/response-caching.html)
-        
--   
-    Testing and Debugging
-    
-    -   Testing and Debugging Function Stacks
-    -   Unit Tests
-    -   Test Suites
+// Create webhook URL for n8n
+webhook_url = "https://your-instance.xano.io/api/n8n-webhook"
+```
 
--   
-    The Database
-    
-    -   Getting Started Shortcuts
-    -   Designing your Database
-    -   Database Basics
-        
-        -   [Using the Xano
-            Database](../the-database/database-basics/using-the-xano-database.html)
-        -   [Field
-            Types](../the-database/database-basics/field-types.html)
-        -   [Relationships](../the-database/database-basics/relationships.html)
-        -   [Database
-            Views](../the-database/database-basics/database-views.html)
-        -   [Export and
-            Sharing](../the-database/database-basics/export-and-sharing.html)
-        -   [Data
-            Sources](../the-database/database-basics/data-sources.html)
-            -   Migrating your Data
-        
-        -   [Airtable to
-            Xano](../the-database/migrating-your-data/airtable-to-xano.html)
-        -   [Supabase to
-            Xano](../the-database/migrating-your-data/supabase-to-xano.html)
-        -   [CSV Import &
-            Export](../the-database/migrating-your-data/csv-import-and-export.html)
-            -   Database Performance and Maintenance
-        
-        -   [Storage](../the-database/database-performance-and-maintenance/storage.html)
-        -   [Indexing](../the-database/database-performance-and-maintenance/indexing.html)
-        -   [Maintenance](../the-database/database-performance-and-maintenance/maintenance.html)
-        -   [Schema
-            Versioning](../the-database/database-performance-and-maintenance/schema-versioning.html)
-        
--   CI/CD
+### WeWeb Integration Setup
+```javascript
+// Configure API for WeWeb frontend
+weweb_config = {
+  base_url: "https://your-instance.xano.io/api/1.0",
+  endpoints: {
+    users: "/users",
+    auth: "/auth/login",
+    data: "/data"
+  },
+  authentication: {
+    type: "bearer",
+    token_field: "authToken"
+  }
+}
+```
 
--   
-    Build For AI
-    
-    -   Agents
-        
-        -   [Templates](../ai-tools/agents/templates.html)
-            -   MCP Builder
-        
-        -   [Connecting
-            Clients](../ai-tools/mcp-builder/connecting-clients.html)
-        -   [MCP
-            Functions](../ai-tools/mcp-builder/mcp-functions.html)
-            -   Xano MCP Server
+### Make.com Integration
+```javascript
+// Set up Make.com webhook integration
+make_webhook = {
+  trigger_url: "https://hook.integromat.com/your-webhook-id",
+  events: ["user_created", "data_updated"],
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  }
+}
+```
 
--   
-    Build With AI
-    
-    -   Using AI Builders with Xano
-    -   Building a Backend Using AI
-    -   Get Started Assistant
-    -   AI Database Assistant
-    -   AI Lambda Assistant
-    -   AI SQL Assistant
-    -   API Request Assistant
-    -   Template Engine
-    -   Streaming APIs
+## ⚙️ Workspace Optimization
 
--   
-    File Storage
-    
-    -   File Storage in Xano
-    -   Private File Storage
+### Database Configuration
+```sql
+-- Optimize your database for better performance
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_created_at ON users(created_at);
 
--   
-    Realtime
-    
-    -   Realtime in Xano
-    -   Channel Permissions
-    -   Realtime in Webflow
+-- Set up relationships for complex data
+ALTER TABLE orders 
+ADD FOREIGN KEY (user_id) REFERENCES users(id);
+```
 
--   
-    Maintenance, Monitoring, and Logging
-    
-    -   Statement Explorer
-    -   Request History
-    -   Instance Dashboard
-        
-        -   Memory Usage
-        
--   
-    Building Backend Features
-    
-    -   User Authentication & User Data
-        
-        -   [Separating User
-            Data](../building-backend-features/user-authentication-and-user-data/separating-user-data.html)
-        -   [Restricting Access
-            (RBAC)](../building-backend-features/user-authentication-and-user-data/restricting-access-rbac.html)
-        -   [OAuth
-            (SSO)](../building-backend-features/user-authentication-and-user-data/oauth-sso.html)
-            -   Webhooks
-    -   Messaging
-    -   Emails
-    -   Custom Report Generation
-    -   Fuzzy Search
-    -   Chatbots
+### API Optimization
+```javascript
+// Configure efficient API endpoints
+endpoint_config = {
+  caching: {
+    enabled: true,
+    duration: 300, // 5 minutes
+    key_strategy: "query_based"
+  },
+  rate_limiting: {
+    requests_per_minute: 100,
+    burst_limit: 20
+  },
+  response_compression: true
+}
+```
 
--   
-    Xano Features
-    
-    -   Snippets
-    -   Instance Settings
-        
-        -   [Release Track
-            Preferences](../xano-features/instance-settings/release-track-preferences.html)
-        -   [Static IP
-            (Outgoing)](../xano-features/instance-settings/static-ip-outgoing.html)
-        -   [Change Server
-            Region](../xano-features/instance-settings/change-server-region.html)
-        -   [Direct Database
-            Connector](../xano-features/instance-settings/direct-database-connector.html)
-        -   [Backup and
-            Restore](../xano-features/instance-settings/backup-and-restore.html)
-        -   [Security
-            Policy](../xano-features/instance-settings/security-policy.html)
-            -   Workspace Settings
-        
-        -   [Audit
-            Logs](../xano-features/workspace-settings/audit-logs.html)
-            -   Advanced Back-end Features
-        
-        -   [Xano
-            Link](../xano-features/advanced-back-end-features/xano-link.html)
-        -   [Developer API
-            (Deprecated)](../xano-features/advanced-back-end-features/developer-api-deprecated.html)
-            -   Metadata API
-        
-        -   [Master Metadata
-            API](../xano-features/metadata-api/master-metadata-api.html)
-        -   [Tables and
-            Schema](../xano-features/metadata-api/tables-and-schema.html)
-        -   [Content](../xano-features/metadata-api/content.html)
-        -   [Search](../xano-features/metadata-api/search.html)
-        -   [File](../xano-features/metadata-api/file.html)
-        -   [Request
-            History](../xano-features/metadata-api/request-history.html)
-        -   [Workspace Import and
-            Export](../xano-features/metadata-api/workspace-import-and-export.html)
-        -   [Token Scopes
-            Reference](../xano-features/metadata-api/token-scopes-reference.html)
-        
--   
-    Xano Transform
-    
-    -   Using Xano Transform
+## 🔒 Security Best Practices
 
--   
-    Xano Actions
-    
-    -   What are Actions?
-    -   Browse Actions
+### Authentication Setup
+```javascript
+// Implement secure authentication
+auth_config = {
+  jwt_secret: process.env.JWT_SECRET, // Use environment variables
+  token_expiry: "24h",
+  refresh_tokens: true,
+  password_requirements: {
+    min_length: 8,
+    require_symbols: true,
+    require_numbers: true
+  }
+}
+```
 
--   
-    Team Collaboration
-    
-    -   Realtime Collaboration
-    -   Managing Team Members
-    -   Branching & Merging
-    -   Role-based Access Control (RBAC)
+### RBAC Configuration
+```javascript
+// Set up role-based access control
+rbac_roles = {
+  admin: {
+    permissions: ["read", "write", "delete", "manage_users"]
+  },
+  user: {
+    permissions: ["read", "write_own"]
+  },
+  guest: {
+    permissions: ["read_public"]
+  }
+}
+```
 
--   
-    Agencies
-    
-    -   Xano for Agencies
-    -   Agency Features
-        
-        -   [Agency
-            Dashboard](../agencies/agency-features/agency-dashboard.html)
-        -   [Client
-            Invite](../agencies/agency-features/client-invite.html)
-        -   [Transfer
-            Ownership](../agencies/agency-features/transfer-ownership.html)
-        -   [Agency
-            Profile](../agencies/agency-features/agency-profile.html)
-        -   [Commission](../agencies/agency-features/commission.html)
-        -   [Private
-            Marketplace](../agencies/agency-features/private-marketplace.html)
-        
--   
-    Custom Plans (Enterprise)
-    
-    -   Xano for Enterprise (Custom Plans)
-    -   Custom Plan Features
-        
-        -   Microservices
-            
-            -   Ollama
-                
-                -   [Choosing a
-                    Model](../enterprise/enterprise-features/microservices/ollama/choosing-a-model.html)
-                                    -   [Tenant
-            Center](../enterprise/enterprise-features/tenant-center.html)
-        -   [Compliance
-            Center](../enterprise/enterprise-features/compliance-center.html)
-        -   [Security
-            Policy](../enterprise/enterprise-features/security-policy.html)
-        -   [Instance
-            Activity](../enterprise/enterprise-features/instance-activity.html)
-        -   [Deployment](../enterprise/enterprise-features/deployment.html)
-        -   [RBAC (Role-based Access
-            Control)](../enterprise/enterprise-features/rbac-role-based-access-control.html)
-        -   [Xano
-            Link](../enterprise/enterprise-features/xano-link.html)
-        -   [Resource
-            Management](../enterprise/enterprise-features/resource-management.html)
-        
--   
-    Your Xano Account
-    
-    -   Account Page
-    -   Billing
-    -   Referrals & Commissions
+## 📊 Plan Comparison
 
--   
-    Troubleshooting & Support
-    
-    -   Error Reference
-    -   Troubleshooting Performance
-        
-        -   [When a single workflow feels
-            slow](../troubleshooting-and-support/troubleshooting-performance/when-a-single-workflow-feels-slow.html)
-        -   [When everything feels
-            slow](../troubleshooting-and-support/troubleshooting-performance/when-everything-feels-slow.html)
-        -   [RAM
-            Usage](../troubleshooting-and-support/troubleshooting-performance/ram-usage.html)
-        -   [Function Stack
-            Performance](../troubleshooting-and-support/troubleshooting-performance/function-stack-performance.html)
-            -   Getting Help
-        
-        -   [Granting
-            Access](../troubleshooting-and-support/getting-help/granting-access.html)
-        -   [Community Code of
-            Conduct](../troubleshooting-and-support/getting-help/community-code-of-conduct.html)
-        -   [Community Content Modification
-            Policy](../troubleshooting-and-support/getting-help/community-content-modification-policy.html)
-        -   [Reporting Potential Bugs and
-            Issues](../troubleshooting-and-support/getting-help/reporting-potential-bugs-and-issues.html)
-        
--   
-    Special Pricing
-    
-    -   Students & Education
-    -   Non-Profits
+| Feature | Free Plan | Launch ($25/mo) | Scale ($85/mo) | 
+|---------|-----------|-----------------|----------------|
+| Database Records | 100,000 | Unlimited | Unlimited |
+| API Requests | 100k/month | Unlimited | Unlimited |
+| Team Members | 1 | 5 | Unlimited |
+| Background Tasks | ❌ | ✅ | ✅ |
+| Testing Suite | ❌ | ✅ | ✅ |
+| Priority Support | ❌ | ✅ | ✅ |
+| Advanced Features | Limited | Full | Full + Enterprise |
 
--   
-    Security
-    
-    -   Best Practices
+## 🎯 Try This: First Project Setup
 
-[Powered by GitBook]
+### Create Your First API
+```javascript
+// 1. Create a simple user registration endpoint
+POST /api/register
+{
+  "name": "John Doe", 
+  "email": "john@example.com",
+  "password": "securepass123"
+}
 
-On this page
+// 2. Function stack for registration
+function_stack = [
+  validate_input,
+  hash_password, 
+  add_record,
+  generate_jwt_token,
+  send_welcome_email
+]
 
-Was this helpful?
+// 3. Connect to external service
+external_integration = {
+  service: "n8n",
+  webhook_url: process.env.N8N_WEBHOOK,
+  data: {
+    event: "user_registered",
+    user_id: new_user.id
+  }
+}
+```
 
-Copy
+## 💡 Pro Tips
 
-1.  [Before You
-    Begin](using-these-docs.html)
+- **Start Simple**: Begin with basic CRUD operations before adding complexity
+- **Use AI Features**: Leverage Xano's AI assistants for faster development
+- **Plan Your Schema**: Design your database structure before building APIs
+- **Test Everything**: Use the built-in testing tools to validate your APIs
+- **Secure First**: Always implement proper authentication and validation
 
-Set Up a Free Xano Account 
-==========================
+## 🆘 Common Mistakes to Avoid
 
-Let\'s make sure that you are ready to play around in Xano before
-continuing.
+- **Skipping validation**: Always validate user input data
+- **Weak passwords**: Use strong, unique passwords for your account
+- **No backups**: Set up regular data backups (available in paid plans)
+- **Ignoring rate limits**: Monitor your API usage to avoid limits
+- **Poor database design**: Plan your relationships and indexes carefully
 
-First, let\'s make sure you have a Xano account. Choose an option below
-to get started.
+## 🔄 Next Steps After Account Creation
 
-[](https://www.xano.com/)
+### Immediate Tasks
+1. **Complete Profile Setup** - Add your name, company information
+2. **Verify Email** - Check your email and verify your account
+3. **Explore Dashboard** - Familiarize yourself with the interface
+4. **Create First Database** - Set up your initial data structure
+5. **Build First API** - Create a simple GET/POST endpoint
 
-![Cover](../_gitbook/image3827.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FWvkJHMgaONNYHwTH0Uuq%252FYT%2817%29.png%3Falt%3Dmedia%26token%3D462d5de4-641c-4674-a6b5-b4d569640ca5&width=376&dpr=4&quality=100&sign=eaebc892&sv=2)
+### Learning Path
+1. **[Key Concepts](key-concepts.md)** - Understand Xano fundamentals
+2. **[Navigating Xano](navigating-xano.md)** - Master the interface
+3. **[Working with Data](working_with_data.md)** - Database operations
+4. **[Building APIs](api__apis.md)** - Create your first endpoints
 
+## 🔗 Integration Resources
 
+### Documentation Links
+- **[n8n Integration Guide](../../../04-integrations/external-apis/)** - Connect with n8n workflows  
+- **[WeWeb Setup](../../../04-integrations/third-party/)** - Frontend integration patterns
+- **[API Documentation](get_your_api_documentation.md)** - Generate OpenAPI docs
 
-For most users, you should start here! Our free plan is almost fully
-featured and perfect for checking out Xano.
+### Community Resources
+- **[Xano Community](https://community.xano.com)** - Connect with other builders
+- **[YouTube Channel](https://youtube.com/nocodebackend)** - Video tutorials
+- **[Office Hours](https://go.xano.co/officehours)** - Live support sessions
 
-**What do I get with a free account?**
+## 📈 Upgrade Considerations
 
--   
-    
-        
-    
-    One workspace to build and prototype
-    
--   
-    
-        
-    
-    Access to our AI features to build MCP servers and AI Agents
-    visually
-    
--   
-    
-        
-    
-    Up to 100,000 database records
-    
+### When to Upgrade from Free
+- **Database Growth**: Approaching 100,000 records
+- **Team Collaboration**: Need multiple team members
+- **Production Traffic**: Requiring unlimited API requests
+- **Advanced Features**: Need background tasks, testing, middleware
 
-[](https://www.xano.com/pricing/)
+### Upgrade Process
+```bash
+# Access billing in your account
+Account Settings → Billing → Upgrade Plan
 
-![Cover](../_gitbook/image0b38.jpg?url=https%3A%2F%2F3699875497-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F2tWsL4o1vHmDGb2UAUDD%252Fuploads%252FMvCKGtHmYriMljXBY7Gc%252FYT%2818%29.png%3Falt%3Dmedia%26token%3Dce7b615c-8400-479e-b68a-742d94119749&width=376&dpr=4&quality=100&sign=3d43b5b7&sv=2)
+# Choose appropriate plan based on needs
+# Upgrade is instant with no data loss
+# All existing APIs and data remain intact
+```
 
+## 🎉 Welcome to Xano!
 
+You're now ready to build powerful backends without code! Your free account gives you access to everything needed to create professional APIs, manage databases, and integrate with your favorite no-code tools.
 
-
-start with more performance and more features.
-
-**What do I get with a paid plan?**
-
--   
-    
-        
-    
-    Unlimited records
-    
--   
-    
-        
-    
-    No rate limit
-    
--   
-    
-        
-    
-    Team collaboration features
-    
--   
-    
-        
-    
-    Background tasks, workflow testing, middleware, triggers, and more
-    
-Once you\'re in, let\'s make sure you\'ve went through the workspace
-setup. Don\'t worry about not picking the right options; you can always
-change things later. Check out the interactive tutorial below for a full
-walkthrough.
-
-Last updated 1 month ago
-
-Was this helpful?
+Remember: Start simple, learn the fundamentals, then gradually add complexity as your skills grow. The Xano community is here to help every step of the way!

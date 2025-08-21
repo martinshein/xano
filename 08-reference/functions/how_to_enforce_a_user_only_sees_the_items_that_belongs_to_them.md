@@ -1,334 +1,514 @@
 ---
-category: functions
+title: "User Data Separation & Access Control"
+description: "Complete guide to implementing user data separation, RBAC patterns, and secure access control to ensure users only see their own data in Xano applications."
+category: security
+difficulty: intermediate
 has_code_examples: true
-last_updated: '2025-01-23'
+last_updated: '2025-08-21'
 tags:
-- API
-- Database
-- Functions
-- Queries
-- Authentication
-title: How to enforce a user only sees the items that belongs to them
+  - user-data-separation
+  - rbac
+  - access-control
+  - data-security
+  - authentication
 ---
 
-# How to enforce a user only sees the items that belongs to them
+# User Data Separation & Access Control
 
-apple-mobile-web-app-status-bar-style: black
-apple-mobile-web-app-title: Xano Documentation
-color-scheme: dark light
-generator: GitBook (28f7fba)
-lang: en
-mobile-web-app-capable: yes
-robots: 'index, follow'
-title: 'separating-user-data'
-twitter:card: summary\_large\_image
-twitter:image: 'https://docs.xano.com/\~gitbook/image?url=https%3A%2F%2F3176331816-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-M8Si5XvG2QHSLi9JcVY%252Fsocialpreview%252FB4Ck16bnUcYEeDgEY62Y%252Fxano\_docs.png%3Falt%3Dmedia%26token%3D2979b9da-f20a-450a-9f22-10bf085a0715&width=1200&height=630&sign=550fee9a&sv=2'
-twitter:title: 'Separating User Data \| Xano Documentation'
-viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
----
-[](../../index.html)
-Xano Documentation
-[Ctrl][K]
--   ::: 
-    Before You Begin
-    :::
--   ::: 
-    [🛠️]The Visual Builder
-    :::
-        ::: 
-            ::: 
-            -   Swagger (OpenAPI Documentation)
-            :::
-            ::: 
-            -   Async Functions
-            :::
-        -   Background Tasks
-        -   Triggers
-        -   Middleware
-        -   Configuring Expressions
-        -   Working with Data
-        :::
-        ::: 
-        -   AI Tools
-            ::: 
-                ::: 
-                -   External Filtering Examples
-                :::
-            -   Get Record
-            -   Add Record
-            -   Edit Record
-            -   Add or Edit Record
-            -   Patch Record
-            -   Delete Record
-            -   Bulk Operations
-            -   Database Transaction
-            -   External Database Query
-            -   Direct Database Query
-            -   Get Database Schema
-            :::
-            ::: 
-            -   Create Variable
-            -   Update Variable
-            -   Conditional
-            -   Switch
-            -   Loops
-            -   Math
-            -   Arrays
-            -   Objects
-            -   Text
-            :::
-        -   Security
-            ::: 
-            -   Realtime Functions
-            -   External API Request
-            -   Lambda Functions
-            :::
-        -   Data Caching (Redis)
-        -   Custom Functions
-        -   Utility Functions
-        -   File Storage
-        -   Cloud Services
-        :::
-        ::: 
-        -   Manipulation
-        -   Math
-        -   Timestamp
-        -   Text
-        -   Array
-        -   Transform
-        -   Conversion
-        -   Comparison
-        -   Security
-        :::
-        ::: 
-        -   Text
-        -   Expression
-        -   Array
-        -   Object
-        -   Integer
-        -   Decimal
-        -   Boolean
-        -   Timestamp
-        -   Null
-        :::
-        ::: 
-        -   Response Caching
-        :::
--   ::: 
-    Testing and Debugging
-    :::
--   ::: 
-    The Database
-    :::
-        ::: 
-        -   Using the Xano Database
-        -   Field Types
-        -   Relationships
-        -   Database Views
-        -   Export and Sharing
-        -   Data Sources
-        :::
-        ::: 
-        -   Airtable to Xano
-        -   Supabase to Xano
-        -   CSV Import & Export
-        :::
-        ::: 
-        -   Storage
-        -   Indexing
-        -   Maintenance
-        -   Schema Versioning
-        :::
--   ::: 
-    Build For AI
-    :::
-        ::: 
-        -   Templates
-        :::
-        ::: 
-        -   Connecting Clients
-        -   MCP Functions
-        :::
--   ::: 
-    Build With AI
-    :::
--   ::: 
-    File Storage
-    :::
--   ::: 
-    Realtime
-    :::
--   ::: 
-    Maintenance, Monitoring, and Logging
-    :::
-        ::: 
-        :::
--   ::: 
-    Building Backend Features
-    :::
-        ::: 
-        -   Separating User Data
-        -   Restricting Access (RBAC)
-        -   OAuth (SSO)
-        :::
--   ::: 
-    Xano Features
-    :::
-        ::: 
-        -   Release Track Preferences
-        -   Static IP (Outgoing)
-        -   Change Server Region
-        -   Direct Database Connector
-        -   Backup and Restore
-        -   Security Policy
-        :::
-        ::: 
-        -   Audit Logs
-        :::
-        ::: 
-        -   Xano Link
-        -   Developer API (Deprecated)
-        :::
-        ::: 
-        -   Master Metadata API
-        -   Tables and Schema
-        -   Content
-        -   Search
-        -   File
-        -   Request History
-        -   Workspace Import and Export
-        -   Token Scopes Reference
-        :::
--   ::: 
-    Xano Transform
-    :::
--   ::: 
-    Xano Actions
-    :::
--   ::: 
-    Team Collaboration
-    :::
--   ::: 
-    Agencies
-    :::
-        ::: 
-        -   Agency Dashboard
-        -   Client Invite
-        -   Transfer Ownership
-        -   Agency Profile
-        -   Commission
-        -   Private Marketplace
-        :::
--   ::: 
-    Custom Plans (Enterprise)
-    :::
-        ::: 
-            ::: 
-                ::: 
-                -   Choosing a Model
-                :::
-            :::
-        -   Tenant Center
-        -   Compliance Center
-        -   Security Policy
-        -   Instance Activity
-        -   Deployment
-        -   RBAC (Role-based Access Control)
-        -   Xano Link
-        -   Resource Management
-        :::
--   ::: 
-    Your Xano Account
-    :::
--   ::: 
-    Troubleshooting & Support
-    :::
-        ::: 
-        -   When a single workflow feels slow
-        -   When everything feels slow
-        -   RAM Usage
-        -   Function Stack Performance
-        :::
-        ::: 
-        -   Granting Access
-        -   Community Code of Conduct
-        -   Community Content Modification Policy
-        -   Reporting Potential Bugs and Issues
-        :::
--   ::: 
-    Special Pricing
-    :::
--   ::: 
-    Security
-    :::
-For this example, we have three users in our user table: Steph, Klay, and Jordan.
-There is also an items table. Each item belongs to a user.
-####  
-How to enforce a user only sees the items that belongs to them
-Here we have an API endpoint, which gets all the items from the items table. The first step is to require user authentication on the endpoint.
-Require authentication for the API endpoint.
-Now that authentication is required, the next step is to open the Query All Records function and add an expression to the by custom query section.
-Copy
-``` 
-WHERE
-db: items.user_id = auth id
-```
-Add an expression to the Query All Records function for items.
-Filter the record where the user\_id must be equal to the auth id.
-When we go to run the API endpoint in Run&Debug, an auth token is required to run the API. In Xano, we can easily search for a user to use a auth token for testing. In your application, the user will need to authenticate first by logging in or signing up.
-Let\'s select user 2, Klay and run the API endpoint:
-The result is all the items associated with user id = 2:
-Items only belonging to user 2 are returned.
-####  
-Added layer of security with precondition
-We can add an additional layer of security with the use of preconditions.
-First, use a Get Record on the user table with a field value of the auth id.
-Get the user record with the auth id.
-Then use a precondition to enforce the auth ID is equal to the id from the Get Record.
-Copy
-``` 
-WHERE
-auth id = var: user.id
-```
-Set a precondition where the ID of the user record is equal to the auth id.
-####  
-How to enforce the user can only edit data that belongs to them
-When it comes to editing data, the function stack will also use a precondition. The API endpoint will once again require authentication.
-First, we need to Get the Record of the item that the user wants to edit.
-First, Get the Record that the user is trying to edit.
-Getting the existing record allows us to check if it belongs to the user.
-Next, use a Precondition to say:
-Copy
-``` 
-WHERE
-var: items_1 |GET| "user_id" = auth id
-```
-The precondition enforces that the record belongs to the user trying to edit it. Using the GET filter makes sure that the record exists - if it doesn\'t the precondition will fail.
-Here we use the GET filter with a default value of 0. This helps us account for existence of the record we want to edit. If the record does not exist, the precondition will trigger because a user\_id value of 0 will not match the auth ID.
-If the precondition passes, then the function stack will continue to run and edit the data. If it fails, it will throw an error and stop execution.
-Last updated 6 months ago
-Was this helpful?
+## 📋 **Quick Summary**
+Comprehensive guide to implementing secure user data separation in Xano. Learn how to ensure users only access their own data through proper filtering, authentication checks, and RBAC patterns for multi-tenant applications.
 
-## Code Examples
+## What You'll Learn
+- User data separation fundamentals and security principles
+- Database filtering techniques for user-specific data
+- Authentication and authorization patterns
+- RBAC implementation for different user roles
+- Multi-tenant data isolation strategies
 
-```
- 
-WHERE
-db: items.user_id = auth id
+## 🚀 Understanding User Data Separation
 
+User data separation ensures that:
+- **Users only see their own records** - No unauthorized access to other users' data
+- **Role-based permissions** - Different access levels based on user roles
+- **Secure API endpoints** - All endpoints properly authenticate and filter data
+- **Data isolation** - Multi-tenant applications maintain strict data boundaries
+
+## 🎯 Try This: Basic User Data Filtering
+
+### Simple User-Specific Queries
+```javascript
+// Get user's own records only
+get_user_orders = query_all_records({
+  table: "orders",
+  filter: [
+    {
+      field: "user_id",
+      operator: "=",
+      value: request.user.id  // From JWT authentication
+    }
+  ]
+})
+
+// Alternative using request context
+get_user_profile = get_record({
+  table: "user_profiles", 
+  record_id: request.user.id
+})
 ```
 
+### Authentication-First Approach
+```javascript
+// Always validate authentication before data access
+secure_user_data_access = function_stack([
+  // 1. Validate JWT token
+  authenticate_user,
+  
+  // 2. Check user exists and is active
+  conditional({
+    if: !request.user || request.user.status !== "active",
+    then: return_error({
+      status: 401,
+      message: "Unauthorized access"
+    })
+  }),
+  
+  // 3. Filter data by user ID
+  query_all_records({
+    table: "user_documents",
+    filter: [
+      {
+        field: "owner_id",
+        operator: "=", 
+        value: request.user.id
+      }
+    ]
+  })
+])
 ```
- 
-WHERE
-auth id = var: user.id
 
+## 🔗 Integration Examples
+
+### n8n User-Specific Workflows
+```javascript
+// Trigger n8n workflow with user-specific data
+trigger_user_workflow = external_api_request({
+  url: process.env.N8N_USER_WEBHOOK,
+  method: "POST",
+  headers: {
+    "Authorization": "Bearer " + process.env.N8N_API_KEY,
+    "X-User-ID": request.user.id  // Pass user context
+  },
+  data: {
+    user_id: request.user.id,
+    user_email: request.user.email,
+    user_role: request.user.role,
+    action: "process_user_data",
+    data: user_specific_data
+  }
+})
 ```
 
+### WeWeb User Context
+```javascript
+// Return user-specific data for WeWeb frontend
+weweb_user_data = {
+  user: {
+    id: request.user.id,
+    name: request.user.name,
+    email: request.user.email,
+    role: request.user.role
+  },
+  dashboard_data: query_all_records({
+    table: "user_metrics",
+    filter: [{ field: "user_id", operator: "=", value: request.user.id }]
+  }),
+  recent_activity: query_all_records({
+    table: "activity_log",
+    filter: [
+      { field: "user_id", operator: "=", value: request.user.id }
+    ],
+    limit: 10,
+    order_by: "created_at DESC"
+  })
+}
 ```
- 
-WHERE
-var: items_1 |GET| "user_id" = auth id
 
+## 🔒 Advanced RBAC Patterns
+
+### Role-Based Data Access
+```javascript
+// Dynamic data access based on user roles
+role_based_data_access = conditional({
+  // Admin users see all data
+  if: request.user.role === "admin",
+  then: query_all_records({ table: "orders" }),
+  
+  // Managers see their team's data  
+  else_if: request.user.role === "manager",
+  then: query_all_records({
+    table: "orders",
+    filter: [
+      {
+        field: "assigned_team",
+        operator: "=",
+        value: request.user.team_id
+      }
+    ]
+  }),
+  
+  // Regular users see only their own data
+  else: query_all_records({
+    table: "orders", 
+    filter: [
+      {
+        field: "user_id",
+        operator: "=",
+        value: request.user.id
+      }
+    ]
+  })
+})
 ```
 
+### Hierarchical Permission System
+```javascript
+// Multi-level permission checking
+check_data_access_permission = function_stack([
+  // 1. Basic authentication
+  authenticate_user,
+  
+  // 2. Get requested resource
+  get_record({
+    table: request.path_params.table,
+    record_id: request.path_params.id
+  }),
+  
+  // 3. Check ownership and permissions
+  conditional({
+    // Resource owner always has access
+    if: response_data.user_id === request.user.id,
+    then: create_variable({ name: "access_granted", value: true }),
+    
+    // Team members can view if shared
+    else_if: response_data.shared_with_team && 
+             response_data.team_id === request.user.team_id,
+    then: create_variable({ name: "access_granted", value: true }),
+    
+    // Admins have full access
+    else_if: request.user.role === "admin",
+    then: create_variable({ name: "access_granted", value: true }),
+    
+    // Everyone else denied
+    else: return_error({
+      status: 403,
+      message: "Access denied to this resource"
+    })
+  })
+])
+```
+
+### Organization-Level Separation
+```javascript
+// Multi-tenant organization data isolation
+org_data_isolation = function_stack([
+  authenticate_user,
+  
+  // Validate user belongs to organization
+  conditional({
+    if: !request.user.organization_id,
+    then: return_error({
+      status: 400,
+      message: "User must belong to an organization"
+    })
+  }),
+  
+  // Filter all queries by organization
+  query_all_records({
+    table: request.query.table || "default_table",
+    filter: [
+      {
+        field: "organization_id",
+        operator: "=",
+        value: request.user.organization_id
+      },
+      // Additional user-specific filtering if needed
+      {
+        field: "user_id", 
+        operator: "=",
+        value: request.query.user_specific ? request.user.id : null
+      }
+    ]
+  })
+])
+```
+
+## ⚙️ Database Design for User Separation
+
+### User Reference Patterns
+```sql
+-- Every user-owned table should have user_id
+CREATE TABLE user_documents (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  title VARCHAR(255) NOT NULL,
+  content TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Multi-tenant organization pattern
+CREATE TABLE organization_data (
+  id SERIAL PRIMARY KEY,
+  organization_id INTEGER NOT NULL REFERENCES organizations(id),
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  data_type VARCHAR(50),
+  data_content JSONB,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Team-based sharing pattern
+CREATE TABLE team_resources (
+  id SERIAL PRIMARY KEY,
+  owner_id INTEGER NOT NULL REFERENCES users(id),
+  team_id INTEGER REFERENCES teams(id),
+  resource_type VARCHAR(50),
+  visibility VARCHAR(20) DEFAULT 'private', -- private, team, organization
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### Secure Indexes for Performance
+```sql
+-- Indexes for efficient user data filtering
+CREATE INDEX idx_documents_user_id ON user_documents(user_id);
+CREATE INDEX idx_documents_user_created ON user_documents(user_id, created_at);
+CREATE INDEX idx_org_data_org_user ON organization_data(organization_id, user_id);
+CREATE INDEX idx_team_resources_owner ON team_resources(owner_id);
+CREATE INDEX idx_team_resources_team ON team_resources(team_id);
+```
+
+## 🔧 Middleware for Automatic Filtering
+
+### Global User Data Middleware
+```javascript
+// Middleware to automatically filter user data
+user_data_filter_middleware = function_stack([
+  // Extract user ID from JWT
+  authenticate_user,
+  
+  // Add user context to all database operations
+  create_variable({
+    name: "user_context",
+    value: {
+      user_id: request.user.id,
+      organization_id: request.user.organization_id,
+      role: request.user.role,
+      team_id: request.user.team_id
+    }
+  }),
+  
+  // Auto-apply user filtering to queries
+  conditional({
+    if: request.query.auto_filter !== "false",
+    then: create_variable({
+      name: "default_filters",
+      value: [
+        {
+          field: "user_id",
+          operator: "=", 
+          value: request.user.id
+        }
+      ]
+    })
+  })
+])
+```
+
+### Table-Specific Security Rules
+```javascript
+// Security rules per table type
+table_security_rules = {
+  "user_profiles": {
+    read: "owner_or_admin",
+    write: "owner_only",
+    delete: "owner_only"
+  },
+  "team_documents": {
+    read: "team_member_or_admin", 
+    write: "team_member",
+    delete: "owner_or_team_lead"
+  },
+  "organization_settings": {
+    read: "organization_member",
+    write: "organization_admin",
+    delete: "organization_owner"
+  }
+}
+
+// Apply security rules
+apply_table_security = function_stack([
+  authenticate_user,
+  
+  // Get table security rule
+  create_variable({
+    name: "security_rule",
+    value: table_security_rules[request.query.table]
+  }),
+  
+  // Check permissions based on operation
+  conditional({
+    if: request.method === "GET" && security_rule.read === "owner_only",
+    then: [
+      query_all_records({
+        table: request.query.table,
+        filter: [{ field: "user_id", operator: "=", value: request.user.id }]
+      })
+    ],
+    
+    else_if: request.method === "POST" && security_rule.write === "team_member",
+    then: [
+      // Validate team membership before allowing write
+      validate_team_membership,
+      add_record({
+        table: request.query.table,
+        data: merge(request.data, { user_id: request.user.id })
+      })
+    ]
+  })
+])
+```
+
+## 💡 Pro Tips
+
+- **Always Filter by User**: Never trust client-side filtering for security
+- **Use Middleware**: Implement consistent security checks across all endpoints
+- **Database Indexes**: Index user_id fields for better query performance
+- **Audit Logging**: Track who accessed what data and when
+- **Test Security**: Regularly test with different user roles and permissions
+
+## 🆘 Common Security Mistakes
+
+- **Client-Side Filtering**: Relying on frontend to filter sensitive data
+- **Missing Authentication**: Endpoints that don't verify user identity
+- **Role Confusion**: Inconsistent role checking across different endpoints
+- **Data Leakage**: Returning more data than necessary in API responses
+- **Weak Session Management**: Not properly validating JWT tokens
+
+## 🎯 Try This: Complete Security Implementation
+
+### Secure API Endpoint Pattern
+```javascript
+// Complete secure endpoint implementation
+secure_user_orders_endpoint = function_stack([
+  // 1. Authentication middleware
+  authenticate_user,
+  
+  // 2. Validate user is active
+  conditional({
+    if: request.user.status !== "active",
+    then: return_error({ status: 401, message: "Account inactive" })
+  }),
+  
+  // 3. Get user's orders with proper filtering
+  query_all_records({
+    table: "orders",
+    filter: [
+      { field: "user_id", operator: "=", value: request.user.id },
+      // Optional date filtering
+      request.query.from_date ? {
+        field: "created_at",
+        operator: ">=",
+        value: request.query.from_date
+      } : null
+    ].filter(Boolean),
+    limit: request.query.limit || 20,
+    offset: request.query.offset || 0,
+    order_by: "created_at DESC"
+  }),
+  
+  // 4. Sanitize response data
+  create_variable({
+    name: "sanitized_orders",
+    value: response_data.map(order => ({
+      id: order.id,
+      total: order.total,
+      status: order.status,
+      created_at: order.created_at,
+      items_count: order.items.length
+      // Never expose internal IDs or sensitive data
+    }))
+  }),
+  
+  // 5. Log access for audit
+  add_record({
+    table: "access_log",
+    data: {
+      user_id: request.user.id,
+      action: "view_orders",
+      resource_count: response_data.length,
+      timestamp: now(),
+      ip_address: $remote_ip
+    }
+  }),
+  
+  // 6. Return secure response
+  {
+    success: true,
+    data: sanitized_orders,
+    pagination: {
+      limit: request.query.limit || 20,
+      offset: request.query.offset || 0,
+      total: sanitized_orders.length
+    }
+  }
+])
+```
+
+## 📊 Security Checklist
+
+| Security Layer | Implementation | Status |
+|----------------|----------------|--------|
+| Authentication | JWT validation on all endpoints | ✅ |
+| User Filtering | All queries filter by user_id | ✅ |
+| Role-Based Access | Different permissions by role | ✅ |
+| Data Sanitization | Remove sensitive fields from responses | ✅ |
+| Audit Logging | Track all data access | ✅ |
+| Input Validation | Validate all user inputs | ✅ |
+| Error Handling | Don't leak information in errors | ✅ |
+
+## 🔄 Testing Your Security
+
+```javascript
+// Security test scenarios
+security_tests = [
+  // Test 1: User can only see their own data
+  {
+    test: "user_data_isolation",
+    user: "user_a",
+    expected: "only_user_a_data"
+  },
+  
+  // Test 2: Unauthorized access returns 401  
+  {
+    test: "unauthorized_access",
+    user: "no_token",
+    expected: "401_error"
+  },
+  
+  // Test 3: Admin can see all data
+  {
+    test: "admin_access",
+    user: "admin_user", 
+    expected: "all_organization_data"
+  },
+  
+  // Test 4: Cross-organization data leakage
+  {
+    test: "organization_isolation",
+    user: "org_a_user",
+    expected: "no_org_b_data"
+  }
+]
+```
+
+User data separation is fundamental to building secure, trustworthy applications. Always implement security at the database and API level, never rely on client-side restrictions!
